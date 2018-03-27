@@ -5,6 +5,7 @@ const dataPaths = require('../src/data-paths')
 const sharp = require('sharp')
 
 // const net = new brain.NeuralNetwork()
+// const net = new brain.NeuralNetworkGPU()
 const net = new brain.recurrent.RNN()
 const data = fs.readFileSync(dataPaths.trainingOutput)
 
@@ -27,11 +28,12 @@ dirs.forEach(dir => {
     const file = sharp(buffer)
       .resize(96)
       .grayscale()
-      .trim()
       .toBuffer()
-      .toString('bas64')
+    // .toString('base64')
+    // .split('')
 
-    const output = net.runInput(file)
+    // const output = net.runInput([file])
+    const output = net.run(file)
 
     result.push({
       input: dir,
