@@ -6,7 +6,7 @@
   "scripts": {
     "train": "node src/index.js",
     "test": "node scripts/test.js",
-    "ren-files": "node scripts/rename-files.js",
+    "rename-files": "node scripts/rename-files.js",
     "x-or": "node src/x-or.js"
   },
   "repository": {

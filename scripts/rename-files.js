@@ -1,5 +1,5 @@
 const fs = require('fs')
-
+const path = require('path')
 const dataPaths = require('../src/data-paths')
 
 const optionPaths = ['a', 'b', 'c', 'd', 'e', 'none']
@@ -9,9 +9,9 @@ renameFiles(dataPaths.sample)
 renameFiles(dataPaths.test)
 /* eslint-enable */
 
-function renameFiles(path) {
+function renameFiles(rootPath) {
   optionPaths.forEach(optionPath => {
-    const optionPathFull = path.join(path, optionPath)
+    const optionPathFull = path.join(rootPath, optionPath)
     let isValidPath = false
 
     try {
@@ -37,7 +37,7 @@ function renameFiles(path) {
 
         fs.renameSync(
           path.join(optionPathFull, file),
-          path.join(optionPathFull, `${optionPath}-${index}.${extension}`)
+          path.join(optionPathFull, `${optionPath}-${index + 1}.${extension}`)
         )
       })
     }

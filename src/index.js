@@ -2,51 +2,59 @@ const fs = require('fs')
 const path = require('path')
 const brain = require('brain.js')
 const dataPaths = require('./data-paths')
-const utilities = require('./utilities')
-// const sharp = require('sharp')
+const sharp = require('sharp')
 
-// const net = new brain.NeuralNetwork({
+const utilities = require('./utilities.js')
+
+// const net = new brain.NeuralNetwork()
 const net = new brain.recurrent.RNN()
 const dirs = fs.readdirSync(dataPaths.sample)
 const trainingData = []
 
-console.log('Preparing training data...')
+console.log('\nPreparing training data...')
 
 dirs.forEach(dir => {
   const dirPath = path.join(dataPaths.sample, dir)
   const subDirs = fs.readdirSync(dirPath)
 
-  subDirs.forEach((option, index) => {
+  subDirs.forEach(option => {
     const filePath = path.join(dirPath, option)
-    // const file = utilities.base64_encode(fs.readFileSync(filePath))
-    const file = utilities.base64_encode(fs.readFileSync(filePath)).split('')
+    const buffer = fs.readFileSync(filePath)
+    const file = sharp(buffer)
+      .resize(96)
+      .grayscale()
+      .trim()
+      .toBuffer()
+      .toString('bas64')
 
     trainingData.push({
-      input: file,
-      output: [dir]
+      input: [file],
+      output: [
+        {
+          option: dir
+        }
+      ]
     })
   })
 })
 
-// console.log(trainingData)
+console.log('\nTraining started...')
 
-console.log('Training started...')
+const startTime = utilities.clock()
 
 const result = net.train(trainingData, {
-  iterations: 100,
+  iterations: 1000,
   log: true,
-  logPeriod: 1,
-  timeout: 60000
+  logPeriod: 100,
+  learningRate: 0.01
 })
 
-console.log(result)
+const duration = utilities.clock(startTime)
 
-/*
-  .then(status => {
-    const result = net.toJSON()
+console.log(
+  `\nTraining finished in ${duration / 1000}s with error: ${result.error}`
+)
 
-    fs.writeFileSync(dataPaths.trainingOutput, JSON.stringify(result))
+fs.writeFileSync(dataPaths.trainingOutput, JSON.stringify(net.toJSON()))
 
-    console.log('Traning finished with status: ', status)
-  })
-  */
+console.log('\nTraining data exported to: ', dataPaths.trainingOutput)
