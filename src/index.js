@@ -2,8 +2,11 @@ const fs = require('fs')
 const path = require('path')
 const brain = require('brain.js')
 const dataPaths = require('./data-paths')
+const utilities = require('./utilities')
+// const sharp = require('sharp')
 
-const net = new brain.NeuralNetwork()
+// const net = new brain.NeuralNetwork({
+const net = new brain.recurrent.RNN()
 const dirs = fs.readdirSync(dataPaths.sample)
 const trainingData = []
 
@@ -15,26 +18,30 @@ dirs.forEach(dir => {
 
   subDirs.forEach((option, index) => {
     const filePath = path.join(dirPath, option)
-    const buffer = fs.readFileSync(filePath)
+    // const file = utilities.base64_encode(fs.readFileSync(filePath))
+    const file = utilities.base64_encode(fs.readFileSync(filePath)).split('')
 
     trainingData.push({
-      input: buffer.toJSON().data,
+      input: file,
       output: [dir]
     })
   })
 })
 
-console.log(trainingData)
+// console.log(trainingData)
 
 console.log('Training started...')
 
-net
-  .trainAsync(trainingData, {
-    iterations: 10,
-    log: true,
-    logPeriod: 1,
-    timeout: 30000
-  })
+const result = net.train(trainingData, {
+  iterations: 100,
+  log: true,
+  logPeriod: 1,
+  timeout: 60000
+})
+
+console.log(result)
+
+/*
   .then(status => {
     const result = net.toJSON()
 
@@ -42,3 +49,4 @@ net
 
     console.log('Traning finished with status: ', status)
   })
+  */
