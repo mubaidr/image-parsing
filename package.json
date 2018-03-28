@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "train": "node src/index.js",
+    "train-synaptic": "node src/synaptic-index.js",
     "test": "node scripts/test.js",
     "rename-files": "node scripts/rename-files.js",
     "x-or": "node src/x-or.js"
@@ -13,7 +14,11 @@
     "type": "git",
     "url": "git+https://github.com/mubaidr/image-parsing.git"
   },
-  "keywords": ["node", "brain.js", "AI"],
+  "keywords": [
+    "node",
+    "brain.js",
+    "AI"
+  ],
   "author": "mubaidr@gmail.com",
   "license": "MIT",
   "bugs": {
@@ -38,6 +43,7 @@
   },
   "dependencies": {
     "brain.js": "^1.1.2",
-    "sharp": "^0.20.1"
+    "sharp": "^0.20.1",
+    "synaptic": "^1.1.4"
   }
 }
