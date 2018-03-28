@@ -10,6 +10,13 @@ const net = new brain.recurrent.RNN()
 const dirs = fs.readdirSync(dataPaths.sample)
 const trainingData = []
 
+/**
+ *
+ *
+ * @param {any} imgPath Path to the image file
+ * @param {any} option output for the image
+ * @returns Raw data array of size width x height
+ */
 async function getDataFromImage(imgPath, option) {
   const img = sharp(imgPath)
     .resize(96, 28)
@@ -17,28 +24,6 @@ async function getDataFromImage(imgPath, option) {
     .threshold(32)
 
   const buff = await img.raw().toBuffer()
-
-  // console.log(buff.length)
-
-  const rawData = buff.toJSON().data
-  const result = {}
-  let last = null
-  let count = 0
-
-  for (let i = 0; i < rawData.length; i += 1) {
-    const item = rawData[i]
-
-    if (item === last) {
-      count += 1
-    } else {
-      if (i !== 0) {
-        result[Object.keys(result).length] = count
-      }
-
-      last = item
-      count = 1
-    }
-  }
 
   /*
   img
@@ -49,11 +34,14 @@ async function getDataFromImage(imgPath, option) {
   */
 
   return {
-    data: result, // buff.toJSON().data.join(''),
+    data: buff.toJSON().data, // .join(''),
     option
   }
 }
-
+/**
+ * Initiates the learning process
+ *
+ */
 function startTraining() {
   console.log('\nTraining started...\n')
 
@@ -77,6 +65,10 @@ function startTraining() {
   console.log('\nTraining data exported to: ', dataPaths.trainingOutput)
 }
 
+/**
+ * Prepares/pre-process image data for for input
+ *
+ */
 function processData() {
   const promises = []
   console.log('\nPreparing training data...')
