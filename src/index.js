@@ -18,6 +18,30 @@ async function getDataFromImage(imgPath, option) {
 
   const buff = await img.raw().toBuffer()
 
+  // console.log(buff.length)
+
+  const rawData = buff.toJSON().data
+  const result = {}
+  let last = null
+  let count = 0
+
+  for (let i = 0; i < rawData.length; i += 1) {
+    const item = rawData[i]
+
+    if (item === last) {
+      count += 1
+    } else {
+      if (i !== 0) {
+        result[Object.keys(result).length] = count
+      }
+
+      last = item
+      count = 1
+    }
+  }
+
+  // console.log('----', result)
+
   /*
   img
     .toFormat('png')
@@ -27,7 +51,7 @@ async function getDataFromImage(imgPath, option) {
   */
 
   return {
-    data: buff.toJSON().data, // .join(''),
+    data: result, // buff.toJSON().data.join(''),
     option
   }
 }
@@ -38,7 +62,7 @@ function startTraining() {
   const startTime = utilities.clock()
 
   const result = net.train(trainingData, {
-    iterations: 10000,
+    iterations: 1000,
     log: true,
     logPeriod: 100,
     activation: 'leaky-relu'
@@ -76,12 +100,16 @@ function processData() {
     for (let i = 0; i < res.length; i += 1) {
       const item = res[i]
 
+      const opt = {}
+      opt[item.option] = 1
+
       trainingData.push({
         input: [item.data],
-        output: [item.option]
+        output: [opt]
       })
     }
 
+    // TODO: Use same images multiple times in each option
     // console.log(trainingData[0].input[0])
 
     startTraining()
