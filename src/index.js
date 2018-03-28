@@ -1,63 +1,36 @@
 const fs = require('fs')
 const path = require('path')
 const brain = require('brain.js')
-const dataPaths = require('./data-paths')
 const sharp = require('sharp')
-// const getPixels = require('get-pixels')
 
+const dataPaths = require('./data-paths')
 const utilities = require('./utilities.js')
 
-// const net = new brain.NeuralNetwork()
-// const net = new brain.NeuralNetworkGPU()
 const net = new brain.recurrent.RNN()
 const dirs = fs.readdirSync(dataPaths.sample)
 const trainingData = []
 
-console.log('\nPreparing training data...')
+async function getDataFromImage(imgPath, option) {
+  const img = sharp(imgPath)
+    .resize(96, 28)
+    .toColourspace('b-w')
+    .threshold(32)
 
-dirs.forEach((dir, index) => {
-  const dirPath = path.join(dataPaths.sample, dir)
-  const subDirs = fs.readdirSync(dirPath)
+  const buff = await img.raw().toBuffer()
 
-  subDirs.forEach((option, indexOption) => {
-    const filePath = path.join(dirPath, option)
-
-    // eslint-disable-next-line
-    const data = getDataFromImage(filePath, index, indexOption)
-
-    /*
-    const buffer = fs.readFileSync(filePath)
-    const file = sharp(buffer)
-      .resize(96)
-      .grayscale()
-      .raw()
-      .toBuffer()
-      .then(buff => {
-        console.log(buff.toString('base64'))
-      })
-    // .toString('base64')
-    // .split('')
-
-    /*
-    trainingData.push({
-      input: [file],
-      output: { option: dir }
+  /*
+  img
+    .toFormat('png')
+    .toFile(path.join(dataPaths.test, 'tmp', `${Math.random()}.png`), err => {
+      if (err) console.error('Error writing file: ', err)
     })
-    */
-    /*
-    console.log(file)
-*/
-    trainingData.push({
-      input: [data],
-      output: { option: dir }
-    })
-  })
-})
+  */
 
-console.log(trainingData.length)
-
-// eslint-disable-next-line
-startTraining()
+  return {
+    data: buff.toJSON().data, // .join(''),
+    option
+  }
+}
 
 function startTraining() {
   console.log('\nTraining started...\n')
@@ -65,11 +38,10 @@ function startTraining() {
   const startTime = utilities.clock()
 
   const result = net.train(trainingData, {
-    iterations: 10,
+    iterations: 10000,
     log: true,
-    logPeriod: 1
-    // timeout: 30000
-    // ,learningRate: 0.9
+    logPeriod: 100,
+    activation: 'leaky-relu'
   })
 
   const duration = utilities.clock(startTime)
@@ -83,25 +55,40 @@ function startTraining() {
   console.log('\nTraining data exported to: ', dataPaths.trainingOutput)
 }
 
-async function getDataFromImage(imgPath, a, b) {
-  const file = await sharp(imgPath)
-    .resize(96)
-    // .toColourspace('b-w')
-    .threshold(32)
-    // .raw()
-    .toBuffer()
+function processData() {
+  const promises = []
+  console.log('\nPreparing training data...')
 
-  fs.writeFileSync(path.join(dataPaths.test, 'tmp', `${a}-${b}.png`), file)
-  // console.log(file.length)
+  // for (let i = 0; i < 1; i += 1) {
 
-  console.log(
-    file.length,
-    file[321],
-    file[322],
-    file[323],
-    file[324],
-    file[325]
-  )
+  dirs.forEach(dir => {
+    const dirPath = path.join(dataPaths.sample, dir)
+    const subDirs = fs.readdirSync(dirPath)
 
-  return file // .toString('base64').split('')
+    subDirs.forEach(option => {
+      const filePath = path.join(dirPath, option)
+
+      promises.push(getDataFromImage(filePath, dir))
+    })
+  })
+
+  Promise.all(promises).then(res => {
+    for (let i = 0; i < res.length; i += 1) {
+      const item = res[i]
+
+      trainingData.push({
+        input: [item.data],
+        output: [item.option]
+      })
+    }
+
+    // console.log(trainingData[0].input[0])
+
+    startTraining()
+  })
+
+  // }
 }
+
+// Starts process
+processData()
