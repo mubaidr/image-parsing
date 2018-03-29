@@ -5,8 +5,8 @@ const sharp = require('sharp')
 
 const dataPaths = require('../src/data-paths')
 
-const net = new brain.recurrent.RNN()
-const dirs = fs.readdirSync(dataPaths.testSimple)
+const net = new brain.NeuralNetwork()
+const dirs = fs.readdirSync(dataPaths.test)
 const trainingData = fs.readFileSync(dataPaths.trainingOutput)
 net.fromJSON(JSON.parse(trainingData))
 const result = []
@@ -20,16 +20,12 @@ const result = []
  */
 async function getDataFromImage(imgPath, option) {
   const img = sharp(imgPath)
-    // .resize(96, 28)
+    .resize(96, 28)
     .toColourspace('b-w')
     .threshold(32)
 
   const buff = await img.raw().toBuffer()
-  const data = buff
-    .toJSON()
-    .data.join('')
-    .replace(/255/g, '1')
-    .split('')
+  const data = buff.toJSON().data.map(str => (parseInt(str, 10) === 0 ? 1 : 0))
 
   /*
   img
@@ -54,7 +50,7 @@ function processData() {
   console.log('\nLoading training data...')
 
   dirs.forEach(dir => {
-    const dirPath = path.join(dataPaths.testSimple, dir)
+    const dirPath = path.join(dataPaths.test, dir)
     const subDirs = fs.readdirSync(dirPath)
 
     subDirs.forEach(option => {
@@ -68,7 +64,7 @@ function processData() {
     for (let i = 0; i < res.length; i += 1) {
       const item = res[i]
 
-      const output = net.runInput(item.data)
+      const output = net.run(item.data)
 
       result.push({
         input: item.option,

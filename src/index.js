@@ -6,7 +6,7 @@ const sharp = require('sharp')
 const dataPaths = require('./data-paths')
 const utilities = require('./utilities.js')
 
-const net = new brain.recurrent.RNN()
+const net = new brain.NeuralNetwork()
 const dirs = fs.readdirSync(dataPaths.sampleSimple)
 const trainingData = []
 
@@ -24,11 +24,7 @@ async function getDataFromImage(imgPath, option) {
     .threshold(32)
 
   const buff = await img.raw().toBuffer()
-  const data = buff
-    .toJSON()
-    .data.join('')
-    .replace(/255/g, '1')
-    .split('')
+  const data = buff.toJSON().data.map(str => (parseInt(str, 10) === 0 ? 1 : 0))
 
   /*
   img
@@ -54,21 +50,31 @@ function startTraining() {
   const startTime = utilities.clock()
 
   const result = net.train(trainingData, {
-    iterations: 1000,
+    iterations: 10000,
     log: true,
-    logPeriod: 100,
-    activation: 'leaky-relu'
+    logPeriod: 1000
+    // activation: 'leaky-relu'
   })
 
   const duration = utilities.clock(startTime)
 
   console.log(
-    `\nTraining finished in ${duration / 1000}s with error: ${result.error}`
+    `\nTraining finished in ${duration / 1000}s with training error: ${
+      result.error
+    }`
   )
 
   fs.writeFileSync(dataPaths.trainingOutput, JSON.stringify(net.toJSON()))
 
   console.log('\nTraining data exported to: ', dataPaths.trainingOutput)
+
+  /*
+  console.log('\nRunning test: ')
+
+  const output = brain.likely([0, 1, 0, 0], net)
+
+  console.log('Output should be A: ', output)
+  */
 }
 
 /**
@@ -94,13 +100,16 @@ function processData() {
     for (let i = 0; i < res.length; i += 1) {
       const item = res[i]
 
+      const output = {}
+      output[item.option] = 1
+
       trainingData.push({
-        input: [...item.data],
-        output: [item.option]
+        input: item.data,
+        output
       })
     }
 
-    // console.log(trainingData)
+    // console.dir(trainingData[0])
 
     startTraining()
   })

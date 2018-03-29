@@ -14,11 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/mubaidr/image-parsing.git"
   },
-  "keywords": [
-    "node",
-    "brain.js",
-    "AI"
-  ],
+  "keywords": ["node", "brain.js", "AI"],
   "author": "mubaidr@gmail.com",
   "license": "MIT",
   "bugs": {
@@ -44,6 +40,7 @@
   "dependencies": {
     "brain.js": "^1.1.2",
     "sharp": "^0.20.1",
-    "synaptic": "^1.1.4"
+    "synaptic": "^1.1.4",
+    "node-mind": "^1.0.1"
   }
 }
