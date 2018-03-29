@@ -2,7 +2,7 @@ const brain = require('brain.js')
 
 // let net = new brain.NeuralNetwork()
 
-const net = new brain.recurrent.RNN()
+const net = new brain.recurrent.LSTM()
 
 net.train([
   { input: ['abcde'], output: ['a'] },
@@ -12,6 +12,6 @@ net.train([
   { input: ['uvwxyz'], output: ['u'] }
 ])
 
-const output = net.run(['fghij']) // [0.987]
+const output = net.run(['fghij'])
 
 console.log('Result for ["fghij"] : ', output)

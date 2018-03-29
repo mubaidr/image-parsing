@@ -7,7 +7,7 @@ const dataPaths = require('./data-paths')
 const utilities = require('./utilities.js')
 
 const net = new brain.recurrent.RNN()
-const dirs = fs.readdirSync(dataPaths.sample)
+const dirs = fs.readdirSync(dataPaths.sampleSimple)
 const trainingData = []
 
 /**
@@ -19,11 +19,15 @@ const trainingData = []
  */
 async function getDataFromImage(imgPath, option) {
   const img = sharp(imgPath)
-    .resize(96, 28)
+    // .resize(96, 28)
     .toColourspace('b-w')
     .threshold(32)
 
   const buff = await img.raw().toBuffer()
+  const data = buff
+    .toJSON()
+    .data.join('')
+    .replace(/255/g, '1')
 
   /*
   img
@@ -34,10 +38,11 @@ async function getDataFromImage(imgPath, option) {
   */
 
   return {
-    data: buff.toJSON().data, // .join(''),
+    data,
     option
   }
 }
+
 /**
  * Initiates the learning process
  *
@@ -73,8 +78,6 @@ function processData() {
   const promises = []
   console.log('\nPreparing training data...')
 
-  // for (let i = 0; i < 1; i += 1) {
-
   dirs.forEach(dir => {
     const dirPath = path.join(dataPaths.sample, dir)
     const subDirs = fs.readdirSync(dirPath)
@@ -90,22 +93,14 @@ function processData() {
     for (let i = 0; i < res.length; i += 1) {
       const item = res[i]
 
-      const opt = {}
-      opt[item.option] = 1
-
       trainingData.push({
         input: [item.data],
-        output: [opt]
+        output: [item.option]
       })
     }
 
-    // console.log(trainingData[0].input[0])
-    // console.log(trainingData[0].output[0])
-
     startTraining()
   })
-
-  // }
 }
 
 // Starts process

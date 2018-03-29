@@ -6,7 +6,9 @@ const optionPaths = ['a', 'b', 'c', 'd', 'e', 'none']
 
 /* eslint-disable */
 renameFiles(dataPaths.sample)
+renameFiles(dataPaths.sampleSimple)
 renameFiles(dataPaths.test)
+renameFiles(dataPaths.testSimple)
 /* eslint-enable */
 
 function renameFiles(rootPath) {

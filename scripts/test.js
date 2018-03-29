@@ -1,49 +1,87 @@
 const fs = require('fs')
 const path = require('path')
 const brain = require('brain.js')
-const dataPaths = require('../src/data-paths')
 const sharp = require('sharp')
 
-// const net = new brain.NeuralNetwork()
-// const net = new brain.NeuralNetworkGPU()
+const dataPaths = require('../src/data-paths')
+
 const net = new brain.recurrent.RNN()
-const data = fs.readFileSync(dataPaths.trainingOutput)
-
-console.log('\nLoading net from existing data...')
-
-net.fromJSON(JSON.parse(data))
-
-console.log('\nRunning tests...')
-
-const dirs = fs.readdirSync(dataPaths.test)
+const dirs = fs.readdirSync(dataPaths.testSimple)
+const trainingData = fs.readFileSync(dataPaths.trainingOutput)
+net.fromJSON(JSON.parse(trainingData))
 const result = []
 
-dirs.forEach(dir => {
-  const dirPath = path.join(dataPaths.test, dir)
-  const subDirs = fs.readdirSync(dirPath)
+/**
+ *
+ *
+ * @param {any} imgPath Path to the image file
+ * @param {any} option output for the image
+ * @returns Raw data array of size width x height
+ */
+async function getDataFromImage(imgPath, option) {
+  const img = sharp(imgPath)
+    // .resize(96, 28)
+    .toColourspace('b-w')
+    .threshold(32)
 
-  subDirs.forEach(option => {
-    const filePath = path.join(dirPath, option)
-    const buffer = fs.readFileSync(filePath)
-    const file = sharp(buffer)
-      .resize(96)
-      .grayscale()
-      .toBuffer()
-    // .toString('base64')
-    // .split('')
+  const buff = await img.raw().toBuffer()
+  const data = buff
+    .toJSON()
+    .data.join('')
+    .replace(/255/g, '1')
 
-    // const output = net.runInput([file])
-    const output = net.run(file)
+  /*
+  img
+    .toFormat('png')
+    .toFile(path.join(dataPaths.test, 'tmp', `${Math.random()}.png`), err => {
+      if (err) console.error('Error writing file: ', err)
+    })
+  */
 
-    result.push({
-      input: dir,
-      output
+  return {
+    data,
+    option
+  }
+}
+
+/**
+ * Prepares/pre-process image data for for input
+ *
+ */
+function processData() {
+  const promises = []
+  console.log('\nLoading training data...')
+
+  dirs.forEach(dir => {
+    const dirPath = path.join(dataPaths.sample, dir)
+    const subDirs = fs.readdirSync(dirPath)
+
+    subDirs.forEach(option => {
+      const filePath = path.join(dirPath, option)
+
+      promises.push(getDataFromImage(filePath, dir))
     })
   })
-})
 
-console.log('\nResults: ', result)
+  Promise.all(promises).then(res => {
+    for (let i = 0; i < res.length; i += 1) {
+      const item = res[i]
 
-fs.writeFileSync(dataPaths.resultsOutput, JSON.stringify(result))
+      const output = net.runInput(item.data)
 
-console.log('\nResults have been saved to: ', dataPaths.resultsOutput)
+      result.push({
+        input: item.option,
+        output
+      })
+    }
+
+    console.log('\nResults: ', result)
+
+    fs.writeFileSync(dataPaths.resultsOutput, JSON.stringify(result))
+
+    console.log('\nResults have been saved to: ', dataPaths.resultsOutput)
+  })
+}
+
+// Starts process
+processData()
