@@ -7,7 +7,10 @@ const dataPaths = require('./data-paths')
 const utilities = require('./utilities.js')
 
 const net = new brain.NeuralNetwork()
-const dirs = fs.readdirSync(dataPaths.sampleSimple)
+// const net = new brain.recurrent.RNN()
+// const net = new brain.recurrent.LSTM()
+// const net = new brain.recurrent.GRU()
+const dirs = fs.readdirSync(dataPaths.sample)
 const trainingData = []
 
 /**
@@ -19,19 +22,24 @@ const trainingData = []
  */
 async function getDataFromImage(imgPath, option) {
   const img = sharp(imgPath)
-    // .resize(96, 28)
+    .resize(48, 14)
     .toColourspace('b-w')
     .threshold(32)
 
   const buff = await img.raw().toBuffer()
-  const data = buff.toJSON().data.map(str => (parseInt(str, 10) === 0 ? 1 : 0))
+  const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
+
+  // TODO: implement huffman type encoding to reduce data
 
   /*
   img
     .toFormat('png')
-    .toFile(path.join(dataPaths.test, 'tmp', `${Math.random()}.png`), err => {
-      if (err) console.error('Error writing file: ', err)
-    })
+    .toFile(
+      path.join(dataPaths.test, 'tmp', `${Math.random() * 100}.png`),
+      err => {
+        if (err) console.error('Error writing file: ', err)
+      }
+    )
   */
 
   return {
@@ -50,10 +58,11 @@ function startTraining() {
   const startTime = utilities.clock()
 
   const result = net.train(trainingData, {
-    iterations: 10000,
+    // iterations: 500,
+    errorThresh: 0.0001,
     log: true,
-    logPeriod: 1000
-    // activation: 'leaky-relu'
+    logPeriod: 1,
+    activation: 'leaky-relu'
   })
 
   const duration = utilities.clock(startTime)
@@ -86,7 +95,7 @@ function processData() {
   console.log('\nPreparing training data...')
 
   dirs.forEach(dir => {
-    const dirPath = path.join(dataPaths.sampleSimple, dir)
+    const dirPath = path.join(dataPaths.sample, dir)
     const subDirs = fs.readdirSync(dirPath)
 
     subDirs.forEach(option => {

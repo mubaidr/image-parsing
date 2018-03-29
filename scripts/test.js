@@ -25,7 +25,7 @@ async function getDataFromImage(imgPath, option) {
     .threshold(32)
 
   const buff = await img.raw().toBuffer()
-  const data = buff.toJSON().data.map(str => (parseInt(str, 10) === 0 ? 1 : 0))
+  const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
 
   /*
   img
