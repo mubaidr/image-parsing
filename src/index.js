@@ -28,6 +28,7 @@ async function getDataFromImage(imgPath, option) {
     .toJSON()
     .data.join('')
     .replace(/255/g, '1')
+    .split('')
 
   /*
   img
@@ -79,7 +80,7 @@ function processData() {
   console.log('\nPreparing training data...')
 
   dirs.forEach(dir => {
-    const dirPath = path.join(dataPaths.sample, dir)
+    const dirPath = path.join(dataPaths.sampleSimple, dir)
     const subDirs = fs.readdirSync(dirPath)
 
     subDirs.forEach(option => {
@@ -94,10 +95,12 @@ function processData() {
       const item = res[i]
 
       trainingData.push({
-        input: [item.data],
+        input: [...item.data],
         output: [item.option]
       })
     }
+
+    // console.log(trainingData)
 
     startTraining()
   })
