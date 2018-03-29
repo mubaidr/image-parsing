@@ -20,7 +20,7 @@ const result = []
  */
 async function getDataFromImage(imgPath, option) {
   const img = sharp(imgPath)
-    .resize(96, 28)
+    .resize(48, 14)
     .toColourspace('b-w')
     .threshold(32)
 
@@ -30,9 +30,12 @@ async function getDataFromImage(imgPath, option) {
   /*
   img
     .toFormat('png')
-    .toFile(path.join(dataPaths.test, 'tmp', `${Math.random()}.png`), err => {
-      if (err) console.error('Error writing file: ', err)
-    })
+    .toFile(
+      path.join(dataPaths.test, '..', 'tmp', `${Math.random()}.png`),
+      err => {
+        if (err) console.error('Error writing file: ', err)
+      }
+    )
   */
 
   return {

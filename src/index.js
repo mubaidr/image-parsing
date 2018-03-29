@@ -35,7 +35,7 @@ async function getDataFromImage(imgPath, option) {
   img
     .toFormat('png')
     .toFile(
-      path.join(dataPaths.test, 'tmp', `${Math.random() * 100}.png`),
+      path.join(dataPaths.test, '..', 'tmp', `${Math.random() * 100}.png`),
       err => {
         if (err) console.error('Error writing file: ', err)
       }
@@ -61,8 +61,8 @@ function startTraining() {
     // iterations: 500,
     errorThresh: 0.0001,
     log: true,
-    logPeriod: 1,
-    activation: 'leaky-relu'
+    logPeriod: 1
+    // activation: 'leaky-relu'
   })
 
   const duration = utilities.clock(startTime)
