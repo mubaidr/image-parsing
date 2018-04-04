@@ -1,5 +1,8 @@
 {
   "author": "Muhammad Ubaid Raza <mubaidr@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/mubaidr/image-parsing/issues"
+  },
   "build": {
     "appId": "org.mubaidr.image-parsing",
     "directories": {
@@ -20,7 +23,9 @@
         }
       ]
     },
-    "files": ["dist/electron/**/*"],
+    "files": [
+      "dist/electron/**/*"
+    ],
     "linux": {
       "icon": "build/icons"
     },
@@ -33,13 +38,13 @@
     }
   },
   "dependencies": {
-    "axios": "^0.16.1",
+    "brain.js": "^1.1.2",
+    "bulma-fluent": "^0.1.16",
+    "sharp": "^0.20.1",
     "vue": "^2.3.3",
     "vue-electron": "^1.0.6",
     "vue-router": "^2.5.3",
-    "vuex": "^2.3.1",
-    "brain.js": "^1.1.2",
-    "sharp": "^0.20.1"
+    "vuex": "^2.3.1"
   },
   "description": "An electron-vue project",
   "devDependencies": {
@@ -60,6 +65,7 @@
     "css-loader": "^0.28.4",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
+    "electron": "^2.0.0-beta.7",
     "electron-builder": "^19.19.1",
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.0",
@@ -86,8 +92,9 @@
     "mocha": "^3.0.2",
     "multispinner": "^0.2.1",
     "node-loader": "^0.6.0",
+    "node-sass": "^4.8.3",
     "nodemon": "^1.17.3",
-    "electron": "^2.0.0-beta.7",
+    "sass-loader": "^6.0.7",
     "style-loader": "^0.18.2",
     "url-loader": "^0.5.9",
     "vue-html-loader": "^1.2.4",
@@ -102,21 +109,21 @@
   "license": "MIT",
   "main": "./dist/electron/main.js",
   "name": "image-parsing",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mubaidr/image-parsing.git"
+  },
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
     "dev": "node .electron-vue/dev-runner.js",
-    "lint":
-      "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter src test",
-    "lint:fix":
-      "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src test",
+    "lint": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter src test",
+    "lint:fix": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src test",
     "pack": "npm run pack:main && npm run pack:renderer",
-    "pack:main":
-      "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
-    "pack:renderer":
-      "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
+    "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
+    "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "postinstall": "npm run lint:fix",
     "test": "npm run unit",
     "unit": "karma start test/unit/karma.conf.js"

@@ -7,6 +7,8 @@
 
 /* eslint-disable */
 
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true
+
 // Set environment for development
 process.env.NODE_ENV = 'development'
 
