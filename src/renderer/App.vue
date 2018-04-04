@@ -5,11 +5,11 @@
 </template>
 
 <script>
-  export default {
-    name: 'image-parsing'
-  }
+export default {
+  name: 'image-parsing'
+}
 </script>
 
 <style>
-  /* CSS */
+/* CSS */
 </style>

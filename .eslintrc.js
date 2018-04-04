@@ -8,11 +8,11 @@ module.exports = {
     browser: true,
     node: true
   },
-  extends: ['airbnb-base', 'plugin:vue/recommended', 'prettier'],
+  extends: ['airbnb-base', 'prettier'],
   globals: {
     __static: true
   },
-  plugins: ['html', 'vue'],
+  plugins: ['html'],
   rules: {
     'global-require': 0,
     'import/no-unresolved': 0,
