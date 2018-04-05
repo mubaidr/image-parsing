@@ -7,10 +7,16 @@
         <router-view/>
       </transition>
     </div>
+
+    <router-link to="/home">Home</router-link>
+    <router-link to="/load">Load</router-link>
+    <router-link to="/about">About</router-link>
   </div>
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
+
 export default {
   name: 'image-parsing',
   components: {},
@@ -36,10 +42,11 @@ export default {
     }
   },
   created() {
-    // mainWindow.setMenu(null)
-    // TODO: load/set menu from vue-router config on vue-app-ready
+    // send routes to main process to set menu
+    ipcRenderer.send('set-menu', this.$router.options.routes)
   }
 }
 </script>
 
-<style lang="sass"></style>
+<style lang="sass">
+</style>

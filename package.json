@@ -23,9 +23,7 @@
         }
       ]
     },
-    "files": [
-      "dist/electron/**/*"
-    ],
+    "files": ["dist/electron/**/*"],
     "linux": {
       "icon": "build/icons"
     },
@@ -40,6 +38,7 @@
   "dependencies": {
     "brain.js": "^1.1.2",
     "bulma-fluent": "^0.1.18",
+    "electron": "^2.0.0-beta.7",
     "sharp": "^0.20.1",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
@@ -65,7 +64,6 @@
     "css-loader": "^0.28.11",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^2.0.0-beta.7",
     "electron-builder": "^20.8.1",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.3",
@@ -119,11 +117,15 @@
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
     "dev": "node .electron-vue/dev-runner.js",
-    "lint": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter src test",
-    "lint:fix": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src test",
+    "lint":
+      "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter src test",
+    "lint:fix":
+      "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src test",
     "pack": "npm run pack:main && npm run pack:renderer",
-    "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
-    "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
+    "pack:main":
+      "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
+    "pack:renderer":
+      "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "postinstall": "npm run lint:fix",
     "test": "npm run unit",
     "unit": "karma start test/unit/karma.conf.js"

@@ -11,7 +11,6 @@
             <p>Design, populate and extract results from the answer sheets. </p>
           </div>
         </div>
-        <router-link to="/about">About</router-link>
       </section>
     </div>
   </div>
@@ -19,7 +18,7 @@
 
 <script>
 export default {
-  name: 'landing-page'
+  name: 'Home'
 }
 </script>
 
