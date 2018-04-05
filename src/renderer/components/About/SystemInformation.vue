@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="title is-4">System Information</h1>
+    <h2 class="subtitle is-3">System Information</h2>
     <table class="table is-fullwidth">
       <thead>
         <tr>

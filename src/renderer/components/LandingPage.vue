@@ -11,30 +11,15 @@
             <p>Design, populate and extract results from the answer sheets. </p>
           </div>
         </div>
+        <router-link to="/about">About</router-link>
       </section>
-    </div>
-    <br/>
-    <div class="colums">
-      <div class="column is-8 is-offset-2">
-        <div class="box">
-          <system-information></system-information>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-import SystemInformation from './LandingPage/SystemInformation'
-
 export default {
-  name: 'landing-page',
-  components: { SystemInformation },
-  methods: {
-    open(link) {
-      this.$electron.shell.openExternal(link)
-    }
-  }
+  name: 'landing-page'
 }
 </script>
 

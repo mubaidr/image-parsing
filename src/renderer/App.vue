@@ -1,8 +1,7 @@
 <template>
   <div id="app">
-    <menu-view/>
     <div class="content-custom">
-      <transition name="slide-right"
+      <transition :name="transitionName"
                   appear="appear"
                   mode="out-in">
         <router-view/>
@@ -12,13 +11,9 @@
 </template>
 
 <script>
-import menuView from './components/Templates/Menu'
-
 export default {
   name: 'image-parsing',
-  components: {
-    menuView
-  },
+  components: {},
   data() {
     return {
       transitionName: 'slide-up'
@@ -39,10 +34,12 @@ export default {
         this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
       }
     }
+  },
+  created() {
+    // mainWindow.setMenu(null)
+    // TODO: load/set menu from vue-router config on vue-app-ready
   }
 }
 </script>
 
-<style>
-/* CSS */
-</style>
+<style lang="sass"></style>

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 import 'bulma-fluent/css/bulma.css'
-
+import './assets/main.sass'
 import './assets/animations.sass'
 
 import App from './App'
