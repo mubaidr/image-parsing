@@ -27,13 +27,13 @@ function createWindow() {
     height: 700,
     minWidth: 500,
     minHeight: 350,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#f0f0f0',
     webPreferences: {
       nodeIntegrationInWorker: true,
       webSecurity: false
     }
   })
-  // mainWindow.setMenu(null)
+  mainWindow.setMenu(null)
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {

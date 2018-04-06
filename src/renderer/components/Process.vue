@@ -7,21 +7,47 @@
       <p>Choose a folder which contains answer sheet data image files.</p>
       <br/>
       <div class="columns">
-        <div class="column is-4">
-          <div class="box">
-            <button class="button is-primary is-fullwidth"
-                    @click="choosePath">Choose Source</button>
-            <h2 class="subtitle is-6">{{ normalizedDirectory || 'No Source Selected' }}</h2>
-
-            <ul>
+        <div class="column"
+             :class="previewFile ? 'is-4' : 'is-12'">
+          <nav class="panel">
+            <p class="panel-heading">
+              {{ normalizedDirectory || 'No Source Selected' }}
+            </p>
+            <div class="panel-block">
+              <p class="control has-icons-left">
+                <input class="input"
+                       type="text"
+                       placeholder="Search" />
+              </p>
+            </div>
+            <a class="panel-block">
+              <span class="panel-icon">
+                <i class="fas fa-book" />
+              </span>
+              bulma
+            </a>
+            <div class="panel-block">
+              <button class="button is-primary is-fullwidth"
+                      @click="choosePath">
+                Choose Directory
+              </button>
+            </div>
+          </nav>
+          <aside class="menu">
+            <p class="menu-label">
+              {{ normalizedDirectory || 'No Source Selected' }}
+            </p>
+            <ul class="menu-list fixed-height">
               <li v-for="(file,index) in files"
                   :key="index"
-                  class="tag is-fullwidth"
+                  :class="{'is-active' : file === previewFile}"
                   @click="previewFile = file">
-                {{ file }}
+                <a>
+                  {{ file }}
+                </a>
               </li>
             </ul>
-          </div>
+          </aside>
         </div>
         <div class="column is-8">
           <template v-if="previewFile">
@@ -95,15 +121,10 @@ export default {
 </script>
 
 <style lang="sass">
-.tag
-  cursor: default
-  user-select: none
+.column
   transition: all 0.25s ease-out
-  &:hover
-    background-color: rgba(0,0,0,0.1)
-  &:active
-    background-color: rgba(0,0,0,0.25)
-  &.is-fullwidth
-    width: 100%
-    justify-content: left
+
+.fixed-height
+  max-height: 420px
+  overflow: auto
 </style>
