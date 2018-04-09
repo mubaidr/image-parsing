@@ -13,14 +13,25 @@
               {{ normalizedDirectory || 'No Source Selected' }}
             </p>
             <div class="panel-block has-text-centered">
-              <button class="button is-primary is-fullwidth"
+              <button class="button is-fullwidth"
                       @click="choosePath">
                 Change Directory
               </button>
             </div>
             <template v-if="directory && files.length">
               <div class="panel-block">
-                <p class="control has-icons-left">
+                <div class="tag"> {{files.length}} images found in the selected directory. </div>
+              </div>
+              <div class="panel-block">
+                <button class="button is-primary is-fullwidth"
+                        @click="choosePath">
+                  Next Step
+                </button>
+              </div>
+              <div class="panel-block">You can preview any image by clicking its name in the following list;
+              </div>
+              <div class="panel-block">
+                <p class="control">
                   <input v-model="fileFilter"
                          class="input is-small"
                          type="text"
@@ -123,6 +134,6 @@ export default {
 
 <style lang="sass">
 .fixed-height
-  max-height: 420px
+  max-height: 25em
   overflow: auto
 </style>
