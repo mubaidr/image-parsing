@@ -6,13 +6,13 @@
       </h1>
       <p>Choose a folder which contains answer sheet data image files.</p>
       <br>
-      <div class="columns">
-        <div class="column is-6-tablet is-offset-3-tablet is-4-desktop is-offset-4-desktop">
+      <div class="columns is-mobile">
+        <div class="column is-4 is-offset-4">
           <nav class="panel">
             <p class="panel-heading">
               {{ normalizedDirectory || 'No Source Selected' }}
             </p>
-            <div class="panel-block has-text-centered">
+            <div class="panel-block">
               <button class="button is-primary is-fullwidth"
                       @click="choosePath">
                 Change Directory
@@ -27,56 +27,37 @@
                          placeholder="Search">
                 </p>
               </div>
-              <div class="fixed-height">
-                <a v-for="(file,index) in filteredFiles"
-                   :class="{'is-active' : file === previewFile}"
-                   :key="index"
-                   class="panel-block"
-                   @click="previewFile = file">
-                  {{ file }}
-                </a>
-              </div>
+              <a v-for="(file,index) in filteredFiles"
+                 :class="{'is-active' : file === previewFile}"
+                 :key="index"
+                 class="panel-block"
+                 @click="previewFile = file">
+                {{ file }}
+              </a>
             </template>
             <template v-if="directory && !files.length">
-              <div class="notification is-warning">Selected directory does not contains any image files. </div>
+              <div class="notification is-warning">Selected directory does not contains valid image files. </div>
             </template>
           </nav>
         </div>
-        <image-modal :previewFile="previewFile"
-                     :previewFilePath="previewFilePath"
-                     @close="previewFile = null"></image-modal>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import imageModal from './Templates/image-modal'
 const path = require('path')
 const fs = require('fs')
 // eslint-disable-next-line
 const { dialog } = require('electron').remote
 
 export default {
-  components: { imageModal },
   data() {
     return {
       directory: null,
       files: [],
       previewFile: null,
-      fileFilter: '',
-      imageFormats: [
-        'png',
-        'jpg',
-        'jpeg',
-        'jpe',
-        'jfif',
-        'gif',
-        'tif',
-        'tiff',
-        'bmp',
-        'dib'
-      ]
+      fileFilter: ''
     }
   },
   computed: {
@@ -87,9 +68,7 @@ export default {
       return this.directory ? this.directory.replace(/(\\)/g, '\\') : null
     },
     previewFilePath() {
-      return this.previewFile
-        ? path.join(this.normalizedDirectory, this.previewFile)
-        : null
+      return path.join(this.normalizedDirectory, this.previewFile)
     }
   },
   watch: {
@@ -98,14 +77,11 @@ export default {
         fs.readdir(val, (err, res) => {
           if (err) {
             this.files = []
+            // alert(err)
           } else {
-            this.files = res.filter(file => {
-              const dotIndex = file.lastIndexOf('.')
-              if (dotIndex === -1) return false
-
-              const ext = file.substring(dotIndex + 1).toLowerCase()
-              return this.imageFormats.indexOf(ext) !== -1
-            })
+            this.files = res.map(file =>
+              file.replace(file.substring(file.lastIndexOf('.')), '')
+            )
           }
         })
       }
@@ -122,6 +98,9 @@ export default {
 </script>
 
 <style lang="sass">
+.column
+  transition: all 0.25s ease-out
+
 .fixed-height
   max-height: 420px
   overflow: auto

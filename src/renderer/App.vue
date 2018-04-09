@@ -15,6 +15,7 @@
 </template>
 
 <script>
+// eslint-disable-next-line
 import { ipcRenderer } from 'electron'
 
 export default {
