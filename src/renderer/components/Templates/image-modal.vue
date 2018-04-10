@@ -22,13 +22,24 @@
     </div>
     <button class="modal-close is-large"
             aria-label="close"
-            @click="$emit('close');"></button>
+            @click="$emit('close');"
+            @keyup.esc="$emit('close');"
+            ref="btnClose"
+            autofocus></button>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['previewFile', 'previewFilePath']
+  props: ['previewFile', 'previewFilePath'],
+  watch: {
+    previewFile(val) {
+      if (val)
+        this.$nextTick(() => {
+          this.$refs.btnClose.focus()
+        })
+    }
+  }
 }
 </script>
 

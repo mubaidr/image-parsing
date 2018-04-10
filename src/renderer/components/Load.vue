@@ -1,63 +1,95 @@
 <template>
   <div>
     <div class="section">
-      <h1 class="title is-1">
-        Choose Data Source
-      </h1>
-      <p>Choose a folder which contains answer sheet data image files.</p>
+      <div class="header">
+        <h1 class="title is-1">
+          Choose Data Source
+        </h1>
+        <p>Choose a folder which contains answer sheet data image files.</p>
+      </div>
       <br>
-      <div class="columns is-mobile">
-        <div class="column is-4 is-offset-4">
+      <div class="columns">
+        <div class="column is-6-tablet is-offset-3-tablet is-4-desktop is-offset-4-desktop">
           <nav class="panel">
             <p class="panel-heading">
               {{ normalizedDirectory || 'No Source Selected' }}
             </p>
-            <div class="panel-block">
-              <button class="button is-primary is-fullwidth"
+            <div class="panel-block has-text-centered">
+              <button class="button is-fullwidth"
                       @click="choosePath">
                 Change Directory
               </button>
             </div>
             <template v-if="directory && files.length">
               <div class="panel-block">
-                <p class="control has-icons-left">
+                <div class="tag"> {{files.length}} images found in the selected directory. </div>
+              </div>
+              <div class="panel-block">
+                <button class="button is-primary is-fullwidth"
+                        @click="choosePath">
+                  Next Step
+                </button>
+              </div>
+              <div class="panel-block">You can preview any image by clicking its name in the following list;
+              </div>
+              <div class="panel-block">
+                <p class="control">
                   <input v-model="fileFilter"
                          class="input is-small"
                          type="text"
                          placeholder="Search">
                 </p>
               </div>
-              <a v-for="(file,index) in filteredFiles"
-                 :class="{'is-active' : file === previewFile}"
-                 :key="index"
-                 class="panel-block"
-                 @click="previewFile = file">
-                {{ file }}
-              </a>
+              <div class="fixed-height">
+                <a v-for="(file,index) in filteredFiles"
+                   :class="{'is-active' : file === previewFile}"
+                   :key="index"
+                   class="panel-block"
+                   @click="previewFile = file">
+                  {{ file }}
+                </a>
+              </div>
             </template>
             <template v-if="directory && !files.length">
-              <div class="notification is-warning">Selected directory does not contains valid image files. </div>
+              <div class="notification is-warning">Selected directory does not contains any image files. </div>
             </template>
           </nav>
         </div>
+        <image-modal :previewFile="previewFile"
+                     :previewFilePath="previewFilePath"
+                     @close="previewFile = null"></image-modal>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import imageModal from './Templates/image-modal'
 const path = require('path')
 const fs = require('fs')
 // eslint-disable-next-line
 const { dialog } = require('electron').remote
 
 export default {
+  components: { imageModal },
   data() {
     return {
       directory: null,
       files: [],
       previewFile: null,
-      fileFilter: ''
+      fileFilter: '',
+      imageFormats: [
+        'png',
+        'jpg',
+        'jpeg',
+        'jpe',
+        'jfif',
+        'gif',
+        'tif',
+        'tiff',
+        'bmp',
+        'dib'
+      ]
     }
   },
   computed: {
@@ -68,7 +100,9 @@ export default {
       return this.directory ? this.directory.replace(/(\\)/g, '\\') : null
     },
     previewFilePath() {
-      return path.join(this.normalizedDirectory, this.previewFile)
+      return this.previewFile
+        ? path.join(this.normalizedDirectory, this.previewFile)
+        : null
     }
   },
   watch: {
@@ -77,11 +111,14 @@ export default {
         fs.readdir(val, (err, res) => {
           if (err) {
             this.files = []
-            // alert(err)
           } else {
-            this.files = res.map(file =>
-              file.replace(file.substring(file.lastIndexOf('.')), '')
-            )
+            this.files = res.filter(file => {
+              const dotIndex = file.lastIndexOf('.')
+              if (dotIndex === -1) return false
+
+              const ext = file.substring(dotIndex + 1).toLowerCase()
+              return this.imageFormats.indexOf(ext) !== -1
+            })
           }
         })
       }
@@ -98,10 +135,7 @@ export default {
 </script>
 
 <style lang="sass">
-.column
-  transition: all 0.25s ease-out
-
 .fixed-height
-  max-height: 420px
+  max-height: 25em
   overflow: auto
 </style>

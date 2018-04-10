@@ -19,6 +19,11 @@ export default new Router({
       component: require('@/components/About').default
     },
     {
+      path: '/load',
+      name: 'Load',
+      component: require('@/components/Load').default
+    },
+    {
       path: '/process',
       name: 'Process',
       component: require('@/components/Process').default

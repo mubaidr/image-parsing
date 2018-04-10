@@ -9,7 +9,8 @@
       "output": "build"
     },
     "dmg": {
-      "contents": [{
+      "contents": [
+        {
           "path": "/Applications",
           "type": "link",
           "x": 410,
@@ -38,7 +39,7 @@
   },
   "dependencies": {
     "brain.js": "^1.1.2",
-    "bulma-fluent": "^0.1.21",
+    "bulma-fluent": "^0.1.25",
     "sharp": "^0.20.1",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
@@ -71,7 +72,7 @@
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
-    "eslint-friendly-formatter": "^4.0.0",
+    "eslint-friendly-formatter": "^4.0.1",
     "eslint-import-resolver-webpack": "^0.9.0",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-html": "^4.0.2",
