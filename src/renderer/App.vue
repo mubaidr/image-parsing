@@ -46,6 +46,8 @@ export default {
   created() {
     // send routes to main process to set menu
     ipcRenderer.send('set-menu', this.$router.options.routes)
+
+    // TODO: check global variable
   }
 }
 </script>

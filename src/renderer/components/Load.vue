@@ -5,7 +5,7 @@
         <h1 class="title is-1">
           Choose Data Source
         </h1>
-        <p>Choose a folder which contains answer sheet data image files.</p>
+        <p>Choose the folder which contains answer sheet data image files.</p>
       </div>
       <br>
       <div class="columns">
@@ -42,10 +42,10 @@
               </div>
               <div class="fixed-height">
                 <a v-for="(file,index) in filteredFiles"
-                   :class="{'is-active' : file === previewFile}"
+                   :class="{'is-active' : file === selectedFile}"
                    :key="index"
                    class="panel-block"
-                   @click="previewFile = file">
+                   @click="selectedFile = file">
                   {{ file }}
                 </a>
               </div>
@@ -55,9 +55,8 @@
             </template>
           </nav>
         </div>
-        <image-modal :previewFile="previewFile"
-                     :previewFilePath="previewFilePath"
-                     @close="previewFile = null"></image-modal>
+        <image-modal :filePath="selectedFilePath"
+                     @close="selectedFile = null"></image-modal>
       </div>
     </div>
   </div>
@@ -76,7 +75,7 @@ export default {
     return {
       directory: null,
       files: [],
-      previewFile: null,
+      selectedFile: null,
       fileFilter: '',
       imageFormats: [
         'png',
@@ -99,9 +98,9 @@ export default {
     normalizedDirectory() {
       return this.directory ? this.directory.replace(/(\\)/g, '\\') : null
     },
-    previewFilePath() {
-      return this.previewFile
-        ? path.join(this.normalizedDirectory, this.previewFile)
+    selectedFilePath() {
+      return this.selectedFile
+        ? path.join(this.normalizedDirectory, this.selectedFile)
         : null
     }
   },
@@ -121,6 +120,8 @@ export default {
             })
           }
         })
+      } else {
+        this.files = []
       }
     }
   },
@@ -128,7 +129,7 @@ export default {
     choosePath() {
       ;[this.directory] = dialog.showOpenDialog({
         properties: ['openDirectory']
-      })
+      }) || [false]
     }
   }
 }

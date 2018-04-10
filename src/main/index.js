@@ -1,4 +1,14 @@
-import { app, BrowserWindow, ipcMain, Menu, MenuItem } from 'electron' // eslint-disable-line
+/* eslint-disable */
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  MenuItem
+} from 'electron'
+/* eslint-enable */
+
+const dataPaths = require('../utiltities/data-paths.js')
 
 /**
  * Set `__static` path to static files in production
@@ -10,12 +20,14 @@ if (process.env.NODE_ENV !== 'development') {
     .join(__dirname, '/static')
     .replace(/\\/g, '\\\\') // eslint-disable-line
 }
+// eslint-disable-next-line
+global.__paths = dataPaths
 
 let mainWindow
 const winURL =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:9080'
-    : `file://${__dirname}/index.html`
+  process.env.NODE_ENV === 'development' ?
+  'http://localhost:9080' :
+  `file://${__dirname}/index.html`
 
 function createWindow() {
   /**

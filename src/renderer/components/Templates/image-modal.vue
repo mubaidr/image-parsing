@@ -1,43 +1,61 @@
 <template>
-  <div class="modal"
-       :class="{'is-active': previewFile}"
-       v-if="previewFile">
-    <div class="modal-background"></div>
+  <div :class="{'is-active': filePath}"
+       class="modal">
+    <div class="modal-background"
+         @click="$emit('close');"></div>
     <div class="modal-content">
       <div class="card">
         <div class="card-image">
           <figure class="image is-4by3">
-            <img :src="previewFilePath"
+            <img :src="filePathData"
                  alt="Preview Image">
           </figure>
         </div>
-        <div class="card-content">
-          <div class="media">
-            <div class="media-content">
-              <p class="title is-4">{{ previewFile }}</p>
-            </div>
-          </div>
+        <div class="card-content has-text-centered">
+          <p>{{ filePath }}</p>
         </div>
       </div>
     </div>
-    <button class="modal-close is-large"
-            aria-label="close"
+    <button ref="btnClose"
+            class="modal-close is-large"
             @click="$emit('close');"
             @keyup.esc="$emit('close');"
-            ref="btnClose"
+            aria-label="close"
             autofocus></button>
   </div>
 </template>
 
 <script>
+const sharp = require('sharp')
+
 export default {
-  props: ['previewFile', 'previewFilePath'],
+  props: ['filePath'],
+  data() {
+    return {
+      filePathData: null
+    }
+  },
   watch: {
-    previewFile(val) {
-      if (val)
-        this.$nextTick(() => {
-          this.$refs.btnClose.focus()
-        })
+    async filePath(val) {
+      if (!val) {
+        this.filePathData = null
+        return
+      }
+
+      const dotIndex = val.lastIndexOf('.')
+      const ext = val.substring(dotIndex + 1).toLowerCase()
+
+      if (ext.indexOf('tif') !== -1) {
+        const img = sharp(val).png()
+
+        this.filePathData = img
+      } else {
+        this.filePathData = this.filePath
+      }
+
+      this.$nextTick(() => {
+        this.$refs.btnClose.focus()
+      })
     }
   }
 }
