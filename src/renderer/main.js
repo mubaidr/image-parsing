@@ -8,7 +8,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-import dataPaths from './../utiltities/data-paths'
+const dataPaths = require('../utilities/data-paths.js')
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 
@@ -16,7 +16,7 @@ Vue.config.productionTip = false
 Vue.config.devtools = false
 
 /* eslint-disable no-new */
-new Vue({
+const app = new Vue({
   components: {
     App
   },
@@ -24,3 +24,6 @@ new Vue({
   store,
   template: '<App/>'
 }).$mount('#app')
+
+// eslint-disable-next-line
+global.__paths = dataPaths()

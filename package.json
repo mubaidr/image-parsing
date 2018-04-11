@@ -9,8 +9,7 @@
       "output": "build"
     },
     "dmg": {
-      "contents": [
-        {
+      "contents": [{
           "path": "/Applications",
           "type": "link",
           "x": 410,
@@ -39,12 +38,13 @@
   },
   "dependencies": {
     "brain.js": "^1.1.2",
-    "bulma-fluent": "^0.1.25",
+    "bulma-fluent": "^0.1.30",
     "sharp": "^0.20.1",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-persistedstate": "^2.5.2"
   },
   "description": "An electron-vue project",
   "devDependencies": {

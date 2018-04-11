@@ -26,6 +26,7 @@
 </template>
 
 <script>
+const path = require('path')
 const sharp = require('sharp')
 
 export default {
@@ -46,9 +47,13 @@ export default {
       const ext = val.substring(dotIndex + 1).toLowerCase()
 
       if (ext.indexOf('tif') !== -1) {
-        const img = sharp(val).png()
-
-        this.filePathData = img
+        const imgOutputPath = path.join(global.__paths.tmp, 'preview.png')
+        const img = sharp(val)
+          .png()
+          .toFile(imgOutputPath)
+          .then(() => {
+            this.filePathData = imgOutputPath
+          })
       } else {
         this.filePathData = this.filePath
       }
