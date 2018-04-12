@@ -37,7 +37,7 @@ export default {
     }
   },
   watch: {
-    async filePath(val) {
+    filePath(val) {
       if (!val) {
         this.filePathData = null
         return
