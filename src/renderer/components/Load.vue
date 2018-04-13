@@ -8,6 +8,13 @@
         <p>Choose the folder which contains answer sheet data image files.</p>
       </div>
       <br>
+      <div class="panel-block">
+        <button 
+          class="button is-primary is-fullwidth"
+          @click="choosePath">
+          Next Step
+        </button>
+      </div>
       <div class="columns">
         <div class="column is-6-tablet is-offset-3-tablet is-4-desktop is-offset-4-desktop">
           <nav class="panel">
@@ -15,37 +22,34 @@
               {{ normalizedDirectory || 'No Source Selected' }}
             </p>
             <div class="panel-block has-text-centered">
-              <button class="button is-fullwidth"
-                      @click="choosePath">
+              <button 
+                class="button is-fullwidth"
+                @click="choosePath">
                 Change Directory
               </button>
             </div>
             <template v-if="directory && files.length">
               <div class="panel-block">
-                <div class="tag"> {{files.length}} images found in the selected directory. </div>
-              </div>
-              <div class="panel-block">
-                <button class="button is-primary is-fullwidth"
-                        @click="choosePath">
-                  Next Step
-                </button>
+                <div class="tag"> {{ files.length }} images found in the selected directory. </div>
               </div>
               <div class="panel-block">You can preview any image by clicking its name in the following list;
               </div>
               <div class="panel-block">
                 <p class="control">
-                  <input v-model="fileFilter"
-                         class="input is-small"
-                         type="text"
-                         placeholder="Search">
+                  <input 
+                    v-model="fileFilter"
+                    class="input is-small"
+                    type="text"
+                    placeholder="Search">
                 </p>
               </div>
               <div class="fixed-height">
-                <a v-for="(file,index) in filteredFiles"
-                   :class="{'is-active' : file === selectedFile}"
-                   :key="index"
-                   class="panel-block"
-                   @click="selectedFile = file">
+                <a 
+                  v-for="(file,index) in filteredFiles"
+                  :class="{'is-active' : file === selectedFile}"
+                  :key="index"
+                  class="panel-block"
+                  @click="selectedFile = file">
                   {{ file }}
                 </a>
               </div>
@@ -55,8 +59,9 @@
             </template>
           </nav>
         </div>
-        <image-modal :filePath="selectedFilePath"
-                     @close="selectedFile = null"></image-modal>
+        <image-modal 
+          :file-path="selectedFilePath"
+          @close="selectedFile = null"/>
       </div>
     </div>
   </div>
@@ -76,19 +81,7 @@ export default {
       directory: null,
       files: [],
       selectedFile: null,
-      fileFilter: '',
-      imageFormats: [
-        'png',
-        'jpg',
-        'jpeg',
-        'jpe',
-        'jfif',
-        'gif',
-        'tif',
-        'tiff',
-        'bmp',
-        'dib'
-      ]
+      fileFilter: ''
     }
   },
   computed: {

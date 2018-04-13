@@ -1,14 +1,17 @@
 <template>
-  <div :class="{'is-active': filePath}"
-       class="modal">
-    <div class="modal-background"
-         @click="$emit('close');"></div>
+  <div
+    :class="{'is-active': filePath}"
+    class="modal">
+    <div
+      class="modal-background"
+      @click="$emit('close');"/>
     <div class="modal-content">
       <div class="card">
         <div class="card-image">
           <figure class="image is-4by3">
-            <img :src="filePathData"
-                 alt="Preview Image">
+            <img
+              :src="filePathData"
+              alt="Preview Image">
           </figure>
         </div>
         <div class="card-content has-text-centered">
@@ -16,12 +19,13 @@
         </div>
       </div>
     </div>
-    <button ref="btnClose"
-            class="modal-close is-large"
-            @click="$emit('close');"
-            @keyup.esc="$emit('close');"
-            aria-label="close"
-            autofocus></button>
+    <button
+      ref="btnClose"
+      class="modal-close is-large"
+      aria-label="close"
+      autofocus
+      @click="$emit('close');"
+      @keyup.esc="$emit('close');"/>
   </div>
 </template>
 
