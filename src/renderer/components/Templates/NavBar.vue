@@ -1,7 +1,7 @@
 <template>
   <div class="navigation-bar is-static"
        :class="{'is-active': isNavBarWide}">
-    <button class="button is-white"
+    <button class="button"
             @click="isNavBarWide = !isNavBarWide">
       <span class="icon">
         <i class="fas fa-bars" />
@@ -12,15 +12,13 @@
         <li v-for="step in allSteps"
             :key="step.path"
             :class="{'is-active' : step.path === activeStep.path}"
-            @click="setActiveStep(step.path)">
-          <router-link :to="step.path"
-                       :title="step.name">
-            <span class="icon">
-              <i class="fas"
-                 :class="step.icon" />
-            </span>
-            <span>{{step.name}}</span>
-          </router-link>
+            @click="gotoURL(step.path)"
+            :title="step.name">
+          <span class="icon">
+            <i class="fas"
+               :class="step.icon" />
+          </span>
+          <span>{{step.name}}</span>
         </li>
       </ul>
     </aside>
@@ -36,11 +34,18 @@ export default {
       isNavBarWide: false
     }
   },
+
   computed: {
     ...mapGetters(['allSteps', 'activeStep'])
   },
+
   methods: {
-    ...mapActions(['setActiveStep'])
+    ...mapActions(['setActiveStep']),
+
+    gotoURL(path) {
+      this.setActiveStep(path)
+      this.$router.push(path)
+    }
   }
 }
 </script>

@@ -7,15 +7,21 @@ const state = {
     },
     {
       path: '/design',
-      name: 'Design',
+      name: 'Design Answer Sheet',
       active: false,
       icon: 'fa-object-group'
     },
     {
-      path: '/process',
-      name: 'Process',
+      path: '/generate',
+      name: 'Generate Answer Sheets',
       active: false,
-      icon: 'fa-coffee'
+      icon: 'fa-file-alt'
+    },
+    {
+      path: '/process',
+      name: 'Process Scanned Files',
+      active: false,
+      icon: 'fa-play'
     },
     {
       path: '/about',

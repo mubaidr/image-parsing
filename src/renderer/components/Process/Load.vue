@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import imageModal from './Templates/ImageModal'
 const path = require('path')
 const fs = require('fs')
@@ -71,6 +72,7 @@ const { dialog } = require('electron').remote
 
 export default {
   components: { imageModal },
+
   data() {
     return {
       directory: null,
@@ -79,19 +81,25 @@ export default {
       fileFilter: ''
     }
   },
+
   computed: {
+    ...mapGetters(['validFileTypes']),
+
     filteredFiles() {
       return this.files.filter(file => file.indexOf(this.fileFilter) !== -1)
     },
+
     normalizedDirectory() {
       return this.directory ? this.directory.replace(/(\\)/g, '\\') : null
     },
+
     selectedFilePath() {
       return this.selectedFile
         ? path.join(this.normalizedDirectory, this.selectedFile)
         : null
     }
   },
+
   watch: {
     directory(val) {
       if (val) {
@@ -104,7 +112,7 @@ export default {
               if (dotIndex === -1) return false
 
               const ext = file.substring(dotIndex + 1).toLowerCase()
-              return this.imageFormats.indexOf(ext) !== -1
+              return this.validFileTypes.indexOf(ext) !== -1
             })
           }
         })
@@ -113,6 +121,7 @@ export default {
       }
     }
   },
+
   methods: {
     choosePath() {
       ;[this.directory] = dialog.showOpenDialog({

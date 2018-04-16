@@ -18,21 +18,26 @@ import NavBar from './components/Templates/NavBar'
 
 export default {
   name: 'ImageParsing',
+
   components: { NavBar },
+
   data() {
     return {
-      transitionName: 'slide-up'
+      transitionName: 'slide-right'
     }
   },
+
   watch: {
     $route(to, from) {
-      this.setTransition(to, from)
+      // this.setTransition(to, from)
     }
   },
+
   created() {
     // send routes to main process to set menu
     ipcRenderer.send('set-menu', this.$router.options.routes)
   },
+
   methods: {
     setTransition(to, from) {
       const toDepth = to.path.split('/').length

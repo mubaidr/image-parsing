@@ -17,7 +17,11 @@ const state = {
   }
 }
 
-const getters = {}
+const getters = {
+  validFileTypes(state) {
+    return state.imageFormats
+  }
+}
 
 const mutations = {}
 
