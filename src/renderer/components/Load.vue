@@ -9,9 +9,8 @@
       </div>
       <br>
       <div class="panel-block">
-        <button 
-          class="button is-primary is-fullwidth"
-          @click="choosePath">
+        <button class="button is-primary is-fullwidth"
+                @click="choosePath">
           Next Step
         </button>
       </div>
@@ -22,9 +21,8 @@
               {{ normalizedDirectory || 'No Source Selected' }}
             </p>
             <div class="panel-block has-text-centered">
-              <button 
-                class="button is-fullwidth"
-                @click="choosePath">
+              <button class="button is-fullwidth"
+                      @click="choosePath">
                 Change Directory
               </button>
             </div>
@@ -36,20 +34,18 @@
               </div>
               <div class="panel-block">
                 <p class="control">
-                  <input 
-                    v-model="fileFilter"
-                    class="input is-small"
-                    type="text"
-                    placeholder="Search">
+                  <input v-model="fileFilter"
+                         class="input is-small"
+                         type="text"
+                         placeholder="Search">
                 </p>
               </div>
               <div class="fixed-height">
-                <a 
-                  v-for="(file,index) in filteredFiles"
-                  :class="{'is-active' : file === selectedFile}"
-                  :key="index"
-                  class="panel-block"
-                  @click="selectedFile = file">
+                <a v-for="(file,index) in filteredFiles"
+                   :class="{'is-active' : file === selectedFile}"
+                   :key="index"
+                   class="panel-block"
+                   @click="selectedFile = file">
                   {{ file }}
                 </a>
               </div>
@@ -59,16 +55,15 @@
             </template>
           </nav>
         </div>
-        <image-modal 
-          :file-path="selectedFilePath"
-          @close="selectedFile = null"/>
+        <image-modal :file-path="selectedFilePath"
+                     @close="selectedFile = null" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import imageModal from './Templates/image-modal'
+import imageModal from './Templates/ImageModal'
 const path = require('path')
 const fs = require('fs')
 // eslint-disable-next-line
