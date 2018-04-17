@@ -4,8 +4,8 @@ import 'bulma-fluent/css/bulma.css'
 
 import './mixins'
 
-import './assets/main.sass'
-import './assets/animations.sass'
+import './assets/style/main.sass'
+import './assets/style/animations.sass'
 import './assets/fontawesome/css/fontawesome-all.css'
 
 import App from './App'
