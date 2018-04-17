@@ -18,7 +18,7 @@ export default new Router({
     },
     {
       path: '/design',
-      name: 'Design Answer Sheet',
+      name: 'Design',
       meta: {
         icon: 'fa-object-group'
       },
@@ -26,7 +26,7 @@ export default new Router({
     },
     {
       path: '/generate',
-      name: 'Generate Answer Sheets',
+      name: 'Generate',
       meta: {
         icon: 'fa-file-alt'
       },
@@ -34,14 +34,14 @@ export default new Router({
     },
     {
       path: '/process',
-      name: 'Process Now',
+      name: 'Process',
       meta: {
         icon: 'fa-play'
       },
       component: require('@/components/Process').default,
       children: [{
           path: 'chooseDesign', // design
-          name: 'Design',
+          name: 'Select Design',
           meta: {
             icon: 'fa-object-group'
           },
@@ -49,7 +49,7 @@ export default new Router({
         },
         {
           path: 'chooseData',
-          name: 'Data',
+          name: 'Select Data',
           meta: {
             icon: 'fa-database'
           },
@@ -57,7 +57,7 @@ export default new Router({
         },
         {
           path: 'identifySource',
-          name: 'Options',
+          name: 'Customize Options',
           meta: {
             icon: 'fa-qrcode'
           },
@@ -65,7 +65,7 @@ export default new Router({
         },
         {
           path: 'startProcess',
-          name: 'Process',
+          name: 'Process Now',
           meta: {
             icon: 'fa-play'
           },

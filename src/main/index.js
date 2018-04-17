@@ -69,7 +69,7 @@ app.on('activate', () => {
 })
 
 // Event handlers
-/* TODO: update when routes ready
+/*
 ipcMain.on('set-menu', (event, routes) => {
   console.log(routes)
   const menu = new Menu()
@@ -77,16 +77,33 @@ ipcMain.on('set-menu', (event, routes) => {
     const route = routes[i]
     const menuItem = new MenuItem({
       label: route.name,
-      submenu: [
-        { role: 'undo' },
-        { role: 'redo' },
-        { type: 'separator' },
-        { role: 'cut' },
-        { role: 'copy' },
-        { role: 'paste' },
-        { role: 'pasteandmatchstyle' },
-        { role: 'delete' },
-        { role: 'selectall' }
+      submenu: [{
+          role: 'undo'
+        },
+        {
+          role: 'redo'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          role: 'cut'
+        },
+        {
+          role: 'copy'
+        },
+        {
+          role: 'paste'
+        },
+        {
+          role: 'pasteandmatchstyle'
+        },
+        {
+          role: 'delete'
+        },
+        {
+          role: 'selectall'
+        }
       ]
     })
     menu.append(menuItem)
