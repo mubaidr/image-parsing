@@ -24,6 +24,7 @@ module.exports = {
     'no-multi-assign': 0,
     'no-underscore-dangle': 0,
     'no-console': 0,
+    'linebreak-style': ['error', 'windows'],
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'no-unused-vars': process.env.NODE_ENV === 'production' ? 2 : 0
