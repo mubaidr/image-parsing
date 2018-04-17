@@ -1,6 +1,9 @@
 import Vue from 'vue'
 
 import 'bulma-fluent/css/bulma.css'
+
+import './mixins'
+
 import './assets/main.sass'
 import './assets/animations.sass'
 import './assets/fontawesome/css/fontawesome-all.css'

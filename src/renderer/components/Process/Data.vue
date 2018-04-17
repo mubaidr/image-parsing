@@ -75,8 +75,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['validImageFormats']),
-
     filteredFiles() {
       return this.files.filter(file => file.indexOf(this.fileFilter) !== -1)
     },
@@ -104,7 +102,7 @@ export default {
               if (dotIndex === -1) return false
 
               const ext = file.substring(dotIndex + 1).toLowerCase()
-              return this.validImageFormats.indexOf(ext) !== -1
+              return this.options.validImageFormats.indexOf(ext) !== -1
             })
           }
         })

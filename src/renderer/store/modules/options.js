@@ -18,8 +18,8 @@ const state = {
 }
 
 const getters = {
-  validImageFormats(state) {
-    return state.validImageFormats
+  options(state) {
+    return state.options
   }
 }
 
