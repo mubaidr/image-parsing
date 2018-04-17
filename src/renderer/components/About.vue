@@ -1,6 +1,7 @@
 <template>
   <div class="section">
     <h1 class="title">About</h1>
+    <h2 class="subtitle">Developer and System information.</h2>
     <br/>
     <div class="columns">
       <div class="column is-4">

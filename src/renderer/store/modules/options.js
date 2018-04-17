@@ -2,7 +2,7 @@ const state = {
   options: {
     source: '.',
     target: '.',
-    imageFormats: [
+    validImageFormats: [
       'png',
       'jpg',
       'jpeg',
@@ -18,8 +18,8 @@ const state = {
 }
 
 const getters = {
-  validFileTypes(state) {
-    return state.imageFormats
+  validImageFormats(state) {
+    return state.validImageFormats
   }
 }
 

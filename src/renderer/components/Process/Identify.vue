@@ -1,5 +1,5 @@
 <template>
-  <h1>Generate Answer Sheets</h1>
+  <h1>Identify</h1>
 </template>
 
 <script>

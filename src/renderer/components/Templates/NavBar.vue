@@ -9,16 +9,17 @@
     </button>
     <aside class="menu">
       <ul class="menu-list">
-        <li v-for="step in allSteps"
-            :key="step.path"
-            :class="{'is-active' : step.path === activeStep.path}"
-            @click="gotoURL(step.path)"
-            :title="step.name">
+        <li v-for="(route, index) in routes"
+            :key="index"
+            :class="{'is-active' : $route.path.indexOf(route.path) !== -1}"
+            @click="$router.push(route.path)"
+            :title="route.name">
+
           <span class="icon">
             <i class="fas"
-               :class="step.icon" />
+               :class="route.meta.icon" />
           </span>
-          <span>{{step.name}}</span>
+          <span>{{route.name}}</span>
         </li>
       </ul>
     </aside>
@@ -31,25 +32,21 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      isNavBarWide: false
+      isNavBarWide: false,
+      routes: []
     }
   },
 
-  computed: {
-    ...mapGetters(['allSteps', 'activeStep'])
-  },
-
-  methods: {
-    ...mapActions(['setActiveStep']),
-
-    gotoURL(path) {
-      this.setActiveStep(path)
-      this.$router.push(path)
-    }
+  created() {
+    this.routes = this.$router.options.routes.filter(
+      route => route.path !== '*' && route.path !== '/'
+    )
   }
 }
 </script>
 
 <style>
-
+.menu-list li span {
+  cursor: default;
+}
 </style>

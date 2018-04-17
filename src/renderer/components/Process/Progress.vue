@@ -1,5 +1,5 @@
 <template>
-  <h1>Process</h1>
+  <h1>Progress</h1>
 </template>
 
 <script>
