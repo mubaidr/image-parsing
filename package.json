@@ -9,8 +9,7 @@
       "output": "build"
     },
     "dmg": {
-      "contents": [
-        {
+      "contents": [{
           "path": "/Applications",
           "type": "link",
           "x": 410,
@@ -70,6 +69,7 @@
     "electron-builder": "^20.8.1",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.3",
+    "electron-rebuild": "^1.7.3",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
@@ -127,7 +127,7 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-    "postinstall": "npm run lint:fix",
+    "postinstall": "npm run lint:fix && ./node_modules/.bin/electron-rebuild",
     "test": "npm run unit",
     "unit": "karma start test/unit/karma.conf.js"
   },
