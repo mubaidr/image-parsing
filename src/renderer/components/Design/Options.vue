@@ -1,102 +1,105 @@
 <template>
-  <div class="block">
-    <nav class="navbar is-white">
-      <div class="navbar-brand">
-        <div class="navbar-burger burger">
-          <span>
-            <span>
-              <span/>
+  <div class="box no-padding">
+    <div class="buttons has-addons">
+      <div class="dropdown is-hoverable">
+        <div class="dropdown-trigger">
+          <button class="button is-white is-small"
+                  aria-haspopup="true"
+                  aria-controls="dropdown-menu">
+            <span>Design</span>
+            <span class="icon">
+              <i class="fas fa-angle-down"
+                 aria-hidden="true"></i>
             </span>
-          </span>
+          </button>
         </div>
-      </div>
-
-      <div class="navbar-menu">
-        <div class="navbar-start">
-          <div class="navbar-item has-dropdown is-hoverable">
-            <span class="navbar-link">
-              <!-- <span class="icon">
-                <i class="far fa-file" />
-              </span> -->
-              File</span>
-            <div class="navbar-dropdown is-boxed">
-              <a class="navbar-item">
-                <span class="icon">
-                  <i class="fa fa-file" />
-                </span>
-                New
-              </a>
-              <a class="navbar-item">
-                <span class="icon">
-                  <i class="fa fa-upload" />
-                </span>
-                Import
-              </a>
-              <hr class="navbar-divider">
-              <a class="navbar-item">
-                <span class="icon">
-                  <i class="fa fa-download" />
-                </span>
-                Export
-              </a>
-              <a class="navbar-item">
-                <span class="icon">
-                  <i class="fa fa-save" />
-                </span>
-                Save
-              </a>
-            </div>
-          </div>
-          <div class="navbar-item has-dropdown is-hoverable">
-            <span class="navbar-link">
-              <!-- <span class="icon">
-                <i class="far fa-edit" />
-              </span> -->
-              Edit</span>
-            <div class="navbar-dropdown is-boxed">
-              <a class="navbar-item">
-                <span class="icon">
-                  <i class="fa fa-undo" />
-                </span>
-                Undo
-              </a>
-              <a class="navbar-item">
-                <span class="icon">
-                  <i class="fa fa-redo" />
-                </span>
-                Redo
-              </a>
-              <hr class="navbar-divider">
-              <a class="navbar-item">
-                <span class="icon">
-                  <i class="fa fa-retweet" />
-                </span>
-                Revert
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="navbar-end">
-          <div class="navbar-item">
+        <div class="dropdown-menu"
+             role="menu">
+          <div class="dropdown-content">
+            <a class="dropdown-item">
+              <span class="icon">
+                <i class="fa fa-file" />
+              </span>
+              New
+            </a>
+            <a class="dropdown-item">
+              <span class="icon">
+                <i class="fa fa-upload" />
+              </span>
+              Import
+            </a>
+            <hr class="dropdown-divider">
+            <a class="dropdown-item">
+              <span class="icon">
+                <i class="fa fa-download" />
+              </span>
+              Export
+            </a>
+            <a class="dropdown-item">
+              <span class="icon">
+                <i class="fa fa-save" />
+              </span>
+              Save
+            </a>
           </div>
         </div>
       </div>
-    </nav>
+
+      <div class="dropdown is-hoverable">
+        <div class="dropdown-trigger">
+          <button class="button is-white is-small"
+                  aria-haspopup="true"
+                  aria-controls="dropdown-menu">
+            <span>Edit</span>
+            <span class="icon">
+              <i class="fas fa-angle-down"
+                 aria-hidden="true"></i>
+            </span>
+          </button>
+        </div>
+        <div class="dropdown-menu"
+             role="menu">
+          <div class="dropdown-content">
+            <a class="dropdown-item">
+              <span class="icon">
+                <i class="fa fa-undo" />
+              </span>
+              Undo
+            </a>
+            <a class="dropdown-item">
+              <span class="icon">
+                <i class="fa fa-redo" />
+              </span>
+              Redo
+            </a>
+            <hr class="dropdown-divider">
+            <a class="dropdown-item">
+              <span class="icon">
+                <i class="fa fa-retweet" />
+              </span>
+              Revert
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {}
+  }
+}
 </script>
 
 <style lang="sass">
-.navbar
-  min-height: 0
-  .navbar-brand
-    min-height: 0
-  span,
-  a
-    cursor: default
-
+.no-padding
+  padding: 0
+.buttons
+  & .dropdown-trigger
+    .button
+      padding: 0 0.5rem
+      border-color: transparent
 </style>
