@@ -4,7 +4,7 @@
     <button class="button"
             @click="isNavBarWide = !isNavBarWide">
       <span class="icon">
-        <i class="fas fa-bars" />
+        <i class="fa fa-bars" />
       </span>
     </button>
     <aside class="menu">
@@ -16,7 +16,7 @@
             :title="route.name">
 
           <span class="icon">
-            <i class="fas"
+            <i class="fa"
                :class="route.meta.icon" />
           </span>
           <span>{{route.name}}</span>

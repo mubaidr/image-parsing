@@ -2,7 +2,7 @@
   <div class="section">
     <h1 class="title">Process</h1>
     <h2 class="subtitle">Process scanned images to generate result.</h2>
-    <div class="tabs is-centered has-text-centered">
+    <div class="tabs is-centered">
       <ul>
         <li v-for="(route, index) in routeChildren"
             :key="index"
