@@ -18,7 +18,7 @@
     </div>
 
     <!-- Child routes -->
-    <transition name="slide-right"
+    <transition name="slide-up"
                 appear="appear"
                 mode="out-in">
       <router-view/>

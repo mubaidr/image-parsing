@@ -3,6 +3,8 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+// TODO: add meta > title to each route to display name, remove name proeprty from routes
+
 export default new Router({
   routes: [{
       path: '/',
@@ -30,7 +32,40 @@ export default new Router({
       meta: {
         icon: 'fa-file-alt'
       },
-      component: require('@/components/Generate').default
+      component: require('@/components/Generate').default,
+      children: [{
+          path: 'chooseDesign', // design
+          name: 'Select Design',
+          meta: {
+            icon: 'fa-object-group'
+          },
+          component: require('@/components/Generate/Design').default
+        },
+        {
+          path: 'chooseData',
+          name: 'Select Data',
+          meta: {
+            icon: 'fa-database'
+          },
+          component: require('@/components/Generate/Data').default
+        },
+        {
+          path: 'identifySource',
+          name: 'Customize Options',
+          meta: {
+            icon: 'fa-qrcode'
+          },
+          component: require('@/components/Generate/Identify').default
+        },
+        {
+          path: 'startProcess',
+          name: 'Generate Now',
+          meta: {
+            icon: 'fa-play'
+          },
+          component: require('@/components/Generate/Progress').default
+        }
+      ]
     },
     {
       path: '/process',
