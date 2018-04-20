@@ -1,12 +1,9 @@
 <template>
   <div>
-    <div class="header">
-      <h1 class="title is-5">
-        Choose Data Source
-      </h1>
-      <h2 class="subtitle is-5">Choose the folder which contains scanned answer sheet image files.</h2>
-    </div>
-    <br>
+    <h1 class="title is-5">
+      Choose Data Source
+    </h1>
+    <h2 class="subtitle is-5">Choose the folder which contains scanned answer sheet image files.</h2>
     <div class="columns">
       <div class="column is-6-tablet is-offset-3-tablet is-4-desktop is-offset-4-desktop">
         <nav class="panel">
@@ -56,7 +53,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import imageModal from '../Templates/ImageModal'
+import imageModal from './ImageModal'
 const tinyGlob = require('tiny-glob')
 const path = require('path')
 
@@ -98,10 +95,13 @@ export default {
         return
       }
 
-      const dir = val.replace(/\\/g, '/')
+      // const dir = val.replace(/\\/g, '/')
 
-      tinyGlob(`${dir}/*/*.{${this.options.validImageFormats.join(',')}}`)
+      tinyGlob(`${val}/*.{${this.options.validImageFormats.join(',')}}`, {
+        filesOnly: true
+      })
         .then(files => {
+          console.log(files)
           this.files = files
         })
         .catch(err => {

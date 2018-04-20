@@ -1,7 +1,7 @@
 <template>
   <div class="section">
-    <h1 class="title">Design Tool</h1>
-    <h2 class="subtitle">Create a new design or update an exisitng one.</h2>
+    <!-- <h1 class="title">Design Tool</h1>
+    <h2 class="subtitle">Create a new design or update an exisitng one.</h2> -->
 
     <design-options></design-options>
     <div class="columns">
