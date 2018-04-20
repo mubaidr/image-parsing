@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="header">
-      <!-- <h1 class="title is-5">
+      <h1 class="title is-5">
         Choose Data Source
-      </h1> -->
+      </h1>
       <h2 class="subtitle is-5">Choose the folder which contains scanned answer sheet image files.</h2>
     </div>
     <br>
@@ -57,8 +57,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import imageModal from '../Templates/ImageModal'
+const tinyGlob = require('tiny-glob')
 const path = require('path')
-const fs = require('fs')
+
 // eslint-disable-next-line
 const { dialog } = require('electron').remote
 
@@ -92,23 +93,21 @@ export default {
 
   watch: {
     directory(val) {
-      if (val) {
-        fs.readdir(val, (err, res) => {
-          if (err) {
-            this.files = []
-          } else {
-            this.files = res.filter(file => {
-              const dotIndex = file.lastIndexOf('.')
-              if (dotIndex === -1) return false
-
-              const ext = file.substring(dotIndex + 1).toLowerCase()
-              return this.options.validImageFormats.indexOf(ext) !== -1
-            })
-          }
-        })
-      } else {
+      if (!val) {
         this.files = []
+        return
       }
+
+      const dir = val.replace(/\\/g, '/')
+
+      tinyGlob(`${dir}/*/*.{${this.options.validImageFormats.join(',')}}`)
+        .then(files => {
+          this.files = files
+        })
+        .catch(err => {
+          this.files = []
+          console.log(err)
+        })
     }
   },
 

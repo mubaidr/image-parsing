@@ -37,7 +37,7 @@ export default new Router({
             title: 'Design',
             icon: 'fa-object-group'
           },
-          component: require('@/components/Generate/Design').default
+          component: require('@/components/Templates/Design').default
         },
         {
           path: 'choose-data',
@@ -45,7 +45,7 @@ export default new Router({
             title: 'Data',
             icon: 'fa-database'
           },
-          component: require('@/components/Generate/Data').default
+          component: require('@/components/Templates/Data').default
         },
         {
           path: 'choose-options',
@@ -53,7 +53,7 @@ export default new Router({
             title: 'Options',
             icon: 'fa-qrcode'
           },
-          component: require('@/components/Generate/Identify').default
+          component: require('@/components/Generate/options').default
         },
         {
           path: 'start-generate',
@@ -78,7 +78,7 @@ export default new Router({
             title: 'Design',
             icon: 'fa-object-group'
           },
-          component: require('@/components/Process/Design').default
+          component: require('@/components/Templates/Design').default
         },
         {
           path: 'choose-data',
@@ -86,7 +86,7 @@ export default new Router({
             title: 'Data',
             icon: 'fa-database'
           },
-          component: require('@/components/Process/Data').default
+          component: require('@/components/Templates/Data').default
         },
         {
           path: 'choose-options',
@@ -94,7 +94,7 @@ export default new Router({
             title: 'Options',
             icon: 'fa-qrcode'
           },
-          component: require('@/components/Process/Identify').default
+          component: require('@/components/Process/options').default
         },
         {
           path: 'start-process',
