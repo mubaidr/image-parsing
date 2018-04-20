@@ -12,7 +12,7 @@
             <span class="icon">
               <i class="fas"
                  :class="route.meta.icon" />
-            </span>{{ route.name }}</router-link>
+            </span>{{ route.meta.title }}</router-link>
         </li>
       </ul>
     </div>
@@ -39,7 +39,7 @@ export default {
       route => route.path === '/generate'
     )[0].children
 
-    this.$router.push('/generate/chooseDesign')
+    this.$router.push('/generate/choose-design')
   }
 }
 </script>

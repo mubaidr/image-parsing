@@ -3,8 +3,6 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-// TODO: add meta > title to each route to display name, remove name proeprty from routes
-
 export default new Router({
   routes: [{
       path: '/',
@@ -12,55 +10,55 @@ export default new Router({
     },
     {
       path: '/home',
-      name: 'Home',
       meta: {
+        title: 'Home',
         icon: 'fa-home'
       },
       component: require('@/components/Home').default
     },
     {
       path: '/design',
-      name: 'Design',
       meta: {
+        title: 'Design',
         icon: 'fa-object-group'
       },
       component: require('@/components/Design').default
     },
     {
       path: '/generate',
-      name: 'Generate',
       meta: {
+        title: 'Generate',
         icon: 'fa-file-alt'
       },
       component: require('@/components/Generate').default,
       children: [{
-          path: 'chooseDesign', // design
-          name: 'Select Design',
+          path: 'choose-design', // design
           meta: {
+            title: 'Design',
             icon: 'fa-object-group'
           },
           component: require('@/components/Generate/Design').default
         },
         {
-          path: 'chooseData',
-          name: 'Select Data',
+          path: 'choose-data',
           meta: {
+            title: 'Data',
             icon: 'fa-database'
           },
           component: require('@/components/Generate/Data').default
         },
         {
-          path: 'identifySource',
-          name: 'Customize Options',
+          path: 'choose-options',
           meta: {
+            title: 'Options',
             icon: 'fa-qrcode'
           },
           component: require('@/components/Generate/Identify').default
         },
         {
-          path: 'startProcess',
-          name: 'Generate Now',
+          path: 'start-generate',
           meta: {
+            title: 'Generate',
             icon: 'fa-play'
           },
           component: require('@/components/Generate/Progress').default
@@ -69,39 +67,39 @@ export default new Router({
     },
     {
       path: '/process',
-      name: 'Process',
       meta: {
+        title: 'Process',
         icon: 'fa-play'
       },
       component: require('@/components/Process').default,
       children: [{
-          path: 'chooseDesign', // design
-          name: 'Select Design',
+          path: 'choose-design',
           meta: {
+            title: 'Design',
             icon: 'fa-object-group'
           },
           component: require('@/components/Process/Design').default
         },
         {
-          path: 'chooseData',
-          name: 'Select Data',
+          path: 'choose-data',
           meta: {
+            title: 'Data',
             icon: 'fa-database'
           },
           component: require('@/components/Process/Data').default
         },
         {
-          path: 'identifySource',
-          name: 'Customize Options',
+          path: 'choose-options',
           meta: {
+            title: 'Options',
             icon: 'fa-qrcode'
           },
           component: require('@/components/Process/Identify').default
         },
         {
-          path: 'startProcess',
-          name: 'Process Now',
+          path: 'start-process',
           meta: {
+            title: 'Process',
             icon: 'fa-play'
           },
           component: require('@/components/Process/Progress').default
@@ -110,8 +108,8 @@ export default new Router({
     },
     {
       path: '/about',
-      name: 'About',
       meta: {
+        title: 'About',
         icon: 'fa-info-circle'
       },
       component: require('@/components/About').default

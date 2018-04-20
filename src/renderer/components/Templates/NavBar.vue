@@ -13,13 +13,13 @@
             :key="index"
             :class="{'is-active' : $route.path.indexOf(route.path) !== -1}"
             @click="$router.push(route.path)"
-            :title="route.name">
+            :title="route.meta.title">
 
           <span class="icon">
             <i class="fa"
                :class="route.meta.icon" />
           </span>
-          <span>{{route.name}}</span>
+          <span>{{route.meta.title}}</span>
         </li>
       </ul>
     </aside>
