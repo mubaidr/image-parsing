@@ -3,7 +3,13 @@
 </template>
 
 <script>
-export default {}
+// import '@/assets/script/fabric.js'
+
+export default {
+  created() {
+    console.log(fabric)
+  }
+}
 </script>
 
 <style>

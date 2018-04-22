@@ -8,7 +8,7 @@
       <div class="column is-6-tablet is-offset-3-tablet is-4-desktop is-offset-4-desktop">
         <nav class="panel">
           <p class="panel-heading">
-            {{ normalizedDirectory || 'No Source Selected' }}
+            {{ directory || 'No Source Selected' }}
           </p>
           <div class="panel-block has-text-centered">
             <button class="button is-fullwidth"
@@ -36,7 +36,7 @@
                  :key="index"
                  class="panel-block"
                  @click="selectedFile = file">
-                {{ file }}
+                {{ extractName(file) }}
               </a>
             </div>
           </template>
@@ -45,7 +45,7 @@
           </template>
         </nav>
       </div>
-      <image-modal :file-path="selectedFilePath"
+      <image-modal :file-path="selectedFile"
                    @close="selectedFile = null" />
     </div>
   </div>
@@ -54,8 +54,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import imageModal from './ImageModal'
-const tinyGlob = require('tiny-glob')
-const path = require('path')
+const fastGlob = require('fast-glob')
 
 // eslint-disable-next-line
 const { dialog } = require('electron').remote
@@ -75,16 +74,6 @@ export default {
   computed: {
     filteredFiles() {
       return this.files.filter(file => file.indexOf(this.fileFilter) !== -1)
-    },
-
-    normalizedDirectory() {
-      return this.directory ? this.directory.replace(/(\\)/g, '\\') : null
-    },
-
-    selectedFilePath() {
-      return this.selectedFile
-        ? path.join(this.normalizedDirectory, this.selectedFile)
-        : null
     }
   },
 
@@ -97,11 +86,10 @@ export default {
 
       // const dir = val.replace(/\\/g, '/')
 
-      tinyGlob(`${val}/*.{${this.options.validImageFormats.join(',')}}`, {
-        filesOnly: true
+      fastGlob(`${val}/*.{${this.options.validImageFormats.join(',')}}`, {
+        onlyFiles: true
       })
         .then(files => {
-          console.log(files)
           this.files = files
         })
         .catch(err => {
@@ -116,6 +104,11 @@ export default {
       ;[this.directory] = dialog.showOpenDialog({
         properties: ['openDirectory']
       }) || [false]
+    },
+
+    extractName(str) {
+      const index = str.lastIndexOf('/') + 1
+      return str.substr(index)
     }
   }
 }

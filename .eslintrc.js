@@ -11,7 +11,8 @@ module.exports = {
   },
   extends: ['airbnb-base', 'prettier'],
   globals: {
-    __static: true
+    __static: true,
+    fabric: true
   },
   plugins: ['html'],
   rules: {
