@@ -37,7 +37,7 @@ export default new Router({
             title: 'Design',
             icon: 'fa-object-group'
           },
-          component: require('@/components/Templates/Design').default
+          component: require('@/components/Generate/Design').default
         },
         {
           path: 'choose-data',
@@ -45,7 +45,7 @@ export default new Router({
             title: 'Data',
             icon: 'fa-database'
           },
-          component: require('@/components/Templates/Data').default
+          component: require('@/components/Generate/Data').default
         },
         {
           path: 'choose-options',
@@ -78,7 +78,7 @@ export default new Router({
             title: 'Design',
             icon: 'fa-object-group'
           },
-          component: require('@/components/Templates/Design').default
+          component: require('@/components/Process/Design').default
         },
         {
           path: 'choose-data',
@@ -86,7 +86,7 @@ export default new Router({
             title: 'Data',
             icon: 'fa-database'
           },
-          component: require('@/components/Templates/Data').default
+          component: require('@/components/Process/Data').default
         },
         {
           path: 'choose-options',
