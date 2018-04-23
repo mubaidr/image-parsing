@@ -1,6 +1,6 @@
 <template>
   <div>
-    <load-files></load-files>
+    <load-files @dirictory="updateOptions"></load-files>
   </div>
 </template>
 
@@ -10,6 +10,15 @@ import LoadFiles from '@/components/Templates/LoadFiles'
 export default {
   components: {
     LoadFiles
+  },
+
+  methods: {
+    updateOptions(dir) {
+      const opt = this.options
+      opt.generate.source.data = dir
+
+      this.setOptions(opt)
+    }
   }
 }
 </script>

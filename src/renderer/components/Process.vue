@@ -22,7 +22,9 @@
     <transition name="slide-up"
                 appear="appear"
                 mode="out-in">
-      <router-view/>
+      <keep-alive>
+        <router-view/>
+      </keep-alive>
     </transition>
   </div>
 </template>

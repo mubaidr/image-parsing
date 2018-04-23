@@ -1,7 +1,30 @@
 const state = {
   options: {
-    source: '.',
-    target: '.',
+    design: {
+      options: {}
+    },
+    generate: {
+      source: {
+        data: '.',
+        design: '.'
+      },
+      target: {
+        data: '',
+        design: ''
+      },
+      options: {}
+    },
+    process: {
+      source: {
+        data: '.',
+        design: '.'
+      },
+      target: {
+        data: '',
+        design: ''
+      },
+      options: {}
+    },
     validImageFormats: [
       'png',
       'jpg',
@@ -23,9 +46,17 @@ const getters = {
   }
 }
 
-const mutations = {}
+const mutations = {
+  setOptions(state, opt) {
+    state.options = opt
+  }
+}
 
-const actions = {}
+const actions = {
+  setOptions(context, opt) {
+    context.commit('setOptions', opt)
+  }
+}
 
 export default {
   state,

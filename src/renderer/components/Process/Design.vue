@@ -1,15 +1,15 @@
 <template>
   <div>
-    <load-files></load-files>
+    <load-design-files></load-design-files>
   </div>
 </template>
 
 <script>
-import LoadFiles from '@/components/Templates/LoadFiles'
+import LoadDesignFiles from '@/components/Templates/LoadDesignFiles'
 
 export default {
   components: {
-    LoadFiles
+    LoadDesignFiles
   }
 }
 </script>

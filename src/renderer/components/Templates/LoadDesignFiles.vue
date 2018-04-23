@@ -1,24 +1,26 @@
 <template>
   <div>
+    <h1 class="title is-5">
+      Choose Data Source
+    </h1>
+    <h2 class="subtitle is-5">Choose the folder which contains scanned answer sheet image files.</h2>
     <div class="columns">
-      <div class="column is-8-tablet is-offset-2-tablet is-4-desktop is-offset-4-desktop">
-        <h1 class="title is-4">
-          Data Source
-        </h1>
-        <h2 class="subtitle is-6">Choose the folder which contains scanned answer sheet image files.</h2>
+      <div class="column is-6-tablet is-offset-3-tablet is-4-desktop is-offset-4-desktop">
         <nav class="panel">
           <p class="panel-heading">
             {{ directory || 'No Source Selected' }}
           </p>
           <div class="panel-block has-text-centered">
-            <button class="button is-primary is-fullwidth"
+            <button class="button is-fullwidth"
                     @click="choosePath">
               Change Directory
             </button>
           </div>
-          <template v-if="directory && filteredFiles.length">
+          <template v-if="directory && files.length">
             <div class="panel-block">
-              <span class="tag">{{ filteredFiles.length }} images found in the selected directory.</span>
+              <div class="tag"> {{ files.length }} images found in the selected directory. </div>
+            </div>
+            <div class="panel-block">You can preview any image by clicking its name in the following list;
             </div>
             <div class="panel-block">
               <p class="control">
@@ -27,8 +29,6 @@
                        type="text"
                        placeholder="Search">
               </p>
-            </div>
-            <div class="panel-block">You can preview any image by clicking its name in the following list;
             </div>
             <div class="fixed-height">
               <a v-for="(file,index) in filteredFiles"
@@ -40,7 +40,7 @@
               </a>
             </div>
           </template>
-          <template v-if="directory && !filteredFiles.length">
+          <template v-if="directory && !files.length">
             <div class="notification is-warning">Selected directory does not contains any image files. </div>
           </template>
         </nav>
@@ -84,10 +84,8 @@ export default {
         return
       }
 
-      // update options
-      this.$emit('directory', this.directory)
+      // const dir = val.replace(/\\/g, '/')
 
-      // read files
       fastGlob(`${val}/*.{${this.options.validImageFormats.join(',')}}`, {
         onlyFiles: true
       })
