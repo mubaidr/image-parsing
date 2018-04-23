@@ -84,7 +84,8 @@ export default {
         return
       }
 
-      // const dir = val.replace(/\\/g, '/')
+      // update options
+      this.$emit('directory', this.directory)
 
       fastGlob(`${val}/*.{${this.options.validImageFormats.join(',')}}`, {
         onlyFiles: true

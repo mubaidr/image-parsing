@@ -1,6 +1,6 @@
 <template>
   <div>
-    <load-design-files></load-design-files>
+    <load-design-files @directory="updateOptions"></load-design-files>
   </div>
 </template>
 
@@ -10,6 +10,15 @@ import LoadDesignFiles from '@/components/Templates/LoadDesignFiles'
 export default {
   components: {
     LoadDesignFiles
+  },
+
+  methods: {
+    updateOptions(dir) {
+      const opt = this.options
+      opt.process.source.design = dir
+
+      this.setOptions(opt)
+    }
   }
 }
 </script>
