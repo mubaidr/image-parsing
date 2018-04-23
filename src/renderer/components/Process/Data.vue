@@ -1,6 +1,6 @@
 <template>
   <div>
-    <load-files @dirictory="updateOptions"></load-files>
+    <load-files @directory="updateOptions"></load-files>
   </div>
 </template>
 
@@ -15,7 +15,7 @@ export default {
   methods: {
     updateOptions(dir) {
       const opt = this.options
-      opt.generate.source.data = dir
+      opt.process.source.data = dir
 
       this.setOptions(opt)
     }

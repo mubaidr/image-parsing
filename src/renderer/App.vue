@@ -8,6 +8,9 @@
         <router-view/>
       </transition>
     </div>
+    <pre>
+      {{options}}
+    </pre>
   </div>
 </template>
 

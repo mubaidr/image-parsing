@@ -1,6 +1,6 @@
 <template>
   <div>
-    <load-files @dirictory="updateOptions"></load-files>
+    <load-files @directory="updateOptions"></load-files>
   </div>
 </template>
 

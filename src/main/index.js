@@ -46,7 +46,7 @@ function createWindow() {
       webSecurity: false
     }
   })
-  mainWindow.setMenu(null)
+  // mainWindow.setMenu(null)
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {
