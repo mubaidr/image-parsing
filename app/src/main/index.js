@@ -13,17 +13,29 @@ let dotenv = require('dotenv')
 
 let appPath = app.getAppPath()
 let envFile = path.resolve(appPath, 'dist/.env')
-
-dotenv.load({
-  path: envFile
-})
-
+let mainWindow
+let webUrl
 const dataPaths = require('../../../utilities/data-paths.js')
 
 // eslint-disable-next-line
 global.__paths = dataPaths()
 
-let mainWindow
+dotenv.load({
+  path: envFile
+})
+
+if (process.env.NODE_ENV === 'development') {
+  process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true
+  // Install `electron-debug` with `devtron`
+  require('electron-debug')({
+    showDevTools: true
+  })
+
+  webUrl = process.env.WEB_URL
+} else {
+  let file = path.resolve(appPath, 'dist/web/index.html')
+  webUrl = `file://${file}`
+}
 
 function createWindow() {
   /**
@@ -43,13 +55,6 @@ function createWindow() {
   })
 
   // and load the index.html of the app.
-  let webUrl
-  if (process.env.NODE_ENV === 'development') {
-    webUrl = process.env.WEB_URL
-  } else {
-    let file = path.resolve(appPath, 'dist/web/index.html')
-    webUrl = `file://${file}`
-  }
   mainWindow.loadURL(webUrl)
 
   // mainWindow.setMenu(null)
