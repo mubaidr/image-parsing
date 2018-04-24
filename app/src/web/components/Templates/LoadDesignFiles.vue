@@ -52,7 +52,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import imageModal from './ImageModal'
 const fastGlob = require('fast-glob')
 
@@ -115,8 +114,9 @@ export default {
 }
 </script>
 
-<style lang="sass">
-.fixed-height
-  max-height: 25em
-  overflow: auto
+<style lang="scss">
+.fixed-height {
+  max-height: 25em;
+  overflow: auto;
+}
 </style>

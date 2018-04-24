@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import LoadDesignFiles from '@/components/Templates/LoadDesignFiles'
+import LoadDesignFiles from '~/components/Templates/LoadDesignFiles'
 
 export default {
   components: {

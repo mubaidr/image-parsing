@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import LoadFiles from '@/components/Templates/LoadFiles'
+import LoadFiles from '~/components/Templates/LoadFiles'
 
 export default {
   components: {

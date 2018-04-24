@@ -8,7 +8,7 @@ module.exports = () => {
 
   // create/clean tmp directory
   fs.mkdir(tmp, err => {
-    if (err) console.log('Temporary directory already exists.')
+    if (err) console.log('Temp. directory already exists. \n')
   })
 
   return {

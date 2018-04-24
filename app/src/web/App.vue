@@ -24,5 +24,6 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style>
+/*TODO: Lang = sass not working*/
 </style>

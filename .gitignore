@@ -13,4 +13,5 @@ data/tmp/
 .tmp/
 tmp/
 .cache/
-app/dist
+app/dist/
+dist/

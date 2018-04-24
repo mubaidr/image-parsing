@@ -60,7 +60,7 @@
     "dev": "run-s dev:env && run-p dev:web dev:main",
     "dev:env": "node utilities/copy-env.js",
     "dev:main": "dotenv -e env/dev.env electron ./app/src/main/index.dev.js --debug",
-    "dev:web": "dotenv -e env/dev.env parcel app/src/web/index.html",
+    "dev:web": "dotenv -e env/dev.env parcel ./app/src/web/index.html -d app/dist/web --no-autoinstall --no-minify",
     "lint": "eslint --ext .js,.vue app --fix",
     "test": "run-s lint unit",
     "unit": "jest --config jest.conf.js --coverage"

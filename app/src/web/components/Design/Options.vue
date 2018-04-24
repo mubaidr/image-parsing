@@ -94,12 +94,17 @@ export default {
 }
 </script>
 
-<style lang="sass">
-.no-padding
-  padding: 0
-.buttons
-  & .dropdown-trigger
-    .button
-      padding: 0 0.5rem
-      border-color: transparent
+<style lang="scss">
+.no-padding {
+  padding: 0;
+}
+
+.buttons {
+  .dropdown-trigger {
+    .button {
+      padding: 0 0.5rem;
+      border-color: transparent;
+    }
+  }
+}
 </style>
