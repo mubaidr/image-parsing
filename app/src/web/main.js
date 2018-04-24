@@ -1,5 +1,4 @@
 import Vue from 'vue'
-
 import 'bulma-fluent/css/bulma.css'
 
 import './mixins'
@@ -12,14 +11,15 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-const dataPaths = require('../utilities/data-paths.js')
-
-if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
+Vue.use(require('vue-electron'))
+const dataPaths = require('../../../utilities/data-paths.js')
+// eslint-disable-next-line
+global.__paths = dataPaths()
 
 Vue.config.productionTip = false
 Vue.config.devtools = false
 
-/* eslint-disable no-new */
+// eslint-disable-next-line
 const app = new Vue({
   components: {
     App
@@ -28,6 +28,3 @@ const app = new Vue({
   store,
   template: '<App/>'
 }).$mount('#app')
-
-// eslint-disable-next-line
-global.__paths = dataPaths()

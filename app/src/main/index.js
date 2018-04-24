@@ -1,34 +1,29 @@
 /* eslint-disable */
-import {
+let {
   app,
   BrowserWindow,
   ipcMain,
   Menu,
   MenuItem
-} from 'electron'
+} = require('electron')
+
 /* eslint-enable */
+let path = require('path')
+let dotenv = require('dotenv')
 
-const dataPaths = require('../utilities/data-paths.js')
+let appPath = app.getAppPath()
+let envFile = path.resolve(appPath, 'dist/.env')
 
-/**
- * Set `__static` path to static files in production
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
- */
-if (process.env.NODE_ENV !== 'development') {
-  // eslint-disable-next-line
-  global.__static = require('path')
-    .join(__dirname, '/static')
-    .replace(/\\/g, '\\\\') // eslint-disable-line
-}
+dotenv.load({
+  path: envFile
+})
+
+const dataPaths = require('../../../utilities/data-paths.js')
 
 // eslint-disable-next-line
 global.__paths = dataPaths()
 
 let mainWindow
-const winURL =
-  process.env.NODE_ENV === 'development' ?
-  'http://localhost:9080' :
-  `file://${__dirname}/index.html`
 
 function createWindow() {
   /**
@@ -46,8 +41,18 @@ function createWindow() {
       webSecurity: false
     }
   })
+
+  // and load the index.html of the app.
+  let webUrl
+  if (process.env.NODE_ENV === 'development') {
+    webUrl = process.env.WEB_URL
+  } else {
+    let file = path.resolve(appPath, 'dist/web/index.html')
+    webUrl = `file://${file}`
+  }
+  mainWindow.loadURL(webUrl)
+
   // mainWindow.setMenu(null)
-  mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {
     mainWindow = null

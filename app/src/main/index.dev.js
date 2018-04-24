@@ -13,7 +13,9 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true
 process.env.NODE_ENV = 'development'
 
 // Install `electron-debug` with `devtron`
-require('electron-debug')({ showDevTools: true })
+require('electron-debug')({
+  showDevTools: true
+})
 
 // Install `vue-devtools`
 require('electron').app.on('ready', () => {
@@ -21,9 +23,7 @@ require('electron').app.on('ready', () => {
   installExtension
     .default(installExtension.VUEJS_DEVTOOLS)
     .then(() => {})
-    .catch(() => {
-      console.log('Unable to install `vue-devtools`')
-    })
+    .catch(() => {})
 })
 
 // Require `main` process to boot app

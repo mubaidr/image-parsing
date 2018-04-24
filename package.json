@@ -3,45 +3,12 @@
   "bugs": {
     "url": "https://github.com/mubaidr/image-parsing/issues"
   },
-  "build": {
-    "appId": "org.mubaidr.image-parsing",
-    "directories": {
-      "output": "build"
-    },
-    "dmg": {
-      "contents": [
-        {
-          "path": "/Applications",
-          "type": "link",
-          "x": 410,
-          "y": 150
-        },
-        {
-          "type": "file",
-          "x": 130,
-          "y": 150
-        }
-      ]
-    },
-    "files": [
-      "dist/electron/**/*"
-    ],
-    "linux": {
-      "icon": "build/icons"
-    },
-    "mac": {
-      "icon": "build/icons/icon.icns"
-    },
-    "productName": "image-parsing",
-    "win": {
-      "icon": "build/icons/icon.ico"
-    }
-  },
   "dependencies": {
     "brain.js": "^1.2.0",
     "bulma-fluent": "^0.1.37",
+    "dotenv": "^5.0.1",
+    "fast-glob": "^2.2.1",
     "sharp": "^0.20.1",
-    "fast-glob": "^2.2.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
@@ -50,87 +17,53 @@
   },
   "description": "An electron-vue project",
   "devDependencies": {
-    "babel-core": "^6.26.0",
+    "@vue/component-compiler-utils": "^1.0.0",
     "babel-eslint": "^8.2.3",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-istanbul": "^4.1.6",
+    "babel-jest": "^22.4.3",
+    "babel-plugin-dynamic-import-node": "^1.2.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "babili-webpack-plugin": "^0.1.2",
-    "cfonts": "^2.0.0",
-    "chai": "^4.1.2",
-    "chalk": "^2.4.0",
-    "copy-webpack-plugin": "^4.5.1",
-    "cross-env": "^5.1.4",
-    "css-loader": "^0.28.11",
-    "del": "^3.0.0",
-    "devtron": "^1.4.0",
+    "dotenv-cli": "^1.4.0",
     "electron": "^2.0.0-beta.7",
-    "electron-builder": "^20.10.0",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.3",
     "electron-rebuild": "^1.7.3",
     "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
+    "eslint-config-standard": "^11.0.0",
     "eslint-friendly-formatter": "^4.0.1",
-    "eslint-import-resolver-webpack": "^0.9.0",
     "eslint-loader": "^2.0.0",
-    "eslint-plugin-html": "^4.0.3",
     "eslint-plugin-import": "^2.11.0",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "file-loader": "^1.1.11",
-    "html-webpack-plugin": "^3.2.0",
-    "inject-loader": "^4.0.1",
-    "karma": "^2.0.2",
-    "karma-chai": "^0.1.0",
-    "karma-coverage": "^1.1.1",
-    "karma-electron": "^6.0.0",
-    "karma-mocha": "^1.3.0",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-spec-reporter": "^0.0.32",
-    "karma-webpack": "^3.0.0",
-    "mocha": "^5.1.1",
-    "multispinner": "^0.2.1",
-    "node-loader": "^0.6.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-vue": "^4.5.0",
+    "jest": "^22.4.3",
+    "jest-serializer-vue": "^1.0.0",
     "node-sass": "^4.8.3",
-    "nodemon": "^1.17.3",
-    "sass-loader": "^7.0.1",
-    "style-loader": "^0.21.0",
-    "url-loader": "^1.0.1",
-    "vue-html-loader": "^1.2.4",
-    "vue-loader": "^14.2.2",
-    "vue-style-loader": "^4.1.0",
-    "vue-template-compiler": "^2.5.16",
-    "webpack": "^3.5.2",
-    "webpack-dev-server": "^2.7.1",
-    "webpack-hot-middleware": "^2.22.1",
-    "webpack-merge": "^4.1.2"
+    "npm-run-all": "^4.1.2",
+    "parcel-bundler": "^1.7.1",
+    "vue-hot-reload-api": "^2.3.0",
+    "vue-jest": "^2.5.0",
+    "vue-template-compiler": "^2.5.16"
   },
   "license": "MIT",
-  "main": "./dist/electron/main.js",
+  "main": "./app/src/main/",
   "name": "image-parsing",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mubaidr/image-parsing.git"
   },
   "scripts": {
-    "build": "node .electron-vue/build.js && electron-builder",
-    "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
-    "build:dir": "node .electron-vue/build.js && electron-builder --dir",
-    "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
-    "dev": "node .electron-vue/dev-runner.js",
-    "lint": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter src test",
-    "lint:fix": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src test",
-    "pack": "npm run pack:main && npm run pack:renderer",
-    "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
-    "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-    "postinstall": "npm run lint:fix",
-    "rebuild-electron": "./node_modules/.bin/electron-rebuild",
-    "test": "npm run unit",
-    "unit": "karma start test/unit/karma.conf.js"
+    "dev": "run-s dev:env && run-p dev:web dev:main",
+    "dev:env": "node utilities/copy-env.js",
+    "dev:main": "dotenv -e env/dev.env electron ./app/src/main/index.dev.js --debug",
+    "dev:web": "dotenv -e env/dev.env parcel app/src/web/index.html",
+    "lint": "eslint --ext .js,.vue app --fix",
+    "test": "run-s lint unit",
+    "unit": "jest --config jest.conf.js --coverage"
   },
   "version": "0.0.1"
 }

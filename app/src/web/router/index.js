@@ -14,7 +14,7 @@ export default new Router({
         title: 'Home',
         icon: 'fa-home'
       },
-      component: require('@/components/Home').default
+      component: require('../components/Home').default
     },
     {
       path: '/design',
@@ -22,7 +22,7 @@ export default new Router({
         title: 'Design',
         icon: 'fa-object-group'
       },
-      component: require('@/components/Design').default
+      component: require('../components/Design').default
     },
     {
       path: '/generate',
@@ -30,14 +30,14 @@ export default new Router({
         title: 'Generate',
         icon: 'fa-file-alt'
       },
-      component: require('@/components/Generate').default,
+      component: require('../components/Generate').default,
       children: [{
           path: 'choose-design', // design
           meta: {
             title: 'Design',
             icon: 'fa-object-group'
           },
-          component: require('@/components/Generate/Design').default
+          component: require('../components/Generate/Design').default
         },
         {
           path: 'choose-data',
@@ -45,7 +45,7 @@ export default new Router({
             title: 'Data',
             icon: 'fa-database'
           },
-          component: require('@/components/Generate/Data').default
+          component: require('../components/Generate/Data').default
         },
         {
           path: 'choose-options',
@@ -53,7 +53,7 @@ export default new Router({
             title: 'Options',
             icon: 'fa-qrcode'
           },
-          component: require('@/components/Generate/options').default
+          component: require('../components/Generate/options').default
         },
         {
           path: 'start-generate',
@@ -61,7 +61,7 @@ export default new Router({
             title: 'Generate',
             icon: 'fa-play'
           },
-          component: require('@/components/Generate/Progress').default
+          component: require('../components/Generate/Progress').default
         }
       ]
     },
@@ -71,14 +71,14 @@ export default new Router({
         title: 'Process',
         icon: 'fa-play'
       },
-      component: require('@/components/Process').default,
+      component: require('../components/Process').default,
       children: [{
           path: 'choose-design',
           meta: {
             title: 'Design',
             icon: 'fa-object-group'
           },
-          component: require('@/components/Process/Design').default
+          component: require('../components/Process/Design').default
         },
         {
           path: 'choose-data',
@@ -86,7 +86,7 @@ export default new Router({
             title: 'Data',
             icon: 'fa-database'
           },
-          component: require('@/components/Process/Data').default
+          component: require('../components/Process/Data').default
         },
         {
           path: 'choose-options',
@@ -94,7 +94,7 @@ export default new Router({
             title: 'Options',
             icon: 'fa-qrcode'
           },
-          component: require('@/components/Process/options').default
+          component: require('../components/Process/options').default
         },
         {
           path: 'start-process',
@@ -102,7 +102,7 @@ export default new Router({
             title: 'Process',
             icon: 'fa-play'
           },
-          component: require('@/components/Process/Progress').default
+          component: require('../components/Process/Progress').default
         }
       ]
     },
@@ -112,7 +112,7 @@ export default new Router({
         title: 'About',
         icon: 'fa-info-circle'
       },
-      component: require('@/components/About').default
+      component: require('../components/About').default
     },
     {
       path: '*',
