@@ -25,8 +25,8 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-0": "^6.24.1",
-    "dotenv-cli": "^1.4.0",
     "devtron": "^1.4.0",
+    "dotenv-cli": "^1.4.0",
     "electron": "^2.0.0-beta.7",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.3",
@@ -60,7 +60,7 @@
     "dev": "run-s dev:env && run-p dev:web dev:main",
     "dev:env": "node utilities/copy-env.js",
     "dev:main": "dotenv -e env/dev.env electron . --debug",
-    "dev:web": "dotenv -e env/dev.env parcel ./app/src/web/index.html --target electron",
+    "dev:web": "dotenv -e env/dev.env parcel ./app/src/web/index.html --no-autoinstall --detailedReport",
     "lint": "eslint --ext .js,.vue app --fix",
     "test": "run-s lint unit",
     "unit": "jest --config jest.conf.js --coverage"
