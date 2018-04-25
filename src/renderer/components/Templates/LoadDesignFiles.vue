@@ -52,8 +52,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import imageModal from './ImageModal'
+
 const fastGlob = require('fast-glob')
 
 // eslint-disable-next-line

@@ -12,3 +12,5 @@ thumbs.db
 data/tmp/
 .tmp/
 tmp/
+.cache
+dist

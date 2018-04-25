@@ -29,7 +29,6 @@
 <script>
 // eslint-disable-next-line
 import { ipcRenderer } from 'electron'
-import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {

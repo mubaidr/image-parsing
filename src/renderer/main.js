@@ -20,7 +20,7 @@ Vue.config.productionTip = false
 Vue.config.devtools = false
 
 /* eslint-disable no-new */
-const app = new Vue({
+new Vue({
   components: {
     App
   },
