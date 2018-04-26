@@ -3,10 +3,9 @@
     <div class="columns">
       <div class="column is-8-tablet is-offset-2-tablet is-6-desktop is-offset-3-desktop is-4-widescreen is-offset-4-widescreen">
         <h1 class="title is-4">
-          {{type[0].toUpperCase() + type.substr(1)}} Source
+          {{dataType}} Source
         </h1>
-        <!-- TODO: update descript based on `type` prop -->
-        <h2 class="subtitle is-6">Choose the folder which contains scanned answer sheet image files.</h2>
+        <h2 class="subtitle is-6">Choose the folder which contains {{dataType}} files.</h2>
         <nav class="panel">
           <p class="panel-heading">
             {{ directory || 'No Source Selected' }}
@@ -19,7 +18,7 @@
           </div>
           <template v-if="directory && filteredFiles.length">
             <div class="panel-block">
-              <span class="tag">{{ filteredFiles.length }} images found in the selected directory.</span>
+              <span class="tag">{{ filteredFiles.length }} {{dataType}}s found in the selected directory.</span>
             </div>
             <div class="panel-block">
               <p class="control">
@@ -29,7 +28,8 @@
                        placeholder="Search">
               </p>
             </div>
-            <div class="panel-block">You can preview any image by clicking its name in the following list;
+            <div class="panel-block">You can preview any {{dataType}} by clicking its name in the following
+              list;
             </div>
             <div class="fixed-height">
               <a v-for="(file,index) in filteredFiles"
@@ -42,28 +42,29 @@
             </div>
           </template>
           <template v-if="directory && !filteredFiles.length">
-            <div class="notification is-warning">Selected directory does not contains any image files. </div>
+            <div class="notification is-warning">Selected directory does not contains any {{dataType}} files. </div>
           </template>
         </nav>
       </div>
-      <image-modal :file-path="selectedFile"
-                   @close="selectedFile = null" />
+      <preview-modal :file-path="selectedFile"
+                     :type="type"
+                     @close="selectedFile = null" />
     </div>
   </div>
 </template>
 
 <script>
-import imageModal from './ImageModal'
+import PreviewModal from './PreviewModal'
 
 const fastGlob = require('fast-glob')
 
 export default {
-  components: { imageModal },
+  components: { PreviewModal },
 
   props: {
     type: {
       type: String,
-      Default: 'image' // design
+      Default: 'image' // or design or excel
     }
   },
 
@@ -79,6 +80,13 @@ export default {
   computed: {
     filteredFiles() {
       return this.files.filter(file => file.indexOf(this.fileFilter) !== -1)
+    },
+
+    dataType() {
+      if (this.type === 'design') return 'Design'
+      if (this.type === 'excel') return 'Excel'
+      // if (this.type === 'image')
+      return 'Images'
     }
   },
 
