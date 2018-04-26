@@ -14,9 +14,6 @@ import store from './store'
 
 Vue.use(require('vue-electron'))
 
-// eslint-disable-next-line
-global.__paths = require('../utilities/data-paths.js').__paths
-
 Vue.config.productionTip = false
 Vue.config.devtools = false
 
@@ -29,3 +26,9 @@ new Vue({
   store,
   template: '<App/>'
 }).$mount('#app')
+
+// eslint-disable-next-line
+global.__paths = require('../utilities/data-paths.js').__paths
+
+// fabric.js
+Vue.prototype.$fabric = fabric

@@ -3,7 +3,9 @@
 process.env.BABEL_ENV = 'renderer'
 
 const path = require('path')
-const { dependencies } = require('../package.json')
+const {
+  dependencies
+} = require('../package.json')
 const webpack = require('webpack')
 
 const BabiliWebpackPlugin = require('babili-webpack-plugin')
@@ -34,8 +36,7 @@ let rendererConfig = {
     )
   ],
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.(js|vue)$/,
         enforce: 'pre',
         exclude: /node_modules/,
@@ -52,7 +53,9 @@ let rendererConfig = {
       },
       {
         test: /\.sass$/,
-        use: ['vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax']
+        use: ['vue-style-loader', 'css-loader',
+          'sass-loader?indentedSyntax'
+        ]
       },
       {
         test: /\.css$/,
@@ -131,10 +134,8 @@ let rendererConfig = {
         removeAttributeQuotes: true,
         removeComments: true
       },
-      nodeModules:
-        process.env.NODE_ENV !== 'production'
-          ? path.resolve(__dirname, '../node_modules')
-          : false
+      nodeModules: process.env.NODE_ENV !== 'production' ?
+        path.resolve(__dirname, '../node_modules') : false
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
@@ -147,7 +148,8 @@ let rendererConfig = {
   resolve: {
     alias: {
       '@': path.join(__dirname, '../src/renderer'),
-      vue$: 'vue/dist/vue.esm.js'
+      vue$: 'vue/dist/vue.esm.js',
+      fabric$: path.join(__dirname, '../src/renderer/assets/script/fabric.js')
     },
     extensions: ['.js', '.vue', '.json', '.css', '.node']
   },
@@ -173,13 +175,11 @@ if (process.env.NODE_ENV === 'production') {
 
   rendererConfig.plugins.push(
     new BabiliWebpackPlugin(),
-    new CopyWebpackPlugin([
-      {
-        from: path.join(__dirname, '../static'),
-        to: path.join(__dirname, '../dist/electron/static'),
-        ignore: ['.*']
-      }
-    ]),
+    new CopyWebpackPlugin([{
+      from: path.join(__dirname, '../static'),
+      to: path.join(__dirname, '../dist/electron/static'),
+      ignore: ['.*']
+    }]),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"'
     }),
