@@ -56,9 +56,6 @@ import imageModal from './ImageModal'
 
 const fastGlob = require('fast-glob')
 
-// eslint-disable-next-line
-const { dialog } = require('electron').remote
-
 export default {
   components: { imageModal },
 
@@ -103,7 +100,7 @@ export default {
 
   methods: {
     choosePath() {
-      ;[this.directory] = dialog.showOpenDialog({
+      ;[this.directory] = this.$electron.remote.dialog.showOpenDialog({
         properties: ['openDirectory']
       }) || [false]
     },

@@ -27,9 +27,6 @@
 </template>
 
 <script>
-// eslint-disable-next-line
-import { ipcRenderer } from 'electron'
-
 export default {
   data() {
     return {
@@ -43,7 +40,7 @@ export default {
       route => route.path !== '*' && route.path !== '/'
     )
 
-    ipcRenderer.send('set-menu', this.routes)
+    this.$electron.ipcRenderer.send('set-menu', this.routes)
   }
 }
 </script>

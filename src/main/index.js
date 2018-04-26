@@ -8,7 +8,7 @@ import {
 } from 'electron'
 /* eslint-enable */
 
-const dataPaths = require('../utilities/data-paths.js')
+global.__paths = require('../utilities/data-paths.js').__paths
 
 /**
  * Set `__static` path to static files in production
@@ -20,9 +20,6 @@ if (process.env.NODE_ENV !== 'development') {
     .join(__dirname, '/static')
     .replace(/\\/g, '\\\\') // eslint-disable-line
 }
-
-// eslint-disable-next-line
-global.__paths = dataPaths()
 
 let mainWindow
 const winURL =

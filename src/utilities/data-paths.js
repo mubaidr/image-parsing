@@ -1,17 +1,29 @@
 const path = require('path')
 const fs = require('fs')
 
-module.exports = () => {
-  const root = path.join('.')
-  const src = path.join(root, 'src')
-  const tmp = path.join(root, '.tmp')
+const root = path.resolve('.')
+const src = path.join(root, 'src')
+const tmp = path.join(root, '.tmp')
 
-  // create/clean tmp directory
+if (fs.existsSync(tmp)) {
+  fs.readdir(tmp, (err, files) => {
+    if (err) console.log(err)
+
+    // eslint-disable-next-line
+    for (const file of files) {
+      fs.unlink(path.join(tmp, file), err => {
+        if (err) console.log(err)
+      });
+    }
+  });
+} else {
   fs.mkdir(tmp, err => {
-    if (err) console.log('Temporary directory already exists.')
+    if (err) console.log(err)
   })
+}
 
-  return {
+module.exports = {
+  __paths: {
     tmp,
     root,
     src,
