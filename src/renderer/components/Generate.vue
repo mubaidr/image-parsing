@@ -20,7 +20,6 @@
 
     <!-- Child routes -->
     <transition name="slide-up"
-                appear="appear"
                 mode="out-in">
       <keep-alive>
         <router-view/>

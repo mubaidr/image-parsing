@@ -5,7 +5,15 @@
 </template>
 
 <script>
-export default {}
+import tool from './Panel/tool'
+
+console.log(tool)
+
+export default {
+  mounted() {
+    tool.init()
+  }
+}
 </script>
 
 <style>

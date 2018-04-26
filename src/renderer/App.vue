@@ -3,7 +3,6 @@
     <nav-bar></nav-bar>
     <div class="content-custom">
       <transition name="slide-right"
-                  appear="appear"
                   mode="out-in">
         <router-view/>
       </transition>
