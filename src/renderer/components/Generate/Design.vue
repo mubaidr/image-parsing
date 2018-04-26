@@ -1,20 +1,21 @@
 <template>
   <div>
-    <load-design-files @directory="updateOptions"></load-design-files>
+    <load-files @directory="updateOptions"
+                type="design"></load-files>
   </div>
 </template>
 
 <script>
-import LoadDesignFiles from '@/components/Templates/LoadDesignFiles'
+import LoadFiles from '@/components/Templates/LoadFiles'
 
 export default {
   components: {
-    LoadDesignFiles
+    LoadFiles
   },
 
   methods: {
     updateOptions(dir) {
-      const opt = this.options
+      const opt = JSON.parse(JSON.stringify(this.options))
       opt.generate.source.design = dir
 
       this.setOptions(opt)

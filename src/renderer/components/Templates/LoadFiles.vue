@@ -1,10 +1,11 @@
 <template>
   <div>
     <div class="columns">
-      <div class="column is-8-tablet is-offset-2-tablet is-4-desktop is-offset-4-desktop">
+      <div class="column is-8-tablet is-offset-2-tablet is-6-desktop is-offset-3-desktop is-4-widescreen is-offset-4-widescreen">
         <h1 class="title is-4">
-          Data Source
+          {{type[0].toUpperCase() + type.substr(1)}} Source
         </h1>
+        <!-- TODO: update descript based on `type` prop -->
         <h2 class="subtitle is-6">Choose the folder which contains scanned answer sheet image files.</h2>
         <nav class="panel">
           <p class="panel-heading">
@@ -59,6 +60,13 @@ const fastGlob = require('fast-glob')
 export default {
   components: { imageModal },
 
+  props: {
+    type: {
+      type: String,
+      Default: 'image' // design
+    }
+  },
+
   data() {
     return {
       directory: null,
@@ -85,7 +93,7 @@ export default {
       this.$emit('directory', this.directory)
 
       // read files
-      fastGlob(`${val}/*.{${this.options.validImageFormats.join(',')}}`, {
+      fastGlob(`${val}/*.{${this.options.validFormats[this.type].join(',')}}`, {
         onlyFiles: true
       })
         .then(files => {

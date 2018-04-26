@@ -11,9 +11,7 @@ Vue.mixin({
 
   methods: {
     ...mapActions([
-      'setDesignOptions',
-      'setGenerateOptions',
-      'setProcessOptions'
+      'setOptions'
     ])
   }
 })

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <load-files @directory="updateOptions"></load-files>
+    <load-files @directory="updateOptions"
+                type="excel"></load-files>
   </div>
 </template>
 
@@ -14,7 +15,7 @@ export default {
 
   methods: {
     updateOptions(dir) {
-      const opt = this.options
+      const opt = JSON.parse(JSON.stringify(this.options))
       opt.generate.source.data = dir
 
       this.setOptions(opt)

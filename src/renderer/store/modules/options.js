@@ -25,18 +25,28 @@ const state = {
       },
       options: {}
     },
-    validImageFormats: [
-      'png',
-      'jpg',
-      'jpeg',
-      'jpe',
-      'jfif',
-      'gif',
-      'tif',
-      'tiff',
-      'bmp',
-      'dib'
-    ]
+    validFormats: {
+      image: [
+        'png',
+        'jpg',
+        'jpeg',
+        'jpe',
+        'jfif',
+        'gif',
+        'tif',
+        'tiff',
+        'bmp',
+        'dib'
+      ],
+      design: [
+        'json'
+      ],
+      excel: [
+        'xls',
+        'xlsx',
+        'xlsm'
+      ]
+    }
   }
 }
 
