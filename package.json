@@ -40,6 +40,7 @@
   "dependencies": {
     "brain.js": "^1.2.1",
     "bulma-fluent": "^0.1.37",
+    "exceljs": "^1.4.2",
     "sharp": "^0.20.1",
     "fast-glob": "^2.2.1",
     "vue": "^2.5.16",
@@ -50,7 +51,7 @@
   },
   "description": "An electron-vue project",
   "devDependencies": {
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
     "babel-loader": "^7.1.4",
     "babel-plugin-istanbul": "^4.1.6",
@@ -59,7 +60,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.26.0",
     "babili-webpack-plugin": "^0.1.2",
-    "cfonts": "^2.0.0",
+    "cfonts": "^2.1.0",
     "copy-webpack-plugin": "^4.5.1",
     "cross-env": "^5.1.4",
     "css-loader": "^0.28.11",

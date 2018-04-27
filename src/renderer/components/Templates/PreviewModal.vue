@@ -23,8 +23,9 @@
 </template>
 
 <script>
-const path = require('path')
+const exceljs = require('exceljs')
 const sharp = require('sharp')
+const path = require('path')
 
 export default {
   props: {
@@ -62,6 +63,7 @@ export default {
           // TODO: Load design preview
           break
         case 'excel':
+          console.log(exceljs)
           // TODO: load excel data preview
           break
         case 'image':
