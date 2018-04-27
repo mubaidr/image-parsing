@@ -1,7 +1,8 @@
 <template>
   <div>
     <load-files @directory="updateOptions"
-                type="design"></load-files>
+                file-type="design"
+                is-file=true></load-files>
   </div>
 </template>
 

@@ -47,7 +47,8 @@
         </nav>
       </div>
       <preview-modal :file-path="selectedFile"
-                     :type="type"
+                     :file-type="fileType"
+                     :is-file="isFile"
                      @close="selectedFile = null" />
     </div>
   </div>
@@ -62,9 +63,13 @@ export default {
   components: { PreviewModal },
 
   props: {
-    type: {
+    fileType: {
       type: String,
       Default: 'image' // or design or excel
+    },
+    isFile: {
+      type: Boolean,
+      Default: false
     }
   },
 
@@ -83,9 +88,9 @@ export default {
     },
 
     dataType() {
-      if (this.type === 'design') return 'Design'
-      if (this.type === 'excel') return 'Excel'
-      // if (this.type === 'image')
+      if (this.fileType === 'design') return 'Design'
+      if (this.fileType === 'excel') return 'Excel'
+      // if (this.fileType === 'image')
       return 'Images'
     }
   },
@@ -101,9 +106,12 @@ export default {
       this.$emit('directory', this.directory)
 
       // read files
-      fastGlob(`${val}/*.{${this.options.validFormats[this.type].join(',')}}`, {
-        onlyFiles: true
-      })
+      fastGlob(
+        `${val}/*.{${this.options.validFormats[this.fileType].join(',')}}`,
+        {
+          onlyFiles: true
+        }
+      )
         .then(files => {
           this.files = files
         })

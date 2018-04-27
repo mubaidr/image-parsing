@@ -1,7 +1,7 @@
 <template>
   <div>
     <load-files @directory="updateOptions"
-                type="image"></load-files>
+                file-type="image"></load-files>
   </div>
 </template>
 

@@ -6,16 +6,16 @@
     <div class="modal-content">
       <div class="card">
         <div class="card-image">
-          <template v-if="type === 'image'">
+          <template v-if="fileType === 'image'">
             <figure class="image">
               <img :src="filePathData"
                    alt="Preview Image">
             </figure>
           </template>
-          <template v-if-else="type === 'design'">
+          <template v-if-else="fileType === 'design'">
             <canvas></canvas>
           </template>
-          <template v-if-else="type === 'excel'">
+          <template v-if-else="fileType === 'excel'">
             <div></div>
           </template>
         </div>
@@ -42,9 +42,13 @@ export default {
     filePath: {
       type: String
     },
-    type: {
+    fileType: {
       type: String,
       Default: 'image' // design
+    },
+    isFile: {
+      type: Boolean,
+      Default: false
     }
   },
 
@@ -64,7 +68,7 @@ export default {
       const dotIndex = val.lastIndexOf('.')
       const ext = val.substring(dotIndex + 1).toLowerCase()
 
-      switch (this.type) {
+      switch (this.fileType) {
         case 'design':
           // TODO: Load design preview
           break

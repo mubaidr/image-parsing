@@ -1,7 +1,8 @@
 <template>
   <div>
     <load-files @directory="updateOptions"
-                type="excel"></load-files>
+                file-type="excel"
+                is-file=true></load-files>
   </div>
 </template>
 
