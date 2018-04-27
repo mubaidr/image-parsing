@@ -2,7 +2,7 @@
   <div>
     <load-files @directory="updateOptions"
                 file-type="excel"
-                is-file=true></load-files>
+                :is-file="true"></load-files>
   </div>
 </template>
 

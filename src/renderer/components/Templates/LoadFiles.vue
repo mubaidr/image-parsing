@@ -1,11 +1,14 @@
 <template>
   <div>
+    <!-- <h1 class="title is-4">
+      {{dataType}}
+    </h1> -->
+    <h2 class="subtitle is-6">Choose the folder which contains {{dataType}} files.</h2>
+
     <div class="columns">
-      <div class="column is-8-tablet is-offset-2-tablet is-6-desktop is-offset-3-desktop is-4-widescreen is-offset-4-widescreen">
-        <h1 class="title is-4">
-          {{dataType}} Source
-        </h1>
-        <h2 class="subtitle is-6">Choose the folder which contains {{dataType}} files.</h2>
+      <div class="column is-4"
+           :class="{'is-offset-4' : !selectedFile}">
+        <h2 class="subtitle is-4">Source</h2>
         <nav class="panel">
           <p class="panel-heading">
             {{ directory || 'No Source Selected' }}
@@ -46,10 +49,14 @@
           </template>
         </nav>
       </div>
-      <preview-modal :file-path="selectedFile"
-                     :file-type="fileType"
-                     :is-file="isFile"
-                     @close="selectedFile = null" />
+
+      <div class="column"
+           :class="{'is-hidden': !selectedFile}">
+        <h2 class="subtitle is-4">Preview</h2>
+        <preview-modal :file-path="selectedFile"
+                       :file-type="fileType"
+                       :is-file="isFile" />
+      </div>
     </div>
   </div>
 </template>
@@ -141,4 +148,7 @@ export default {
 .fixed-height
   max-height: 25em
   overflow: auto
+
+.column
+  transition: all 0.5s ease-out
 </style>
