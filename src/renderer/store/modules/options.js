@@ -39,7 +39,8 @@ const state = {
         'dib'
       ],
       design: [
-        'json'
+        'json',
+        'svg'
       ],
       excel: [
         'xls',
