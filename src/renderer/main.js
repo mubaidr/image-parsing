@@ -1,5 +1,4 @@
 import Vue from 'vue'
-
 import 'bulma-fluent/css/bulma.css'
 
 import './mixins'
@@ -12,10 +11,10 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-Vue.use(require('vue-electron'))
-
 Vue.config.productionTip = false
 Vue.config.devtools = false
+
+Vue.use(require('vue-electron'))
 
 /* eslint-disable no-new */
 new Vue({

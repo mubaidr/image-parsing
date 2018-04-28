@@ -9,7 +9,7 @@ const {
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+// const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const {
   VueLoaderPlugin
@@ -46,19 +46,19 @@ const rendererConfig = {
       },
       {
         test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, 'vue-style-loader', 'css-loader',
+        use: ['vue-style-loader', 'css-loader',
           'sass-loader'
         ]
       },
       {
         test: /\.sass$/,
-        use: [MiniCssExtractPlugin.loader, 'vue-style-loader', 'css-loader',
+        use: ['vue-style-loader', 'css-loader',
           'sass-loader?indentedSyntax'
         ]
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
+        use: ['vue-style-loader', 'css-loader']
       },
       {
         test: /\.html$/,
@@ -80,8 +80,8 @@ const rendererConfig = {
           options: {
             extractCSS: process.env.NODE_ENV === 'production',
             loaders: {
-              sass: `${MiniCssExtractPlugin.loader},MiniCssExtractPlugin.loader,vue-style-loader!css-loader!sass-loader?indentedSyntax=1`,
-              scss: `${MiniCssExtractPlugin.loader},vue-style-loader!css-loader!sass-loader`
+              sass: `vue-style-loader!css-loader!sass-loader?indentedSyntax=1`,
+              scss: `vue-style-loader!css-loader!sass-loader`
             }
           }
         }
@@ -128,7 +128,7 @@ const rendererConfig = {
         path.resolve(__dirname, '../node_modules') : false
     }),
     new VueLoaderPlugin(),
-    new MiniCssExtractPlugin()
+    // new MiniCssExtractPlugin()
   ],
   output: {
     filename: '[name].js',
