@@ -8,24 +8,35 @@ import {
 } from 'electron'
 /* eslint-enable */
 
-global.__paths = require('../utilities/data-paths.js').__paths
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
-/**
- * Set `__static` path to static files in production
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
- */
-if (process.env.NODE_ENV !== 'development') {
+global.__paths = require('../utilities/data-paths.js').__paths
+let mainWindow
+let winURL = 'http://localhost:9080'
+
+if (process.env.NODE_ENV === 'production') {
+  winURL = `file://${__dirname}/index.html`
+
+  /**
+   * Set `__static` path to static files in production
+   * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
+   */
   // eslint-disable-next-line
   global.__static = require('path')
     .join(__dirname, '/static')
     .replace(/\\/g, '\\\\') // eslint-disable-line
+} else {
+  require('electron-debug')({ //eslint-disable-line
+    showDevTools: true
+  })
 }
 
-let mainWindow
-const winURL =
-  process.env.NODE_ENV === 'development' ?
-  'http://localhost:9080' :
-  `file://${__dirname}/index.html`
+function installDevTools() {
+  if (process.env.NODE_ENV === 'development') {
+    require('devtron').install() //eslint-disable-line
+    // TODO: ionstall vue.js from zip file
+  }
+}
 
 function createWindow() {
   /**
@@ -43,6 +54,7 @@ function createWindow() {
       webSecurity: false
     }
   })
+
   // mainWindow.setMenu(null)
   mainWindow.loadURL(winURL)
 
@@ -51,7 +63,10 @@ function createWindow() {
   })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createWindow()
+  installDevTools()
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
