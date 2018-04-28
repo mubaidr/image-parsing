@@ -9,7 +9,8 @@
       "output": "build"
     },
     "dmg": {
-      "contents": [{
+      "contents": [
+        {
           "path": "/Applications",
           "type": "link",
           "x": 410,
@@ -41,7 +42,7 @@
     "bulma-fluent": "^0.1.37",
     "exceljs": "^1.4.2",
     "fast-glob": "^2.2.1",
-    "sharp": "^0.20.2",
+    "sharp": "^0.20.1",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
@@ -84,6 +85,7 @@
     "sass-loader": "^7.0.1",
     "style-loader": "^0.21.0",
     "url-loader": "^1.0.1",
+    "vue-devtools": "^3.1.9",
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^15.0.4",
     "vue-style-loader": "^4.1.0",

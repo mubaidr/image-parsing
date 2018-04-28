@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === 'production') {
 function installDevTools() {
   if (process.env.NODE_ENV === 'development') {
     require('devtron').install() //eslint-disable-line
-    // TODO: ionstall vue.js from zip file
+    require('vue-devtools').install() //eslint-disable-line
   }
 }
 
