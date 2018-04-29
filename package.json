@@ -39,10 +39,10 @@
   },
   "dependencies": {
     "brain.js": "^1.2.1",
-    "bulma-fluent": "^0.1.37",
+    "bulma-fluent": "^0.1.38",
     "exceljs": "^1.4.2",
     "fast-glob": "^2.2.1",
-    "sharp": "^0.20.1",
+    "sharp": "^0.20.2",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
@@ -65,7 +65,7 @@
     "del": "^3.0.0",
     "devtron": "^1.4.0",
     "electron": "^2.0.0-beta.8",
-    "electron-builder": "^20.10.0",
+    "electron-builder": "^20.11.1",
     "electron-debug": "^1.5.0",
     "electron-rebuild": "^1.7.3",
     "eslint": "^4.19.1",
@@ -111,7 +111,7 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.renderer.config.js",
-    "postinstall": "electron-builder install-app-deps && npm run lint:fix",
+    "postinstall": "electron-builder install-app-deps && npm rebuild node-sass && npm run lint:fix",
     "rebuild-electron": "./node_modules/.bin/electron-rebuild"
   },
   "version": "0.0.1"
