@@ -18,6 +18,9 @@ let electronProcess = null
 let manualRestart = false
 
 function startRenderer() {
+  rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(
+    rendererConfig.entry.renderer)
+
   // eslint-disable-next-line
   return new Promise((resolve, reject) => {
     const compiler = webpack(rendererConfig)
@@ -27,6 +30,9 @@ function startRenderer() {
     })
 
     compiler.hooks.afterEmit.tap('afterEmit', () => {
+      hotMiddleware.publish({
+        action: 'reload'
+      })
       console.info('\nCompiled renderer script!\n')
     })
 

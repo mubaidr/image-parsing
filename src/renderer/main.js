@@ -31,3 +31,8 @@ global.__paths = require('../utilities/data-paths.js').__paths
 
 // fabric.js
 Vue.prototype.$fabric = fabric
+
+/* Enable webpack hot reloading */
+if (module.hot) {
+  module.hot.accept();
+}

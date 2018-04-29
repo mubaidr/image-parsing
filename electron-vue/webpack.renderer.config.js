@@ -128,6 +128,7 @@ const rendererConfig = {
         path.resolve(__dirname, '../node_modules') : false
     }),
     new VueLoaderPlugin(),
+    new webpack.HotModuleReplacementPlugin()
     // new MiniCssExtractPlugin()
   ],
   output: {

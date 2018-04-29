@@ -48,15 +48,23 @@ function createWindow() {
     height: 700,
     minWidth: 500,
     minHeight: 350,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fff',
     webPreferences: {
       nodeIntegrationInWorker: true,
       webSecurity: false
-    }
+    },
+    // show: false,
   })
 
   // mainWindow.setMenu(null)
   mainWindow.loadURL(winURL)
+
+  /* Show when loaded
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show()
+    mainWindow.focus()
+  })
+  */
 
   mainWindow.on('closed', () => {
     mainWindow = null
