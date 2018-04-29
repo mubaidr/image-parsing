@@ -102,7 +102,7 @@
     "url": "git+https://github.com/mubaidr/image-parsing.git"
   },
   "scripts": {
-    "build": "node electron-vue/build.js && electron-builder",
+    "build": "cross-env NODE_ENV=production node electron-vue/build.js && electron-builder",
     "build:clean": "cross-env BUILD_TARGET=clean node electron-vue/build.js",
     "build:dir": "node electron-vue/build.js && electron-builder --dir",
     "dev": "cross-env NODE_ENV=development node electron-vue/dev-runner.js",
@@ -111,7 +111,7 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.renderer.config.js",
-    "postinstall": "npm run lint:fix",
+    "postinstall": "electron-builder install-app-deps && npm run lint:fix",
     "rebuild-electron": "./node_modules/.bin/electron-rebuild"
   },
   "version": "0.0.1"
