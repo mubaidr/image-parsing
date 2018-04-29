@@ -9,14 +9,11 @@
           </figure>
         </template>
         <template v-if-else="fileType === 'design'">
-          <canvas></canvas>
+          <canvas ref="previewCanvas"></canvas>
         </template>
         <template v-if-else="fileType === 'excel'">
           <div></div>
         </template>
-      </div>
-      <div class="card-content has-text-centered">
-        <p>{{ filePath }}</p>
       </div>
     </div>
   </div>
@@ -26,6 +23,7 @@
 const exceljs = require('exceljs')
 const sharp = require('sharp')
 const path = require('path')
+const fs = require('fs')
 
 export default {
   props: {
@@ -44,7 +42,8 @@ export default {
 
   data() {
     return {
-      filePathData: null
+      filePathData: null,
+      canvas: null
     }
   },
 
@@ -60,7 +59,32 @@ export default {
 
       switch (this.fileType) {
         case 'design':
-          // TODO: Load design preview
+          setTimeout(() => {
+            switch (ext) {
+              case 'svg':
+                fabric.loadSVGFromURL(this.filePath, (objects, options) => {
+                  const obj = fabric.util.groupSVGElements(objects, options)
+                  this.canvas.add(obj).centerObject(obj)
+                  obj.setCoords()
+                  this.canvas.calcOffset()
+                  this.canvas.renderAll()
+                })
+                break
+              case 'json':
+              default:
+                fabric.loadFromJSON(
+                  JSON.parse(fs.readFileSync(this.filePath)),
+                  (objects, options) => {
+                    const obj = fabric.util.groupSVGElements(objects, options)
+                    this.canvas.add(obj).centerObject(obj)
+                    obj.setCoords()
+                    this.canvas.calcOffset()
+                    this.canvas.renderAll()
+                  }
+                )
+                break
+            }
+          }, 250)
           break
         case 'excel':
           console.log(exceljs)
@@ -83,6 +107,12 @@ export default {
           break
       }
     }
+  },
+
+  mounted() {
+    this.canvas = new fabric.Canvas(this.$refs.previewCanvas, {
+      backgroundColor: 'white'
+    })
   }
 }
 </script>

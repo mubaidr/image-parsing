@@ -150,5 +150,5 @@ export default {
   overflow: auto
 
 .column
-  transition: all 0.5s ease-out
+  transition: all 0.25s ease-out
 </style>
