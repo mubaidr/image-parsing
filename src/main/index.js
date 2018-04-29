@@ -56,7 +56,7 @@ function createWindow() {
     // show: false,
   })
 
-  // mainWindow.setMenu(null)
+  mainWindow.setMenu(null)
   mainWindow.loadURL(winURL)
 
   /* Show when loaded
@@ -87,53 +87,6 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
-// Event handlers
-/*
-ipcMain.on('set-menu', (event, routes) => {
-  console.log(routes)
-  const menu = new Menu()
-  for (let i = 0; i < routes.length; i += 1) {
-    const route = routes[i]
-    const menuItem = new MenuItem({
-      label: route.name,
-      submenu: [{
-          role: 'undo'
-        },
-        {
-          role: 'redo'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          role: 'cut'
-        },
-        {
-          role: 'copy'
-        },
-        {
-          role: 'paste'
-        },
-        {
-          role: 'pasteandmatchstyle'
-        },
-        {
-          role: 'delete'
-        },
-        {
-          role: 'selectall'
-        }
-      ]
-    })
-    menu.append(menuItem)
-  }
-
-  console.log(menu)
-
-  Menu.setApplicationMenu(menu)
-})
-*/
 
 /**
  * Auto Updater
