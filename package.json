@@ -9,8 +9,7 @@
       "output": "build"
     },
     "dmg": {
-      "contents": [
-        {
+      "contents": [{
           "path": "/Applications",
           "type": "link",
           "x": 410,

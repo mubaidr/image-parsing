@@ -5,13 +5,11 @@
 </template>
 
 <script>
-import tool from './Panel/tool'
-
-console.log(tool)
+// import tool from './Panel/tool'
 
 export default {
   mounted() {
-    tool.init()
+    // tool.init()
   }
 }
 </script>
