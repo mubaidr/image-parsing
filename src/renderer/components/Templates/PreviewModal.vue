@@ -1,45 +1,41 @@
 <template>
-  <div>
-    <div class="card">
-      <div class="card-image">
-        <template v-if="fileType === 'image'">
-          <figure class="image">
-            <img :src="filePathData"
-                 alt="Loading preview...">
-          </figure>
-        </template>
-        <template v-else-if="fileType === 'design'">
-          <template v-if="json">
-            <canvas ref="previewCanvas"
-                    width="1240"
-                    height="1754">
-            </canvas>
-          </template>
-          <template v-else>
-            <img :src="filePathData"
-                 alt="Loading preview...">
-          </template>
-        </template>
-        <template v-else-if="fileType === 'excel'">
-          <div>
-            <table>
+  <div class="box">
+    <template v-if="fileType === 'image'">
+      <figure class="image">
+        <img :src="filePathData"
+             alt="Loading preview...">
+      </figure>
+    </template>
+    <template v-else-if="fileType === 'design'">
+      <template v-if="fileExtension === 'json'">
+        <canvas ref="previewCanvas"
+                width="1240"
+                height="1754">
+        </canvas>
+      </template>
+      <template v-else-if="fileExtension === 'svg'">
+        <img :src="filePathData"
+             alt="Loading preview...">
+      </template>
+    </template>
+    <template v-else-if="fileType === 'excel'">
+      <div>
+        <table>
 
-              <head></head>
+          <head></head>
 
-              <body>
-                <tr v-for="(row, rowIndex) in excelData"
-                    :key="rowIndex">
-                  <td v-for="(col, colIndex) in row"
-                      :key="colIndex">
-                    {{col}}
-                  </td>
-                </tr>
-              </body>
-            </table>
-          </div>
-        </template>
+          <body>
+            <tr v-for="(row, rowIndex) in excelData"
+                :key="rowIndex">
+              <td v-for="(col, colIndex) in row"
+                  :key="colIndex">
+                {{col}}
+              </td>
+            </tr>
+          </body>
+        </table>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -67,6 +63,7 @@ export default {
   data() {
     return {
       filePathData: null,
+      fileExtension: null,
       excelData: [],
       canvas: null
     }
@@ -83,7 +80,9 @@ export default {
       this.resetData()
 
       const dotIndex = val.lastIndexOf('.')
-      const ext = val.substring(dotIndex + 1).toLowerCase()
+      const ext = (this.fileExtension = val
+        .substring(dotIndex + 1)
+        .toLowerCase())
 
       if (this.fileType === 'design') {
         // design files preview
