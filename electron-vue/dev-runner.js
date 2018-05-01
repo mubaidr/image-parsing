@@ -33,7 +33,7 @@ function startRenderer() {
       hotMiddleware.publish({
         action: 'reload'
       })
-      console.info('\nCompiled renderer script!\n')
+      console.info('\nCompiled renderer script.')
     })
 
     const server = new WebpackDevServer(compiler, {
@@ -102,7 +102,7 @@ function startMain() {
         }, 5000)
       }
 
-      console.info('\nCompiled main script!\n')
+      console.info('\nCompiled main script.')
       resolve()
     })
 

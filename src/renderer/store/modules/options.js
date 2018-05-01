@@ -31,21 +31,22 @@ const state = {
         'jpg',
         'jpeg',
         'jpe',
-        'jfif',
+        // 'jfif',
         'gif',
         'tif',
         'tiff',
         'bmp',
-        'dib'
+        // 'dib'
       ],
       design: [
         'json',
         'svg'
       ],
       excel: [
-        'xls',
+        // 'xls',
         'xlsx',
-        'xlsm'
+        'xlsm',
+        'csv'
       ]
     }
   }

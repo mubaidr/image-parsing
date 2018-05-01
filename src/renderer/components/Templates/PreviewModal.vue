@@ -8,11 +8,26 @@
                  alt="Preview Image">
           </figure>
         </template>
-        <template v-if-else="fileType === 'design'">
+        <template v-else-if="fileType === 'design'">
           <canvas ref="previewCanvas"></canvas>
         </template>
-        <template v-if-else="fileType === 'excel'">
-          <div></div>
+        <template v-else-if="fileType === 'excel'">
+          <div>
+            <table>
+
+              <head></head>
+
+              <body>
+                <tr v-for="(row, rowIndex) in excelData"
+                    :key="rowIndex">
+                  <td v-for="(col, colIndex) in row"
+                      :key="colIndex">
+                    {{col}}
+                  </td>
+                </tr>
+              </body>
+            </table>
+          </div>
         </template>
       </div>
     </div>
@@ -43,6 +58,7 @@ export default {
   data() {
     return {
       filePathData: null,
+      excelData: [],
       canvas: null
     }
   },
@@ -54,11 +70,17 @@ export default {
         return
       }
 
+      // reset data
+      this.resetData()
+
       const dotIndex = val.lastIndexOf('.')
       const ext = val.substring(dotIndex + 1).toLowerCase()
 
       if (this.fileType === 'design') {
         // design files preview
+        this.canvas = new fabric.Canvas(this.$refs.previewCanvas, {
+          backgroundColor: 'white'
+        })
         setTimeout(() => {
           switch (ext) {
             case 'svg':
@@ -100,21 +122,40 @@ export default {
         }
       } else if (this.fileType === 'excel') {
         // excel files preview
-        const workbook = new Excel.Workbook()
-        workbook.xlsx.readFile(this.filePath).then(() => {
-          // use workbook
-
-          console.log(workbook)
-        })
+        if (ext === 'csv') {
+          fs.readFile(this.filePath, (err, data) => {
+            const rows = data.toString().split('\n')
+            const maxRows = Math.min(rows.length, 10)
+            for (let i = 0; i < maxRows; i += 1) {
+              this.excelData.push(rows[i].split(','))
+            }
+          })
+        } else {
+          const sampleData = []
+          const workbook = new Excel.Workbook()
+          workbook.xlsx.readFile(this.filePath).then(() => {
+            // use workbook
+            workbook.worksheets.forEach(sheet => {
+              const maxRows = Math.min(sheet.actualRowCount, 10)
+              for (let i = 0; i < maxRows; i += 1) {
+                this.excelData.push(sheet.getRow(i).values)
+              }
+            })
+          })
+        }
       }
     }
   },
 
-  mounted() {
-    this.canvas = new fabric.Canvas(this.$refs.previewCanvas, {
-      backgroundColor: 'white'
-    })
-  }
+  methods: {
+    resetData() {
+      this.filePathData = null
+      this.excelData = []
+      this.canvas ? this.canvas.dispose() : (this.canvas = null) //eslint-disable-line
+    }
+  },
+
+  mounted() {}
 }
 </script>
 
