@@ -5,11 +5,20 @@
         <template v-if="fileType === 'image'">
           <figure class="image">
             <img :src="filePathData"
-                 alt="Preview Image">
+                 alt="Loading preview...">
           </figure>
         </template>
         <template v-else-if="fileType === 'design'">
-          <canvas ref="previewCanvas"></canvas>
+          <template v-if="json">
+            <canvas ref="previewCanvas"
+                    width="1240"
+                    height="1754">
+            </canvas>
+          </template>
+          <template v-else>
+            <img :src="filePathData"
+                 alt="Loading preview...">
+          </template>
         </template>
         <template v-else-if="fileType === 'excel'">
           <div>
@@ -84,13 +93,17 @@ export default {
         setTimeout(() => {
           switch (ext) {
             case 'svg':
+              this.filePathData = this.filePath
+              /*
               fabric.loadSVGFromURL(this.filePath, (objects, options) => {
-                const obj = fabric.util.groupSVGElements(objects, options)
-                this.canvas.add(obj).centerObject(obj)
-                obj.setCoords()
-                this.canvas.calcOffset()
+                objects.forEach(obj => {
+                  this.canvas.add(obj)
+                  // obj.setCoords()
+                })
+                // this.canvas.calcOffset()
                 this.canvas.renderAll()
               })
+              */
               break
             case 'json':
             default:
