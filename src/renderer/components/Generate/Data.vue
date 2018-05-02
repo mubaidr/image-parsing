@@ -2,7 +2,9 @@
   <div>
     <load-files @directory="updateOptions"
                 file-type="excel"
-                :is-file="true"></load-files>
+                :is-file="true"
+                :default-path="options.generate.source.data">
+    </load-files>
   </div>
 </template>
 

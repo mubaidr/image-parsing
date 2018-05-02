@@ -2,7 +2,9 @@
   <div>
     <load-files @directory="updateOptions"
                 file-type="design"
-                :is-file="true"></load-files>
+                :is-file="true"
+                :default-path="options.generate.source.design">
+    </load-files>
   </div>
 </template>
 

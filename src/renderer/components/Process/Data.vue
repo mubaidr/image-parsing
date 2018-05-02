@@ -1,7 +1,9 @@
 <template>
   <div>
     <load-files @directory="updateOptions"
-                file-type="image"></load-files>
+                file-type="image"
+                :default-path="options.process.source.data">
+    </load-files>
   </div>
 </template>
 

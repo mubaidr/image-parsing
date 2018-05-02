@@ -1,4 +1,7 @@
-const state = {
+const Store = require('electron-store');
+const store = new Store();
+
+const _defaults = {
   options: {
     design: {
       options: {}
@@ -52,6 +55,11 @@ const state = {
   }
 }
 
+const opt = store.get('options')
+const state = opt ? {
+  options: opt
+} : _defaults
+
 const getters = {
   options(state) {
     return state.options
@@ -67,6 +75,8 @@ const mutations = {
 const actions = {
   setOptions(context, opt) {
     context.commit('setOptions', opt)
+
+    store.set('options', opt)
   }
 }
 

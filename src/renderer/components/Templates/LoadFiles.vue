@@ -46,6 +46,7 @@
                      :file-type="fileType"
                      :is-file="isFile" />
     </div>
+    {{defaultPath}}
   </div>
 </template>
 
@@ -65,6 +66,10 @@ export default {
     isFile: {
       type: Boolean,
       Default: false
+    },
+    defaultPath: {
+      type: String,
+      Default: ''
     }
   },
 
@@ -120,7 +125,8 @@ export default {
   methods: {
     choosePath() {
       ;[this.directory] = this.$electron.remote.dialog.showOpenDialog({
-        properties: ['openDirectory']
+        properties: ['openDirectory'],
+        defaultPath: this.defaultPath
       }) || [false]
     },
 
