@@ -46,7 +46,6 @@
                      :file-type="fileType"
                      :is-file="isFile" />
     </div>
-    {{defaultPath}}
   </div>
 </template>
 

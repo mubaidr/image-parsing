@@ -95,6 +95,9 @@ export default {
               this.filePathData = this.filePath
               /*
               fabric.loadSVGFromURL(this.filePath, (objects, options) => {
+                this.canvas.setWidth(options.width)
+                this.canvas.setHeight(options.height)
+
                 objects.forEach(obj => {
                   this.canvas.add(obj)
                   // obj.setCoords()
@@ -109,6 +112,9 @@ export default {
               fabric.loadFromJSON(
                 JSON.parse(fs.readFileSync(this.filePath)),
                 (objects, options) => {
+                  this.canvas.setWidth(options.width)
+                  this.canvas.setHeight(options.height)
+
                   const obj = fabric.util.groupSVGElements(objects, options)
                   this.canvas.add(obj).centerObject(obj)
                   obj.setCoords()
