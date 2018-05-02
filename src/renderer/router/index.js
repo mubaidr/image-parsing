@@ -105,6 +105,13 @@ export default new Router({
           component: require('@/components/Process/Progress').default
         }
       ]
+    }, {
+      path: '/train',
+      meta: {
+        title: 'Train',
+        icon: 'fa-vials'
+      },
+      component: require('@/components/Train').default
     },
     {
       path: '/about',

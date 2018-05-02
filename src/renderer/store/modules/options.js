@@ -12,8 +12,7 @@ const _defaults = {
         design: '.'
       },
       target: {
-        data: '',
-        design: ''
+        data: ''
       },
       options: {}
     },
@@ -23,8 +22,18 @@ const _defaults = {
         design: '.'
       },
       target: {
-        data: '',
-        design: ''
+        data: ''
+      },
+      options: {}
+    },
+    train: {
+      source: {
+        data: '.',
+        design: '.',
+        result: '.'
+      },
+      target: {
+        data: ''
       },
       options: {}
     },
@@ -54,6 +63,9 @@ const _defaults = {
     }
   }
 }
+
+// reset options
+store.delete('options');
 
 const opt = store.get('options')
 const state = opt ? {

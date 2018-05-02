@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1 class="title is-4">Source</h1>
-    <h2 class="subtitle is-6">Choose the folder which contains {{dataType}} files.</h2>
+  <div class="block">
     <div class="file has-name is-fullwidth">
       <label class="file-label">
         <button class="file-input"

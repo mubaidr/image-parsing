@@ -3,7 +3,7 @@
     <!-- <nav-bar></nav-bar> -->
     <side-bar></side-bar>
     <div class="content-custom">
-      <transition name="slide-right"
+      <transition name="slide-up"
                   mode="out-in">
         <router-view/>
       </transition>
