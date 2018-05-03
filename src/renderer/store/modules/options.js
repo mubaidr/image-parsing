@@ -67,15 +67,13 @@ const _defaults = {
 // reset options
 // store.delete('options');
 
-let state = {}
+const state = {}
 const opt = store.get('options')
 
-if (opt) {
-  state = {
-    options: opt
-  }
+if (opt && opt.design && opt.generate && opt.process) {
+  state.options = opt
 } else {
-  state = _defaults
+  state.options = _defaults.options
 
   store.set('options', _defaults.options)
 }
