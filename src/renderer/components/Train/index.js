@@ -108,8 +108,27 @@ async function getImagePaths() {
 // Load results csv
 async function getResultData() {
   const resultsData = {}
-  const resultFile = fs.readFileSync(options.train.source.designFile,
+  const resultFile = fs.readFileSync(options.train.source.excelFile,
     'utf8')
+
+  const rows = resultFile.split('\n')
+  const headerValues = rows[0].split(',')
+  const rollNoIndex = headerValues.indexOf('RollNo') || headerValues.indexOf(
+    'RollNumber')
+
+  let values
+  let obj
+
+  for (let i = 1; i < rows.length; i += 1) {
+    values = rows[i].split(',')
+    obj = {}
+
+    for (let j = 0; j < values.length; j += 1) {
+      obj[headerValues[j]] = values[j]
+    }
+
+    resultsData[values[rollNoIndex]] = obj
+  }
 
   return resultsData
 }
@@ -120,6 +139,8 @@ module.exports = {
     const resultsData = await getResultData()
     const images = await getImagePaths()
 
-    console.log(resultsData)
+    // TODO: extract image portions using sharp
+
+    console.log(images)
   }
 }
