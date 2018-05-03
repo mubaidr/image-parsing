@@ -50,13 +50,10 @@ export default {
     filePath: {
       type: String
     },
+
     fileType: {
       type: String,
       Default: 'image' // design
-    },
-    isFile: {
-      type: Boolean,
-      Default: false
     }
   },
 

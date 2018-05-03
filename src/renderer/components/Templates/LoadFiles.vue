@@ -17,7 +17,7 @@
         <span class="file-name">
           {{ directory || 'No Source Selected' }}
           <template v-if="directory">
-            <i>({{ filteredFiles.length }} {{dataType}} files)</i>
+            <i>({{ filteredFiles.length }} {{fileType}} files)</i>
           </template>
         </span>
       </label>
@@ -35,21 +35,20 @@
         </div>
       </template>
       <template v-if="directory && !filteredFiles.length">
-        <div class="notification is-warning">Selected directory does not contains any {{dataType}} files. </div>
+        <div class="notification is-warning">Selected directory does not contains any {{fileType}} files. </div>
       </template>
     </nav>
     <div class="block has-text-centered"
          v-show="selectedFile">
       <preview-modal :file-path="selectedFile"
-                     :file-type="fileType"
-                     :is-file="isFile" />
+                     :file-type="fileType" />
     </div>
   </div>
 </template>
 
 <script>
+import _set from 'lodash/set'
 import PreviewModal from './PreviewModal'
-
 const fastGlob = require('fast-glob')
 
 export default {
@@ -60,21 +59,23 @@ export default {
       type: String,
       Default: 'image' // or design or excel
     },
+
     isFile: {
       type: Boolean,
       Default: false
     },
-    defaultPath: {
+
+    option: {
       type: String,
-      Default: ''
+      Default: 'generate.source.design'
     }
   },
 
   data() {
     return {
       directory: null,
-      files: [],
       selectedFile: null,
+      files: [],
       fileFilter: ''
     }
   },
@@ -82,13 +83,6 @@ export default {
   computed: {
     filteredFiles() {
       return this.files.filter(file => file.indexOf(this.fileFilter) !== -1)
-    },
-
-    dataType() {
-      if (this.fileType === 'design') return 'Design'
-      if (this.fileType === 'excel') return 'Excel'
-      // if (this.fileType === 'image')
-      return 'Images'
     }
   },
 
@@ -96,26 +90,28 @@ export default {
     directory(val) {
       if (!val) {
         this.files = []
-        return
+      } else {
+        // read files
+        fastGlob(
+          `${this.directory}/*.{${this.options.validFormats[this.fileType].join(
+            ','
+          )}}`,
+          {
+            onlyFiles: true
+          }
+        )
+          .then(files => {
+            this.files = files
+          })
+          .catch(err => {
+            this.files = []
+            console.log(err)
+          })
       }
+    },
 
-      // update options
-      this.$emit('directory', this.directory)
-
-      // read files
-      fastGlob(
-        `${val}/*.{${this.options.validFormats[this.fileType].join(',')}}`,
-        {
-          onlyFiles: true
-        }
-      )
-        .then(files => {
-          this.files = files
-        })
-        .catch(err => {
-          this.files = []
-          console.log(err)
-        })
+    selectedFile(val) {
+      this.updateOptions('file')
     }
   },
 
@@ -125,11 +121,29 @@ export default {
         properties: ['openDirectory'],
         defaultPath: this.defaultPath
       }) || [false]
+
+      this.selectedFile = null
+
+      // update options
+      this.updateOptions()
     },
 
     extractName(str) {
       const index = str.lastIndexOf('/') + 1
       return str.substr(index)
+    },
+
+    updateOptions(updateType) {
+      const opt = JSON.parse(JSON.stringify(this.options))
+      const optionPath = this.option
+
+      if (updateType === 'file') {
+        _set(opt, `${optionPath}File`, this.selectedFile)
+      } else {
+        _set(opt, optionPath, this.directory)
+      }
+
+      this.setOptions(opt)
     }
   }
 }

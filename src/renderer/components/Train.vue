@@ -1,30 +1,44 @@
 <template>
   <div class="section">
     <h1 class="title">Train Network</h1>
-    <br/>
+    <br>
 
     <h2 class="subtitle">Design</h2>
-    <load-files @directory="updateOptionsDesign"
+    <load-files :is-file="true"
                 file-type="design"
-                :default-path="options.train.source.design">
+                option="train.source.design">
     </load-files>
 
     <h2 class="subtitle">Images</h2>
-    <load-files @directory="updateOptionsData"
-                file-type="image"
-                :default-path="options.train.source.data">
+    <load-files file-type="image"
+                option="train.source.image">
     </load-files>
 
     <h2 class="subtitle">Result</h2>
-    <load-files @directory="updateOptionsResult"
+    <load-files :is-file="true"
                 file-type="excel"
-                :default-path="options.train.source.result">
+                option="train.source.excel">
     </load-files>
+
+    <hr/>
+
+    <h2 class="subtitle">Output</h2>
+    <load-files :is-file="true"
+                file-type="excel"
+                option="train.target.data">
+    </load-files>
+
+    <button class="button is-primary"
+            @click="startProcess">Start Training</button>
+
+    <button class="button is-danger"
+            @click="stopProcess">Stop Training</button>
   </div>
 </template>
 
 <script>
 import loadFiles from './Templates/LoadFiles'
+const trainingModule = require('./Train/index')
 
 export default {
   name: 'About',
@@ -32,25 +46,14 @@ export default {
   components: { loadFiles },
 
   methods: {
-    updateOptionsDesign(dir) {
-      const opt = JSON.parse(JSON.stringify(this.options))
-      opt.train.source.design = dir
+    async startProcess() {
+      console.log('Starting process...')
 
-      this.setOptions(opt)
+      trainingModule.train()
     },
 
-    updateOptionsData(dir) {
-      const opt = JSON.parse(JSON.stringify(this.options))
-      opt.train.source.data = dir
-
-      this.setOptions(opt)
-    },
-
-    updateOptionsResult(dir) {
-      const opt = JSON.parse(JSON.stringify(this.options))
-      opt.train.source.result = dir
-
-      this.setOptions(opt)
+    async stopProcess() {
+      console.log('Stoping process...')
     }
   }
 }

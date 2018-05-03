@@ -1,9 +1,8 @@
 <template>
   <div>
-    <load-files @directory="updateOptions"
+    <load-files :is-file="true"
                 file-type="design"
-                :is-file="true"
-                :default-path="options.generate.source.design">
+                option="generate.source.design">
     </load-files>
   </div>
 </template>
@@ -14,15 +13,6 @@ import LoadFiles from '@/components/Templates/LoadFiles'
 export default {
   components: {
     LoadFiles
-  },
-
-  methods: {
-    updateOptions(dir) {
-      const opt = JSON.parse(JSON.stringify(this.options))
-      opt.generate.source.design = dir
-
-      this.setOptions(opt)
-    }
   }
 }
 </script>

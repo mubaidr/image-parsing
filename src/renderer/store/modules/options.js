@@ -8,7 +8,7 @@ const _defaults = {
     },
     generate: {
       source: {
-        data: '.',
+        excel: '.',
         design: '.'
       },
       target: {
@@ -18,7 +18,7 @@ const _defaults = {
     },
     process: {
       source: {
-        data: '.',
+        image: '.',
         design: '.'
       },
       target: {
@@ -28,9 +28,9 @@ const _defaults = {
     },
     train: {
       source: {
-        data: '.',
+        image: '.',
         design: '.',
-        result: '.'
+        excel: '.'
       },
       target: {
         data: ''
@@ -65,12 +65,20 @@ const _defaults = {
 }
 
 // reset options
-store.delete('options');
+// store.delete('options');
 
+let state = {}
 const opt = store.get('options')
-const state = opt ? {
-  options: opt
-} : _defaults
+
+if (opt) {
+  state = {
+    options: opt
+  }
+} else {
+  state = _defaults
+
+  store.set('options', _defaults.options)
+}
 
 const getters = {
   options(state) {
