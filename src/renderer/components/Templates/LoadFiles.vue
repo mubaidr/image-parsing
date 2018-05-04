@@ -2,13 +2,13 @@
   <div class="block">
     <div class="file has-name is-fullwidth">
       <label class="file-label">
-        <button class="file-input"
-                name="resume"
-                @click="choosePath">
-        </button>
+        <button
+          class="file-input"
+          name="resume"
+          @click="choosePath" />
         <span class="file-cta">
           <span class="file-icon">
-            <i class="fas fa-upload"></i>
+            <i class="fas fa-upload" />
           </span>
           <span class="file-label">
             Choose a directory...
@@ -17,7 +17,7 @@
         <span class="file-name">
           {{ directory || 'No Source Selected' }}
           <template v-if="directory">
-            <i>({{ filteredFiles.length }} {{fileType}} files)</i>
+            <i>({{ filteredFiles.length }} {{ fileType }} files)</i>
           </template>
         </span>
       </label>
@@ -25,23 +25,26 @@
     <nav class="panel">
       <template v-if="directory && filteredFiles.length">
         <div class="fixed-height">
-          <a v-for="(file,index) in filteredFiles"
-             :class="{'is-active' : file === selectedFile}"
-             :key="index"
-             class="panel-block"
-             @click="selectedFile = file">
+          <a
+            v-for="(file,index) in filteredFiles"
+            :class="{'is-active' : file === selectedFile}"
+            :key="index"
+            class="panel-block"
+            @click="selectedFile = file">
             {{ extractName(file) }}
           </a>
         </div>
       </template>
       <template v-if="directory && !filteredFiles.length">
-        <div class="notification is-warning">Selected directory does not contains any {{fileType}} files. </div>
+        <div class="notification is-warning">Selected directory does not contains any {{ fileType }} files. </div>
       </template>
     </nav>
-    <div class="block has-text-centered"
-         v-show="selectedFile">
-      <preview-modal :file-path="selectedFile"
-                     :file-type="fileType" />
+    <div
+      v-show="selectedFile"
+      class="block has-text-centered">
+      <preview-modal
+        :file-path="selectedFile"
+        :file-type="fileType" />
     </div>
   </div>
 </template>
@@ -49,6 +52,7 @@
 <script>
 import _set from 'lodash/set'
 import PreviewModal from './PreviewModal'
+
 const fastGlob = require('fast-glob')
 
 export default {
@@ -57,17 +61,17 @@ export default {
   props: {
     fileType: {
       type: String,
-      Default: 'image' // or design or excel
+      default: 'image' // or design or excel
     },
 
     isFile: {
       type: Boolean,
-      Default: false
+      default: false
     },
 
     option: {
       type: String,
-      Default: 'generate.source.design'
+      default: 'generate.source.design'
     }
   },
 

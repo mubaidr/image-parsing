@@ -1,9 +1,9 @@
 <template>
   <div>
-    <load-files :is-file="true"
-                file-type="design"
-                option="generate.source.design">
-    </load-files>
+    <load-files 
+      :is-file="true"
+      file-type="design"
+      option="generate.source.design"/>
   </div>
 </template>
 

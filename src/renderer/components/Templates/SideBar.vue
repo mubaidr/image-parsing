@@ -1,25 +1,29 @@
 <template>
-  <div class="navigation-bar is-static"
-       :class="{'is-active': isNavBarWide}">
-    <button class="button"
-            @click="isNavBarWide = !isNavBarWide">
+  <div 
+    :class="{'is-active': isNavBarWide}"
+    class="navigation-bar is-static">
+    <button 
+      class="button"
+      @click="isNavBarWide = !isNavBarWide">
       <span class="icon">
         <i class="fa fa-bars" />
       </span>
     </button>
     <aside class="menu">
       <ul class="menu-list">
-        <li v-for="(route, index) in routes"
-            :key="index"
-            :class="{'is-active' : $route.path.indexOf(route.path) !== -1}"
-            @click="$router.push(route.path)"
-            :title="route.meta.title">
+        <li 
+          v-for="(route, index) in routes"
+          :key="index"
+          :class="{'is-active' : $route.path.indexOf(route.path) !== -1}"
+          :title="route.meta.title"
+          @click="$router.push(route.path)">
 
           <span class="icon">
-            <i class="fa"
-               :class="route.meta.icon" />
+            <i 
+              :class="route.meta.icon"
+              class="fa" />
           </span>
-          <span>{{route.meta.title}}</span>
+          <span>{{ route.meta.title }}</span>
         </li>
       </ul>
     </aside>

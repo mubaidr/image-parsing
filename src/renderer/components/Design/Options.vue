@@ -3,18 +3,21 @@
     <div class="buttons has-addons">
       <div class="dropdown is-hoverable">
         <div class="dropdown-trigger">
-          <button class="button is-white is-small"
-                  aria-haspopup="true"
-                  aria-controls="dropdown-menu">
+          <button 
+            class="button is-white is-small"
+            aria-haspopup="true"
+            aria-controls="dropdown-menu">
             <span>Design</span>
             <span class="icon">
-              <i class="fas fa-angle-down"
-                 aria-hidden="true"></i>
+              <i 
+                class="fas fa-angle-down"
+                aria-hidden="true"/>
             </span>
           </button>
         </div>
-        <div class="dropdown-menu"
-             role="menu">
+        <div 
+          class="dropdown-menu"
+          role="menu">
           <div class="dropdown-content">
             <a class="dropdown-item">
               <span class="icon">
@@ -47,18 +50,21 @@
 
       <div class="dropdown is-hoverable">
         <div class="dropdown-trigger">
-          <button class="button is-white is-small"
-                  aria-haspopup="true"
-                  aria-controls="dropdown-menu">
+          <button 
+            class="button is-white is-small"
+            aria-haspopup="true"
+            aria-controls="dropdown-menu">
             <span>Edit</span>
             <span class="icon">
-              <i class="fas fa-angle-down"
-                 aria-hidden="true"></i>
+              <i 
+                class="fas fa-angle-down"
+                aria-hidden="true"/>
             </span>
           </button>
         </div>
-        <div class="dropdown-menu"
-             role="menu">
+        <div 
+          class="dropdown-menu"
+          role="menu">
           <div class="dropdown-content">
             <a class="dropdown-item">
               <span class="icon">

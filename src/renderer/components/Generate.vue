@@ -5,22 +5,25 @@
 
     <div class="tabs is-centered">
       <ul>
-        <li v-for="(route, index) in routeChildren"
-            :key="index"
-            :class="{'is-active' : $route.path.indexOf(route.path) !== -1}"
-            class='is-disabled'>
+        <li 
+          v-for="(route, index) in routeChildren"
+          :key="index"
+          :class="{'is-active' : $route.path.indexOf(route.path) !== -1}"
+          class="is-disabled">
           <router-link :to="`/generate/${route.path}`">
             <span class="icon">
-              <i class="fas"
-                 :class="route.meta.icon" />
-            </span>{{ route.meta.title }}</router-link>
+              <i 
+                :class="route.meta.icon"
+                class="fas" />
+          </span>{{ route.meta.title }}</router-link>
         </li>
       </ul>
     </div>
 
     <!-- Child routes -->
-    <transition name="slide-up"
-                mode="out-in">
+    <transition 
+      name="slide-up"
+      mode="out-in">
       <keep-alive>
         <router-view/>
       </keep-alive>

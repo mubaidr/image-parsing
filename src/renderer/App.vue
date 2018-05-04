@@ -1,15 +1,16 @@
 <template>
   <div id="app">
     <!-- <nav-bar></nav-bar> -->
-    <side-bar></side-bar>
+    <side-bar/>
     <div class="content-custom">
-      <transition name="slide-up"
-                  mode="out-in">
+      <transition 
+        name="slide-up"
+        mode="out-in">
         <router-view/>
       </transition>
     </div>
     <pre>
-    {{options}}
+    {{ options }}
     </pre>
   </div>
 </template>

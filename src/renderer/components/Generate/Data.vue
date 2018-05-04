@@ -1,9 +1,9 @@
 <template>
   <div>
-    <load-files :is-file="true"
-                option="generate.source.excel"
-                file-type="excel">
-    </load-files>
+    <load-files 
+      :is-file="true"
+      option="generate.source.excel"
+      file-type="excel"/>
   </div>
 </template>
 

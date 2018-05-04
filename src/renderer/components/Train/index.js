@@ -5,7 +5,7 @@ const sharp = require('sharp')
 const fastGlob = require('fast-glob')
 const Store = require('electron-store')
 
-import('tracking')
+import ('tracking')
 
 const utilities = require('../../../utilities/utilities')
 
@@ -117,8 +117,7 @@ async function getDesignData() {
 // get Images
 async function getImagePaths() {
   return fastGlob(
-    `${options.train.source.image}/*.{${options.validFormats.image.join(',')}}`,
-    {
+    `${options.train.source.image}/*.{${options.validFormats.image.join(',')}}`, {
       onlyFiles: true
     }
   )
@@ -185,7 +184,10 @@ module.exports = {
       designData.height
     )
 
-    const { rollNo, questions } = designData
+    const {
+      rollNo,
+      questions
+    } = designData
 
     console.log(designData, imageOffset)
 

@@ -1,4 +1,5 @@
 const Store = require('electron-store');
+
 const store = new Store();
 
 const _defaults = {

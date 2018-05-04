@@ -1,8 +1,8 @@
 <template>
   <div>
-    <load-files file-type="image"
-                option="process.source.image">
-    </load-files>
+    <load-files 
+      file-type="image"
+      option="process.source.image"/>
   </div>
 </template>
 

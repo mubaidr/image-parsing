@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <h1>Panel</h1>
-    <canvas ref="myCanvas"></canvas>
+    <canvas ref="myCanvas"/>
   </div>
 </template>
 

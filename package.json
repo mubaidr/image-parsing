@@ -9,8 +9,7 @@
       "output": "build"
     },
     "dmg": {
-      "contents": [
-        {
+      "contents": [{
           "path": "/Applications",
           "type": "link",
           "x": 410,
@@ -76,8 +75,8 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-import-resolver-webpack": "^0.9.0",
     "eslint-loader": "^2.0.0",
-    "eslint-plugin-html": "^4.0.3",
     "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-vue": "^4.5.0",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
     "inject-loader": "^4.0.1",
@@ -90,10 +89,10 @@
     "url-loader": "^1.0.1",
     "vue-devtools": "^3.1.9",
     "vue-html-loader": "^1.2.4",
-    "vue-loader": "^15.0.6",
+    "vue-loader": "^15.0.7",
     "vue-style-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.16",
-    "webpack": "^4.6.0",
+    "webpack": "^4.7.0",
     "webpack-dev-server": "3.1.4",
     "webpack-hot-middleware": "^2.22.1"
   },

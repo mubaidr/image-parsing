@@ -11,6 +11,7 @@ import {
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
 global.__paths = require('../utilities/data-paths.js').__paths
+
 let mainWindow
 let winURL = 'http://localhost:9080'
 

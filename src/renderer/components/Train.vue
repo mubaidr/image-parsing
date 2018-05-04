@@ -4,40 +4,43 @@
     <br>
 
     <h2 class="subtitle">Design</h2>
-    <load-files :is-file="true"
-                file-type="design"
-                option="train.source.design">
-    </load-files>
+    <load-files
+      :is-file="true"
+      file-type="design"
+      option="train.source.design"/>
 
     <h2 class="subtitle">Images</h2>
-    <load-files file-type="image"
-                option="train.source.image">
-    </load-files>
+    <load-files
+      file-type="image"
+      option="train.source.image"/>
 
     <h2 class="subtitle">Result</h2>
-    <load-files :is-file="true"
-                file-type="excel"
-                option="train.source.excel">
-    </load-files>
+    <load-files
+      :is-file="true"
+      file-type="excel"
+      option="train.source.excel"/>
 
-    <hr/>
+    <hr>
 
     <h2 class="subtitle">Output</h2>
-    <load-files :is-file="true"
-                file-type="excel"
-                option="train.target.data">
-    </load-files>
+    <load-files
+      :is-file="true"
+      file-type="excel"
+      option="train.target.data"/>
 
-    <button class="button is-primary"
-            @click="startProcess">Start Training</button>
+    <button
+      class="button is-primary"
+      @click="startProcess">Start Training</button>
 
-    <button class="button is-danger"
-            @click="stopProcess">Stop Training</button>
+    <button
+      class="button is-danger"
+      @click="stopProcess">Stop Training</button>
   </div>
 </template>
 
 <script>
 import loadFiles from './Templates/LoadFiles'
+
 const trainingModule = require('./Train/index')
 
 export default {
@@ -60,5 +63,4 @@ export default {
 </script>
 
 <style>
-
 </style>
