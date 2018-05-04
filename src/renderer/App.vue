@@ -3,15 +3,15 @@
     <!-- <nav-bar></nav-bar> -->
     <side-bar/>
     <div class="content-custom">
-      <transition 
+      <transition
         name="slide-up"
         mode="out-in">
         <router-view/>
       </transition>
     </div>
-    <pre>
+    <!-- <pre>
     {{ options }}
-    </pre>
+    </pre> -->
   </div>
 </template>
 

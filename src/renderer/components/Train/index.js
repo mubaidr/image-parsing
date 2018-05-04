@@ -1,18 +1,18 @@
 const fs = require('fs')
-const path = require('path')
-const brain = require('brain.js')
+// const path = require('path')
+// const brain = require('brain.js')
 const sharp = require('sharp')
 const fastGlob = require('fast-glob')
 const Store = require('electron-store')
 
 import ('tracking')
 
-const utilities = require('../../../utilities/utilities')
+// const utilities = require('../../../utilities/utilities')
 
-const net = new brain.NeuralNetwork()
+// const net = new brain.NeuralNetwork()
 const store = new Store()
 const options = store.get('options')
-const trainingData = []
+// const trainingData = []
 
 async function getDesignData() {
   const designData = {
@@ -150,10 +150,14 @@ async function getResultData() {
   return resultsData
 }
 
+/*
 async function getImageOffset(path, width, height) {
-  return new Promise((resolve, reject) => {
-    const scaledImg = sharp(path)
+  return new Promise((resolve, reject) => { //eslint-disable-line
+    const scaledImg = sharp(path) //eslint-disable-line
       .resize(width, height)
+      .toColourspace('b-w')
+      .blur()
+      .threshold(32)
       .png()
       .toBuffer()
       .then(data => {
@@ -162,47 +166,48 @@ async function getImageOffset(path, width, height) {
         // img.style.display = 'none!important'
         // img.style.visibility = 'hidden'
         img.onload = () => {
-          console.log(tracking.Image.sobel(img, width, height))
-          // tracking.track('#myImage', colors)
+
         }
         img.src = `data:image/png;base64,${data.toString('base64')}`
         document.body.appendChild(img)
       })
   })
 }
+*/
 
 module.exports = {
-  async train(opt) {
+  async train(opt) { //eslint-disable-line
     const designData = await getDesignData()
     const resultsData = await getResultData()
     const paths = await getImagePaths()
 
     // get offset details from first image
+    /*
     const imageOffset = await getImageOffset(
       paths[0],
       designData.width,
       designData.height
     )
+    */
 
-    const {
-      rollNo,
-      questions
-    } = designData
-
-    console.log(designData, imageOffset)
+    console.log(designData, resultsData)
 
     paths.forEach(path => {
-      const img = sharp(path).resize(designData.width, designData.height)
+      const img = sharp(path)
+        .resize(designData.width, designData.height)
+        // .toColourspace('b-w')
+        // .blur(0.5)
+        // .threshold(32)
+        .png()
 
       img
         .extract({
-          left: rollNo.x1,
-          top: rollNo.y1,
-          width: rollNo.x2 - rollNo.x1,
-          height: rollNo.y2 - rollNo.y1
+          left: designData.rollNo.x1,
+          top: designData.rollNo.y1,
+          width: designData.rollNo.x2 - designData.rollNo.x1,
+          height: designData.rollNo.y2 - designData.rollNo.y1
         })
-        .toFormat('png')
-        .toFile(`d:/tmp/some-${Math.random()}.png`, err => {
+        .toFile(`${global.__paths.tmp}/${Math.random()}.png`, err => {
           if (err) console.log(err)
         })
     })
