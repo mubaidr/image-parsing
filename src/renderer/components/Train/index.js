@@ -1,3 +1,5 @@
+import Quagga from 'quagga'
+
 const fs = require('fs')
 // const path = require('path')
 // const brain = require('brain.js')
@@ -7,10 +9,8 @@ const Store = require('electron-store')
 
 // const utilities = require('../../../utilities/utilities')
 
-// const net = new brain.NeuralNetwork()
 const store = new Store()
 const options = store.get('options')
-// const trainingData = []
 
 async function getDesignData() {
   const designData = {
@@ -113,7 +113,7 @@ async function getDesignData() {
 }
 
 // get Images
-async function getImagePaths() {
+function getImagePaths() {
   return fastGlob(
     `${options.train.source.image}/*.{${options.validFormats.image.join(',')}}`, {
       onlyFiles: true
@@ -128,8 +128,7 @@ async function getResultData() {
 
   const rows = resultFile.split('\n')
   const headerValues = rows[0].split(',')
-  const rollNoIndex =
-    headerValues.indexOf('RollNo') || headerValues.indexOf('RollNumber')
+  const rollNoIndex = headerValues.indexOf('RollNo')
 
   let values
   let obj
@@ -148,51 +147,103 @@ async function getResultData() {
   return resultsData
 }
 
-module.exports = {
-  // eslint-disable-next-line
-  async train(opt) {
-    const designData = await getDesignData()
-    const resultsData = await getResultData()
-    const paths = await getImagePaths()
+async function getRollNoFromImageBuffer(path, designData) {
+  const img = sharp(path).png()
+  const rollNoPos = designData.rollNo
 
-    console.log(designData, resultsData)
+  // extract meta data
+  const metadata = await img.metadata()
+  const ratio = metadata.width / designData.width
 
-    paths.forEach(path => {
-      const img = sharp(path)
-        .resize(designData.width, designData.height)
-        // .toColourspace('b-w')
-        // .blur(0.5)
-        // .threshold(32)
-        .png()
-
-      img
-        .extract({
-          left: designData.rollNo.x1,
-          top: designData.rollNo.y1,
-          width: designData.rollNo.x2 - designData.rollNo.x1,
-          height: designData.rollNo.y2 - designData.rollNo.y1
-        })
-        .toFile(`${global.__paths.tmp}/${Math.random()}.png`, err => {
-          if (err) console.log(err)
-        })
-
-      /*
-      Object.keys(designData.questions).forEach(q => {
-        img
-          .extract({
-            left: designData.questions[q].x1,
-            top: designData.questions[q].y1,
-            width: designData.questions[q].x2 - designData.questions[
-              q].x1,
-            height: designData.questions[q].y2 - designData.questions[
-              q].y1
-          })
-          .toFile(`${global.__paths.tmp}/${q}.png`,
-            err => {
-              if (err) console.log(err)
-            })
+  return new Promise((resolve, reject) => {
+    // prepre buffer for barcode scanner
+    img
+      .extract({
+        left: Math.ceil(rollNoPos.x1 * ratio),
+        top: Math.ceil(rollNoPos.y1 * ratio),
+        width: Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio),
+        height: Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio)
       })
-      */
+      .toBuffer()
+      .then(buff => {
+        Quagga.decodeSingle({
+            decoder: {
+              multiple: false,
+              readers: ['code_39_reader']
+            },
+            locate: false,
+            locator: {
+              halfSample: true,
+              patchSize: 'large'
+            },
+            numOfWorkers: 0,
+            src: `data:image/png;base64,${buff.toString('base64')}`
+          },
+          result => {
+            if (result.codeResult) {
+              resolve(result.codeResult.code)
+            } else {
+              reject(new Error('Unable to read barcode'))
+            }
+          }
+        )
+      })
+  })
+}
+
+async function prepareTrainingData(designData, resultsData, paths) {
+  const promises = []
+
+  // eslint-disable-next-line
+  for (const path of paths) {
+    // TODO: use promise.all for roll no and questions result for parallel data extraction
+    const rollNo = await getRollNoFromImageBuffer(path, designData)
+    const img = sharp(path).resize(designData.width)
+
+    // extract all questions portions
+    Object.keys(designData.questions).forEach(title => {
+      promises.push(new Promise((resolve, reject) => {
+        const q = designData.questions[title]
+
+        const buff = img.extract({
+          left: q.x1 - 10,
+          top: q.y1 - 10,
+          width: q.x2 - q.x1 + 10,
+          height: q.y2 - q.y1 + 10
+        }).raw().toBuffer()
+
+        img.raw().toBuffer().then(buff => {
+          const data = buff.toJSON().data.map(val => (val === 0 ?
+            1 : 0))
+
+          resolve(data, resultsData[rollNo][title])
+        })
+
+      }))
+
     })
+  }
+
+  return Promise.all(promises)
+}
+
+module.exports = {
+  async train(opt) {
+    Promise.all([getDesignData(), getResultData(), getImagePaths()]).then(
+      res => {
+        const [designData, resultsData, paths] = res
+
+        prepareTrainingData(designData, resultsData, paths).then(data => {
+          console.log(data)
+          // const net = new brain.NeuralNetwork()
+        })
+
+        /*
+          img.toFile(`${global.__paths.tmp}/${Math.random()}.png`, err => {
+          if (err) console.log(err)
+          })
+        */
+      }
+    )
   }
 }
