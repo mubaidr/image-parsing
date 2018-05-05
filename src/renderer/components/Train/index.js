@@ -5,8 +5,6 @@ const sharp = require('sharp')
 const fastGlob = require('fast-glob')
 const Store = require('electron-store')
 
-import ('tracking')
-
 // const utilities = require('../../../utilities/utilities')
 
 // const net = new brain.NeuralNetwork()
@@ -26,8 +24,8 @@ async function getDesignData() {
   const svg = container.getElementsByTagName('svg')[0]
   const groups = svg.getElementsByTagName('g')
 
-  designData.width = parseInt(svg.width.baseVal.value, 10)
-  designData.height = parseInt(svg.height.baseVal.value, 10)
+  designData.width = parseInt(svg.viewBox.baseVal.width, 10)
+  designData.height = parseInt(svg.viewBox.baseVal.height, 10)
 
   let transform
   let x
@@ -150,45 +148,12 @@ async function getResultData() {
   return resultsData
 }
 
-/*
-async function getImageOffset(path, width, height) {
-  return new Promise((resolve, reject) => { //eslint-disable-line
-    const scaledImg = sharp(path) //eslint-disable-line
-      .resize(width, height)
-      .toColourspace('b-w')
-      .blur()
-      .threshold(32)
-      .png()
-      .toBuffer()
-      .then(data => {
-        const img = new Image()
-        img.id = 'myImage'
-        // img.style.display = 'none!important'
-        // img.style.visibility = 'hidden'
-        img.onload = () => {
-
-        }
-        img.src = `data:image/png;base64,${data.toString('base64')}`
-        document.body.appendChild(img)
-      })
-  })
-}
-*/
-
 module.exports = {
-  async train(opt) { //eslint-disable-line
+  // eslint-disable-next-line
+  async train(opt) {
     const designData = await getDesignData()
     const resultsData = await getResultData()
     const paths = await getImagePaths()
-
-    // get offset details from first image
-    /*
-    const imageOffset = await getImageOffset(
-      paths[0],
-      designData.width,
-      designData.height
-    )
-    */
 
     console.log(designData, resultsData)
 
@@ -210,6 +175,24 @@ module.exports = {
         .toFile(`${global.__paths.tmp}/${Math.random()}.png`, err => {
           if (err) console.log(err)
         })
+
+      /*
+      Object.keys(designData.questions).forEach(q => {
+        img
+          .extract({
+            left: designData.questions[q].x1,
+            top: designData.questions[q].y1,
+            width: designData.questions[q].x2 - designData.questions[
+              q].x1,
+            height: designData.questions[q].y2 - designData.questions[
+              q].y1
+          })
+          .toFile(`${global.__paths.tmp}/${q}.png`,
+            err => {
+              if (err) console.log(err)
+            })
+      })
+      */
     })
   }
 }

@@ -114,7 +114,7 @@ export default {
       }
     },
 
-    selectedFile(val) {
+    selectedFile() {
       this.updateOptions('file')
     }
   },

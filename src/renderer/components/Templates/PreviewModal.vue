@@ -151,7 +151,6 @@ export default {
             }
           })
         } else {
-          const sampleData = []
           const workbook = new Excel.Workbook()
           workbook.xlsx.readFile(this.filePath).then(() => {
             // use workbook
