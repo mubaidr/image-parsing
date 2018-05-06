@@ -2,7 +2,7 @@ const Quagga = require('quagga').default
 
 const fs = require('fs')
 // const path = require('path')
-// const brain = require('brain.js')
+const brain = require('brain.js')
 const sharp = require('sharp')
 const fastGlob = require('fast-glob')
 const Store = require('electron-store')
@@ -24,8 +24,8 @@ async function getDesignData() {
   const svg = container.getElementsByTagName('svg')[0]
   const groups = svg.getElementsByTagName('g')
 
-  designData.width = parseInt(svg.viewBox.baseVal.width, 10)
-  designData.height = parseInt(svg.viewBox.baseVal.height, 10)
+  designData.width = Math.ceil(svg.viewBox.baseVal.width)
+  designData.height = Math.ceil(svg.viewBox.baseVal.height)
 
   let transform
   let x
@@ -201,33 +201,41 @@ async function prepareTrainingData(designData, resultsData, path, rollNo) {
   return new Promise((resolve, reject) => {
     const promises = []
 
-    const img = sharp(path).resize(designData.width)
-
     // extract all questions portions
     Object.keys(designData.questions).forEach(title => {
       const p = new Promise((resolve, reject) => {
         const q = designData.questions[title]
 
-        const buff = img.extract({
-          left: q.x1 - 10,
-          top: q.y1 - 10,
-          width: q.x2 - q.x1 + 10,
-          height: q.y2 - q.y1 + 10
-        }).raw().toBuffer()
-
-        img.raw().toBuffer().then(buff => {
-          const data = buff.toJSON().data.map(val => (val ===
-            0 ?
-            1 : 0))
-
-          const o = {}
-          o[resultsData[rollNo][title]] = 1
-
-          resolve({
-            input: data,
-            output: o
+        sharp(path)
+          .resize(designData.width, designData.height)
+          .max()
+          .extract({
+            left: q.x1 - 10,
+            top: q.y1 - 10,
+            width: q.x2 - q.x1 + 10,
+            height: q.y2 - q.y1 + 10
           })
-        })
+          /*
+          .toFile(
+            `${global.__paths.tmp}/${Math.random()}.png`, err => {
+              if (err) console.log(err)
+            })
+          */
+          .raw()
+          .toBuffer()
+          .then(buff => {
+            const data = buff.toJSON().data.map(val => (val ===
+              0 ?
+              1 : 0))
+
+            const o = {}
+            o[resultsData[rollNo][title]] = 1
+
+            resolve({
+              input: data,
+              output: o
+            })
+          })
 
       })
 
@@ -250,6 +258,8 @@ module.exports = {
         const [designData, resultsData, paths] = res
         const promises = []
 
+        console.log(designData)
+
         // eslint-disable-next-line
         for (const path of paths) {
           const rollNo = await getRollNoFromImageBuffer(path, designData)
@@ -262,8 +272,30 @@ module.exports = {
           promises.push(p)
         }
 
-        Promise.all(promises).then(res => {
-          console.log(res)
+        Promise.all(promises).then(results => {
+          const trainingData = []
+          const net = new brain.NeuralNetwork()
+
+          results.forEach(result => {
+            result.data.forEach(data => {
+              trainingData.push({
+                input: data.input,
+                output: data.output
+              })
+            })
+          })
+
+          // console.log(trainingData)
+
+          const result = net.train(trainingData, {
+            // iterations: 500,
+            // errorThresh: 0.0001,
+            log: true,
+            logPeriod: 1
+            // activation: 'leaky-relu'
+          })
+
+          console.log(result)
         })
 
         /*
