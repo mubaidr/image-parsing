@@ -127,15 +127,21 @@ async function getResultData() {
   const resultFile = fs.readFileSync(options.train.source.excelFile, 'utf8')
 
   const rows = resultFile.split('\n')
-  const headerValues = rows[0].split(',')
-  const rollNoIndex = headerValues.indexOf('RollNo')
+  const headerValues = rows[0].split(',').map(word => word.toLowerCase())
+  const rollNoIndex = headerValues.indexOf('rollno') || headerValues.indexOf(
+    'rollnumber') || headerValues.indexOf('rollno.') || headerValues.indexOf(
+    'roll no') || headerValues.indexOf(
+    'roll number')
 
   let values
   let obj
 
   for (let i = 1; i < rows.length; i += 1) {
-    values = rows[i].split(',')
+    values = rows[i].split(',').map(word => word.toLowerCase())
     obj = {}
+
+    // eslint-disable-next-line
+    if (values.length <= 60) continue
 
     for (let j = 0; j < values.length; j += 1) {
       obj[headerValues[j]] = values[j]
@@ -200,9 +206,9 @@ async function prepareTrainingData(designData, resultsData, paths) {
     const rollNo = await getRollNoFromImageBuffer(path, designData)
     const img = sharp(path).resize(designData.width)
 
-    // extract all questions portions
-    Object.keys(designData.questions).forEach(title => {
-      promises.push(new Promise((resolve, reject) => {
+    const p = new Promise((resolve, reject) => {
+      // extract all questions portions
+      Object.keys(designData.questions).forEach(title => {
         const q = designData.questions[title]
 
         const buff = img.extract({
@@ -216,12 +222,22 @@ async function prepareTrainingData(designData, resultsData, paths) {
           const data = buff.toJSON().data.map(val => (val === 0 ?
             1 : 0))
 
-          resolve(data, resultsData[rollNo][title])
+          console.log(resultsData[rollNo], title)
+
+          const o = {}
+          o[title] = resultsData[rollNo][title]
+
+          resolve({
+            input: data,
+            output: o
+          })
         })
 
-      }))
+      })
 
     })
+
+    promises.push(p)
   }
 
   return Promise.all(promises)
@@ -233,8 +249,10 @@ module.exports = {
       res => {
         const [designData, resultsData, paths] = res
 
-        prepareTrainingData(designData, resultsData, paths).then(data => {
-          console.log(data)
+        console.log(resultsData)
+
+        prepareTrainingData(designData, resultsData, paths).then(res => {
+          console.log(res)
           // const net = new brain.NeuralNetwork()
         })
 
