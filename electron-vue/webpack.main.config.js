@@ -17,12 +17,6 @@ const mainConfig = {
   externals: [...Object.keys(dependencies || {})],
   module: {
     rules: [{
-        test: /\.(js)$/,
-        enforce: 'pre',
-        exclude: /node_modules/,
-        use: 'eslint-loader'
-      },
-      {
         test: /\.js$/,
         use: 'babel-loader',
         exclude: /node_modules/
