@@ -298,12 +298,14 @@ module.exports = {
           console.log(result)
 
           fs.writeFileSync(
-            `${global.__paths.tmp}\${new Date().toISOString()}`, JSON
+            `${global.__paths.trainingData}\\${new Date().toISOString()}`,
+            JSON
             .stringify(net.toJSON())
           )
 
           console.log('\nTraining data exported to: ',
-            `${global.__paths.tmp}\${new Date().toISOString()}`)
+            `${global.__paths.trainingData}\${new Date().toISOString()}`
+          )
 
         })
       }
