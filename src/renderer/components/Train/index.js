@@ -1,4 +1,4 @@
-import Quagga from 'quagga'
+const Quagga = require('quagga').default
 
 const fs = require('fs')
 // const path = require('path')
@@ -197,18 +197,15 @@ async function getRollNoFromImageBuffer(path, designData) {
   })
 }
 
-async function prepareTrainingData(designData, resultsData, paths) {
-  const promises = []
+async function prepareTrainingData(designData, resultsData, path) {
+  return new Promise((resolve, reject) => {
+    const promises = []
 
-  // eslint-disable-next-line
-  for (const path of paths) {
-    // TODO: use promise.all for roll no and questions result for parallel data extraction
-    const rollNo = await getRollNoFromImageBuffer(path, designData)
     const img = sharp(path).resize(designData.width)
 
-    const p = new Promise((resolve, reject) => {
-      // extract all questions portions
-      Object.keys(designData.questions).forEach(title => {
+    // extract all questions portions
+    Object.keys(designData.questions).forEach(title => {
+      const p = new Promise((resolve, reject) => {
         const q = designData.questions[title]
 
         const buff = img.extract({
@@ -219,28 +216,22 @@ async function prepareTrainingData(designData, resultsData, paths) {
         }).raw().toBuffer()
 
         img.raw().toBuffer().then(buff => {
-          const data = buff.toJSON().data.map(val => (val === 0 ?
+          const data = buff.toJSON().data.map(val => (val ===
+            0 ?
             1 : 0))
 
-          console.log(resultsData[rollNo], title)
-
-          const o = {}
-          o[title] = resultsData[rollNo][title]
-
-          resolve({
-            input: data,
-            output: o
-          })
+          resolve(data)
         })
 
       })
 
+      promises.push(p)
     })
 
-    promises.push(p)
-  }
-
-  return Promise.all(promises)
+    Promise.all(promises).then(res => {
+      resolve(res)
+    })
+  })
 }
 
 module.exports = {
@@ -248,12 +239,16 @@ module.exports = {
     Promise.all([getDesignData(), getResultData(), getImagePaths()]).then(
       res => {
         const [designData, resultsData, paths] = res
+        const promises = []
 
-        console.log(resultsData)
+        // eslint-disable-next-line
+        for (const path of paths) {
+          const p = prepareTrainingData(designData, resultsData, path)
+          promises.push(p)
+        }
 
-        prepareTrainingData(designData, resultsData, paths).then(res => {
+        Promise.all(promises).then(res => {
           console.log(res)
-          // const net = new brain.NeuralNetwork()
         })
 
         /*

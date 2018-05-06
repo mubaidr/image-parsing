@@ -9,8 +9,7 @@
       "output": "build"
     },
     "dmg": {
-      "contents": [
-        {
+      "contents": [{
           "path": "/Applications",
           "type": "link",
           "x": 410,
@@ -89,7 +88,7 @@
     "url-loader": "^1.0.1",
     "vue-devtools": "^3.1.9",
     "vue-html-loader": "^1.2.4",
-    "vue-loader": "^15.0.7",
+    "vue-loader": "^15.0.9",
     "vue-style-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^4.7.0",
@@ -113,7 +112,7 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.renderer.config.js",
-    "postinstall": "electron-builder install-app-deps && npm rebuild node-sass && npm run lint:fix",
+    "postinstall": "electron-builder install-app-deps && npm rebuild node-sass",
     "rebuild-electron": "./node_modules/.bin/electron-rebuild"
   },
   "version": "0.0.1"
