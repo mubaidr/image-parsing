@@ -197,7 +197,7 @@ async function getRollNoFromImageBuffer(path, designData) {
   })
 }
 
-async function prepareTrainingData(designData, resultsData, path) {
+async function prepareTrainingData(designData, resultsData, path, rollNo) {
   return new Promise((resolve, reject) => {
     const promises = []
 
@@ -220,7 +220,13 @@ async function prepareTrainingData(designData, resultsData, path) {
             0 ?
             1 : 0))
 
-          resolve(data)
+          const o = {}
+          o[resultsData[rollNo][title]] = 1
+
+          resolve({
+            input: data,
+            output: o
+          })
         })
 
       })
@@ -229,7 +235,10 @@ async function prepareTrainingData(designData, resultsData, path) {
     })
 
     Promise.all(promises).then(res => {
-      resolve(res)
+      resolve({
+        rollNo,
+        data: res
+      })
     })
   })
 }
@@ -237,13 +246,19 @@ async function prepareTrainingData(designData, resultsData, path) {
 module.exports = {
   async train(opt) {
     Promise.all([getDesignData(), getResultData(), getImagePaths()]).then(
-      res => {
+      async res => {
         const [designData, resultsData, paths] = res
         const promises = []
 
         // eslint-disable-next-line
         for (const path of paths) {
-          const p = prepareTrainingData(designData, resultsData, path)
+          const rollNo = await getRollNoFromImageBuffer(path, designData)
+          const p = prepareTrainingData(
+            designData,
+            resultsData,
+            path,
+            rollNo)
+
           promises.push(p)
         }
 
