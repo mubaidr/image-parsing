@@ -128,10 +128,12 @@ async function getResultData() {
 
   const rows = resultFile.split('\n')
   const headerValues = rows[0].split(',').map(word => word.toLowerCase())
-  const rollNoIndex = headerValues.indexOf('rollno') || headerValues.indexOf(
-    'rollnumber') || headerValues.indexOf('rollno.') || headerValues.indexOf(
-    'roll no') || headerValues.indexOf(
-    'roll number')
+  const rollNoIndex =
+    headerValues.indexOf('rollno') ||
+    headerValues.indexOf('rollnumber') ||
+    headerValues.indexOf('rollno.') ||
+    headerValues.indexOf('roll no') ||
+    headerValues.indexOf('roll number')
 
   let values
   let obj
@@ -200,15 +202,16 @@ async function getRollNoFromImageBuffer(path, designData) {
 async function prepareTrainingData(designData, resultsData, path, rollNo) {
   return new Promise((resolve, reject) => {
     const promises = []
+    const img = sharp(path)
+      .resize(designData.width, designData.height)
+      .max()
 
     // extract all questions portions
     Object.keys(designData.questions).forEach(title => {
       const p = new Promise((resolve, reject) => {
         const q = designData.questions[title]
 
-        sharp(path)
-          .resize(designData.width, designData.height)
-          .max()
+        img
           .extract({
             left: q.x1 - 10,
             top: q.y1 - 10,
@@ -216,17 +219,16 @@ async function prepareTrainingData(designData, resultsData, path, rollNo) {
             height: q.y2 - q.y1 + 10
           })
           /*
-          .toFile(
-            `${global.__paths.tmp}/${Math.random()}.png`, err => {
-              if (err) console.log(err)
-            })
+          .toFile(`${global.__paths.tmp}\${rollNo}-${title}.png`, err => {
+            if (err) console.log(err)
+          })
           */
+
           .raw()
           .toBuffer()
           .then(buff => {
             const data = buff.toJSON().data.map(val => (val ===
-              0 ?
-              1 : 0))
+              0 ? 1 : 0))
 
             const o = {}
             o[resultsData[rollNo][title]] = 1
@@ -236,7 +238,6 @@ async function prepareTrainingData(designData, resultsData, path, rollNo) {
               output: o
             })
           })
-
       })
 
       promises.push(p)
@@ -258,15 +259,10 @@ module.exports = {
         const [designData, resultsData, paths] = res
         const promises = []
 
-        console.log(designData)
-
         // eslint-disable-next-line
         for (const path of paths) {
           const rollNo = await getRollNoFromImageBuffer(path, designData)
-          const p = prepareTrainingData(
-            designData,
-            resultsData,
-            path,
+          const p = prepareTrainingData(designData, resultsData, path,
             rollNo)
 
           promises.push(p)
@@ -285,8 +281,6 @@ module.exports = {
             })
           })
 
-          // console.log(trainingData)
-
           const result = net.train(trainingData, {
             // iterations: 500,
             // errorThresh: 0.0001,
@@ -296,13 +290,16 @@ module.exports = {
           })
 
           console.log(result)
-        })
 
-        /*
-          img.toFile(`${global.__paths.tmp}/${Math.random()}.png`, err => {
-          if (err) console.log(err)
-          })
-        */
+          fs.writeFileSync(
+            `${global.__paths.tmp}\${new Date().toISOString()}`, JSON
+            .stringify(net.toJSON())
+          )
+
+          console.log('\nTraining data exported to: ',
+            `${global.__paths.tmp}\${new Date().toISOString()}`)
+
+        })
       }
     )
   }

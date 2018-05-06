@@ -4,6 +4,7 @@ const fs = require('fs')
 const root = path.resolve('.')
 const src = path.join(root, 'src')
 const tmp = path.join(root, '.tmp')
+const trainingData = path.join(root, 'training-data')
 
 if (fs.existsSync(tmp)) {
   fs.readdir(tmp, (err, files) => {
@@ -27,6 +28,7 @@ module.exports = {
     tmp,
     root,
     src,
+    trainingData,
     main: path.join(src, 'main'),
     renderer: path.join(src, 'renderer'),
     utiltities: path.join(src, 'utiltities')
