@@ -205,6 +205,10 @@ async function prepareTrainingData(designData, resultsData, path, rollNo) {
     const img = sharp(path)
       .resize(designData.width, designData.height)
       .max()
+      .blur(0.75)
+      .flatten()
+      .toColourspace('b-w')
+      .threshold(32)
 
     // extract all questions portions
     Object.keys(designData.questions).forEach(title => {
@@ -218,10 +222,12 @@ async function prepareTrainingData(designData, resultsData, path, rollNo) {
             width: q.x2 - q.x1 + 10,
             height: q.y2 - q.y1 + 10
           })
+
           /*
-          .toFile(`${global.__paths.tmp}\${rollNo}-${title}.png`, err => {
-            if (err) console.log(err)
-          })
+          .toFile(`${global.__paths.tmp}\\${rollNo}-${title}.png`,
+            err => {
+              if (err) console.log(err)
+            })
           */
 
           .raw()
