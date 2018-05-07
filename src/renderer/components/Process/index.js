@@ -16,7 +16,7 @@ async function getDesignData() {
   const designData = {
     questions: {}
   }
-  const rollNoPattern = new RegExp(/rollnobarcode/)
+  const rollNoPattern = new RegExp(/rollnobarcode/gi)
   const questionPattern = new RegExp(/(q[1-9][0-9]?[ad])\b/gi) // Match roll and questions options a & d
 
   const container = document.createElement('div')
@@ -115,44 +115,11 @@ async function getDesignData() {
 // get Images
 function getImagePaths() {
   return fastGlob(
-    `${options.train.source.image}/*.{${options.validFormats.image.join(',')}}`, {
+    `${options.train.source.image}/*.{${options.validFormats.image.join(',')}}`,
+    {
       onlyFiles: true
     }
   )
-}
-
-// Load results csv
-async function getResultData() {
-  const resultsData = {}
-  const resultFile = fs.readFileSync(options.train.source.excelFile, 'utf8')
-
-  const rows = resultFile.split('\n')
-  const headerValues = rows[0].split(',').map(word => word.toLowerCase())
-  const rollNoIndex =
-    headerValues.indexOf('rollno') ||
-    headerValues.indexOf('rollnumber') ||
-    headerValues.indexOf('rollno.') ||
-    headerValues.indexOf('roll no') ||
-    headerValues.indexOf('roll number')
-
-  let values
-  let obj
-
-  for (let i = 1; i < rows.length; i += 1) {
-    values = rows[i].split(',').map(word => word.toLowerCase())
-    obj = {}
-
-    // eslint-disable-next-line
-    if (values.length <= 60) continue
-
-    for (let j = 0; j < values.length; j += 1) {
-      obj[headerValues[j]] = values[j]
-    }
-
-    resultsData[values[rollNoIndex]] = obj
-  }
-
-  return resultsData
 }
 
 async function getRollNoFromImageBuffer(path, designData) {
@@ -174,7 +141,8 @@ async function getRollNoFromImageBuffer(path, designData) {
       })
       .toBuffer()
       .then(buff => {
-        Quagga.decodeSingle({
+        Quagga.decodeSingle(
+          {
             decoder: {
               multiple: false,
               readers: ['code_39_reader']
@@ -199,7 +167,7 @@ async function getRollNoFromImageBuffer(path, designData) {
   })
 }
 
-async function prepareTrainingData(designData, resultsData, path, rollNo) {
+async function prepareTrainingData(designData, path, rollNo) {
   return new Promise((resolve, reject) => {
     const promises = []
     const img = sharp(path)
@@ -223,25 +191,15 @@ async function prepareTrainingData(designData, resultsData, path, rollNo) {
             height: q.y2 - q.y1 + 10
           })
 
-          /*
-          .toFile(`${global.__paths.tmp}\\${rollNo}-${title}.png`,
-            err => {
-              if (err) console.log(err)
-            })
-          */
-
           .raw()
           .toBuffer()
           .then(buff => {
-            const data = buff.toJSON().data.map(val => (val ===
-              0 ? 1 : 0))
-
-            const o = {}
-            o[resultsData[rollNo][title]] = 1
+            const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
 
             resolve({
-              input: data,
-              output: o
+              rollNo,
+              title,
+              data
             })
           })
       })
@@ -260,56 +218,46 @@ async function prepareTrainingData(designData, resultsData, path, rollNo) {
 
 module.exports = {
   async train(opt) {
-    Promise.all([getDesignData(), getResultData(), getImagePaths()]).then(
-      async res => {
-        const [designData, resultsData, paths] = res
-        const promises = []
+    Promise.all([getDesignData(), getImagePaths()]).then(async res => {
+      const [designData, paths] = res
+      const promises = []
 
-        // eslint-disable-next-line
-        for (const path of paths) {
-          const rollNo = await getRollNoFromImageBuffer(path, designData)
-          const p = prepareTrainingData(designData, resultsData, path,
-            rollNo)
+      // eslint-disable-next-line
+      for (const path of paths) {
+        const rollNo = await getRollNoFromImageBuffer(path, designData)
+        const p = prepareTrainingData(designData, path, rollNo)
 
-          promises.push(p)
-        }
-
-        Promise.all(promises).then(results => {
-          const trainingData = []
-          const net = new brain.NeuralNetwork()
-
-          results.forEach(result => {
-            result.data.forEach(data => {
-              trainingData.push({
-                input: data.input,
-                output: data.output
-              })
-            })
-          })
-
-          console.log('Starting training...')
-
-          const result = net.train(trainingData, {
-            // iterations: 500,
-            // errorThresh: 0.0001,
-            log: true,
-            logPeriod: 1
-            // activation: 'leaky-relu'
-          })
-
-          console.log(result)
-
-          fs.writeFileSync(
-            `${global.__paths.trainingData}\\data.json`,
-            JSON.stringify(net.toJSON())
-          )
-
-          console.log(
-            '\nTraining data exported to: ',
-            `${global.__paths.trainingData}`
-          )
-        })
+        promises.push(p)
       }
-    )
+
+      Promise.all(promises).then(results => {
+        const net = new brain.NeuralNetwork()
+        const rainingData = JSON.parse(
+          fs.readFileSync(`${global.__paths.trainingData}\\data.json`)
+        )
+
+        net.fromJSON(rainingData)
+
+        results.forEach(result => {
+          result.data.forEach(data => {
+            console.log(data)
+          })
+        })
+
+        console.log('Starting processing...')
+
+        // console.log(result)
+
+        fs.writeFileSync(
+          `${global.__paths.trainingData}\\data-output.json`,
+          JSON.stringify(net.toJSON())
+        )
+
+        console.log(
+          '\nTraining data exported to: ',
+          `${global.__paths.trainingData}`
+        )
+      })
+    })
   }
 }

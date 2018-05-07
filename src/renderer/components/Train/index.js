@@ -16,7 +16,7 @@ async function getDesignData() {
   const designData = {
     questions: {}
   }
-  const rollNoPattern = new RegExp(/rollnobarcode/)
+  const rollNoPattern = new RegExp(/rollnobarcode/gi)
   const questionPattern = new RegExp(/(q[1-9][0-9]?[ad])\b/gi) // Match roll and questions options a & d
 
   const container = document.createElement('div')
