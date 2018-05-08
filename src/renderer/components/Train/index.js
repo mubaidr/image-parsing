@@ -205,8 +205,8 @@ async function prepareTrainingData(designData, resultsData, path, rollNo) {
     const img = sharp(path)
       .resize(designData.width, designData.height)
       .max()
-      .blur(0.75)
-      .flatten()
+      // .blur(0.75)
+      // .flatten()
       .toColourspace('b-w')
       .threshold(32)
 
@@ -317,7 +317,7 @@ module.exports = {
 
           console.log(
             '\nTraining data exported to: ',
-            `${global.__paths.trainingData} with result: \n${result}`
+            `${global.__paths.trainingData} with result: \n`, result
           )
         })
       }

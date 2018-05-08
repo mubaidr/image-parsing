@@ -153,9 +153,9 @@ async function getRollNoFromImageBuffer(path, designData) {
             numOfWorkers: 0,
             src: `data:image/png;base64,${buff.toString('base64')}`
           },
-          result => {
-            if (result.codeResult) {
-              resolve(result.codeResult.code)
+          resultsJSON => {
+            if (resultsJSON.codeResult) {
+              resolve(resultsJSON.codeResult.code)
             } else {
               reject(new Error('Unable to read barcode'))
             }
@@ -171,8 +171,8 @@ async function prepareTrainingData(designData, path) {
     const img = sharp(path)
       .resize(designData.width, designData.height)
       .max()
-      .blur(0.75)
-      .flatten()
+      // .blur(1)
+      // .flatten()
       .toColourspace('b-w')
       .threshold(32)
 
@@ -213,7 +213,7 @@ async function prepareTrainingData(designData, path) {
 module.exports = {
   async process() {
     Promise.all([getDesignData(), getImagePaths()]).then(async res => {
-      const result = {}
+      const resultsJSON = {}
       const [designData, paths] = res
       const net = new brain.NeuralNetwork()
       const trainingData = JSON.parse(
@@ -229,37 +229,39 @@ module.exports = {
       for (const path of paths) {
         const rollNo = await getRollNoFromImageBuffer(path, designData)
         prepareTrainingData(designData, path).then(output => {
-          if (!result[rollNo]) result[rollNo] = {}
+          if (!resultsJSON[rollNo]) resultsJSON[rollNo] = {}
 
           output.forEach(q => {
             const pre = net.run(q.data)
-            const {
-              a,
-              b,
-              c,
-              d,
-              empty
-            } = pre
+            const resultArray = []
 
-            console.log(a,
-              b,
-              c,
-              d,
-              empty)
+            Object.keys(pre).forEach((key, index) => {
+              resultArray[index] = {
+                key,
+                val: pre[key]
+              }
+            })
 
-            result[rollNo][q.title] = pre
+            resultArray.sort((a, b) => b.val - a.val)
+
+            if (resultArray[0].val > 0.7) {
+              resultsJSON[rollNo][q.title] = resultArray[0].key
+            } else {
+              // TODO: finalize the output
+              resultsJSON[rollNo][q.title] = 'lol'
+            }
           })
         })
       }
 
       fs.writeFileSync(
         `${global.__paths.trainingData}\\data-output.json`,
-        JSON.stringify(result)
+        JSON.stringify(resultsJSON)
       )
 
       console.log(
         '\nResult data exported to: ',
-        `${global.__paths.trainingData}, Result: \n ${result}`
+        `${global.__paths.trainingData}, Result: \n`, resultsJSON
       )
     })
   }
