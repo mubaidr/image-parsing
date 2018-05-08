@@ -115,7 +115,8 @@ async function getDesignData() {
 // get Images
 function getImagePaths() {
   return fastGlob(
-    `${options.train.source.image}/*.{${options.validFormats.image.join(',')}}`, {
+    `${options.train.source.image}/*.{${options.validFormats.image.join(',')}}`,
+    {
       onlyFiles: true
     }
   )
@@ -156,7 +157,11 @@ async function getResultData() {
 }
 
 async function getRollNoFromImageBuffer(path, designData) {
-  const img = sharp(path).png()
+  const img = sharp(path)
+    .png()
+    .flatten()
+    .toColourspace('b-w')
+    .threshold(32)
   const rollNoPos = designData.rollNo
 
   // extract meta data
@@ -174,7 +179,8 @@ async function getRollNoFromImageBuffer(path, designData) {
       })
       .toBuffer()
       .then(buff => {
-        Quagga.decodeSingle({
+        Quagga.decodeSingle(
+          {
             decoder: {
               multiple: false,
               readers: ['code_39_reader']
@@ -203,10 +209,9 @@ async function prepareTrainingData(designData, resultsData, path, rollNo) {
   return new Promise((resolve, reject) => {
     const promises = []
     const img = sharp(path)
-      .resize(designData.width, designData.height)
+      .resize(designData.width)
       .max()
-      // .blur(0.75)
-      // .flatten()
+      .raw()
       .toColourspace('b-w')
       .threshold(32)
 
@@ -222,22 +227,18 @@ async function prepareTrainingData(designData, resultsData, path, rollNo) {
             width: q.x2 - q.x1 + 10,
             height: q.y2 - q.y1 + 10
           })
-
           /*
-          .toFile(`${global.__paths.tmp}\\${rollNo}-${title}.png`,
-            err => {
-              if (err) console.log(err)
-            })
+          .toFile(`${global.__paths.tmp}\\${rollNo}-${title}.png`, err => {
+            if (err) console.log(err)
+          })
           */
-
-          .raw()
           .toBuffer()
           .then(buff => {
-            const data = buff.toJSON().data.map(val => (val ===
-              0 ? 1 : 0))
+            const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
 
-            if (resultsData[rollNo] &&
-              resultsData[rollNo][title] !== '*') {
+            console.log(data.length)
+
+            if (resultsData[rollNo] && resultsData[rollNo][title] !== '*') {
               const o = {}
               o[resultsData[rollNo][title]] = 1
 
@@ -275,13 +276,11 @@ module.exports = {
           const rollNo = await getRollNoFromImageBuffer(path, designData)
 
           if (rollNo) {
-            const p = prepareTrainingData(designData, resultsData, path,
-              rollNo)
+            const p = prepareTrainingData(designData, resultsData, path, rollNo)
 
             promises.push(p)
           } else {
-            console.log('\nError: unable to read barcode from the file: ',
-              path)
+            console.log('\nError: unable to read barcode from the file: ', path)
           }
         }
 
@@ -317,7 +316,8 @@ module.exports = {
 
           console.log(
             '\nTraining data exported to: ',
-            `${global.__paths.trainingData} with result: \n`, result
+            `${global.__paths.trainingData} with result: \n`,
+            result
           )
         })
       }

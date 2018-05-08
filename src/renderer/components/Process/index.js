@@ -115,14 +115,19 @@ async function getDesignData() {
 // get Images
 function getImagePaths() {
   return fastGlob(
-    `${options.train.source.image}/*.{${options.validFormats.image.join(',')}}`, {
+    `${options.train.source.image}/*.{${options.validFormats.image.join(',')}}`,
+    {
       onlyFiles: true
     }
   )
 }
 
 async function getRollNoFromImageBuffer(path, designData) {
-  const img = sharp(path).png()
+  const img = sharp(path)
+    .png()
+    .flatten()
+    .toColourspace('b-w')
+    .threshold(32)
   const rollNoPos = designData.rollNo
 
   // extract meta data
@@ -140,7 +145,8 @@ async function getRollNoFromImageBuffer(path, designData) {
       })
       .toBuffer()
       .then(buff => {
-        Quagga.decodeSingle({
+        Quagga.decodeSingle(
+          {
             decoder: {
               multiple: false,
               readers: ['code_39_reader']
@@ -169,10 +175,9 @@ async function prepareTrainingData(designData, path) {
   return new Promise((resolve, reject) => {
     const promises = []
     const img = sharp(path)
-      .resize(designData.width, designData.height)
+      .resize(designData.width)
       .max()
-      // .blur(1)
-      // .flatten()
+      .raw()
       .toColourspace('b-w')
       .threshold(32)
 
@@ -188,11 +193,9 @@ async function prepareTrainingData(designData, path) {
             width: q.x2 - q.x1 + 10,
             height: q.y2 - q.y1 + 10
           })
-          .raw()
           .toBuffer()
           .then(buff => {
-            const data = buff.toJSON().data.map(val => (val ===
-              0 ? 1 : 0))
+            const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
 
             resolve({
               title,
@@ -244,11 +247,13 @@ module.exports = {
 
             resultArray.sort((a, b) => b.val - a.val)
 
-            if (resultArray[0].val > 0.7) {
+            if (
+              resultArray[0].val >= 0.66 ||
+              resultArray[0].val - resultArray[1].val >= 0.33
+            ) {
               resultsJSON[rollNo][q.title] = resultArray[0].key
             } else {
-              // TODO: finalize the output
-              resultsJSON[rollNo][q.title] = 'lol'
+              resultsJSON[rollNo][q.title] = '*'
             }
           })
         })
@@ -261,7 +266,8 @@ module.exports = {
 
       console.log(
         '\nResult data exported to: ',
-        `${global.__paths.trainingData}, Result: \n`, resultsJSON
+        `${global.__paths.trainingData}, Result: \n`,
+        resultsJSON
       )
     })
   }
