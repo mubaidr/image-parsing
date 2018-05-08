@@ -115,8 +115,7 @@ async function getDesignData() {
 // get Images
 function getImagePaths() {
   return fastGlob(
-    `${options.train.source.image}/*.{${options.validFormats.image.join(',')}}`,
-    {
+    `${options.train.source.image}/*.{${options.validFormats.image.join(',')}}`, {
       onlyFiles: true
     }
   )
@@ -141,8 +140,7 @@ async function getRollNoFromImageBuffer(path, designData) {
       })
       .toBuffer()
       .then(buff => {
-        Quagga.decodeSingle(
-          {
+        Quagga.decodeSingle({
             decoder: {
               multiple: false,
               readers: ['code_39_reader']
@@ -167,7 +165,7 @@ async function getRollNoFromImageBuffer(path, designData) {
   })
 }
 
-async function prepareTrainingData(designData, path, rollNo) {
+async function prepareTrainingData(designData, path) {
   return new Promise((resolve, reject) => {
     const promises = []
     const img = sharp(path)
@@ -190,14 +188,13 @@ async function prepareTrainingData(designData, path, rollNo) {
             width: q.x2 - q.x1 + 10,
             height: q.y2 - q.y1 + 10
           })
-
           .raw()
           .toBuffer()
           .then(buff => {
-            const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
+            const data = buff.toJSON().data.map(val => (val ===
+              0 ? 1 : 0))
 
             resolve({
-              rollNo,
               title,
               data
             })
@@ -208,56 +205,62 @@ async function prepareTrainingData(designData, path, rollNo) {
     })
 
     Promise.all(promises).then(res => {
-      resolve({
-        rollNo,
-        data: res
-      })
+      resolve(res)
     })
   })
 }
 
 module.exports = {
-  async train(opt) {
+  async process() {
     Promise.all([getDesignData(), getImagePaths()]).then(async res => {
+      const result = {}
       const [designData, paths] = res
-      const promises = []
+      const net = new brain.NeuralNetwork()
+      const trainingData = JSON.parse(
+        fs.readFileSync(`${global.__paths.trainingData}\\data.json`)
+      )
+
+      console.log('\nLoading network...')
+      net.fromJSON(trainingData)
+
+      console.log('\nStarting processing...')
 
       // eslint-disable-next-line
       for (const path of paths) {
         const rollNo = await getRollNoFromImageBuffer(path, designData)
-        const p = prepareTrainingData(designData, path, rollNo)
+        prepareTrainingData(designData, path).then(output => {
+          if (!result[rollNo]) result[rollNo] = {}
 
-        promises.push(p)
-      }
+          output.forEach(q => {
+            const pre = net.run(q.data)
+            const {
+              a,
+              b,
+              c,
+              d,
+              empty
+            } = pre
 
-      Promise.all(promises).then(results => {
-        const net = new brain.NeuralNetwork()
-        const rainingData = JSON.parse(
-          fs.readFileSync(`${global.__paths.trainingData}\\data.json`)
-        )
+            console.log(a,
+              b,
+              c,
+              d,
+              empty)
 
-        net.fromJSON(rainingData)
-
-        results.forEach(result => {
-          result.data.forEach(data => {
-            console.log(data)
+            result[rollNo][q.title] = pre
           })
         })
+      }
 
-        console.log('Starting processing...')
+      fs.writeFileSync(
+        `${global.__paths.trainingData}\\data-output.json`,
+        JSON.stringify(result)
+      )
 
-        // console.log(result)
-
-        fs.writeFileSync(
-          `${global.__paths.trainingData}\\data-output.json`,
-          JSON.stringify(net.toJSON())
-        )
-
-        console.log(
-          '\nTraining data exported to: ',
-          `${global.__paths.trainingData}`
-        )
-      })
+      console.log(
+        '\nResult data exported to: ',
+        `${global.__paths.trainingData}, Result: \n ${result}`
+      )
     })
   }
 }

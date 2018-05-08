@@ -146,7 +146,7 @@ async function getResultData() {
     if (values.length <= 60) continue
 
     for (let j = 0; j < values.length; j += 1) {
-      obj[headerValues[j]] = values[j]
+      obj[headerValues[j]] = values[j] === '?' ? 'empty' : values[j]
     }
 
     resultsData[values[rollNoIndex]] = obj
@@ -182,7 +182,7 @@ async function getRollNoFromImageBuffer(path, designData) {
             locate: false,
             locator: {
               halfSample: true,
-              patchSize: 'large'
+              patchSize: 'medium'
             },
             numOfWorkers: 0,
             src: `data:image/png;base64,${buff.toString('base64')}`
@@ -236,13 +236,18 @@ async function prepareTrainingData(designData, resultsData, path, rollNo) {
             const data = buff.toJSON().data.map(val => (val ===
               0 ? 1 : 0))
 
-            const o = {}
-            o[resultsData[rollNo][title]] = 1
+            if (resultsData[rollNo] &&
+              resultsData[rollNo][title] !== '*') {
+              const o = {}
+              o[resultsData[rollNo][title]] = 1
 
-            resolve({
-              input: data,
-              output: o
-            })
+              resolve({
+                input: data,
+                output: o
+              })
+            } else {
+              resolve(false)
+            }
           })
       })
 
@@ -268,10 +273,16 @@ module.exports = {
         // eslint-disable-next-line
         for (const path of paths) {
           const rollNo = await getRollNoFromImageBuffer(path, designData)
-          const p = prepareTrainingData(designData, resultsData, path,
-            rollNo)
 
-          promises.push(p)
+          if (rollNo) {
+            const p = prepareTrainingData(designData, resultsData, path,
+              rollNo)
+
+            promises.push(p)
+          } else {
+            console.log('\nError: unable to read barcode from the file: ',
+              path)
+          }
         }
 
         Promise.all(promises).then(results => {
@@ -280,10 +291,12 @@ module.exports = {
 
           results.forEach(result => {
             result.data.forEach(data => {
-              trainingData.push({
-                input: data.input,
-                output: data.output
-              })
+              if (data) {
+                trainingData.push({
+                  input: data.input,
+                  output: data.output
+                })
+              }
             })
           })
 
@@ -297,8 +310,6 @@ module.exports = {
             // activation: 'leaky-relu'
           })
 
-          console.log(result)
-
           fs.writeFileSync(
             `${global.__paths.trainingData}\\data.json`,
             JSON.stringify(net.toJSON())
@@ -306,7 +317,7 @@ module.exports = {
 
           console.log(
             '\nTraining data exported to: ',
-            `${global.__paths.trainingData}`
+            `${global.__paths.trainingData} with result: \n${result}`
           )
         })
       }
