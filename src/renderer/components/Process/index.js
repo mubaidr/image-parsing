@@ -49,10 +49,7 @@ async function prepareTrainingData(designData, path) {
 
 module.exports = {
   async process() {
-    Promise.all([
-      utilities.getDesignData(),
-      utilities.getImagePaths()
-    ]).then(
+    Promise.all([utilities.getDesignData(), utilities.getImagePaths()]).then(
       async res => {
         const resultsJSON = {}
         const [designData, paths] = res
@@ -87,14 +84,22 @@ module.exports = {
               })
 
               resultArray.sort((a, b) => b.val - a.val)
+              let value = resultArray[0]
 
-              if (
-                resultArray[0].val >= 0.66 ||
-                resultArray[0].val - resultArray[1].val >= 0.33
-              ) {
-                resultsJSON[rollNo][q.title] = resultArray[0].key
+              if (value.val >= 0.95 && value.key === '?') {
+                resultsJSON[rollNo][q.title] = value.key
               } else {
-                resultsJSON[rollNo][q.title] = '*'
+                const newArray = resultArray
+                  .filter(item => item.key !== '?')
+                  .sort((a, b) => b.val - a.val)
+
+                value = newArray[0]
+
+                if (newArray[1].val >= 0.5) {
+                  resultsJSON[rollNo][q.title] = '*'
+                } else {
+                  resultsJSON[rollNo][q.title] = value.key.toUpperCase()
+                }
               }
             })
           })
@@ -115,6 +120,7 @@ module.exports = {
           `${global.__paths.trainingData}, Result: \n`,
           resultsJSON
         )
-      })
+      }
+    )
   }
 }

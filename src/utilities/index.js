@@ -113,9 +113,11 @@ module.exports = {
     return designData
   },
 
-  getImagePaths() {
+  getImagePaths(isTraining) {
+    const path = isTraining ? 'train' : 'process'
+
     return fastGlob(
-      `${options.train.source.image}/*.{${options.validFormats.image.join(',')}}`, {
+      `${options[path].source.image}/*.{${options.validFormats.image.join(',')}}`, {
         onlyFiles: true
       }
     )

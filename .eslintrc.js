@@ -27,6 +27,7 @@ module.exports = {
     'linebreak-style': [2, 'windows'],
     'no-unused-vars': 2,
     'no-await-in-loop': 0,
+    'prefer-destructuring': 0,
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'no-unused-vars': process.env.NODE_ENV === 'production' ? 2 : 0

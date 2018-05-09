@@ -68,7 +68,7 @@ module.exports = {
     Promise.all([
       utilities.getDesignData(),
       utilities.getResultData(),
-      utilities.getImagePaths()
+      utilities.getImagePaths(true)
     ]).then(
       async res => {
         const [designData, resultsData, paths] = res
