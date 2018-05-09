@@ -95,7 +95,8 @@ module.exports = {
 
                 value = newArray[0]
 
-                if (newArray[1].val >= 0.5) {
+                if (newArray[1].val >= 0.5 ||
+                  (newArray[0].val - newArray[1].val < 20)) {
                   resultsJSON[rollNo][q.title] = '*'
                 } else {
                   resultsJSON[rollNo][q.title] = value.key.toUpperCase()
