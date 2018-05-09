@@ -146,7 +146,7 @@ module.exports = {
       if (values.length <= 60) continue
 
       for (let j = 0; j < values.length; j += 1) {
-        obj[headerValues[j]] = values[j] === '?' ? 'empty' : values[j]
+        obj[headerValues[j]] = values[j]
       }
 
       resultsData[values[rollNoIndex]] = obj
@@ -158,9 +158,9 @@ module.exports = {
   getRollNoFromImageBuffer: async (path, designData) => {
     const img = sharp(path)
       .png()
-      .flatten()
-      .toColourspace('b-w')
-      .threshold(32)
+    // .flatten()
+    // .toColourspace('b-w')
+    // .threshold(32)
     const rollNoPos = designData.rollNo
 
     // extract meta data
@@ -203,14 +203,31 @@ module.exports = {
     })
   },
 
-  // function to encode file data to base64 encoded string
-  base64_encode(bitmap) {
-    return Buffer.from(bitmap).toString('base64')
-  },
+  jsonToCsv(obj) {
+    let header = ''
+    let csv = ''
+    // debug
+    obj = JSON.parse(fs.readFileSync('./training-data/data-output.json',
+      'utf8'))
 
-  // function to create file from base64 encoded string
-  base64_decode(base64str) {
-    return Buffer.from(base64str, 'base64')
+    const keys = Object.keys(obj)
+
+    // Prepare header row
+    Object.keys(obj[keys[0]]).forEach(prop => {
+      header += `${prop[0].toUpperCase() + prop.substr(1)},`
+    })
+    header += 'RollNo'
+
+    // prepare data rows
+    keys.forEach(key => {
+      Object.keys(obj[key]).forEach(prop => {
+        csv += `${obj[key][prop]},`
+      })
+      csv += key
+      csv += '\n'
+    })
+
+    return `${header}\n${csv}`
   },
 
   // returns milliseconds passed since provided time

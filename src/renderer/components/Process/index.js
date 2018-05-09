@@ -49,7 +49,10 @@ async function prepareTrainingData(designData, path) {
 
 module.exports = {
   async process() {
-    Promise.all([utilities.getDesignData(), utilities.getImagePaths()]).then(
+    Promise.all([
+      utilities.getDesignData(),
+      utilities.getImagePaths()
+    ]).then(
       async res => {
         const resultsJSON = {}
         const [designData, paths] = res
@@ -65,8 +68,10 @@ module.exports = {
 
         // eslint-disable-next-line
         for (const path of paths) {
-          const rollNo = await utilities.getRollNoFromImageBuffer(path,
-            designData)
+          const rollNo = await utilities.getRollNoFromImageBuffer(
+            path,
+            designData
+          )
           prepareTrainingData(designData, path).then(output => {
             if (!resultsJSON[rollNo]) resultsJSON[rollNo] = {}
 
@@ -98,6 +103,11 @@ module.exports = {
         fs.writeFileSync(
           `${global.__paths.trainingData}\\data-output.json`,
           JSON.stringify(resultsJSON)
+        )
+
+        fs.writeFileSync(
+          `${global.__paths.trainingData}\\data-output.csv`,
+          utilities.jsonToCsv(resultsJSON)
         )
 
         console.log(
