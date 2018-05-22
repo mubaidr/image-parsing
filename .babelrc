@@ -1,16 +1,32 @@
 {
   "comments": false,
-  "presets": [
-    ["env", {
-      "targets": {
-        "node": 8
-      }
-    }],
-    "stage-0"
-  ],
   "env": {
     "test": {
-      "plugins": ["transform-es2015-modules-commonjs"]
+      "presets": [
+        ["env", {
+          "targets": {
+            "node": 8
+          }
+        }],
+        "stage-0"
+      ],
+      "plugins": ["istanbul"]
+    },
+    "main": {
+      "presets": [
+        ["env", {
+          "targets": {
+            "node": 8
+          }
+        }],
+        "stage-0"
+      ]
+    },
+    "renderer": {
+      "presets": [
+        ["env"],
+        "stage-0"
+      ]
     }
   },
   "plugins": ["transform-runtime"]

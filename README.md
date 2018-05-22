@@ -1,6 +1,9 @@
 # image-parsing
 
-> An electron-vue project
+[![Build Status](https://travis-ci.org/mubaidr/image-parsing.svg)](https://travis-ci.org/mubaidr/image-parsing)
+[![Build status](https://ci.appveyor.com/api/projects/status/ghd4n4ehbc955qi0?svg=true)](https://ci.appveyor.com/project/mubaidr/image-parsing)
+
+> A complete solution for Forms/MCQ based paper checking
 
 ## Build Setup
 
@@ -8,15 +11,12 @@
 # install dependencies
 npm install
 
-# serve with hot reload
+# serve with hot reload at localhost:9080
 npm run dev
 
 # build electron application for production
 npm run build
 
-# run unit tests
-npm test
-
-# lint all JS/Vue component files in `app/`
+# lint all JS/Vue component files in `src/`
 npm run lint
 ```

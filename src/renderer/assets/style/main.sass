@@ -1,0 +1,33 @@
+html
+  // border-top: 1px solid rgba(236, 236, 236, 0.95)
+  // background-color: #f0f0f0
+  overflow-y: auto
+
+// Custom navigation bar
+
+body
+  padding-left: 60px
+  @media screen and (min-width: 1024px - 1px)
+    padding-left: 160px
+
+.navigation-bar
+  min-width: 60px
+  max-width: 160px
+  border-right-color: transparent!important
+  .button
+    background-color: #fff
+
+//reduce section top padding
+.section
+  padding-top: 25px
+
+.has-minimum-height
+  &.is-340
+    min-height: 340px
+  &.is-480
+    min-height: 480px
+  &.is-640
+    min-height: 640px
+
+.is-hidden
+  display: none

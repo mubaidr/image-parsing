@@ -3,6 +3,4 @@ test/unit/*.js
 test/e2e/*.js
 **.min.js
 assets/
-app/dist/
-test/
-dist/
+static/scripts/
