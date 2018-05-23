@@ -2,22 +2,15 @@
   <div class="box">
     <template v-if="fileType === 'image'">
       <figure class="image">
-        <img
-          :src="filePathData"
-          alt="Loading preview...">
+        <img :src="filePathData" alt="Loading preview...">
       </figure>
     </template>
     <template v-else-if="fileType === 'design'">
       <template v-if="fileExtension === 'json'">
-        <canvas
-          ref="previewCanvas"
-          width="1240"
-          height="1754"/>
+        <canvas ref="previewCanvas" width="1240" height="1754" />
       </template>
       <template v-else-if="fileExtension === 'svg'">
-        <img
-          :src="filePathData"
-          alt="Loading preview...">
+        <img :src="filePathData" alt="Loading preview...">
       </template>
     </template>
     <template v-else-if="fileType === 'excel'">
@@ -27,12 +20,8 @@
           <head/>
 
           <body>
-            <tr
-              v-for="(row, rowIndex) in excelData"
-              :key="rowIndex">
-              <td
-                v-for="(col, colIndex) in row"
-                :key="colIndex">
+            <tr v-for="(row, rowIndex) in excelData" :key="rowIndex">
+              <td v-for="(col, colIndex) in row" :key="colIndex">
                 {{ col }}
               </td>
             </tr>
@@ -53,13 +42,13 @@ export default {
   props: {
     filePath: {
       type: String,
-      default: ''
+      default: '',
     },
 
     fileType: {
       type: String,
-      default: 'image' // design
-    }
+      default: 'image', // design
+    },
   },
 
   data() {
@@ -67,7 +56,7 @@ export default {
       filePathData: null,
       fileExtension: null,
       excelData: [],
-      canvas: null
+      canvas: null,
     }
   },
 
@@ -89,7 +78,7 @@ export default {
       if (this.fileType === 'design') {
         // design files preview
         this.canvas = new fabric.Canvas(this.$refs.previewCanvas, {
-          backgroundColor: 'white'
+          backgroundColor: 'white',
         })
         setTimeout(() => {
           switch (ext) {
@@ -163,7 +152,7 @@ export default {
           })
         }
       }
-    }
+    },
   },
 
   mounted() {},
@@ -173,11 +162,10 @@ export default {
       this.filePathData = null
       this.excelData = []
       this.canvas ? this.canvas.dispose() : (this.canvas = null) //eslint-disable-line
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style>
-
 </style>

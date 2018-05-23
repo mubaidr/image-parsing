@@ -1,29 +1,21 @@
 <template>
-  <div 
-    :class="{'is-active': isNavBarWide}"
-    class="navigation-bar is-static">
-    <button 
-      class="button"
-      @click="isNavBarWide = !isNavBarWide">
+  <div class="navigation-bar is-static" :class="{'is-active': isNavBarWide}">
+    <button class="button" @click="isNavBarWide = !isNavBarWide">
       <span class="icon">
-        <i class="fa fa-bars" />
+        <i class="fa fa-bars">
+        </i>
       </span>
     </button>
     <aside class="menu">
       <ul class="menu-list">
-        <li 
-          v-for="(route, index) in routes"
-          :key="index"
-          :class="{'is-active' : $route.path.indexOf(route.path) !== -1}"
-          :title="route.meta.title"
-          @click="$router.push(route.path)">
-
-          <span class="icon">
-            <i 
-              :class="route.meta.icon"
-              class="fa" />
-          </span>
-          <span>{{ route.meta.title }}</span>
+        <li v-for="(route, index) in routes" :key="index">
+          <router-link active-class="is-active" :to="route" :title="route.meta.title">
+            <span class="icon">
+              <i class="fa" :class="route.meta.icon">
+              </i>
+            </span>
+            <span>{{ route.meta.title }}</span>
+          </router-link>
         </li>
       </ul>
     </aside>
@@ -35,7 +27,7 @@ export default {
   data() {
     return {
       isNavBarWide: false,
-      routes: []
+      routes: [],
     }
   },
 
@@ -45,12 +37,9 @@ export default {
     )
 
     this.$electron.ipcRenderer.send('set-menu', this.routes)
-  }
+  },
 }
 </script>
 
 <style>
-.menu-list li span {
-  cursor: default;
-}
 </style>

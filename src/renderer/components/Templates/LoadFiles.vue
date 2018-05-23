@@ -2,10 +2,7 @@
   <div class="block">
     <div class="file has-name is-fullwidth">
       <label class="file-label">
-        <button
-          class="file-input"
-          name="resume"
-          @click="choosePath" />
+        <button class="file-input" name="resume" @click="choosePath" />
         <span class="file-cta">
           <span class="file-icon">
             <i class="fas fa-upload" />
@@ -25,12 +22,7 @@
     <nav class="panel">
       <template v-if="directory && filteredFiles.length">
         <div class="fixed-height">
-          <a
-            v-for="(file,index) in filteredFiles"
-            :class="{'is-active' : file === selectedFile}"
-            :key="index"
-            class="panel-block"
-            @click="selectedFile = file">
+          <a v-for="(file,index) in filteredFiles" :class="{'is-active' : file === selectedFile}" :key="index" class="panel-block" @click="selectedFile = file">
             {{ extractName(file) }}
           </a>
         </div>
@@ -39,12 +31,8 @@
         <div class="notification is-warning">Selected directory does not contains any {{ fileType }} files. </div>
       </template>
     </nav>
-    <div
-      v-show="selectedFile"
-      class="block has-text-centered">
-      <preview-modal
-        :file-path="selectedFile"
-        :file-type="fileType" />
+    <div v-show="selectedFile" class="block has-text-centered">
+      <preview-modal :file-path="selectedFile" :file-type="fileType" />
     </div>
   </div>
 </template>
@@ -61,18 +49,18 @@ export default {
   props: {
     fileType: {
       type: String,
-      default: 'image' // or design or excel
+      default: 'image', // or design or excel
     },
 
     isFile: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     option: {
       type: String,
-      default: 'generate.source.design'
-    }
+      default: 'generate.source.design',
+    },
   },
 
   data() {
@@ -80,14 +68,14 @@ export default {
       directory: null,
       selectedFile: null,
       files: [],
-      fileFilter: ''
+      fileFilter: '',
     }
   },
 
   computed: {
     filteredFiles() {
       return this.files.filter(file => file.indexOf(this.fileFilter) !== -1)
-    }
+    },
   },
 
   watch: {
@@ -101,7 +89,7 @@ export default {
             ','
           )}}`,
           {
-            onlyFiles: true
+            onlyFiles: true,
           }
         )
           .then(files => {
@@ -116,14 +104,14 @@ export default {
 
     selectedFile() {
       this.updateOptions('file')
-    }
+    },
   },
 
   methods: {
     choosePath() {
       ;[this.directory] = this.$electron.remote.dialog.showOpenDialog({
         properties: ['openDirectory'],
-        defaultPath: this.defaultPath
+        defaultPath: this.defaultPath,
       }) || [false]
 
       this.selectedFile = null
@@ -148,16 +136,10 @@ export default {
       }
 
       this.setOptions(opt)
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="sass">
-.fixed-height
-  max-height: 25em
-  overflow: auto
-
-.column
-  transition: all 0.25s ease-out
 </style>

@@ -1,9 +1,7 @@
 process.env.BABEL_ENV = 'renderer'
 
 const path = require('path')
-const {
-  dependencies
-} = require('../package.json')
+const { dependencies } = require('../package.json')
 
 /* eslint-disable*/
 const webpack = require('webpack')
@@ -11,9 +9,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 // const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const {
-  VueLoaderPlugin
-} = require('vue-loader')
+const { VueLoaderPlugin } = require('vue-loader')
 /* eslint-enable */
 
 /**
@@ -36,17 +32,14 @@ const rendererConfig = {
     )
   ],
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.scss$/,
-        use: ['vue-style-loader', 'css-loader',
-          'sass-loader'
-        ]
+        use: ['vue-style-loader', 'css-loader', 'sass-loader']
       },
       {
         test: /\.sass$/,
-        use: ['vue-style-loader', 'css-loader',
-          'sass-loader?indentedSyntax'
-        ]
+        use: ['vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax']
       },
       {
         test: /\.css$/,
@@ -116,8 +109,10 @@ const rendererConfig = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
-      nodeModules: process.env.NODE_ENV !== 'production' ?
-        path.resolve(__dirname, '../node_modules') : false
+      nodeModules:
+        process.env.NODE_ENV !== 'production'
+          ? path.resolve(__dirname, '../node_modules')
+          : false
     }),
     new VueLoaderPlugin(),
     new webpack.HotModuleReplacementPlugin()
@@ -144,11 +139,13 @@ const rendererConfig = {
  */
 if (process.env.NODE_ENV === 'production') {
   rendererConfig.plugins.push(
-    new CopyWebpackPlugin([{
-      from: path.join(__dirname, '../static'),
-      to: path.join(__dirname, '../dist/electron/static'),
-      ignore: ['.*']
-    }])
+    new CopyWebpackPlugin([
+      {
+        from: path.join(__dirname, '../static'),
+        to: path.join(__dirname, '../dist/electron/static'),
+        ignore: ['.*']
+      }
+    ])
   )
 }
 

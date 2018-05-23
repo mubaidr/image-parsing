@@ -14,7 +14,7 @@ function clean() {
 
 function pack(config) {
   return new Promise((resolve, reject) => {
-    webpack(config, (err) => {
+    webpack(config, err => {
       if (err) reject(err.stack || err)
 
       resolve()
@@ -25,19 +25,23 @@ function pack(config) {
 function build() {
   del.sync(['dist/electron/*', '!.gitkeep'])
 
-  pack(mainConfig).then(() => {
-    console.log('Compiled Main!')
-  }).catch(err => {
-    console.error(`\n${err}`)
-    process.exit(1)
-  })
+  pack(mainConfig)
+    .then(() => {
+      console.log('Compiled Main!')
+    })
+    .catch(err => {
+      console.error(`\n${err}`)
+      process.exit(1)
+    })
 
-  pack(rendererConfig).then(() => {
-    console.log('Compiled Renderer!')
-  }).catch(err => {
-    console.error(`\n${err}`)
-    process.exit(1)
-  })
+  pack(rendererConfig)
+    .then(() => {
+      console.log('Compiled Renderer!')
+    })
+    .catch(err => {
+      console.error(`\n${err}`)
+      process.exit(1)
+    })
 }
 
 if (process.env.BUILD_TARGET === 'clean') clean()

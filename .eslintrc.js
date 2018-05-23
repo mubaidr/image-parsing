@@ -1,18 +1,17 @@
 module.exports = {
   root: true,
   parserOptions: {
-    parser: 'babel-eslint',
     sourceType: 'module',
-    ecmaVersion: 8,
+    ecmaVersion: 8
   },
   env: {
     browser: true,
-    node: true,
+    node: true
   },
-  extends: ['airbnb-base', 'plugin:vue/recommended'],
+  extends: ['airbnb-base', 'plugin:vue/essential'],
   globals: {
     __static: true,
-    fabric: true,
+    fabric: true
   },
   plugins: ['vue'],
   rules: {
@@ -31,6 +30,6 @@ module.exports = {
     'prefer-destructuring': 0,
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-    'no-unused-vars': process.env.NODE_ENV === 'production' ? 2 : 0,
-  },
+    'no-unused-vars': process.env.NODE_ENV === 'production' ? 2 : 0
+  }
 }
