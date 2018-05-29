@@ -68,7 +68,7 @@
     "del": "^3.0.0",
     "devtron": "^1.4.0",
     "electron-builder": "^20.14.7",
-    "electron-debug": "^1.5.0",
+    "electron-debug": "^2.0.0",
     "electron-rebuild": "^1.7.3",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-import-resolver-webpack": "^0.10.0",
