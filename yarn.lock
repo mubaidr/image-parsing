@@ -1509,9 +1509,9 @@ builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
 
-bulma-fluent@^0.3.7:
-  version "0.3.7"
-  resolved "https://registry.yarnpkg.com/bulma-fluent/-/bulma-fluent-0.3.7.tgz#51556a73d31c47d13afb252b8129a96fd3af87f4"
+bulma-fluent@^0.3.8:
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/bulma-fluent/-/bulma-fluent-0.3.8.tgz#9d842ce8501e2752ccf17d111ffda3b10df85262"
   dependencies:
     bulma "^0.7.1"
 
