@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "brain.js": "^1.2.1",
-    "bulma-fluent": "^0.3.7",
+    "bulma-fluent": "^0.3.8",
     "electron": "^2.0.2",
     "electron-store": "^2.0.0",
     "exceljs": "^1.4.6",
