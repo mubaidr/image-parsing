@@ -23,9 +23,7 @@
         }
       ]
     },
-    "files": [
-      "dist/electron/**/*"
-    ],
+    "files": ["dist/electron/**/*"],
     "linux": {
       "icon": "build/icons"
     },
@@ -71,6 +69,7 @@
     "electron-debug": "^2.0.0",
     "electron-rebuild": "^1.7.3",
     "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-import-resolver-webpack": "^0.10.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-vue": "^4.5.0",
@@ -108,8 +107,10 @@
     "lint": "eslint --ext .js,.vue src test",
     "lint:fix": "eslint --ext .js,.vue --fix src test",
     "pack": "npm run pack:main && npm run pack:renderer",
-    "pack:main": "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.main.config.js",
-    "pack:renderer": "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.renderer.config.js",
+    "pack:main":
+      "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.main.config.js",
+    "pack:renderer":
+      "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.renderer.config.js",
     "postinstall": "electron-builder install-app-deps && npm rebuild node-sass",
     "rebuild-electron": "./node_modules/.bin/electron-rebuild"
   },

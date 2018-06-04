@@ -8,7 +8,7 @@ module.exports = {
     browser: true,
     node: true
   },
-  extends: ['airbnb-base', 'plugin:vue/essential'],
+  extends: ['airbnb-base', 'plugin:vue/recommended', 'prettier'],
   globals: {
     __static: true,
     fabric: true
