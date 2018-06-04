@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import 'bulma-fluent/css/bulma.css'
+import 'bulma-addons/css/bulma.css'
 
 import './mixins'
 
@@ -22,11 +23,11 @@ Vue.use(require('vue-electron'))
 /* eslint-disable no-new */
 new Vue({
   components: {
-    App
+    App,
   },
   router,
   store,
-  template: '<App/>'
+  template: '<App/>',
 }).$mount('#app')
 
 // eslint-disable-next-line
@@ -37,5 +38,5 @@ Vue.prototype.$fabric = fabric
 
 /* Enable webpack hot reloading */
 if (module.hot) {
-  module.hot.accept();
+  module.hot.accept()
 }

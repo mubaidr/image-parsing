@@ -14,9 +14,9 @@ if (fs.existsSync(tmp)) {
     for (const file of files) {
       fs.unlink(path.join(tmp, file), err => {
         if (err) console.log(err)
-      });
+      })
     }
-  });
+  })
 } else {
   fs.mkdir(tmp, err => {
     if (err) console.log(err)
@@ -31,6 +31,6 @@ module.exports = {
     trainingData,
     main: path.join(src, 'main'),
     renderer: path.join(src, 'renderer'),
-    utiltities: path.join(src, 'utiltities')
-  }
+    utiltities: path.join(src, 'utiltities'),
+  },
 }

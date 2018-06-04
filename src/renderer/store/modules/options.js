@@ -1,42 +1,42 @@
-const Store = require('electron-store');
+const Store = require('electron-store')
 
-const store = new Store();
+const store = new Store()
 
 const _defaults = {
   options: {
     design: {
-      options: {}
+      options: {},
     },
     generate: {
       source: {
         excel: '.',
-        design: '.'
+        design: '.',
       },
       target: {
-        data: ''
+        data: '',
       },
-      options: {}
+      options: {},
     },
     process: {
       source: {
         image: '.',
-        design: '.'
+        design: '.',
       },
       target: {
-        data: ''
+        data: '',
       },
-      options: {}
+      options: {},
     },
     train: {
       source: {
         image: '.',
         design: '.',
-        excel: '.'
+        excel: '.',
       },
       target: {
-        data: ''
+        data: '',
       },
-      options: {}
+      options: {},
     },
     validFormats: {
       image: [
@@ -51,18 +51,15 @@ const _defaults = {
         'bmp',
         // 'dib'
       ],
-      design: [
-        'json',
-        'svg'
-      ],
+      design: ['json', 'svg'],
       excel: [
         // 'xls',
         'xlsx',
         'xlsm',
-        'csv'
-      ]
-    }
-  }
+        'csv',
+      ],
+    },
+  },
 }
 
 // reset options
@@ -82,13 +79,13 @@ if (opt && opt.design && opt.generate && opt.process) {
 const getters = {
   options(state) {
     return state.options
-  }
+  },
 }
 
 const mutations = {
   setOptions(state, opt) {
     state.options = opt
-  }
+  },
 }
 
 const actions = {
@@ -96,12 +93,12 @@ const actions = {
     context.commit('setOptions', opt)
 
     store.set('options', opt)
-  }
+  },
 }
 
 export default {
   state,
   getters,
   mutations,
-  actions
+  actions,
 }

@@ -2,15 +2,22 @@
   <div class="box">
     <template v-if="fileType === 'image'">
       <figure class="image">
-        <img :src="filePathData" alt="Loading preview...">
+        <img 
+          :src="filePathData" 
+          alt="Loading preview...">
       </figure>
     </template>
     <template v-else-if="fileType === 'design'">
       <template v-if="fileExtension === 'json'">
-        <canvas ref="previewCanvas" width="1240" height="1754" />
+        <canvas 
+          ref="previewCanvas" 
+          width="1240" 
+          height="1754" />
       </template>
       <template v-else-if="fileExtension === 'svg'">
-        <img :src="filePathData" alt="Loading preview...">
+        <img 
+          :src="filePathData" 
+          alt="Loading preview...">
       </template>
     </template>
     <template v-else-if="fileType === 'excel'">
@@ -20,8 +27,12 @@
           <head/>
 
           <body>
-            <tr v-for="(row, rowIndex) in excelData" :key="rowIndex">
-              <td v-for="(col, colIndex) in row" :key="colIndex">
+            <tr 
+              v-for="(row, rowIndex) in excelData" 
+              :key="rowIndex">
+              <td 
+                v-for="(col, colIndex) in row" 
+                :key="colIndex">
                 {{ col }}
               </td>
             </tr>

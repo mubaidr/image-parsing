@@ -1,21 +1,24 @@
 /* eslint-disable */
-import {
-  app,
-  BrowserWindow,
-  ipcMain,
-  Menu,
-  MenuItem
-} from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, MenuItem } from 'electron'
 /* eslint-enable */
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
-global.__paths = require('../utilities/data-paths.js').__paths
-
 let mainWindow
 let winURL = 'http://localhost:9080'
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'development') {
+  try {
+    // eslint-disable-next-line
+    require('electron-debug')({
+      showDevTools: true,
+    })
+  } catch (err) {
+    console.log(
+      'Failed to install `electron-debug`: Please set `NODE_ENV=production` before build to avoid installing debugging packages. '
+    )
+  }
+} else {
   winURL = `file://${__dirname}/index.html`
 
   /**
@@ -26,16 +29,16 @@ if (process.env.NODE_ENV === 'production') {
   global.__static = require('path')
     .join(__dirname, '/static')
     .replace(/\\/g, '\\\\') // eslint-disable-line
-} else {
-  require('electron-debug')({ //eslint-disable-line
-    showDevTools: true
-  })
 }
 
 function installDevTools() {
-  if (process.env.NODE_ENV === 'development') {
+  try {
     require('devtron').install() //eslint-disable-line
     require('vue-devtools').install() //eslint-disable-line
+  } catch (err) {
+    console.log(
+      'Failed to install `devtron` & `vue-devtools`: Please set `NODE_ENV=production` before build to avoid installing debugging packages. '
+    )
   }
 }
 
@@ -44,26 +47,34 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
+    useContentSize: true,
     width: 1000,
     height: 700,
     minWidth: 500,
     minHeight: 350,
     backgroundColor: '#fff',
     webPreferences: {
-      webSecurity: false
-    }
-    // show: false,
+      nodeIntegrationInWorker: true,
+      webSecurity: false,
+    },
+    show: false,
   })
 
-  mainWindow.setMenu(null)
+  // mainWindow.setMenu(null)
   mainWindow.loadURL(winURL)
 
-  /* Show when loaded
+  // Show when loaded
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
     mainWindow.focus()
+
+    if (
+      process.env.ELECTRON_ENV === 'development' ||
+      process.argv.indexOf('--debug') !== -1
+    ) {
+      mainWindow.webContents.openDevTools()
+    }
   })
-  */
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -72,7 +83,10 @@ function createWindow() {
 
 app.on('ready', () => {
   createWindow()
-  installDevTools()
+
+  if (process.env.NODE_ENV === 'development') {
+    installDevTools()
+  }
 })
 
 app.on('window-all-closed', () => {

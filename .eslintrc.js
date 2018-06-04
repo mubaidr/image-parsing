@@ -2,20 +2,20 @@ module.exports = {
   root: true,
   parserOptions: {
     sourceType: 'module',
-    ecmaVersion: 8
+    ecmaVersion: 8,
   },
   env: {
     browser: true,
-    node: true
+    node: true,
   },
   extends: ['airbnb-base', 'plugin:vue/recommended', 'prettier'],
   globals: {
     __static: true,
-    fabric: true
+    fabric: true,
   },
   plugins: ['vue'],
   rules: {
-    semi: 2,
+    semi: 0,
     'global-require': 0,
     'import/no-unresolved': 0,
     'no-param-reassign': 0,
@@ -30,6 +30,6 @@ module.exports = {
     'prefer-destructuring': 0,
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-    'no-unused-vars': process.env.NODE_ENV === 'production' ? 2 : 0
-  }
+    'no-unused-vars': process.env.NODE_ENV === 'production' ? 2 : 0,
+  },
 }

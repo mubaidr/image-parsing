@@ -24,16 +24,15 @@ async function prepareTrainingData(designData, path) {
             left: q.x1 - 10,
             top: q.y1 - 10,
             width: q.x2 - q.x1 + 10,
-            height: q.y2 - q.y1 + 10
+            height: q.y2 - q.y1 + 10,
           })
           .toBuffer()
           .then(buff => {
-            const data = buff.toJSON().data.map(val => (val ===
-              0 ? 1 : 0))
+            const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
 
             resolve({
               title,
-              data
+              data,
             })
           })
       })
@@ -79,7 +78,7 @@ module.exports = {
               Object.keys(pre).forEach((key, index) => {
                 resultArray[index] = {
                   key,
-                  val: pre[key]
+                  val: pre[key],
                 }
               })
 
@@ -95,8 +94,10 @@ module.exports = {
 
                 value = newArray[0]
 
-                if (newArray[1].val >= 0.5 ||
-                  (newArray[0].val - newArray[1].val < 20)) {
+                if (
+                  newArray[1].val >= 0.5 ||
+                  newArray[0].val - newArray[1].val < 20
+                ) {
                   resultsJSON[rollNo][q.title] = '*'
                 } else {
                   resultsJSON[rollNo][q.title] = value.key.toUpperCase()
@@ -123,5 +124,5 @@ module.exports = {
         )
       }
     )
-  }
+  },
 }

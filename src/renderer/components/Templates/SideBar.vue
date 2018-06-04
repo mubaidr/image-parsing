@@ -1,18 +1,31 @@
 <template>
-  <div class="navigation-bar is-static" :class="{'is-active': isNavBarWide}">
-    <button class="button" @click="isNavBarWide = !isNavBarWide">
-      <span class="icon">
-        <i class="fa fa-bars">
-        </i>
-      </span>
-    </button>
+  <div
+    :class="{'is-active': isNavBarWide}"
+    class="navigation-bar is-static">
+    <a
+      id="myToggleButton"
+      class="navbar-burger"
+      role="button"
+      aria-expanded="false"
+      aria-label="menu"
+      @click="isNavBarWide">
+      <span aria-hidden="true"/>
+      <span aria-hidden="true"/>
+      <span aria-hidden="true"/>
+    </a>
     <aside class="menu">
       <ul class="menu-list">
-        <li v-for="(route, index) in routes" :key="index">
-          <router-link active-class="is-active" :to="route" :title="route.meta.title">
+        <li
+          v-for="(route, index) in routes"
+          :key="index">
+          <router-link
+            :to="route"
+            :title="route.meta.title"
+            active-class="is-active">
             <span class="icon">
-              <i class="fa" :class="route.meta.icon">
-              </i>
+              <i
+                :class="route.meta.icon"
+                class="fa"/>
             </span>
             <span>{{ route.meta.title }}</span>
           </router-link>
@@ -30,7 +43,6 @@ export default {
       routes: [],
     }
   },
-
   created() {
     this.routes = this.$router.options.routes.filter(
       route => route.path !== '*' && route.path !== '/'
@@ -38,6 +50,7 @@ export default {
 
     this.$electron.ipcRenderer.send('set-menu', this.routes)
   },
+  methods: {},
 }
 </script>
 

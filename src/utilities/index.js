@@ -10,14 +10,16 @@ const options = store.get('options')
 module.exports = {
   getDesignData: async () => {
     const designData = {
-      questions: {}
+      questions: {},
     }
     const rollNoPattern = new RegExp(/rollnobarcode/gi)
     const questionPattern = new RegExp(/(q[1-9][0-9]?[ad])\b/gi) // Match roll and questions options a & d
 
     const container = document.createElement('div')
-    container.innerHTML = fs.readFileSync(options.train.source.designFile,
-      'utf8')
+    container.innerHTML = fs.readFileSync(
+      options.train.source.designFile,
+      'utf8'
+    )
     const svg = container.getElementsByTagName('svg')[0]
     const groups = svg.getElementsByTagName('g')
 
@@ -46,10 +48,14 @@ module.exports = {
           .split(',')
           .map(item => parseInt(item, 10))
 
-        x = parseInt(group.getElementsByTagName('rect')[0].getAttribute('x'),
-          10)
-        y = parseInt(group.getElementsByTagName('rect')[0].getAttribute('y'),
-          10)
+        x = parseInt(
+          group.getElementsByTagName('rect')[0].getAttribute('x'),
+          10
+        )
+        y = parseInt(
+          group.getElementsByTagName('rect')[0].getAttribute('y'),
+          10
+        )
 
         x += transform[0]
         y += transform[1]
@@ -84,10 +90,14 @@ module.exports = {
           .split(',')
           .map(item => parseInt(item, 10))
 
-        x = parseInt(group.getElementsByTagName('rect')[0].getAttribute('x'),
-          10)
-        y = parseInt(group.getElementsByTagName('rect')[0].getAttribute('y'),
-          10)
+        x = parseInt(
+          group.getElementsByTagName('rect')[0].getAttribute('x'),
+          10
+        )
+        y = parseInt(
+          group.getElementsByTagName('rect')[0].getAttribute('y'),
+          10
+        )
 
         x += transform[0]
         y += transform[1]
@@ -105,7 +115,7 @@ module.exports = {
           x1: x,
           y1: y,
           x2: x + width,
-          y2: y + height
+          y2: y + height,
         }
       }
     }
@@ -117,16 +127,18 @@ module.exports = {
     const path = isTraining ? 'train' : 'process'
 
     return fastGlob(
-      `${options[path].source.image}/*.{${options.validFormats.image.join(',')}}`, {
-        onlyFiles: true
+      `${options[path].source.image}/*.{${options.validFormats.image.join(
+        ','
+      )}}`,
+      {
+        onlyFiles: true,
       }
     )
   },
 
   getResultData: async () => {
     const resultsData = {}
-    const resultFile = fs.readFileSync(options.train.source.excelFile,
-      'utf8')
+    const resultFile = fs.readFileSync(options.train.source.excelFile, 'utf8')
 
     const rows = resultFile.split('\n')
     const headerValues = rows[0].split(',').map(word => word.toLowerCase())
@@ -158,8 +170,7 @@ module.exports = {
   },
 
   getRollNoFromImageBuffer: async (path, designData) => {
-    const img = sharp(path)
-      .png()
+    const img = sharp(path).png()
     // .flatten()
     // .toColourspace('b-w')
     // .threshold(32)
@@ -176,22 +187,23 @@ module.exports = {
           left: Math.ceil(rollNoPos.x1 * ratio),
           top: Math.ceil(rollNoPos.y1 * ratio),
           width: Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio),
-          height: Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio)
+          height: Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio),
         })
         .toBuffer()
         .then(buff => {
-          Quagga.decodeSingle({
+          Quagga.decodeSingle(
+            {
               decoder: {
                 multiple: false,
-                readers: ['code_39_reader']
+                readers: ['code_39_reader'],
               },
               locate: false,
               locator: {
                 halfSample: true,
-                patchSize: 'medium'
+                patchSize: 'medium',
               },
               numOfWorkers: 0,
-              src: `data:image/png;base64,${buff.toString('base64')}`
+              src: `data:image/png;base64,${buff.toString('base64')}`,
             },
             result => {
               if (result.codeResult) {
@@ -209,8 +221,9 @@ module.exports = {
     let header = ''
     let csv = ''
     // debug
-    obj = JSON.parse(fs.readFileSync('./training-data/data-output.json',
-      'utf8'))
+    obj = JSON.parse(
+      fs.readFileSync('./training-data/data-output.json', 'utf8')
+    )
 
     const keys = Object.keys(obj)
 
@@ -237,5 +250,5 @@ module.exports = {
     if (!start) return process.hrtime()
     const end = process.hrtime(start)
     return Math.round(end[0] * 1000 + end[1] / 1000000)
-  }
+  },
 }

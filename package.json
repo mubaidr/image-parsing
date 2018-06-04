@@ -37,7 +37,9 @@
   },
   "dependencies": {
     "brain.js": "^1.2.1",
+    "bulma-addons": "^0.1.8",
     "bulma-fluent": "^0.3.8",
+    "vue-fluent": "^0.1.2",
     "electron": "^2.0.2",
     "electron-store": "^2.0.0",
     "exceljs": "^1.4.8",
@@ -68,6 +70,7 @@
     "electron-builder": "^20.15.1",
     "electron-debug": "^2.0.0",
     "electron-rebuild": "^1.7.3",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-import-resolver-webpack": "^0.10.0",
@@ -80,6 +83,7 @@
     "multispinner": "^0.2.1",
     "node-loader": "^0.6.0",
     "node-sass": "^4.9.0",
+    "prettier": "^1.13.4",
     "sass-loader": "^7.0.2",
     "style-loader": "^0.21.0",
     "url-loader": "^1.0.1",
@@ -112,6 +116,8 @@
     "pack:renderer":
       "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.renderer.config.js",
     "postinstall": "electron-builder install-app-deps && npm rebuild node-sass",
+    "prettier":
+      "prettier --write ./src/**/*.js && prettier --write ./src/**/*.vue ",
     "rebuild-electron": "./node_modules/.bin/electron-rebuild"
   },
   "version": "0.0.1"
