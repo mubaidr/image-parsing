@@ -42,7 +42,7 @@
     "bulma-addons": "^0.1.9",
     "bulma-fluent": "^0.3.10",
     "electron-store": "^2.0.0",
-    "exceljs": "^1.4.8",
+    "exceljs": "^1.4.9",
     "fast-glob": "^2.2.2",
     "lodash": "^4.17.10",
     "quagga": "^0.12.1",
