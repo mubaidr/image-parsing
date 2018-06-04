@@ -14,14 +14,13 @@
     <% } %>
 </head>
 
-<body class="has-static-navigation-bar">
+<body class="has-static-navigation-view">
   <div id="app"></div>
   <!-- Set `__static` path to static files in production -->
   <script>
     if (process.env.NODE_ENV !== 'development') window.__static = require(
       'path').join(__dirname, '/static').replace(/\\/g, '\\\\')
   </script>
-  <script src="./static/script/fabric.js"></script>
   <!-- webpack builds are automatically injected -->
 </body>
 

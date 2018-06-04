@@ -1,14 +1,14 @@
 <template>
   <div
     :class="{'is-active': isNavBarWide}"
-    class="navigation-bar is-static">
+    class="navigation-view is-static">
     <a
-      id="myToggleButton"
+      :class="{'is-active': isNavBarWide}"
       class="navbar-burger"
       role="button"
       aria-expanded="false"
       aria-label="menu"
-      @click="isNavBarWide">
+      @click="toggleNavigationView">
       <span aria-hidden="true"/>
       <span aria-hidden="true"/>
       <span aria-hidden="true"/>
@@ -48,9 +48,13 @@ export default {
       route => route.path !== '*' && route.path !== '/'
     )
 
-    this.$electron.ipcRenderer.send('set-menu', this.routes)
+    // this.$electron.ipcRenderer.send('set-menu', this.routes)
   },
-  methods: {},
+  methods: {
+    toggleNavigationView() {
+      this.isNavBarWide = !this.isNavBarWide
+    },
+  },
 }
 </script>
 

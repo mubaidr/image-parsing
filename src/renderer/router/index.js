@@ -18,14 +18,6 @@ export default new Router({
       component: require('@/components/Home').default,
     },
     {
-      path: '/design',
-      meta: {
-        title: 'Design',
-        icon: 'fa-object-group',
-      },
-      component: require('@/components/Design').default,
-    },
-    {
       path: '/generate',
       meta: {
         title: 'Generate',
