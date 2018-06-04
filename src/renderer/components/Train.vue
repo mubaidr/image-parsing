@@ -43,6 +43,8 @@ import loadFiles from './Templates/LoadFiles'
 
 const trainingModule = require('./Train/index')
 
+// TODO: spawn node child to process
+
 export default {
   name: 'About',
 
@@ -57,8 +59,8 @@ export default {
 
     async stopProcess() {
       console.log('Stoping process...')
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -1563,9 +1563,21 @@ builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
 
-bulma-addons@^0.1.6, bulma-addons@^0.1.8:
+bulma-addons@^0.1.6:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/bulma-addons/-/bulma-addons-0.1.8.tgz#9c64539bf73350e89b9dc73f9329f98bfb8861be"
+  dependencies:
+    bulma "^0.7.1"
+
+bulma-addons@^0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/bulma-addons/-/bulma-addons-0.1.9.tgz#18ccd97362972d697fabc78732240d63b09bf342"
+  dependencies:
+    bulma "^0.7.1"
+
+bulma-fluent@^0.3.10:
+  version "0.3.10"
+  resolved "https://registry.yarnpkg.com/bulma-fluent/-/bulma-fluent-0.3.10.tgz#7a4fdd391681e4f77666d13bfeffc5a7cd0b1c9b"
   dependencies:
     bulma "^0.7.1"
 

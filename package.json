@@ -23,7 +23,9 @@
         }
       ]
     },
-    "files": ["dist/electron/**/*"],
+    "files": [
+      "dist/electron/**/*"
+    ],
     "linux": {
       "icon": "build/icons"
     },
@@ -37,9 +39,8 @@
   },
   "dependencies": {
     "brain.js": "^1.2.1",
-    "bulma-addons": "^0.1.8",
-    "bulma-fluent": "^0.3.8",
-    "vue-fluent": "^0.1.2",
+    "bulma-addons": "^0.1.9",
+    "bulma-fluent": "^0.3.10",
     "electron": "^2.0.2",
     "electron-store": "^2.0.0",
     "exceljs": "^1.4.8",
@@ -49,6 +50,7 @@
     "sharp": "^0.20.3",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
+    "vue-fluent": "^0.1.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
@@ -104,21 +106,23 @@
     "url": "git+https://github.com/mubaidr/image-parsing.git"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production npm run pack && electron-builder",
-    "build:clean": "cross-env BUILD_TARGET=clean node electron-vue/build.js",
-    "build:dir": " npm run pack && electron-builder --dir",
-    "dev": "cross-env NODE_ENV=development node electron-vue/dev-runner.js",
+    "build": "npm run pack && electron-builder",
+    "build:dir": "npm run pack && electron-builder --dir",
+    "build:linux": "npm run pack && electron-builder --linux",
+    "build:mac": "npm run pack && electron-builder --mac",
+    "build:win": "npm run pack && electron-builder --win",
+    "build:win-app": "npm run pack && electron-builder",
+    "clean": "cross-env BUILD_TARGET=clean node vue-electron/build.js",
+    "dev": "cross-env NODE_ENV=development node vue-electron/dev-runner.js",
     "lint": "eslint --ext .js,.vue src test",
     "lint:fix": "eslint --ext .js,.vue --fix src test",
-    "pack": "npm run pack:main && npm run pack:renderer",
-    "pack:main":
-      "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.main.config.js",
-    "pack:renderer":
-      "cross-env NODE_ENV=production webpack --mode production --progress --config electron-vue/webpack.renderer.config.js",
+    "pack": "cross-env NODE_ENV=production npm run pack:main && npm run pack:renderer",
+    "pack:main": "webpack --mode production --hide-modules --config vue-electron/webpack.main.config.js",
+    "pack:renderer": "webpack --mode production --hide-modules --config vue-electron/webpack.renderer.config.js",
     "postinstall": "electron-builder install-app-deps && npm rebuild node-sass",
-    "prettier":
-      "prettier --write ./src/**/*.js && prettier --write ./src/**/*.vue ",
-    "rebuild-electron": "./node_modules/.bin/electron-rebuild"
+    "prettier": "prettier --write ./src/**/*.js && prettier --write ./src/**/*.vue ",
+    "rebuild-electron": "./node_modules/.bin/electron-rebuild",
+    "release": "build"
   },
   "version": "0.0.1"
 }
