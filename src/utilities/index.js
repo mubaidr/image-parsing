@@ -1,5 +1,6 @@
-const fs = require('fs')
+const brain = require('brain.js')
 const fastGlob = require('fast-glob')
+const fs = require('fs')
 const quagga = require('quagga').default
 const sharp = require('sharp')
 
@@ -88,6 +89,16 @@ function getImagePaths(path, options) {
       onlyFiles: true,
     }
   )
+}
+
+function getNeuralNet() {
+  const net = new brain.NeuralNetwork()
+
+  const trainingData = JSON.parse(
+    fs.readFileSync(`${global.__paths.trainingData}\\data.json`)
+  )
+
+  return net.fromJSON(trainingData).toFunction()
 }
 
 async function getResultData(resultFilePath) {
@@ -191,6 +202,7 @@ module.exports = {
   clock,
   getDesignData,
   getImagePaths,
+  getNeuralNet,
   getResultData,
   getRollNoFromImage,
   jsonToCsv,
