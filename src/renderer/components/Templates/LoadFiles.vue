@@ -2,9 +2,9 @@
   <div class="block">
     <div class="file has-name is-fullwidth">
       <label class="file-label">
-        <button 
-          class="file-input" 
-          name="resume" 
+        <button
+          class="file-input"
+          name="resume"
           @click="choosePath" />
         <span class="file-cta">
           <span class="file-icon">
@@ -22,14 +22,16 @@
         </span>
       </label>
     </div>
-    <nav class="panel">
+    <nav
+      v-if="directory"
+      class="panel">
       <template v-if="directory && filteredFiles.length">
         <div class="fixed-height">
-          <a 
-            v-for="(file,index) in filteredFiles" 
-            :class="{'is-active' : file === selectedFile}" 
-            :key="index" 
-            class="panel-block" 
+          <a
+            v-for="(file,index) in filteredFiles"
+            :class="{'is-active' : file === selectedFile}"
+            :key="index"
+            class="panel-block"
             @click="selectedFile = file">
             {{ extractName(file) }}
           </a>
@@ -39,11 +41,11 @@
         <div class="notification is-warning">Selected directory does not contains any {{ fileType }} files. </div>
       </template>
     </nav>
-    <div 
-      v-show="selectedFile" 
+    <div
+      v-show="selectedFile"
       class="block has-text-centered">
-      <preview-modal 
-        :file-path="selectedFile" 
+      <preview-modal
+        :file-path="selectedFile"
         :file-type="fileType" />
     </div>
   </div>
