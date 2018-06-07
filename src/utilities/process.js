@@ -56,28 +56,25 @@ async function process() {
     getNeuralNet(),
   ])
 
-  const NO_OF_CORES = os.cpus.length * 2 // use hyper-threading
   const TOTAL_IMAGES = imagePaths.length
+  const NO_OF_CORES = TOTAL_IMAGES > 8 ? os.cpus.length * 2 : 1 // use hyper-threading
   const promises = []
-
-  // const resultsJson = {}
 
   for (let i = 0; i < NO_OF_CORES; i += 1) {
     const startIndex = Math.floor(i * (TOTAL_IMAGES / NO_OF_CORES))
     const endIndex =
-      i < NO_OF_CORES
-        ? Math.floor((i + 1) * (TOTAL_IMAGES / NO_OF_CORES))
-        : TOTAL_IMAGES - 1
+      i === NO_OF_CORES - 1
+        ? TOTAL_IMAGES - 1
+        : Math.floor((i + 1) * (TOTAL_IMAGES / NO_OF_CORES))
 
     promises.push(
       processTask(designData, imagePaths.slice(startIndex, endIndex), neuralNet)
     )
   }
 
-  Promise.all(promises).then(res => {
-    // DEBUG: Should contain json parts equal to NO_OF_CORES
-    console.log(res)
-  })
+  const results = await Promise.all(promises)
+  // should contain array of result json
+  console.log(results)
 
   /*
   fs.writeFileSync(
