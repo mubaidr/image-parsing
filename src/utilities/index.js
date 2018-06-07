@@ -4,35 +4,12 @@ const fs = require('fs')
 const quagga = require('quagga').default
 const sharp = require('sharp')
 
-async function csvToJson(path) {
-  const resultData = {}
-  const resultFile = fs.readFileSync(path, 'utf8')
-
-  const rows = resultFile.split('\n')
-  const headerValues = rows[0]
-    .split(',')
-    .map(word => word.replace(/(\s)|(\.)|(-)|(_)/gi, '').toLowerCase())
-
-  const rollNoIndex =
-    headerValues.indexOf('rollno') ||
-    headerValues.indexOf('rollnumber') ||
-    headerValues.indexOf('roll#')
-
-  for (let i = 1; i < rows.length; i += 1) {
-    const values = rows[i].split(',').map(word => word.toLowerCase())
-    const obj = {}
-
-    for (let j = 0; j < values.length; j += 1) {
-      obj[headerValues[j]] = values[j]
-    }
-
-    resultData[values[rollNoIndex]] = obj
-  }
-
-  return resultData
-}
-
-async function getDesignData(designFilePath) {
+/**
+ * Extracts position & dimensions of objects from SVG design File
+ * @param {String} designFilePath Path to the svg design file
+ * @returns {Object} JSON object
+ */
+async function getDesignData(path) {
   const designData = {
     questions: {},
   }
@@ -41,7 +18,7 @@ async function getDesignData(designFilePath) {
 
   const container = document.createElement('div')
   container.style.visibility = 'hidden'
-  container.innerHTML = fs.readFileSync(designFilePath, 'utf8')
+  container.innerHTML = fs.readFileSync(path, 'utf8')
   const svg = container.getElementsByTagName('svg')[0]
 
   designData.width = Math.ceil(svg.viewBox.baseVal.width)
@@ -104,15 +81,22 @@ async function getDesignData(designFilePath) {
   return designData
 }
 
-function getImagePaths(path, options) {
-  return fastGlob(
-    `${options[path].source.image}/*.{${options.validFormats.image.join(',')}}`,
-    {
-      onlyFiles: true,
-    }
-  )
+/**
+ * Return a list of valid image format files from the provided path
+ * @param {String} path Path to sarch for images
+ * @param {Array.<String>} format Array of extensions of valid image formats
+ * @returns {Array.<String>} List of file paths
+ */
+function getImagePaths(path, format) {
+  return fastGlob(`${path}/*.{${format.join(',')}}`, {
+    onlyFiles: true,
+  })
 }
 
+/**
+ * Returns a trained neural network function
+ * @returns {Function} Neural network function
+ */
 function getNeuralNet() {
   const net = new brain.NeuralNetwork()
 
@@ -123,6 +107,12 @@ function getNeuralNet() {
   return net.fromJSON(trainingData).toFunction()
 }
 
+/**
+ *
+ * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
+ * @param {String} path Path of scanned image file
+ * @returns {Object} {title: {String}, data: {buffer}}
+ */
 async function getQuestionsData(designData, path) {
   return new Promise((resolveCol, rejectCol) => {
     const promises = []
@@ -170,7 +160,13 @@ async function getQuestionsData(designData, path) {
   })
 }
 
-async function getRollNoFromImage(path, designData) {
+/**
+ *
+ * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
+ * @param {String} path Path of scanned image file
+ * @returns {Number} Roll Number
+ */
+async function getRollNoFromImage(designData, path) {
   const img = sharp(path).png()
   const rollNoPos = designData.rollNo
 
@@ -215,7 +211,45 @@ async function getRollNoFromImage(path, designData) {
   })
 }
 
-function jsonToCsv(obj) {
+/**
+ *
+ * @param {String} path CSV file path
+ * @returns {Object} JSON Object
+ */
+async function readCsvToJson(path) {
+  const resultData = {}
+  const resultFile = fs.readFileSync(path, 'utf8')
+
+  const rows = resultFile.split('\n')
+  const headerValues = rows[0]
+    .split(',')
+    .map(word => word.replace(/(\s)|(\.)|(-)|(_)/gi, '').toLowerCase())
+
+  const rollNoIndex =
+    headerValues.indexOf('rollno') ||
+    headerValues.indexOf('rollnumber') ||
+    headerValues.indexOf('roll#')
+
+  for (let i = 1; i < rows.length; i += 1) {
+    const values = rows[i].split(',').map(word => word.toLowerCase())
+    const obj = {}
+
+    for (let j = 0; j < values.length; j += 1) {
+      obj[headerValues[j]] = values[j]
+    }
+
+    resultData[values[rollNoIndex]] = obj
+  }
+
+  return resultData
+}
+
+/**
+ *
+ * @param {String} path JSON file path
+ * @returns {Object} CSV String
+ */
+function readJsonToCsv(obj) {
   let header = ''
   let csv = ''
 
@@ -240,11 +274,11 @@ function jsonToCsv(obj) {
 }
 
 module.exports = {
-  csvToJson,
   getDesignData,
   getImagePaths,
   getNeuralNet,
   getRollNoFromImage,
-  jsonToCsv,
+  readCsvToJson,
+  readJsonToCsv,
   getQuestionsData,
 }

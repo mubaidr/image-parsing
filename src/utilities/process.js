@@ -1,5 +1,8 @@
 const os = require('os')
 
+/**
+ * Import utilty functions
+ */
 const {
   getDesignData,
   getImagePaths,
@@ -8,47 +11,83 @@ const {
   getQuestionsData,
 } = require('./index')
 
+/**
+ *
+ * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
+ * @param {Array.<String>} imagePaths List of scanned images paths
+ * @param {Function} neuralNet Trained neural network function (available from utiltities/getneuralNet)
+ *
+ * @returns {Object} Compiled result JSON
+ */
 async function processTask(designData, imagePaths, neuralNet) {
-  const resultsJson = {}
+  const promises = []
 
   for (let i = 0; i < imagePaths.length; i += 1) {
     const imagePath = imagePaths[i]
-    // eslint-disable-next-line
-    const rollNo = await getRollNoFromImage(imagePath, designData)
 
-    getQuestionsData(designData, imagePath).then(output => {
-      if (!resultsJson[rollNo]) resultsJson[rollNo] = {}
+    const promise = new Promise(resolve => {
+      Promise.all([
+        getRollNoFromImage(designData, imagePath),
+        getQuestionsData(designData, imagePath),
+      ]).then(res => {
+        const resultsJson = {}
+        const { rollNo, questionsData } = res
 
-      output.forEach(q => {
-        const pre = neuralNet(q.data)
-        const resultArray = []
+        if (!resultsJson[rollNo]) resultsJson[rollNo] = {}
 
-        Object.keys(pre).forEach((key, index) => {
-          resultArray[index] = { key, val: pre[key] }
-        })
-        resultArray.sort((a, b) => b.val - a.val)
+        questionsData.forEach(q => {
+          const pre = neuralNet(q.data)
+          const resultArray = []
 
-        let topKeyValue = resultArray[0]
+          Object.keys(pre).forEach((key, index) => {
+            resultArray[index] = {
+              key,
+              val: pre[key],
+            }
+          })
+          resultArray.sort((a, b) => b.val - a.val)
 
-        if (topKeyValue.val >= 0.95 && topKeyValue.key === '?') {
-          resultsJson[rollNo][q.title] = topKeyValue.key
-        } else {
-          const newArray = resultArray.filter(item => item.key !== '?')
+          let topKeyValue = resultArray[0]
 
-          // eslint-disable-next-line
-          topKeyValue = newArray[0]
-
-          if (topKeyValue.val < 0.5 || topKeyValue.val - newArray[1].val < 20) {
-            resultsJson[rollNo][q.title] = '*'
+          if (topKeyValue.val >= 0.95 && topKeyValue.key === '?') {
+            resultsJson[rollNo][q.title] = topKeyValue.key
           } else {
-            resultsJson[rollNo][q.title] = topKeyValue.key.toUpperCase()
+            const newArray = resultArray.filter(item => item.key !== '?')
+
+            // eslint-disable-next-line
+            topKeyValue = newArray[0]
+
+            if (
+              topKeyValue.val < 0.5 ||
+              topKeyValue.val - newArray[1].val < 20
+            ) {
+              resultsJson[rollNo][q.title] = '*'
+            } else {
+              resultsJson[rollNo][q.title] = topKeyValue.key.toUpperCase()
+            }
           }
-        }
+        })
+
+        resolve(resultsJson)
       })
     })
+
+    promises.push(promise)
   }
+
+  return new Promise(resolve => {
+    Promise.all(promises).then(collection => {
+      console.log(' Image to JSON: ', collection)
+      resolve(collection)
+    })
+  })
 }
 
+/**
+ * Start processing scanned image files to get result
+ *
+ * @returns null
+ */
 async function process() {
   const [designData, imagePaths, neuralNet] = await Promise.all([
     getDesignData(),
@@ -57,7 +96,8 @@ async function process() {
   ])
 
   const TOTAL_IMAGES = imagePaths.length
-  const NO_OF_CORES = TOTAL_IMAGES > 8 ? os.cpus.length * 2 : 1 // use hyper-threading
+  const NO_OF_CORES = Math.min(os.cpus.length * 2, TOTAL_IMAGES) // use hyper-threading
+
   const promises = []
 
   for (let i = 0; i < NO_OF_CORES; i += 1) {
@@ -74,7 +114,7 @@ async function process() {
 
   const results = await Promise.all(promises)
   // should contain array of result json
-  console.log(results)
+  console.log('Final results: ', results)
 
   /*
   fs.writeFileSync(

@@ -12,8 +12,8 @@ if (fs.existsSync(tmp)) {
 
     // eslint-disable-next-line
     for (const file of files) {
-      fs.unlink(path.join(tmp, file), err => {
-        if (err) console.log(err)
+      fs.unlink(path.join(tmp, file), error => {
+        if (error) console.log(error)
       })
     }
   })
