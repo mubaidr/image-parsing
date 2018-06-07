@@ -24,13 +24,11 @@ if (fs.existsSync(tmp)) {
 }
 
 module.exports = {
-  __paths: {
-    tmp,
-    root,
-    src,
-    trainingData,
-    main: path.join(src, 'main'),
-    renderer: path.join(src, 'renderer'),
-    utiltities: path.join(src, 'utiltities'),
-  },
+  tmp,
+  root,
+  src,
+  trainingData,
+  main: path.join(src, 'main'),
+  renderer: path.join(src, 'renderer'),
+  utiltities: path.join(src, 'utiltities'),
 }

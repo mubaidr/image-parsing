@@ -4,10 +4,32 @@ const fs = require('fs')
 const quagga = require('quagga').default
 const sharp = require('sharp')
 
-function clock(start) {
-  if (!start) return process.hrtime()
-  const end = process.hrtime(start)
-  return Math.round(end[0] * 1000 + end[1] / 1000000)
+async function csvToJson(path) {
+  const resultData = {}
+  const resultFile = fs.readFileSync(path, 'utf8')
+
+  const rows = resultFile.split('\n')
+  const headerValues = rows[0]
+    .split(',')
+    .map(word => word.replace(/(\s)|(\.)|(-)|(_)/gi, '').toLowerCase())
+
+  const rollNoIndex =
+    headerValues.indexOf('rollno') ||
+    headerValues.indexOf('rollnumber') ||
+    headerValues.indexOf('roll#')
+
+  for (let i = 1; i < rows.length; i += 1) {
+    const values = rows[i].split(',').map(word => word.toLowerCase())
+    const obj = {}
+
+    for (let j = 0; j < values.length; j += 1) {
+      obj[headerValues[j]] = values[j]
+    }
+
+    resultData[values[rollNoIndex]] = obj
+  }
+
+  return resultData
 }
 
 async function getDesignData(designFilePath) {
@@ -95,38 +117,57 @@ function getNeuralNet() {
   const net = new brain.NeuralNetwork()
 
   const trainingData = JSON.parse(
-    fs.readFileSync(`${global.__paths.trainingData}\\data.json`)
+    fs.readFileSync(`${global.__paths.trainingData}\\data.json`) // eslint-disable-line
   )
 
   return net.fromJSON(trainingData).toFunction()
 }
 
-async function getResultData(resultFilePath) {
-  const resultData = {}
-  const resultFile = fs.readFileSync(resultFilePath, 'utf8')
+async function getQuestionsData(designData, path) {
+  return new Promise((resolveCol, rejectCol) => {
+    const promises = []
 
-  const rows = resultFile.split('\n')
-  const headerValues = rows[0]
-    .split(',')
-    .map(word => word.replace(/(\s)|(\.)|(-)|(_)/gi, '').toLowerCase())
+    const img = sharp(path)
+      .resize(designData.width)
+      .max()
+      .raw()
+      .toColourspace('b-w')
+      .threshold(32)
 
-  const rollNoIndex =
-    headerValues.indexOf('rollno') ||
-    headerValues.indexOf('rollnumber') ||
-    headerValues.indexOf('roll#')
+    // extract all questions portions
+    Object.keys(designData.questions).forEach(title => {
+      const p = new Promise(resolve => {
+        const q = designData.questions[title]
 
-  for (let i = 1; i < rows.length; i += 1) {
-    const values = rows[i].split(',').map(word => word.toLowerCase())
-    const obj = {}
+        img
+          .extract({
+            left: q.x1 - 10,
+            top: q.y1 - 10,
+            width: q.x2 - q.x1 + 10,
+            height: q.y2 - q.y1 + 10,
+          })
+          .toBuffer()
+          .then(buff => {
+            const { data } = buff.toJSON()
+            // data.map(val => (val === 0 ? 1 : 0))
+            resolve({
+              title,
+              data,
+            })
+          })
+      })
 
-    for (let j = 0; j < values.length; j += 1) {
-      obj[headerValues[j]] = values[j]
-    }
+      promises.push(p)
+    })
 
-    resultData[values[rollNoIndex]] = obj
-  }
-
-  return resultData
+    Promise.all(promises)
+      .then(res => {
+        resolveCol(res)
+      })
+      .catch(err => {
+        rejectCol(err)
+      })
+  })
 }
 
 async function getRollNoFromImage(path, designData) {
@@ -199,11 +240,11 @@ function jsonToCsv(obj) {
 }
 
 module.exports = {
-  clock,
+  csvToJson,
   getDesignData,
   getImagePaths,
   getNeuralNet,
-  getResultData,
   getRollNoFromImage,
   jsonToCsv,
+  getQuestionsData,
 }

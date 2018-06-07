@@ -11,7 +11,7 @@ import './assets/fontawesome/css/fontawesome-all.css'
 // barcode fonts
 import './assets/free3of9/fre3of9x.ttf'
 
-import App from './App'
+import App from './App.vue'
 import router from './router'
 import store from './store'
 
@@ -29,9 +29,6 @@ new Vue({
   store,
   template: '<App/>',
 }).$mount('#app')
-
-// eslint-disable-next-line
-global.__paths = require('../utilities/data-paths.js').__paths
 
 // fabric.js
 // Vue.prototype.$fabric = fabric
