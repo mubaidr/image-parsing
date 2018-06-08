@@ -17,10 +17,11 @@ async function getDesignData(path) {
   const ROLL_NO_PATTERN = new RegExp(/rollnobarcode/gi)
   const QUESTION_PATTERN = new RegExp(/(q[1-9][0-9]?[ad])\b/gi)
 
-  const svg = cheerio.load(fs.readFileSync(path, 'utf8'))('svg')[0]
+  const $ = cheerio.load(fs.readFileSync(path, 'utf8'))
+  const svgViewBox = $('svg')[0].attribs.viewBox.split(' ')
 
-  designData.width = Math.ceil(svg.viewBox.baseVal.width)
-  designData.height = Math.ceil(svg.viewBox.baseVal.height)
+  designData.width = Math.ceil(svgViewBox[2] - svgViewBox[0])
+  designData.height = Math.ceil(svgViewBox[3] - svgViewBox[1])
 
   let gotRollNo = false
   let x
@@ -28,7 +29,13 @@ async function getDesignData(path) {
   let width
   let height
 
-  svg.getElementsByTagName('g').forEach(group => {
+  const groups = $('g')
+  for (let i = 0; i < groups.length; i += 1) {
+    const group = groups[i]
+
+    // DEBUG: get children from group
+    console.log(group, group('title'))
+
     const title = group
       .getElementsByTagName('title')[0]
       .innerHTML.trim()
@@ -74,7 +81,7 @@ async function getDesignData(path) {
       designData.rollNo = { x1: x, y1: y, x2: x + width, y2: y + height }
       gotRollNo = true
     }
-  })
+  }
 
   return designData
 }
