@@ -87,7 +87,20 @@ async function getDesignData(path) {
  * @param {Array.<String>} format Array of extensions of valid image formats
  * @returns {Array.<String>} List of file paths
  */
-function getImagePaths(path, format) {
+function getImagePaths(path) {
+  const format = [
+    'png',
+    'jpg',
+    'jpeg',
+    'jpe',
+    // 'jfif',
+    'gif',
+    'tif',
+    'tiff',
+    'bmp',
+    // 'dib',
+  ]
+
   return fastGlob(`${path}/*.{${format.join(',')}}`, {
     onlyFiles: true,
   })
@@ -97,13 +110,9 @@ function getImagePaths(path, format) {
  * Returns a trained neural network function
  * @returns {Function} Neural network function
  */
-function getNeuralNet() {
+function getNeuralNet(path) {
   const net = new brain.NeuralNetwork()
-
-  const trainingData = JSON.parse(
-    fs.readFileSync(`${global.__paths.trainingData}\\data.json`) // eslint-disable-line
-  )
-
+  const trainingData = JSON.parse(fs.readFileSync(path))
   return net.fromJSON(trainingData).toFunction()
 }
 

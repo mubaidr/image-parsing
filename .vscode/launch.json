@@ -7,8 +7,18 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
-      "program": "${workspaceFolder}\\src\\index.js"
+      "name": "Test Process",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "test-process"],
+      "port": 9229
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test Training",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "test-train"],
+      "port": 9229
     }
   ]
 }

@@ -39,10 +39,10 @@
   },
   "dependencies": {
     "brain.js": "^1.2.1",
-    "bulma-addons": "^0.1.9",
+    "bulma-addons": "^0.1.10",
     "bulma-fluent": "^0.3.10",
     "electron-store": "^2.0.0",
-    "exceljs": "^1.4.9",
+    "exceljs": "^1.4.10",
     "fast-glob": "^2.2.2",
     "lodash": "^4.17.10",
     "quagga": "^0.12.1",
@@ -88,7 +88,7 @@
     "node-loader": "^0.6.0",
     "node-sass": "^4.9.0",
     "prettier": "^1.13.4",
-    "sass-loader": "^7.0.2",
+    "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
     "url-loader": "^1.0.1",
     "vue-devtools": "^4.1.4",
@@ -96,8 +96,8 @@
     "vue-loader": "^15.2.4",
     "vue-style-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.16",
-    "webpack": "^4.10.2",
-    "webpack-cli": "^3.0.1",
+    "webpack": "^4.11.1",
+    "webpack-cli": "^3.0.3",
     "webpack-dev-server": "3.1.4",
     "webpack-hot-middleware": "^2.22.2"
   },
@@ -125,7 +125,9 @@
     "postinstall": "electron-builder install-app-deps && npm rebuild node-sass",
     "prettier": "prettier --write ./src/**/*.js && prettier --write ./src/**/*.vue ",
     "rebuild-electron": "./node_modules/.bin/electron-rebuild",
-    "release": "build"
+    "release": "build",
+    "test-process": "cross-env TEST_TYPE=process node ./src/utilities/test.js",
+    "test-train": "cross-env TEST_TYPE=train node ./src/utilities/test.js"
   },
   "version": "0.0.1"
 }

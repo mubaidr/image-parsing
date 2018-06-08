@@ -77,8 +77,7 @@ async function processTask(designData, imagePaths, neuralNet) {
 
   return new Promise(resolve => {
     Promise.all(promises).then(collection => {
-      console.log(' Image to JSON: ', collection)
-      resolve(collection)
+      resolve([].concat(...collection))
     })
   })
 }
@@ -86,13 +85,23 @@ async function processTask(designData, imagePaths, neuralNet) {
 /**
  * Start processing scanned image files to get result
  *
+ * @param {String} designFilePath design file path
+ * @param {String} imagesDirectory scanned images directory
+ * @param {String} neuralNetFilePath neuralNet file path
+ * @param {String} outputPath output path
+ *
  * @returns null
  */
-async function process() {
+async function process(
+  designFilePath,
+  imagesDirectory,
+  neuralNetFilePath,
+  outputPath
+) {
   const [designData, imagePaths, neuralNet] = await Promise.all([
-    getDesignData(),
-    getImagePaths(),
-    getNeuralNet(),
+    getDesignData(designFilePath),
+    getImagePaths(imagesDirectory),
+    getNeuralNet(neuralNetFilePath),
   ])
 
   const TOTAL_IMAGES = imagePaths.length
@@ -116,17 +125,7 @@ async function process() {
   // should contain array of result json
   console.log('Final results: ', results)
 
-  /*
-  fs.writeFileSync(
-    `${appPaths.trainingData}\\data-output.json`,
-    JSON.stringify(resultsJson)
-  )
-
-  fs.writeFileSync(
-    `${appPaths.trainingData}\\data-output.csv`,
-    jsonToCsv(resultsJson)
-  )
-  */
+  console.log(outputPath)
 }
 
 module.exports = {
