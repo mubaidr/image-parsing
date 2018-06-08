@@ -1,4 +1,5 @@
 const brain = require('brain.js')
+const cheerio = require('cheerio')
 const fastGlob = require('fast-glob')
 const fs = require('fs')
 const quagga = require('quagga').default
@@ -16,10 +17,7 @@ async function getDesignData(path) {
   const ROLL_NO_PATTERN = new RegExp(/rollnobarcode/gi)
   const QUESTION_PATTERN = new RegExp(/(q[1-9][0-9]?[ad])\b/gi)
 
-  const container = document.createElement('div')
-  container.style.visibility = 'hidden'
-  container.innerHTML = fs.readFileSync(path, 'utf8')
-  const svg = container.getElementsByTagName('svg')[0]
+  const svg = cheerio.load(fs.readFileSync(path, 'utf8'))('svg')[0]
 
   designData.width = Math.ceil(svg.viewBox.baseVal.width)
   designData.height = Math.ceil(svg.viewBox.baseVal.height)
@@ -113,7 +111,7 @@ function getImagePaths(path) {
 function getNeuralNet(path) {
   const net = new brain.NeuralNetwork()
   const trainingData = JSON.parse(fs.readFileSync(path))
-  return net.fromJSON(trainingData).toFunction()
+  return net.fromJSON(trainingData)
 }
 
 /**

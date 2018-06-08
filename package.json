@@ -41,6 +41,7 @@
     "brain.js": "^1.2.1",
     "bulma-addons": "^0.1.10",
     "bulma-fluent": "^0.3.10",
+    "cheerio": "1.0.0-rc.2",
     "electron-store": "^2.0.0",
     "exceljs": "^1.4.10",
     "fast-glob": "^2.2.2",
@@ -122,9 +123,7 @@
     "pack": "cross-env NODE_ENV=production npm run pack:main && npm run pack:renderer",
     "pack:main": "webpack --mode production --hide-modules --config vue-electron/webpack.main.config.js",
     "pack:renderer": "webpack --mode production --hide-modules --config vue-electron/webpack.renderer.config.js",
-    "postinstall": "electron-builder install-app-deps && npm rebuild node-sass",
     "prettier": "prettier --write ./src/**/*.js && prettier --write ./src/**/*.vue ",
-    "rebuild-electron": "./node_modules/.bin/electron-rebuild",
     "release": "build",
     "test-process": "cross-env TEST_TYPE=process node ./src/utilities/test.js",
     "test-train": "cross-env TEST_TYPE=train node ./src/utilities/test.js"
