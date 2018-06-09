@@ -36,7 +36,7 @@ async function processTask(designData, imagePaths, neuralNet) {
         if (!resultsJson[rollNo]) resultsJson[rollNo] = {}
 
         questionsData.forEach(q => {
-          const pre = neuralNet(q.data)
+          const pre = neuralNet.run(q.data)
           const resultArray = []
 
           Object.keys(pre).forEach((key, index) => {

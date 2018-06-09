@@ -12,6 +12,7 @@ const {
   readCsvToJson,
 } = require('./index')
 
+// TODO: extract into utilities for common use between train and process
 async function prepareTrainingData(designData, path, resultsData, rollNo) {
   return new Promise(resolveMain => {
     const promises = []
@@ -20,7 +21,6 @@ async function prepareTrainingData(designData, path, resultsData, rollNo) {
       .max()
       .raw()
       .toColourspace('b-w')
-      .threshold(32)
 
     // extract all questions portions
     Object.keys(designData.questions).forEach(title => {
@@ -29,16 +29,16 @@ async function prepareTrainingData(designData, path, resultsData, rollNo) {
 
         img
           .extract({
-            left: q.x1 - 10,
-            top: q.y1 - 10,
-            width: q.x2 - q.x1 + 10,
-            height: q.y2 - q.y1 + 10,
+            left: q.x1,
+            top: q.y1,
+            width: q.x2 - q.x1,
+            height: q.y2 - q.y1,
           })
-          /*
-          .toFile(`${global.__paths.tmp}\\${rollNo}-${title}.png`, err => {
-            if (err) console.log(err)
-          })
-          */
+
+          // .toFile(`${__dirname}\\tmp\\${rollNo}-${title}.png`, err => {
+          //   if (err) console.log(err)
+          // })
+
           .toBuffer()
           .then(buff => {
             const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
@@ -61,7 +61,10 @@ async function prepareTrainingData(designData, path, resultsData, rollNo) {
     })
 
     Promise.all(promises).then(res => {
-      resolveMain({ rollNo, data: res })
+      resolveMain({
+        rollNo,
+        data: res,
+      })
     })
   })
 }
@@ -112,7 +115,8 @@ async function train(
     net.train(trainingData, {
       log: true,
       logPeriod: 1,
-      // activation: 'leaky-relu'
+      errorThresh: 0.001,
+      activation: 'leaky-relu',
     })
 
     console.log('Done!')

@@ -155,10 +155,10 @@ async function getQuestionsData(designData, path) {
 
         img
           .extract({
-            left: q.x1 - 10,
-            top: q.y1 - 10,
-            width: q.x2 - q.x1 + 10,
-            height: q.y2 - q.y1 + 10,
+            left: q.x1,
+            top: q.y1,
+            width: q.x2 - q.x1,
+            height: q.y2 - q.y1,
           })
           .toBuffer()
           .then(buff => {
@@ -202,8 +202,8 @@ async function getRollNoFromImage(designData, path) {
     // prepre buffer for barcode scanner
     img
       .extract({
-        left: Math.ceil(rollNoPos.x1 * ratio),
-        top: Math.ceil(rollNoPos.y1 * ratio),
+        left: Math.floor(rollNoPos.x1 * ratio),
+        top: Math.floor(rollNoPos.y1 * ratio),
         width: Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio),
         height: Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio),
       })
