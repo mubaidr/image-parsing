@@ -26,6 +26,8 @@ async function getDesignData(path) {
   let gotRollNo = false
   let x
   let y
+  let rx
+  let ry
   let width
   let height
 
@@ -45,20 +47,27 @@ async function getDesignData(path) {
       isQuestionGroup || gotRollNo ? false : ROLL_NO_PATTERN.test(title)
 
     if (isQuestionGroup || isRollNoGroup) {
-      const rect = $(group)
-        .find('rect')
-        .first()
-
       const transform = $(group)
         .attr('transform')
         .replace(/(translate)|\(|\)/gi, '')
         .split(',')
+        .map(val => parseInt(val, 10))
 
-      x = parseInt(rect.attr('x'), 10) + parseInt(transform[0] || 0, 10)
-      y = parseInt(rect.attr('y'), 10) + parseInt(transform[1] || 0, 10)
+      const rect = $(group)
+        .find('rect')
+        .first()
 
-      width = parseInt(rect.attr('width'), 10)
-      height = parseInt(rect.attr('height'), 10)
+      const left = parseInt(rect.attr('x'), 10)
+      const top = parseInt(rect.attr('y'), 10)
+
+      rx = parseInt(rect.attr('rx') || 0, 10)
+      ry = parseInt(rect.attr('ry') || 0, 10)
+
+      x = left - rx + transform[0]
+      y = top - ry + transform[1]
+
+      width = parseInt(rect.attr('width'), 10) + rx
+      height = parseInt(rect.attr('height'), 10) + ry
     }
 
     if (isQuestionGroup) {
@@ -198,6 +207,9 @@ async function getRollNoFromImage(designData, path) {
         width: Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio),
         height: Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio),
       })
+      // .toFile(`${__dirname}\\tmp\\test-roll-no.png`, err => {
+      //   if (err) console.log(err)
+      // })
       .toBuffer()
       .then(buff => {
         quagga.decodeSingle(
