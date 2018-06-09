@@ -1,3 +1,4 @@
+// const fs = require('fs')
 const os = require('os')
 
 /**
@@ -9,6 +10,7 @@ const {
   getNeuralNet,
   getRollNoFromImage,
   getQuestionsData,
+  // readJsonToCsv,
 } = require('./index')
 
 /**
@@ -30,8 +32,8 @@ async function processTask(designData, imagePaths, neuralNet) {
         getRollNoFromImage(designData, imagePath),
         getQuestionsData(designData, imagePath),
       ]).then(res => {
+        const [rollNo, questionsData] = res
         const resultsJson = {}
-        const { rollNo, questionsData } = res
 
         if (!resultsJson[rollNo]) resultsJson[rollNo] = {}
 
@@ -75,11 +77,7 @@ async function processTask(designData, imagePaths, neuralNet) {
     promises.push(promise)
   }
 
-  return new Promise(resolve => {
-    Promise.all(promises).then(collection => {
-      resolve([].concat(...collection))
-    })
-  })
+  return Promise.all(promises)
 }
 
 /**
@@ -105,27 +103,25 @@ async function process(
   ])
 
   const TOTAL_IMAGES = imagePaths.length
-  const NO_OF_CORES = Math.min(os.cpus.length * 2, TOTAL_IMAGES) // use hyper-threading
-
-  const promises = []
+  const NO_OF_CORES = Math.min(os.cpus().length * 2, TOTAL_IMAGES) // use hyper-threading
 
   for (let i = 0; i < NO_OF_CORES; i += 1) {
     const startIndex = Math.floor(i * (TOTAL_IMAGES / NO_OF_CORES))
     const endIndex =
       i === NO_OF_CORES - 1
-        ? TOTAL_IMAGES - 1
-        : Math.floor((i + 1) * (TOTAL_IMAGES / NO_OF_CORES))
+        ? TOTAL_IMAGES
+        : Math.ceil((i + 1) * (TOTAL_IMAGES / NO_OF_CORES))
 
-    promises.push(
-      processTask(designData, imagePaths.slice(startIndex, endIndex), neuralNet)
-    )
+    processTask(
+      designData,
+      imagePaths.slice(startIndex, endIndex),
+      neuralNet
+    ).then(result => {
+      console.log(result[0][10023].q1, ' should be ', 'd')
+    })
   }
 
-  const results = await Promise.all(promises)
-  // should contain array of result json
-  console.log('Final results: ', results)
-
-  console.log(outputPath)
+  // fs.writeFileSync(`${outputPath}\\output.csv`, readJsonToCsv(results))
 }
 
 module.exports = {

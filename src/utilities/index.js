@@ -135,9 +135,12 @@ function getNeuralNet(path) {
  *
  * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
  * @param {String} path Path of scanned image file
+ * @param {Object=} resultsData Path to csv file for training data
+ * @param {Number=} rollNo Roll no of the current scanned image
+ *
  * @returns {Object} {title: {String}, data: {buffer}}
  */
-async function getQuestionsData(designData, path) {
+async function getQuestionsData(designData, path, resultsData, rollNo) {
   return new Promise((resolveCol, rejectCol) => {
     const promises = []
 
@@ -164,10 +167,26 @@ async function getQuestionsData(designData, path) {
           .then(buff => {
             const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
 
-            resolve({
-              title,
-              data,
-            })
+            if (resultsData && rollNo) {
+              // for training data
+              if (resultsData[rollNo] && resultsData[rollNo][title] !== '*') {
+                const o = {}
+                o[resultsData[rollNo][title]] = 1
+
+                resolve({
+                  input: data,
+                  output: o,
+                })
+              } else {
+                resolve(false)
+              }
+            } else {
+              // for processing data
+              resolve({
+                title,
+                data,
+              })
+            }
           })
       })
 

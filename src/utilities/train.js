@@ -1,6 +1,5 @@
 const fs = require('fs')
 const brain = require('brain.js')
-const sharp = require('sharp')
 
 /**
  * Import utilty functions
@@ -10,64 +9,8 @@ const {
   getImagePaths,
   getRollNoFromImage,
   readCsvToJson,
+  getQuestionsData,
 } = require('./index')
-
-// TODO: extract into utilities for common use between train and process
-async function prepareTrainingData(designData, path, resultsData, rollNo) {
-  return new Promise(resolveMain => {
-    const promises = []
-    const img = sharp(path)
-      .resize(designData.width)
-      .max()
-      .raw()
-      .toColourspace('b-w')
-
-    // extract all questions portions
-    Object.keys(designData.questions).forEach(title => {
-      const p = new Promise(resolve => {
-        const q = designData.questions[title]
-
-        img
-          .extract({
-            left: q.x1,
-            top: q.y1,
-            width: q.x2 - q.x1,
-            height: q.y2 - q.y1,
-          })
-
-          // .toFile(`${__dirname}\\tmp\\${rollNo}-${title}.png`, err => {
-          //   if (err) console.log(err)
-          // })
-
-          .toBuffer()
-          .then(buff => {
-            const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
-
-            if (resultsData[rollNo] && resultsData[rollNo][title] !== '*') {
-              const o = {}
-              o[resultsData[rollNo][title]] = 1
-
-              resolve({
-                input: data,
-                output: o,
-              })
-            } else {
-              resolve(false)
-            }
-          })
-      })
-
-      promises.push(p)
-    })
-
-    Promise.all(promises).then(res => {
-      resolveMain({
-        rollNo,
-        data: res,
-      })
-    })
-  })
-}
 
 async function train(
   designFilePath,
@@ -89,11 +32,12 @@ async function train(
     const rollNo = await getRollNoFromImage(designData, path)
 
     if (rollNo) {
-      const p = prepareTrainingData(designData, path, resultsData, rollNo)
-
+      const p = new Promise(resolve => {
+        getQuestionsData(designData, path, resultsData, rollNo).then(output => {
+          resolve(output)
+        })
+      })
       promises.push(p)
-    } else {
-      console.log('\nError: unable to read barcode from the file: ', path)
     }
   }
 
@@ -102,13 +46,11 @@ async function train(
     const net = new brain.NeuralNetwork()
 
     results.forEach(result => {
-      result.data.forEach(data => {
-        if (data) {
-          trainingData.push({
-            input: data.input,
-            output: data.output,
-          })
-        }
+      result.forEach(data => {
+        trainingData.push({
+          input: data.input,
+          output: data.output,
+        })
       })
     })
 
