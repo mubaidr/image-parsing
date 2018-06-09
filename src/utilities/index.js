@@ -33,12 +33,11 @@ async function getDesignData(path) {
   for (let i = 0; i < groups.length; i += 1) {
     const group = groups[i]
 
-    // DEBUG: get children from group
-    console.log(group, group('title'))
-
-    const title = group
-      .getElementsByTagName('title')[0]
-      .innerHTML.trim()
+    const title = $(group)
+      .find('title')
+      .first()
+      .html()
+      .trim()
       .toLowerCase()
 
     const isQuestionGroup = QUESTION_PATTERN.test(title)
@@ -46,18 +45,20 @@ async function getDesignData(path) {
       isQuestionGroup || gotRollNo ? false : ROLL_NO_PATTERN.test(title)
 
     if (isQuestionGroup || isRollNoGroup) {
-      const rect = group.getElementsByTagName('rect')[0]
+      const rect = $(group)
+        .find('rect')
+        .first()
 
-      const transform = group
-        .getAttribute('transform')
+      const transform = $(group)
+        .attr('transform')
         .replace(/(translate)|\(|\)/gi, '')
         .split(',')
 
-      x = parseInt(rect.getAttribute('x'), 10) + parseInt(transform[0] || 0, 10)
-      y = parseInt(rect.getAttribute('y'), 10) + parseInt(transform[1] || 0, 10)
+      x = parseInt(rect.attr('x'), 10) + parseInt(transform[0] || 0, 10)
+      y = parseInt(rect.attr('y'), 10) + parseInt(transform[1] || 0, 10)
 
-      width = parseInt(rect.getAttribute('width'), 10)
-      height = parseInt(rect.getAttribute('height'), 10)
+      width = parseInt(rect.attr('width'), 10)
+      height = parseInt(rect.attr('height'), 10)
     }
 
     if (isQuestionGroup) {
