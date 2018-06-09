@@ -153,8 +153,8 @@ async function getQuestionsData(designData, path) {
           })
           .toBuffer()
           .then(buff => {
-            const { data } = buff.toJSON()
-            // data.map(val => (val === 0 ? 1 : 0))
+            const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
+
             resolve({
               title,
               data,
