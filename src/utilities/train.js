@@ -13,7 +13,7 @@ const {
 } = require('./index')
 
 async function prepareTrainingData(designData, path, resultsData, rollNo) {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolveMain => {
     const promises = []
     const img = sharp(path)
       .resize(designData.width)
@@ -24,7 +24,7 @@ async function prepareTrainingData(designData, path, resultsData, rollNo) {
 
     // extract all questions portions
     Object.keys(designData.questions).forEach(title => {
-      const p = new Promise((resolve, reject) => {
+      const p = new Promise(resolve => {
         const q = designData.questions[title]
 
         img
@@ -61,10 +61,7 @@ async function prepareTrainingData(designData, path, resultsData, rollNo) {
     })
 
     Promise.all(promises).then(res => {
-      resolve({
-        rollNo,
-        data: res,
-      })
+      resolveMain({ rollNo, data: res })
     })
   })
 }
@@ -83,8 +80,9 @@ async function train(
 
   const promises = []
 
-  // eslint-disable-next-line
-  for (const path of imagePaths) {
+  for (let i = 0; i < imagePaths.length; i += 1) {
+    const path = imagePaths[i]
+    // eslint-disable-next-line
     const rollNo = await getRollNoFromImage(designData, path)
 
     if (rollNo) {
@@ -111,17 +109,14 @@ async function train(
       })
     })
 
-    console.log('Starting training...')
-
-    const result = net.train(trainingData, {
-      // iterations: 500,
-      // errorThresh: 0.0001,
+    net.train(trainingData, {
       log: true,
       logPeriod: 1,
       // activation: 'leaky-relu'
     })
 
-    console.log(neuralNetFilePath, result)
+    console.log('Done!')
+    fs.writeFileSync(neuralNetFilePath, net.toJSON)
   })
 }
 
