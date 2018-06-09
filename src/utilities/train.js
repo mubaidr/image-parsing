@@ -116,7 +116,7 @@ async function train(
     })
 
     console.log('Done!')
-    fs.writeFileSync(neuralNetFilePath, net.toJSON)
+    fs.writeFileSync(neuralNetFilePath, net.toJSON())
   })
 }
 
