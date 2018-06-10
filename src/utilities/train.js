@@ -58,7 +58,6 @@ async function train(
       log: true,
       logPeriod: 1,
       errorThresh: 0.001,
-      activation: 'leaky-relu',
     })
 
     console.log('Done!')

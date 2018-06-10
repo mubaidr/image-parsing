@@ -60,8 +60,8 @@ async function processTask(designData, imagePaths, neuralNet) {
             topKeyValue = newArray[0]
 
             if (
-              topKeyValue.val < 0.5 ||
-              topKeyValue.val - newArray[1].val < 20
+              topKeyValue.val < 0.4 ||
+              topKeyValue.val - newArray[1].val < 0.2
             ) {
               resultsJson[rollNo][q.title] = '*'
             } else {
@@ -93,8 +93,8 @@ async function processTask(designData, imagePaths, neuralNet) {
 async function process(
   designFilePath,
   imagesDirectory,
-  neuralNetFilePath,
-  outputPath
+  neuralNetFilePath
+  // outputPath
 ) {
   const [designData, imagePaths, neuralNet] = await Promise.all([
     getDesignData(designFilePath),

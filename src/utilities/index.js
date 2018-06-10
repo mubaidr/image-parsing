@@ -149,7 +149,6 @@ async function getQuestionsData(designData, path, resultsData, rollNo) {
       .max()
       .raw()
       .toColourspace('b-w')
-      .threshold(32)
 
     // extract all questions portions
     Object.keys(designData.questions).forEach(title => {
@@ -163,6 +162,9 @@ async function getQuestionsData(designData, path, resultsData, rollNo) {
             width: q.x2 - q.x1,
             height: q.y2 - q.y1,
           })
+          // .toFile(`${__dirname}\\tmp\\${title}.png`, err => {
+          //   if (err) console.log(err)
+          // })
           .toBuffer()
           .then(buff => {
             const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
