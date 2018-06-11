@@ -38,7 +38,7 @@
     }
   },
   "dependencies": {
-    "brain.js": "^1.2.1",
+    "brain.js": "^1.2.2",
     "bulma-addons": "^0.1.10",
     "bulma-fluent": "^0.3.10",
     "cheerio": "1.0.0-rc.2",
