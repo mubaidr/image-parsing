@@ -43,7 +43,7 @@
     "bulma-fluent": "^0.3.10",
     "cheerio": "1.0.0-rc.2",
     "electron-store": "^2.0.0",
-    "exceljs": "^1.4.10",
+    "exceljs": "^1.4.12",
     "fast-glob": "^2.2.2",
     "lodash": "^4.17.10",
     "quagga": "^0.12.1",
