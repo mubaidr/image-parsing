@@ -1,15 +1,13 @@
-// const fs = require('fs')
-const { fork } = require('child_process')
 const os = require('os')
 
 /**
  * Import utilty functions
  */
 const {
+  createWorkerProcesses,
   getDesignData,
   getImagePaths,
   getNeuralNet,
-  // readJsonToCsv,
 } = require('./index')
 
 /**
@@ -31,8 +29,12 @@ async function process(
   const imagePaths = await getImagePaths(imagesDirectory)
 
   const TOTAL_IMAGES = imagePaths.length
-  const NO_OF_CORES = Math.min(os.cpus().length, TOTAL_IMAGES)
-  const STEP = Math.floor(TOTAL_IMAGES / NO_OF_CORES)
+  const NO_OF_PROCESSES = Math.min(os.cpus().length, TOTAL_IMAGES)
+  const STEP = Math.floor(TOTAL_IMAGES / NO_OF_PROCESSES)
+
+  if (!global.WORKER_PROCESSES) {
+    global.WORKER_PROCESSES = createWorkerProcesses()
+  }
 
   Promise.all([
     getDesignData(designFilePath),
@@ -40,11 +42,11 @@ async function process(
   ]).then(res => {
     const [designData, neuralNet] = res
 
-    for (let i = 0; i < NO_OF_CORES; i += 1) {
+    for (let i = 0; i < NO_OF_PROCESSES; i += 1) {
       const startIndex = i * STEP
-      const endIndex = i === NO_OF_CORES - 1 ? TOTAL_IMAGES : (i + 1) * STEP
+      const endIndex = i === NO_OF_PROCESSES - 1 ? TOTAL_IMAGES : (i + 1) * STEP
 
-      const worker = fork(`${__dirname}/processTaskWorker.js`)
+      const worker = global.WORKER_PROCESSES[i]
       worker.on('message', response => {
         // TODO: collect result
         console.log('message: ', response)

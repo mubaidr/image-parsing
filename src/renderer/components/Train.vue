@@ -39,9 +39,9 @@
 </template>
 
 <script>
-import loadFiles from './Templates/LoadFiles'
+import loadFiles from './Templates/LoadFiles.vue'
 
-const trainingModule = require('./Train/index')
+const trainingModule = require('../../utilities/train.js')
 
 // TODO: spawn node child to process
 

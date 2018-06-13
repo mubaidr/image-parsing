@@ -1,9 +1,27 @@
+const { fork } = require('child_process')
 const brain = require('brain.js')
 const cheerio = require('cheerio')
 const fastGlob = require('fast-glob')
 const fs = require('fs')
+const os = require('os')
 const quagga = require('quagga').default
 const sharp = require('sharp')
+
+/**
+ * Create worker process equal to cpu cores
+ *
+ * @returns {Array} array of child process forks
+ */
+function createWorkerProcesses() {
+  const WORKERS = []
+  const NO_OF_CORES = os.cpus().length
+
+  for (let i = 0; i < NO_OF_CORES; i += 1) {
+    WORKERS.push(fork(`${__dirname}/processTaskWorker.js`))
+  }
+
+  return WORKERS
+}
 
 /**
  * Extracts position & dimensions of objects from SVG design File
@@ -322,6 +340,7 @@ function readJsonToCsv(obj) {
 }
 
 module.exports = {
+  createWorkerProcesses,
   getDesignData,
   getImagePaths,
   getNeuralNet,

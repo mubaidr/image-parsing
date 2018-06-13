@@ -13,7 +13,7 @@
 </template>
 
 <script>
-const ProcessingModule = require('./index')
+const ProcessingModule = require('../../../utilities/process.js')
 
 export default {
   methods: {
@@ -25,11 +25,10 @@ export default {
 
     async stopProcess() {
       console.log('Stoping process...')
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style>
-
 </style>

@@ -9,11 +9,13 @@ import './assets/style/animations.sass'
 import './assets/fontawesome/css/fontawesome-all.css'
 
 // barcode fonts
-import './assets/free3of9/fre3of9x.ttf'
+// import './assets/free3of9/fre3of9x.ttf'
 
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
+import { createWorkerProcesses } from '../utilities'
 
 Vue.config.productionTip = false
 Vue.config.devtools = false
@@ -30,8 +32,10 @@ new Vue({
   template: '<App/>',
 }).$mount('#app')
 
-// fabric.js
-// Vue.prototype.$fabric = fabric
+// Create workers processes in advance to use when required
+window.setTimeout(() => {
+  global.WORKER_PROCESSES = createWorkerProcesses()
+}, 1000)
 
 /* Enable webpack hot reloading */
 if (module.hot) {
