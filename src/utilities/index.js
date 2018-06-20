@@ -4,8 +4,9 @@ const cheerio = require('cheerio')
 const fastGlob = require('fast-glob')
 const fs = require('fs')
 const os = require('os')
-const quagga = require('quagga').default
 const sharp = require('sharp')
+const javascriptBarcodeReader = require('javascript-barcode-reader')
+  .barcodeDecoder
 
 /**
  * Create worker process equal to cpu cores
@@ -238,7 +239,7 @@ async function getRollNoFromImage(designData, path) {
   const ratio = metadata.width / designData.width
 
   return new Promise((resolve, reject) => {
-    // prepre buffer for barcode scanner
+    // prepare buffer for barcode scanner
     img
       .extract({
         left: Math.floor(rollNoPos.x1 * ratio),
@@ -251,28 +252,11 @@ async function getRollNoFromImage(designData, path) {
       // })
       .toBuffer()
       .then(buff => {
-        quagga.decodeSingle(
-          {
-            decoder: {
-              multiple: false,
-              readers: ['code_39_reader'],
-            },
-            locate: false,
-            locator: {
-              halfSample: true,
-              patchSize: 'medium',
-            },
-            numOfWorkers: 0,
-            src: `data:image/png;base64,${buff.toString('base64')}`,
-          },
-          result => {
-            if (result.codeResult) {
-              resolve(result.codeResult.code)
-            } else {
-              reject(new Error('Unable to read barcode'))
-            }
-          }
-        )
+        const code = javascriptBarcodeReader(buff, {
+          barcode: 'code-39',
+        })
+
+        resolve(code)
       })
   })
 }
