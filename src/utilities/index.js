@@ -233,10 +233,10 @@ async function getQuestionsData(designData, path, resultsData, rollNo) {
 async function getRollNoFromImage(designData, path) {
   const img = sharp(path).png()
   const rollNoPos = designData.rollNo
-
-  // extract meta data
   const metadata = await img.metadata()
   const ratio = metadata.width / designData.width
+  const width = Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio)
+  const height = Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio)
 
   return new Promise((resolve, reject) => {
     // prepare buffer for barcode scanner
@@ -244,17 +244,21 @@ async function getRollNoFromImage(designData, path) {
       .extract({
         left: Math.floor(rollNoPos.x1 * ratio),
         top: Math.floor(rollNoPos.y1 * ratio),
-        width: Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio),
-        height: Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio),
+        width,
+        height,
       })
       // .toFile(`${__dirname}\\tmp\\test-roll-no.png`, err => {
       //   if (err) console.log(err)
       // })
+      .raw()
       .toBuffer()
       .then(buff => {
-        const code = javascriptBarcodeReader(buff, {
-          barcode: 'code-39',
-        })
+        const code = javascriptBarcodeReader(
+          { data: buff, width, height },
+          {
+            barcode: 'code-39',
+          }
+        )
 
         resolve(code)
       })
