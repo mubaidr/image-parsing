@@ -15,8 +15,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import { createWorkerProcesses } from '../utilities'
-
 Vue.config.productionTip = false
 Vue.config.devtools = false
 
@@ -31,11 +29,6 @@ new Vue({
   store,
   template: '<App/>',
 }).$mount('#app')
-
-// Create workers processes in advance to use when required
-window.setTimeout(() => {
-  global.WORKER_PROCESSES = createWorkerProcesses()
-}, 1000)
 
 /* Enable webpack hot reloading */
 if (module.hot) {

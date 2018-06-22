@@ -71,9 +71,13 @@ async function processTask(designData, imagePaths, neuralNet) {
     promises.push(promise)
   }
 
-  Promise.all(promises).then(res => {
-    process.send(res)
-    process.exit()
+  // eslint-disable-next-line
+  return Promise.all(promises).then(res => {
+    if (process && process.send) {
+      process.send(res)
+    } else {
+      return res
+    }
   })
 }
 

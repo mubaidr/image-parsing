@@ -2,6 +2,8 @@
 import { app, BrowserWindow, ipcMain, Menu, MenuItem } from 'electron'
 /* eslint-enable */
 
+import { createWorkerProcesses } from '../utilities'
+
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
 let mainWindow
@@ -74,6 +76,11 @@ function createWindow() {
     ) {
       mainWindow.webContents.openDevTools()
     }
+
+    // Create workers processes in advance to use when required
+    setTimeout(() => {
+      global.WORKER_PROCESSES = createWorkerProcesses()
+    }, 2500)
   })
 
   mainWindow.on('closed', () => {
