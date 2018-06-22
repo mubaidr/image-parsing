@@ -6,7 +6,6 @@ const fs = require('fs')
 const os = require('os')
 const sharp = require('sharp')
 const javascriptBarcodeReader = require('javascript-barcode-reader')
-  .barcodeDecoder
 
 /**
  * Create worker process equal to cpu cores
@@ -238,7 +237,7 @@ async function getRollNoFromImage(designData, path) {
   const width = Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio)
   const height = Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio)
 
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     // prepare buffer for barcode scanner
     img
       .extract({

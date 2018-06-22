@@ -18,8 +18,6 @@ import store from './store'
 Vue.config.productionTip = false
 Vue.config.devtools = false
 
-Vue.use(require('vue-electron'))
-
 /* eslint-disable no-new */
 new Vue({
   components: {
@@ -31,6 +29,6 @@ new Vue({
 }).$mount('#app')
 
 /* Enable webpack hot reloading */
-if (module.hot) {
+if (module && module.hot) {
   module.hot.accept()
 }
