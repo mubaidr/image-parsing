@@ -1,3 +1,5 @@
+const sharp = require('sharp')
+
 /**
  * Import utilty functions
  */
@@ -20,11 +22,13 @@ async function processTask(designData, imagePaths, neuralNet) {
 
   for (let i = 0; i < imagePaths.length; i += 1) {
     const imagePath = imagePaths[i]
+    const sharpImage = sharp(imagePath)
+    const sharpImageClone = sharpImage.clone() // TODO: test without clone
 
     const promise = new Promise(resolve => {
       Promise.all([
-        getRollNoFromImage(designData, imagePath),
-        getQuestionsData(designData, imagePath),
+        getRollNoFromImage(designData, sharpImage),
+        getQuestionsData(designData, sharpImageClone),
       ]).then(res => {
         const [rollNo, questionsData] = res
         const resultsJson = {}
@@ -36,10 +40,7 @@ async function processTask(designData, imagePaths, neuralNet) {
           const resultArray = []
 
           Object.keys(pre).forEach((key, index) => {
-            resultArray[index] = {
-              key,
-              val: pre[key],
-            }
+            resultArray[index] = { key, val: pre[key] }
           })
           resultArray.sort((a, b) => b.val - a.val)
 

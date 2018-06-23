@@ -1,9 +1,8 @@
-/* eslint-enable */
-const { processTask } = require('./processTaskWorker')
-
 const os = require('os')
 /* eslint-disable */
 const { remote } = require('electron')
+const { processTask } = require('./processTaskWorker')
+/* eslint-enable */
 
 /**
  * Import utilty functions
@@ -33,8 +32,8 @@ async function process(
   Promise.all([
     getDesignData(designFilePath),
     getNeuralNet(neuralNetFilePath),
-  ]).then(res => {
-    const [designData, neuralNet] = res
+  ]).then(result => {
+    const [designData, neuralNet] = result
 
     if (!useWorkers) {
       processTask(designData, imagePaths, neuralNet).then(res => {

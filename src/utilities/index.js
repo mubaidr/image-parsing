@@ -4,7 +4,6 @@ const cheerio = require('cheerio')
 const fastGlob = require('fast-glob')
 const fs = require('fs')
 const os = require('os')
-const sharp = require('sharp')
 const javascriptBarcodeReader = require('javascript-barcode-reader')
 
 /**
@@ -158,16 +157,15 @@ function getNeuralNet(path) {
  *
  * @returns {Object} {title: {String}, data: {buffer}}
  */
-async function getQuestionsData(designData, path, resultsData, rollNo) {
+async function getQuestionsData(designData, img, resultsData, rollNo) {
   return new Promise((resolveCol, rejectCol) => {
-    const promises = []
-
-    const img = sharp(path)
+    img
       .resize(designData.width)
       .max()
       .raw()
       .toColourspace('b-w')
 
+    const promises = []
     // extract all questions portions
     Object.keys(designData.questions).forEach(title => {
       const p = new Promise(resolve => {
@@ -229,8 +227,7 @@ async function getQuestionsData(designData, path, resultsData, rollNo) {
  * @param {String} path Path of scanned image file
  * @returns {Number} Roll Number
  */
-async function getRollNoFromImage(designData, path) {
-  const img = sharp(path).png()
+async function getRollNoFromImage(designData, img) {
   const rollNoPos = designData.rollNo
   const metadata = await img.metadata()
   const ratio = metadata.width / designData.width
@@ -240,6 +237,8 @@ async function getRollNoFromImage(designData, path) {
   return new Promise(resolve => {
     // prepare buffer for barcode scanner
     img
+      .png()
+      // .raw()
       .extract({
         left: Math.floor(rollNoPos.x1 * ratio),
         top: Math.floor(rollNoPos.y1 * ratio),
@@ -249,7 +248,6 @@ async function getRollNoFromImage(designData, path) {
       // .toFile(`${__dirname}\\tmp\\test-roll-no.png`, err => {
       //   if (err) console.log(err)
       // })
-      .raw()
       .toBuffer()
       .then(buff => {
         const code = javascriptBarcodeReader(
