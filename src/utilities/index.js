@@ -5,6 +5,7 @@ const fastGlob = require('fast-glob')
 const fs = require('fs')
 const os = require('os')
 const javascriptBarcodeReader = require('javascript-barcode-reader')
+// const javascriptBarcodeReader = require('../../../Javascript-Barcode-Reader/src/Index.js')
 
 /**
  * Create worker process equal to cpu cores
@@ -158,6 +159,8 @@ function getNeuralNet(path) {
  * @returns {Object} {title: {String}, data: {buffer}}
  */
 async function getQuestionsData(designData, img, resultsData, rollNo) {
+  const isTestData = resultsData && rollNo
+
   return new Promise((resolveCol, rejectCol) => {
     img
       .resize(designData.width)
@@ -185,25 +188,19 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
           .then(buff => {
             const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
 
-            if (resultsData && rollNo) {
+            if (isTestData) {
               // for training data
               if (resultsData[rollNo] && resultsData[rollNo][title] !== '*') {
                 const o = {}
                 o[resultsData[rollNo][title]] = 1
 
-                resolve({
-                  input: data,
-                  output: o,
-                })
+                resolve({ input: data, output: o })
               } else {
                 resolve(false)
               }
             } else {
               // for processing data
-              resolve({
-                title,
-                data,
-              })
+              resolve({ title, data })
             }
           })
       })
@@ -225,11 +222,11 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
  *
  * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
  * @param {String} path Path of scanned image file
- * @returns {Number} Roll Number
+ * @returns {String} Roll Number
  */
 async function getRollNoFromImage(designData, img) {
-  const rollNoPos = designData.rollNo
   const metadata = await img.metadata()
+  const rollNoPos = designData.rollNo
   const ratio = metadata.width / designData.width
   const width = Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio)
   const height = Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio)
@@ -237,24 +234,28 @@ async function getRollNoFromImage(designData, img) {
   return new Promise(resolve => {
     // prepare buffer for barcode scanner
     img
-      .png()
-      // .raw()
+      .raw()
       .extract({
         left: Math.floor(rollNoPos.x1 * ratio),
         top: Math.floor(rollNoPos.y1 * ratio),
         width,
         height,
       })
-      // .toFile(`${__dirname}\\tmp\\test-roll-no.png`, err => {
-      //   if (err) console.log(err)
-      // })
-      .toBuffer()
-      .then(buff => {
+      .toBuffer((err, buff) => {
+        const { data } = buff.toJSON()
+
+        // add missing channel
+        const newData = []
+        for (let i = 0; i < data.length; i += 3) {
+          newData.push(data[i])
+          newData.push(data[i + 1])
+          newData.push(data[i + 2])
+          newData.push(255)
+        }
+
         const code = javascriptBarcodeReader(
-          { data: buff, width, height },
-          {
-            barcode: 'code-39',
-          }
+          { data: newData, width, height },
+          { barcode: 'code-39' }
         )
 
         resolve(code)
