@@ -3301,9 +3301,9 @@ evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
     md5.js "^1.3.4"
     safe-buffer "^5.1.1"
 
-exceljs@^1.4.13:
-  version "1.4.13"
-  resolved "https://registry.yarnpkg.com/exceljs/-/exceljs-1.4.13.tgz#e1780455728ede477352fcb85bf0663ca704d795"
+exceljs@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/exceljs/-/exceljs-1.5.0.tgz#5d1794758ec6c063598af6ea4bbd5c05e0cb1360"
   dependencies:
     archiver "^1.3.0"
     fast-csv "^2.4.0"
