@@ -42,7 +42,7 @@ async function process(
     const TOTAL_IMAGES = imagePaths.length
     const WORKER_PROCESSES = createWorkerProcesses(TOTAL_IMAGES)
     const TOTAL_PROCESS = WORKER_PROCESSES.length
-    const STEP = Math.ceil(TOTAL_IMAGES / TOTAL_PROCESS)
+    const STEP = Math.floor(TOTAL_IMAGES / TOTAL_PROCESS)
 
     for (let i = 0; i < TOTAL_PROCESS; i += 1) {
       const startIndex = i * STEP
