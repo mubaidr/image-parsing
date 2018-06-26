@@ -6,18 +6,18 @@ const sharp = require('sharp')
 const {
   getRollNoFromImage,
   getQuestionsData,
-  // readJsonToCsv,
+  getNeuralNet,
 } = require('./index')
 
 /**
  *
  * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
  * @param {Array.<String>} imagePaths List of scanned images paths
- * @param {Function} neuralNet Trained neural network function (available from utiltities/getneuralNet)
  *
  * @returns {Object} Compiled result JSON
  */
-async function processTask(designData, imagePaths, neuralNet) {
+async function processTask(designData, imagePaths) {
+  const neuralNet = getNeuralNet()
   const promises = []
 
   for (let i = 0; i < imagePaths.length; i += 1) {
@@ -87,7 +87,7 @@ async function processTask(designData, imagePaths, neuralNet) {
 }
 
 process.on('message', m => {
-  processTask(m.designData, m.imagePaths, m.neuralNet)
+  processTask(m.designData, m.imagePaths)
 })
 
 module.exports = {

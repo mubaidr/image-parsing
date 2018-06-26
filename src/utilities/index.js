@@ -3,18 +3,22 @@ const brain = require('brain.js')
 const cheerio = require('cheerio')
 const fastGlob = require('fast-glob')
 const fs = require('fs')
-const os = require('os')
 const javascriptBarcodeReader = require('javascript-barcode-reader')
-// const javascriptBarcodeReader = require('../../../Javascript-Barcode-Reader/src/Index.js')
+const os = require('os')
 
 /**
  * Create worker process equal to cpu cores
  *
  * @returns {Array} array of child process forks
  */
-function createWorkerProcesses() {
+function createWorkerProcesses(imagesCount) {
   const WORKERS = []
-  const NO_OF_CORES = os.cpus().length
+  let NO_OF_CORES = Math.min(os.cpus().length / 2, imagesCount)
+
+  // If available ram is less than 500MB, use only two worker processes
+  if ((os.totalmem() - os.freemem()) / (1024 * 1024 * 1024) < 0.5) {
+    NO_OF_CORES = 2
+  }
 
   for (let i = 0; i < NO_OF_CORES; i += 1) {
     WORKERS.push(fork(`${__dirname}/processTaskWorker.js`))
@@ -143,10 +147,12 @@ function getImagePaths(path) {
  * Returns a trained neural network function
  * @returns {Function} Neural network function
  */
-function getNeuralNet(path) {
+function getNeuralNet() {
   const net = new brain.NeuralNetwork()
-  const trainingData = JSON.parse(fs.readFileSync(path))
-  return net.fromJSON(trainingData)
+
+  return net.fromJSON(
+    JSON.parse(fs.readFileSync(`${__dirname}/../../training-data/data.json`))
+  )
 }
 
 /**

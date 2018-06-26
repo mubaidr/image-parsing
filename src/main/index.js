@@ -2,8 +2,6 @@
 import { app, BrowserWindow, ipcMain, Menu, MenuItem } from 'electron'
 /* eslint-enable */
 
-import { createWorkerProcesses } from '../utilities'
-
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
 let mainWindow
@@ -57,7 +55,7 @@ function createWindow() {
     backgroundColor: '#fff',
     webPreferences: {
       nodeIntegrationInWorker: false,
-      webSecurity: false,
+      webSecurity: true,
     },
     show: false,
   })
@@ -67,9 +65,6 @@ function createWindow() {
 
   // Show when loaded
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
-    mainWindow.focus()
-
     if (
       process.env.ELECTRON_ENV === 'development' ||
       process.argv.indexOf('--debug') !== -1
@@ -77,10 +72,8 @@ function createWindow() {
       mainWindow.webContents.openDevTools()
     }
 
-    // Create workers processes in advance to use when required
-    setTimeout(() => {
-      global.WORKER_PROCESSES = createWorkerProcesses()
-    }, 2500)
+    mainWindow.show()
+    mainWindow.focus()
   })
 
   mainWindow.on('closed', () => {
