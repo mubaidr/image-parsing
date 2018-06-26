@@ -41,12 +41,12 @@ async function process(
   } else {
     const TOTAL_IMAGES = imagePaths.length
     const WORKER_PROCESSES = createWorkerProcesses(TOTAL_IMAGES)
-    const STEP = Math.floor(TOTAL_IMAGES / WORKER_PROCESSES.length)
+    const TOTAL_PROCESS = WORKER_PROCESSES.length
+    const STEP = Math.ceil(TOTAL_IMAGES / TOTAL_PROCESS)
 
-    for (let i = 0; i < WORKER_PROCESSES.length; i += 1) {
+    for (let i = 0; i < TOTAL_PROCESS; i += 1) {
       const startIndex = i * STEP
-      const endIndex =
-        i === WORKER_PROCESSES - 1 ? TOTAL_IMAGES : (i + 1) * STEP
+      const endIndex = i === TOTAL_PROCESS - 1 ? TOTAL_IMAGES : (i + 1) * STEP
       const worker = WORKER_PROCESSES[i]
 
       console.time(`PROCESS-DATA-USING-THREAD-${i}`)
