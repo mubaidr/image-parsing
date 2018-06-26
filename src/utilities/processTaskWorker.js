@@ -23,7 +23,9 @@ async function processTask(designData, imagePaths) {
 
   for (let i = 0; i < imagePaths.length; i += 1) {
     const imagePath = imagePaths[i]
-    const sharpImage = sharp(imagePath) // TODO: Preprocess image to b-w, threshold apply
+    const sharpImage = sharp(imagePath)
+      .raw()
+      .toColourspace('b-w') // TODO: Preprocess image
     const sharpImageClone = sharpImage.clone()
 
     const promise = new Promise(resolve => {

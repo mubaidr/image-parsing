@@ -168,11 +168,7 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
   const isTestData = resultsData && rollNo
 
   return new Promise((resolveCol, rejectCol) => {
-    img
-      .resize(designData.width)
-      .max()
-      .raw()
-      .toColourspace('b-w')
+    img.resize(designData.width).max()
 
     const promises = []
     // extract all questions portions
@@ -190,9 +186,9 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
           // .toFile(`${__dirname}\\tmp\\${title}.png`, err => {
           //   if (err) console.log(err)
           // })
-          .toBuffer()
-          .then(buff => {
-            const data = buff.toJSON().data.map(val => (val === 0 ? 1 : 0))
+          .toBuffer({ resolveWithObject: true })
+          .then(res => {
+            const data = res.data.map(val => (val === 0 ? 1 : 0))
 
             if (isTestData) {
               // for training data
@@ -237,36 +233,28 @@ async function getRollNoFromImage(designData, img) {
   const width = Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio)
   const height = Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio)
 
-  return new Promise(resolve => {
-    // prepare buffer for barcode scanner
-    img
-      .raw()
-      .extract({
-        left: Math.floor(rollNoPos.x1 * ratio),
-        top: Math.floor(rollNoPos.y1 * ratio),
-        width,
-        height,
-      })
-      .toBuffer((err, buff) => {
-        const { data } = buff.toJSON()
+  const { data } = await img
+    .extract({
+      left: Math.floor(rollNoPos.x1 * ratio),
+      top: Math.floor(rollNoPos.y1 * ratio),
+      width,
+      height,
+    })
+    .toBuffer({ resolveWithObject: true })
 
-        // add missing channel
-        const newData = []
-        for (let i = 0; i < data.length; i += 3) {
-          newData.push(data[i])
-          newData.push(data[i + 1])
-          newData.push(data[i + 2])
-          newData.push(255)
-        }
+  // add missing channel
+  const newData = []
+  for (let i = 0; i < data.length; i += 3) {
+    newData.push(data[i])
+    newData.push(data[i + 1])
+    newData.push(data[i + 2])
+    newData.push(255)
+  }
 
-        const code = javascriptBarcodeReader(
-          { data: newData, width, height },
-          { barcode: 'code-39' }
-        )
-
-        resolve(code)
-      })
-  })
+  return javascriptBarcodeReader(
+    { data: newData, width, height },
+    { barcode: 'code-39' }
+  )
 }
 
 /**
