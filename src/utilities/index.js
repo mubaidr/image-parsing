@@ -5,6 +5,7 @@ const fastGlob = require('fast-glob')
 const fs = require('fs')
 const javascriptBarcodeReader = require('javascript-barcode-reader')
 const os = require('os')
+// const javascriptBarcodeReader = require('../../../Javascript-Barcode-Reader/src')
 
 /**
  * Create worker process equal to cpu cores
@@ -186,6 +187,8 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
           // .toFile(`${__dirname}\\tmp\\${title}.png`, err => {
           //   if (err) console.log(err)
           // })
+          .toColourspace('b-w')
+          .threshold()
           .toBuffer({ resolveWithObject: true })
           .then(res => {
             const data = res.data.map(val => (val === 0 ? 1 : 0))
