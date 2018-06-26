@@ -9,6 +9,8 @@ const {
   getNeuralNet,
 } = require('./index')
 
+const neuralNet = getNeuralNet()
+
 /**
  *
  * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
@@ -17,13 +19,11 @@ const {
  * @returns {Object} Compiled result JSON
  */
 async function processTask(designData, imagePaths) {
-  const neuralNet = getNeuralNet()
   const promises = []
 
   for (let i = 0; i < imagePaths.length; i += 1) {
     const imagePath = imagePaths[i]
-    const sharpImage = sharp(imagePath)
-    // TODO: Preprocess image to b-w, threshold apply
+    const sharpImage = sharp(imagePath) // TODO: Preprocess image to b-w, threshold apply
     const sharpImageClone = sharpImage.clone()
 
     const promise = new Promise(resolve => {
@@ -32,13 +32,15 @@ async function processTask(designData, imagePaths) {
         getQuestionsData(designData, sharpImageClone),
       ]).then(res => {
         const [rollNo, questionsData] = res
+        const questionsCount = questionsData.length
         const resultsJson = {}
 
         if (!resultsJson[rollNo]) resultsJson[rollNo] = {}
 
-        questionsData.forEach(q => {
+        for (let j = questionsCount - 1; j >= 0; j -= 1) {
+          const q = questionsData[j]
           const pre = neuralNet.run(q.data)
-          const resultArray = []
+          let resultArray = []
 
           Object.keys(pre).forEach((key, index) => {
             resultArray[index] = {
@@ -48,26 +50,23 @@ async function processTask(designData, imagePaths) {
           })
           resultArray.sort((a, b) => b.val - a.val)
 
-          let topKeyValue = resultArray[0]
+          const topKeyValue = resultArray[0]
 
           if (topKeyValue.val >= 0.95 && topKeyValue.key === '?') {
             resultsJson[rollNo][q.title] = topKeyValue.key
           } else {
-            const newArray = resultArray.filter(item => item.key !== '?')
-
-            // eslint-disable-next-line
-            topKeyValue = newArray[0]
+            resultArray = resultArray.filter(item => item.key !== '?')
 
             if (
               topKeyValue.val < 0.4 ||
-              topKeyValue.val - newArray[1].val < 0.2
+              topKeyValue.val - resultArray[1].val < 0.2
             ) {
               resultsJson[rollNo][q.title] = '*'
             } else {
-              resultsJson[rollNo][q.title] = topKeyValue.key.toUpperCase()
+              resultsJson[rollNo][q.title] = topKeyValue.key
             }
           }
-        })
+        }
 
         resolve(resultsJson)
       })
@@ -77,13 +76,18 @@ async function processTask(designData, imagePaths) {
   }
 
   // eslint-disable-next-line
-  return Promise.all(promises).then(res => {
-    if (process && process.send) {
-      process.send(res)
-    } else {
+  return Promise.all(promises)
+    .then(res => {
+      if (process && process.send) {
+        process.send(res)
+        process.exit(0)
+      }
       return res
-    }
-  })
+    })
+    .catch(err => {
+      console.log(err)
+      process.exit(1)
+    })
 }
 
 process.on('message', m => {

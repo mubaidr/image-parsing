@@ -55,8 +55,8 @@ async function process(
         imagePaths: imagePaths.slice(startIndex, endIndex),
       })
       worker.on('message', res => {
-        console.log(res)
         console.timeEnd(`PROCESS-DATA-USING-THREAD-${i}`)
+        console.log(res)
       })
     }
   }
