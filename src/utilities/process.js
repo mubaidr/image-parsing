@@ -40,7 +40,7 @@ async function process(
     })
   } else {
     const TOTAL_IMAGES = imagePaths.length
-    const WORKER_PROCESSES = createWorkerProcesses(TOTAL_IMAGES)
+    const WORKER_PROCESSES = await createWorkerProcesses(TOTAL_IMAGES)
     const TOTAL_PROCESS = WORKER_PROCESSES.length
     const STEP = Math.floor(TOTAL_IMAGES / TOTAL_PROCESS)
 

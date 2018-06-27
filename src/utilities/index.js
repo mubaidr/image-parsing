@@ -1,4 +1,4 @@
-const { fork } = require('child_process')
+const childProcess = require('child_process')
 const brain = require('brain.js')
 const cheerio = require('cheerio')
 const fastGlob = require('fast-glob')
@@ -12,9 +12,52 @@ const os = require('os')
  *
  * @returns {Array} array of child process forks
  */
-function createWorkerProcesses(imagesCount) {
+async function createWorkerProcesses(imagesCount) {
   const WORKERS = []
-  let NO_OF_CORES = Math.min(os.cpus().length / 2, imagesCount)
+
+  let NO_OF_CORES = await new Promise(resolve => {
+    switch (os.platform()) {
+      case 'win32':
+        childProcess.exec('wmic CPU Get NumberOfCores', {}, (err, out) => {
+          resolve(
+            parseInt(
+              out
+                .replace(/\r/g, '')
+                .split('\n')[1]
+                .trim(),
+              10
+            )
+          )
+        })
+        break
+      case 'darwin':
+      case 'linux':
+        childProcess.exec('getconf _NPROCESSORS_ONLN', {}, (err, out) => {
+          resolve(parseInt(out, 10))
+        })
+        break
+      case 'freebsd':
+      case 'openbsd':
+        childProcess.exec('getconf NPROCESSORS_ONLN', {}, (err, out) => {
+          resolve(parseInt(out, 10))
+        })
+        break
+      case 'sunos':
+        childProcess.exec(
+          'kstat cpu_info|grep core_id|sort -u|wc -l',
+          {},
+          (err, out) => {
+            resolve(parseInt(out, 10))
+          }
+        )
+        break
+      default:
+        resolve()
+        break
+    }
+  })
+
+  NO_OF_CORES = Math.min(NO_OF_CORES || os.cpus().length / 2, imagesCount)
 
   // If available ram is less than 500MB, use only two worker processes
   if ((os.totalmem() - os.freemem()) / (1024 * 1024 * 1024) < 0.5) {
@@ -22,7 +65,7 @@ function createWorkerProcesses(imagesCount) {
   }
 
   for (let i = 0; i < NO_OF_CORES; i += 1) {
-    WORKERS.push(fork(`${__dirname}/processTaskWorker.js`))
+    WORKERS.push(childProcess.fork(`${__dirname}/processTaskWorker.js`))
   }
 
   return WORKERS
