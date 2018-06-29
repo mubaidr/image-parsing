@@ -1,10 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 
-const root = path.resolve('.')
-const src = path.join(root, 'src')
-const tmp = path.join(root, '.tmp')
-const trainingData = path.join(root, 'training-data')
+const tmp = path.resolve('.tmp')
 
 if (fs.existsSync(tmp)) {
   fs.readdir(tmp, (err, files) => {
@@ -24,11 +21,12 @@ if (fs.existsSync(tmp)) {
 }
 
 module.exports = {
-  tmp,
-  root,
-  src,
-  trainingData,
-  main: path.join(src, 'main'),
-  renderer: path.join(src, 'renderer'),
-  utiltities: path.join(src, 'utiltities'),
+  tmp: path.resolve('.tmp'),
+  root: path.resolve('.'),
+  src: path.resolve('src'),
+  trainingData: path.resolve('training-data'),
+  main: path.resolve('src/main'),
+  renderer: path.resolve('src/renderer'),
+  utiltities: path.resolve('src/utilities'),
+  testData: path.resolve('__tests__/test-data'),
 }

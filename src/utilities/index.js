@@ -191,11 +191,13 @@ function getImagePaths(path) {
  * Returns a trained neural network function
  * @returns {Function} Neural network function
  */
-function getNeuralNet() {
+function getNeuralNet(src) {
   const net = new brain.NeuralNetwork()
 
   return net.fromJSON(
-    JSON.parse(fs.readFileSync(`${__dirname}/../../training-data/data.json`))
+    JSON.parse(
+      fs.readFileSync(src || `${__dirname}/../../src/data/training-data.json`)
+    )
   )
 }
 
