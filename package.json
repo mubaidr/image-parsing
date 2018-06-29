@@ -100,6 +100,21 @@
     "webpack-dev-server": "3.1.4",
     "webpack-hot-middleware": "^2.22.2"
   },
+  "jest": {
+    "bail": true,
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/utilities/**/*.js",
+      "!src/utilities/tmp/"
+    ],
+    "coverageDirectory": "__coverage__",
+    "globalSetup": "",
+    "globals": {},
+    "setupFiles": [],
+    "testPathIgnorePatterns": [
+      "__tests__/.eslintrc.js"
+    ]
+  },
   "license": "MIT",
   "main": "./dist/electron/main.js",
   "name": "image-parsing",
@@ -125,7 +140,7 @@
     "postinstall": "electron-builder install-app-deps && npm run electron-rebuild",
     "prettier": "prettier --write ./src/**/*.js && prettier --write ./src/**/*.vue ",
     "release": "build",
-    "test": "jest --wacth",
+    "test": "jest --watch",
     "test:all": "jest"
   },
   "version": "0.0.1"
