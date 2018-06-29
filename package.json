@@ -57,6 +57,7 @@
     "babel-eslint": "^8.2.5",
     "babel-loader": "^7.1.4",
     "babel-plugin-istanbul": "^4.1.6",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
@@ -81,6 +82,7 @@
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
     "inject-loader": "^4.0.1",
+    "jest": "^23.2.0",
     "mini-css-extract-plugin": "0.4.0",
     "node-loader": "^0.6.0",
     "node-sass": "^4.9.0",
@@ -114,17 +116,17 @@
     "build:win-app": "npm run pack && electron-builder",
     "clean": "cross-env BUILD_TARGET=clean node vue-electron/build.js",
     "dev": "cross-env NODE_ENV=development node vue-electron/dev-runner.js",
+    "electron-rebuild": "./node_modules/.bin/electron-rebuild",
     "lint": "eslint --ext .js,.vue src test",
     "lint:fix": "eslint --ext .js,.vue --fix src test",
     "pack": "cross-env NODE_ENV=production npm run pack:main && npm run pack:renderer",
     "pack:main": "webpack --mode production --hide-modules --config vue-electron/webpack.main.config.js",
     "pack:renderer": "webpack --mode production --hide-modules --config vue-electron/webpack.renderer.config.js",
     "postinstall": "electron-builder install-app-deps && npm run electron-rebuild",
-    "electron-rebuild": "./node_modules/.bin/electron-rebuild",
     "prettier": "prettier --write ./src/**/*.js && prettier --write ./src/**/*.vue ",
     "release": "build",
-    "test-process": "cross-env TEST_TYPE=process node ./src/utilities/test.js",
-    "test-train": "cross-env TEST_TYPE=train node ./src/utilities/test.js"
+    "test": "jest --wacth",
+    "test:all": "jest"
   },
   "version": "0.0.1"
 }

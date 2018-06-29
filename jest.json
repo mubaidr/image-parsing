@@ -1,0 +1,9 @@
+{
+  "bail": true,
+  "collectCoverage": true,
+  "collectCoverageFrom": ["src/utilities/**/*.js", "!src/utilities/tmp/"],
+  "coverageDirectory": "__coverage__",
+  "globals": {},
+  "globalSetup": "",
+  "setupFiles": []
+}

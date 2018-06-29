@@ -1,33 +1,30 @@
 {
   "comments": false,
   "env": {
-    "test": {
-      "presets": [
-        ["env", {
-          "targets": {
-            "node": 8
-          }
-        }],
-        "stage-0"
-      ],
-      "plugins": ["istanbul"]
-    },
     "main": {
       "presets": [
-        ["env", {
-          "targets": {
-            "node": 8
+        [
+          "env",
+          {
+            "targets": {
+              "node": 8
+            }
           }
-        }],
-        "stage-0"
+        ]
       ]
     },
     "renderer": {
       "presets": [
-        ["env"],
-        "stage-0"
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": ["last 3 versions", "safari >= 6"]
+            }
+          }
+        ]
       ]
     }
   },
-  "plugins": ["transform-runtime"]
+  "plugins": ["transform-runtime", "transform-object-rest-spread"]
 }
