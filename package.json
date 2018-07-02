@@ -137,7 +137,8 @@
     "release": "build",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "train": "node src/utilities/train-test.js"
   },
   "version": "0.0.1"
 }
