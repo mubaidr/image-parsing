@@ -97,7 +97,7 @@
   },
   "jest": {
     "bail": true,
-    "collectCoverage": true,
+    "collectCoverage": false,
     "collectCoverageFrom": [
       "src/utilities/**/*.js",
       "!src/utilities/tmp/"
@@ -135,8 +135,9 @@
     "postinstall": "electron-builder install-app-deps && npm run electron-rebuild",
     "prettier": "prettier --write ./src/**/*.js && prettier --write ./src/**/*.vue ",
     "release": "build",
-    "test": "jest --watch",
-    "test:all": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch"
   },
   "version": "0.0.1"
 }
