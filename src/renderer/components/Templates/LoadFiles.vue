@@ -52,9 +52,9 @@
 </template>
 
 <script>
-import _set from 'lodash/set'
-import PreviewModal from './PreviewModal'
+import PreviewModal from './PreviewModal.vue'
 
+const { remote } = require('electron')
 const fastGlob = require('fast-glob')
 
 export default {
@@ -100,11 +100,11 @@ export default {
         // read files
         fastGlob(
           `${this.directory}/*.{${this.options.validFormats[this.fileType].join(
-            ','
+            ',',
           )}}`,
           {
             onlyFiles: true,
-          }
+          },
         )
           .then(files => {
             this.files = files
@@ -115,41 +115,21 @@ export default {
           })
       }
     },
-
-    selectedFile() {
-      this.updateOptions('file')
-    },
   },
 
   methods: {
     choosePath() {
-      ;[this.directory] = this.$electron.remote.dialog.showOpenDialog({
+      ;[this.directory] = remote.dialog.showOpenDialog({
         properties: ['openDirectory'],
         defaultPath: this.defaultPath,
       }) || [false]
 
       this.selectedFile = null
-
-      // update options
-      this.updateOptions()
     },
 
     extractName(str) {
       const index = str.lastIndexOf('/') + 1
       return str.substr(index)
-    },
-
-    updateOptions(updateType) {
-      const opt = JSON.parse(JSON.stringify(this.options))
-      const optionPath = this.option
-
-      if (updateType === 'file') {
-        _set(opt, `${optionPath}File`, this.selectedFile)
-      } else {
-        _set(opt, optionPath, this.directory)
-      }
-
-      this.setOptions(opt)
     },
   },
 }

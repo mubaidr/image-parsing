@@ -9,8 +9,6 @@ const {
   getNeuralNet,
 } = require('./index')
 
-const neuralNet = getNeuralNet()
-
 /**
  *
  * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
@@ -19,6 +17,8 @@ const neuralNet = getNeuralNet()
  * @returns {Object} Compiled result JSON
  */
 async function processTask(designData, imagePaths) {
+  // TODO: move this outside, once train module is fixed
+  const neuralNet = getNeuralNet()
   const promises = []
 
   for (let i = 0; i < imagePaths.length; i += 1) {

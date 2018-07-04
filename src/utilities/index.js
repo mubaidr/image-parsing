@@ -25,8 +25,8 @@ async function createWorkerProcesses(imagesCount) {
                 .replace(/\r/g, '')
                 .split('\n')[1]
                 .trim(),
-              10
-            )
+              10,
+            ),
           )
         })
         break
@@ -48,7 +48,7 @@ async function createWorkerProcesses(imagesCount) {
           {},
           (err, out) => {
             resolve(parseInt(out, 10))
-          }
+          },
         )
         break
       default:
@@ -196,8 +196,8 @@ function getNeuralNet(src) {
 
   return net.fromJSON(
     JSON.parse(
-      fs.readFileSync(src || `${__dirname}/../../src/data/training-data.json`)
-    )
+      fs.readFileSync(src || `${__dirname}/../../src/data/training-data.json`),
+    ),
   )
 }
 
@@ -301,7 +301,7 @@ async function getRollNoFromImage(designData, img) {
 
   return javascriptBarcodeReader(
     { data: newData, width, height },
-    { barcode: 'code-39' }
+    { barcode: 'code-39' },
   )
 }
 
