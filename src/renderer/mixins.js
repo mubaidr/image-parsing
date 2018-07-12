@@ -1,12 +1,8 @@
 import Vue from 'vue'
-import { mapGetters, mapActions } from 'vuex'
+// import { mapGetters, mapActions } from 'vuex'
 
 Vue.mixin({
-  computed: {
-    ...mapGetters(['options']),
-  },
+  computed: {},
 
-  methods: {
-    ...mapActions(['setOptions']),
-  },
+  methods: {},
 })
