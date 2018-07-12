@@ -15,7 +15,7 @@ export default new Router({
         title: 'Home',
         icon: 'fa-home',
       },
-      component: require('@/components/Home').default,
+      component: require('@/components/Home.vue').default,
     },
     {
       path: '/generate',
@@ -23,41 +23,7 @@ export default new Router({
         title: 'Generate',
         icon: 'fa-file-alt',
       },
-      component: require('@/components/Generate').default,
-      children: [
-        {
-          path: 'choose-design', // design
-          meta: {
-            title: 'Design',
-            icon: 'fa-object-group',
-          },
-          component: require('@/components/Generate/Design').default,
-        },
-        {
-          path: 'choose-data',
-          meta: {
-            title: 'Data',
-            icon: 'fa-database',
-          },
-          component: require('@/components/Generate/Data').default,
-        },
-        {
-          path: 'choose-options',
-          meta: {
-            title: 'Options',
-            icon: 'fa-qrcode',
-          },
-          component: require('@/components/Generate/options').default,
-        },
-        {
-          path: 'start-generate',
-          meta: {
-            title: 'Generate',
-            icon: 'fa-play',
-          },
-          component: require('@/components/Generate/Progress').default,
-        },
-      ],
+      component: require('@/components/Generate.vue').default,
     },
     {
       path: '/process',
@@ -65,41 +31,7 @@ export default new Router({
         title: 'Process',
         icon: 'fa-play',
       },
-      component: require('@/components/Process').default,
-      children: [
-        {
-          path: 'choose-design',
-          meta: {
-            title: 'Design',
-            icon: 'fa-object-group',
-          },
-          component: require('@/components/Process/Design').default,
-        },
-        {
-          path: 'choose-data',
-          meta: {
-            title: 'Data',
-            icon: 'fa-database',
-          },
-          component: require('@/components/Process/Data').default,
-        },
-        {
-          path: 'choose-options',
-          meta: {
-            title: 'Options',
-            icon: 'fa-qrcode',
-          },
-          component: require('@/components/Process/options').default,
-        },
-        {
-          path: 'start-process',
-          meta: {
-            title: 'Process',
-            icon: 'fa-play',
-          },
-          component: require('@/components/Process/Progress').default,
-        },
-      ],
+      component: require('@/components/Process.vue').default,
     },
     {
       path: '/train',
@@ -107,7 +39,7 @@ export default new Router({
         title: 'Train',
         icon: 'fa-vials',
       },
-      component: require('@/components/Train').default,
+      component: require('@/components/Train.vue').default,
     },
     {
       path: '/about',
@@ -115,7 +47,7 @@ export default new Router({
         title: 'About',
         icon: 'fa-info-circle',
       },
-      component: require('@/components/About').default,
+      component: require('@/components/About.vue').default,
     },
     {
       path: '*',

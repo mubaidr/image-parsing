@@ -45,7 +45,7 @@ export default {
   },
   created() {
     this.routes = this.$router.options.routes.filter(
-      route => route.path !== '*' && route.path !== '/'
+      route => route.path !== '*' && route.path !== '/',
     )
 
     // this.$electron.ipcRenderer.send('set-menu', this.routes)

@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import SideBar from './components/Templates/SideBar'
+import SideBar from './components/Templates/SideBar.vue'
 
 export default {
   name: 'ImageParsing',
 
-  components: { SideBar }
+  components: { SideBar },
 }
 </script>
 

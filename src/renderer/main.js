@@ -8,9 +8,6 @@ import './assets/style/main.sass'
 import './assets/style/animations.sass'
 import './assets/fontawesome/css/fontawesome-all.css'
 
-// barcode fonts
-// import './assets/free3of9/fre3of9x.ttf'
-
 import App from './App.vue'
 import router from './router'
 import store from './store'

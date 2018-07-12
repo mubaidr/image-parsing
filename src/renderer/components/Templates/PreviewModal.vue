@@ -44,7 +44,7 @@
 </template>
 
 <script>
-const Excel = require('exceljs')
+// const Excel = require('exceljs')
 const Sharp = require('sharp')
 const path = require('path')
 const fs = require('fs')
@@ -82,9 +82,9 @@ export default {
       this.resetData()
 
       const dotIndex = val.lastIndexOf('.')
-      const ext = (this.fileExtension = val
-        .substring(dotIndex + 1)
-        .toLowerCase())
+      this.fileExtension = val.substring(dotIndex + 1).toLowerCase()
+
+      const ext = this.fileExtension
 
       if (this.fileType === 'design') {
         // design files preview
