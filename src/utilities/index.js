@@ -207,10 +207,17 @@ function getNeuralNet(src) {
  * @param {String} path Path of scanned image file
  * @param {Object=} resultsData Path to csv file for training data
  * @param {Number=} rollNo Roll no of the current scanned image
+ * @param {Object=} metadata Image metadata
  *
  * @returns {Object} {title: {String}, data: {buffer}}
  */
-async function getQuestionsData(designData, img, resultsData, rollNo) {
+async function getQuestionsData(
+  designData,
+  img,
+  resultsData,
+  rollNo,
+  metadata,
+) {
   const SCALE = 0.5
   const isTestData = resultsData && rollNo
 
@@ -223,7 +230,7 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
       const p = new Promise(resolve => {
         const q = designData.questions[title]
 
-        // TODO: scale data points
+        // TODO: scale data points using metadata
 
         img
           .extract({
@@ -237,7 +244,9 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
           // })
           .toColourspace('b-w')
           .threshold()
-          .toBuffer({ resolveWithObject: true })
+          .toBuffer({
+            resolveWithObject: true,
+          })
           .then(res => {
             const data = res.data.map(val => (val === 0 ? 1 : 0))
 
@@ -247,13 +256,19 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
                 const o = {}
                 o[resultsData[rollNo][title]] = 1
 
-                resolve({ input: data, output: o })
+                resolve({
+                  input: data,
+                  output: o,
+                })
               } else {
                 resolve(false)
               }
             } else {
               // for processing data
-              resolve({ title, data })
+              resolve({
+                title,
+                data,
+              })
             }
           })
       })

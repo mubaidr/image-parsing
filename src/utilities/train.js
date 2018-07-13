@@ -2,6 +2,13 @@ const fs = require('fs')
 const brain = require('brain.js')
 const sharp = require('sharp')
 
+const options = [
+  'D:\\Current\\image-parsing\\__tests__\\test-data\\design.svg',
+  'D:\\Current\\image-parsing\\__tests__\\test-data\\images',
+  'D:\\Current\\image-parsing\\__tests__\\test-data\\result.csv',
+  'D:\\Current\\image-parsing\\src\\data\\training-data.json',
+]
+
 /**
  * Import utilty functions
  */
@@ -19,6 +26,13 @@ async function train(
   resultsFilePath,
   neuralNetFilePath,
 ) {
+  /* eslint-disable */
+  designFilePath = designFilePath || options.designFilePath
+  imagesDirectory = imagesDirectory || options.imagesDirectory
+  resultsFilePath = resultsFilePath || options.resultsFilePath
+  neuralNetFilePath = neuralNetFilePath || options.neuralNetFilePath
+  /* eslint-enable */
+
   const [designData, imagePaths, resultsData] = await Promise.all([
     getDesignData(designFilePath),
     getImagePaths(imagesDirectory),
@@ -33,15 +47,22 @@ async function train(
     const sharpImageClone = sharpImage.clone()
 
     // eslint-disable-next-line
-    const rollNo = await getRollNoFromImage(designData, sharpImage)
+    const META_DATA = await sharpImage.metadata()
+
+    // eslint-disable-next-line
+    const rollNo = await getRollNoFromImage(designData, sharpImage, META_DATA)
 
     if (rollNo) {
       const p = new Promise(resolve => {
-        getQuestionsData(designData, sharpImageClone, resultsData, rollNo).then(
-          output => {
-            resolve(output)
-          },
-        )
+        getQuestionsData(
+          designData,
+          sharpImageClone,
+          resultsData,
+          rollNo,
+          META_DATA,
+        ).then(output => {
+          resolve(output)
+        })
       })
       promises.push(p)
     }
@@ -70,6 +91,10 @@ async function train(
     fs.writeFileSync(neuralNetFilePath, JSON.stringify(net.toJSON()))
   })
 }
+
+process.on('message', () => {
+  train()
+})
 
 module.exports = {
   train,
