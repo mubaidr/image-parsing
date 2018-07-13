@@ -211,16 +211,19 @@ function getNeuralNet(src) {
  * @returns {Object} {title: {String}, data: {buffer}}
  */
 async function getQuestionsData(designData, img, resultsData, rollNo) {
+  const SCALE = 0.5
   const isTestData = resultsData && rollNo
 
   return new Promise((resolveCol, rejectCol) => {
-    img.resize(designData.width).max()
+    img.resize(designData.width * SCALE).max()
 
     const promises = []
     // extract all questions portions
     Object.keys(designData.questions).forEach(title => {
       const p = new Promise(resolve => {
         const q = designData.questions[title]
+
+        // TODO: scale data points
 
         img
           .extract({

@@ -1,32 +1,6 @@
 <template>
   <div class="section">
     <h1 class="title">Train Network</h1>
-    <br>
-
-    <h2 class="subtitle">Design</h2>
-    <load-files
-      :is-file="true"
-      file-type="design"
-      option="train.source.design"/>
-
-    <h2 class="subtitle">Images</h2>
-    <load-files
-      file-type="image"
-      option="train.source.image"/>
-
-    <h2 class="subtitle">Result</h2>
-    <load-files
-      :is-file="true"
-      file-type="excel"
-      option="train.source.excel"/>
-
-    <hr>
-
-    <h2 class="subtitle">Output</h2>
-    <load-files
-      :is-file="true"
-      file-type="excel"
-      option="train.target.data"/>
 
     <button
       class="button is-primary"
@@ -43,8 +17,6 @@ import loadFiles from './Templates/LoadFiles.vue'
 
 const trainingModule = require('../../utilities/train.js')
 
-// TODO: spawn node child to process
-
 export default {
   name: 'About',
 
@@ -52,9 +24,12 @@ export default {
 
   methods: {
     async startProcess() {
-      console.log('Starting process...')
-
-      trainingModule.train()
+      trainingModule.train(
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\design.svg',
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\images',
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\result.csv',
+        'D:\\Current\\image-parsing\\src\\data\\training-data.json',
+      )
     },
 
     async stopProcess() {

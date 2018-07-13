@@ -1,5 +1,6 @@
 const fs = require('fs')
 const brain = require('brain.js')
+const sharp = require('sharp')
 
 /**
  * Import utilty functions
@@ -16,7 +17,7 @@ async function train(
   designFilePath,
   imagesDirectory,
   resultsFilePath,
-  neuralNetFilePath
+  neuralNetFilePath,
 ) {
   const [designData, imagePaths, resultsData] = await Promise.all([
     getDesignData(designFilePath),
@@ -28,14 +29,19 @@ async function train(
 
   for (let i = 0; i < imagePaths.length; i += 1) {
     const path = imagePaths[i]
+    const sharpImage = sharp(path).raw()
+    const sharpImageClone = sharpImage.clone()
+
     // eslint-disable-next-line
-    const rollNo = await getRollNoFromImage(designData, path)
+    const rollNo = await getRollNoFromImage(designData, sharpImage)
 
     if (rollNo) {
       const p = new Promise(resolve => {
-        getQuestionsData(designData, path, resultsData, rollNo).then(output => {
-          resolve(output)
-        })
+        getQuestionsData(designData, sharpImageClone, resultsData, rollNo).then(
+          output => {
+            resolve(output)
+          },
+        )
       })
       promises.push(p)
     }
