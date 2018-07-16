@@ -210,7 +210,7 @@ function getNeuralNet(src) {
  * @returns {Object} {title: {String}, data: {buffer}}
  */
 async function getQuestionsData(designData, img, resultsData, rollNo) {
-  const SCALE = 0.5
+  const SCALE = 0.25
   const IS_TEST_DATA = resultsData && rollNo
 
   return new Promise((resolveCol, rejectCol) => {
@@ -224,20 +224,19 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
 
         img
           .extract({
-            left: Math.floor(q.x1 * SCALE),
-            top: Math.floor(q.y1 * SCALE),
-            width: Math.ceil((q.x2 - q.x1) * SCALE),
-            height: Math.ceil((q.y2 - q.y1) * SCALE),
+            left: Math.floor(q.x1 * SCALE) - 1,
+            top: Math.floor(q.y1 * SCALE) - 1,
+            width: Math.ceil((q.x2 - q.x1) * SCALE) + 2,
+            height: Math.ceil((q.y2 - q.y1) * SCALE) + 2,
           })
-          // .toColourspace('b-w')
-          // .threshold(175)
-          .png()
-          .toFile(`${__dirname}\\tmp\\${`${rollNo}-${title}`}.png`, err => {
-            if (err) console.log(err)
+          .toColourspace('b-w')
+          .threshold(175)
+          // .png()
+          // .toFile(`${__dirname}\\tmp\\${`${rollNo}-${title}`}.png`, err => {
+          //   if (err) console.log(err)
 
-            resolve()
-          })
-        /*
+          //   resolve()
+          // })
           .toBuffer({
             resolveWithObject: true,
           })
@@ -259,7 +258,6 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
               resolve({ title, data })
             }
           })
-          */
       })
 
       promises.push(p)

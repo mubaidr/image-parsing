@@ -24,7 +24,7 @@ module.exports = {
   tmp: path.resolve('.tmp'),
   root: path.resolve('.'),
   src: path.resolve('src'),
-  trainingData: path.resolve('training-data'),
+  trainingData: path.resolve('src/data/training-data.json'),
   main: path.resolve('src/main'),
   renderer: path.resolve('src/renderer'),
   utiltities: path.resolve('src/utilities'),

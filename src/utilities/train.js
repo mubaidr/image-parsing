@@ -1,13 +1,15 @@
 const fs = require('fs')
 const brain = require('brain.js')
 const sharp = require('sharp')
+const path = require('path')
+const dataPaths = require('./data-paths')
 
 // default options
 const options = [
-  'D:\\Current\\image-parsing\\__tests__\\test-data\\design.svg',
-  'D:\\Current\\image-parsing\\__tests__\\test-data\\images',
-  'D:\\Current\\image-parsing\\__tests__\\test-data\\result.csv',
-  'D:\\Current\\image-parsing\\src\\data\\training-data.json',
+  path.join(dataPaths.testData, 'design.svg'),
+  path.join(dataPaths.testData, 'images'),
+  path.join(dataPaths.testData, 'result.csv'),
+  dataPaths.trainingData,
 ]
 // controls if training is enabled
 let trainingEnabled = true
@@ -63,8 +65,8 @@ async function train(
 
   // extract roll no & question image data from images
   for (let i = 0; i < imagePaths.length && trainingEnabled; i += 1) {
-    const path = imagePaths[i]
-    const sharpImage = sharp(path).raw()
+    const imgPath = imagePaths[i]
+    const sharpImage = sharp(imgPath).raw()
     const sharpImageClone = sharpImage.clone() // .png()
 
     // eslint-disable-next-line
