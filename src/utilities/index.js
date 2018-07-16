@@ -169,7 +169,7 @@ async function getDesignData(path) {
  * @returns {Array.<String>} List of file paths
  */
 function getImagePaths(path) {
-  const format = [
+  const formats = [
     'png',
     'jpg',
     'jpeg',
@@ -182,7 +182,7 @@ function getImagePaths(path) {
     // 'dib',
   ]
 
-  return fastGlob(`${path}/*.{${format.join(',')}}`, {
+  return fastGlob(`${path}/*.{${formats.join(',')}}`, {
     onlyFiles: true,
   })
 }
@@ -207,19 +207,11 @@ function getNeuralNet(src) {
  * @param {String} path Path of scanned image file
  * @param {Object=} resultsData Path to csv file for training data
  * @param {Number=} rollNo Roll no of the current scanned image
- * @param {Object=} metadata Image metadata
- *
  * @returns {Object} {title: {String}, data: {buffer}}
  */
-async function getQuestionsData(
-  designData,
-  img,
-  resultsData,
-  rollNo,
-  metadata,
-) {
+async function getQuestionsData(designData, img, resultsData, rollNo) {
   const SCALE = 0.5
-  const isTestData = resultsData && rollNo
+  const IS_TEST_DATA = resultsData && rollNo
 
   return new Promise((resolveCol, rejectCol) => {
     img.resize(designData.width * SCALE).max()
@@ -230,47 +222,44 @@ async function getQuestionsData(
       const p = new Promise(resolve => {
         const q = designData.questions[title]
 
-        // TODO: scale data points using metadata
-
         img
           .extract({
-            left: q.x1,
-            top: q.y1,
-            width: q.x2 - q.x1,
-            height: q.y2 - q.y1,
+            left: Math.floor(q.x1 * SCALE),
+            top: Math.floor(q.y1 * SCALE),
+            width: Math.ceil((q.x2 - q.x1) * SCALE),
+            height: Math.ceil((q.y2 - q.y1) * SCALE),
           })
-          // .toFile(`${__dirname}\\tmp\\${title}.png`, err => {
-          //   if (err) console.log(err)
-          // })
-          .toColourspace('b-w')
-          .threshold()
+          // .toColourspace('b-w')
+          // .threshold(175)
+          .png()
+          .toFile(`${__dirname}\\tmp\\${`${rollNo}-${title}`}.png`, err => {
+            if (err) console.log(err)
+
+            resolve()
+          })
+        /*
           .toBuffer({
             resolveWithObject: true,
           })
           .then(res => {
             const data = res.data.map(val => (val === 0 ? 1 : 0))
 
-            if (isTestData) {
+            if (IS_TEST_DATA) {
               // for training data
               if (resultsData[rollNo] && resultsData[rollNo][title] !== '*') {
                 const o = {}
                 o[resultsData[rollNo][title]] = 1
 
-                resolve({
-                  input: data,
-                  output: o,
-                })
+                resolve({ input: data, output: o })
               } else {
                 resolve(false)
               }
             } else {
               // for processing data
-              resolve({
-                title,
-                data,
-              })
+              resolve({ title, data })
             }
           })
+          */
       })
 
       promises.push(p)
