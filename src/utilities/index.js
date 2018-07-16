@@ -229,19 +229,46 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
             width: Math.ceil((q.x2 - q.x1) * SCALE) + 2,
             height: Math.ceil((q.y2 - q.y1) * SCALE) + 2,
           })
-          .toColourspace('b-w')
-          .threshold(175)
+          // .toColourspace('b-w')
+          // .threshold(175)
           // .png()
           // .toFile(`${__dirname}\\tmp\\${`${rollNo}-${title}`}.png`, err => {
           //   if (err) console.log(err)
 
           //   resolve()
           // })
-          .toBuffer({
-            resolveWithObject: true,
-          })
-          .then(res => {
-            const data = res.data.map(val => (val === 0 ? 1 : 0))
+          .toBuffer()
+          .then(data => {
+            const binaryData = []
+
+            for (let i = 0; i < data.length; i += 3) {
+              const r = i
+              const g = i + 1
+              const b = i + 2
+              const avg = (data[r] + data[g] + data[b]) / 3
+              const threshold = 15
+
+              if (avg < 80) {
+                // black pixel
+                binaryData.push(0)
+              } else if (
+                data[r] < avg + threshold &&
+                data[r] > avg - threshold &&
+                data[g] < avg + threshold &&
+                data[g] > avg - threshold &&
+                data[b] < avg + threshold &&
+                data[b] > avg - threshold
+              ) {
+                // grey pixel
+                binaryData.push(1)
+              } else {
+                // color pixel
+                binaryData.push(0)
+              }
+            }
+
+            // eslint-disable-next-line
+            data = null
 
             if (IS_TEST_DATA) {
               // for training data
@@ -249,13 +276,13 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
                 const o = {}
                 o[resultsData[rollNo][title]] = 1
 
-                resolve({ input: data, output: o })
+                resolve({ input: binaryData, output: o })
               } else {
                 resolve(false)
               }
             } else {
               // for processing data
-              resolve({ title, data })
+              resolve({ title, binaryData })
             }
           })
       })
