@@ -28,7 +28,7 @@ export default {
     },
 
     async stopProcess() {
-      console.log('Stoping process...')
+      trainingModule.stop()
     },
   },
 }

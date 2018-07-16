@@ -8,6 +8,7 @@ const options = [
   'D:\\Current\\image-parsing\\__tests__\\test-data\\result.csv',
   'D:\\Current\\image-parsing\\src\\data\\training-data.json',
 ]
+let trainingEnabled = true
 
 /**
  * Import utilty functions
@@ -20,17 +21,29 @@ const {
   getQuestionsData,
 } = require('./index')
 
+function stop() {
+  trainingEnabled = false
+  console.log('Traning stopped!')
+}
+
 async function train(
   designFilePath,
   imagesDirectory,
   resultsFilePath,
   neuralNetFilePath,
 ) {
+  if (arguments.length === 0) {
+    this.train(...options)
+    return
+  }
+  trainingEnabled = true
+  console.log('Traning started!')
+
   /* eslint-disable */
-  designFilePath = designFilePath || options.designFilePath
-  imagesDirectory = imagesDirectory || options.imagesDirectory
-  resultsFilePath = resultsFilePath || options.resultsFilePath
-  neuralNetFilePath = neuralNetFilePath || options.neuralNetFilePath
+  designFilePath = designFilePath || options[0]
+  imagesDirectory = imagesDirectory || options[1]
+  resultsFilePath = resultsFilePath || options[2]
+  neuralNetFilePath = neuralNetFilePath || options[3]
   /* eslint-enable */
 
   const [designData, imagePaths, resultsData] = await Promise.all([
@@ -41,7 +54,7 @@ async function train(
 
   const promises = []
 
-  for (let i = 0; i < imagePaths.length; i += 1) {
+  for (let i = 0; i < imagePaths.length && trainingEnabled; i += 1) {
     const path = imagePaths[i]
     const sharpImage = sharp(path).raw()
     const sharpImageClone = sharpImage.clone()
@@ -81,21 +94,30 @@ async function train(
       })
     })
 
-    net.train(trainingData, {
-      log: true,
-      logPeriod: 1,
-      errorThresh: 0.001,
-    })
+    if (trainingData.length > 0) {
+      net.train(trainingData, {
+        log: true,
+        logPeriod: 1,
+        errorThresh: 0.001,
+      })
 
-    console.log('Done!')
-    fs.writeFileSync(neuralNetFilePath, JSON.stringify(net.toJSON()))
+      console.log('Done!')
+      fs.writeFileSync(neuralNetFilePath, JSON.stringify(net.toJSON()))
+    }
   })
 }
 
-process.on('message', () => {
-  train()
-})
+if (process) {
+  process.on('train-start', () => {
+    train()
+  })
+
+  process.on('train-stop', () => {
+    stop()
+  })
+}
 
 module.exports = {
   train,
+  stop,
 }
