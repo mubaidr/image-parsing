@@ -96,6 +96,8 @@ async function getDesignData(path) {
   let ry
   let width
   let height
+  let left
+  let top
 
   const groups = $('g')
   for (let i = 0; i < groups.length; i += 1) {
@@ -117,23 +119,23 @@ async function getDesignData(path) {
         .attr('transform')
         .replace(/(translate)|\(|\)/gi, '')
         .split(',')
-        .map(val => parseInt(val, 10))
+        .map(val => parseFloat(val))
 
       const rect = $(group)
         .find('rect')
         .first()
 
-      const left = parseInt(rect.attr('x'), 10)
-      const top = parseInt(rect.attr('y'), 10)
+      left = parseFloat(rect.attr('x'))
+      top = parseFloat(rect.attr('y'))
 
-      rx = parseInt(rect.attr('rx') || 0, 10)
-      ry = parseInt(rect.attr('ry') || 0, 10)
+      rx = parseFloat(rect.attr('rx')) || 0
+      ry = parseFloat(rect.attr('ry')) || 0
 
       x = left - rx + transform[0]
       y = top - ry + transform[1]
 
-      width = parseInt(rect.attr('width'), 10) + rx
-      height = parseInt(rect.attr('height'), 10) + ry
+      width = parseFloat(rect.attr('width')) + rx
+      height = parseFloat(rect.attr('height')) + ry
     }
 
     if (isQuestionGroup) {
@@ -248,16 +250,13 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
               const avg = (data[r] + data[g] + data[b]) / 3
               const threshold = 15
 
-              if (avg < 80) {
+              if (avg <= 80) {
                 // black pixel
                 binaryData.push(0)
               } else if (
-                data[r] < avg + threshold &&
-                data[r] > avg - threshold &&
-                data[g] < avg + threshold &&
-                data[g] > avg - threshold &&
-                data[b] < avg + threshold &&
-                data[b] > avg - threshold
+                (data[r] <= avg + threshold || data[r] >= avg - threshold) &&
+                (data[g] <= avg + threshold || data[g] >= avg - threshold) &&
+                (data[b] <= avg + threshold || data[b] >= avg - threshold)
               ) {
                 // grey pixel
                 binaryData.push(1)

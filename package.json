@@ -61,7 +61,7 @@
     "del": "^3.0.0",
     "devtron": "^1.4.0",
     "electron": "^2.0.5",
-    "electron-builder": "^20.19.2",
+    "electron-builder": "^20.22.0",
     "electron-debug": "^2.0.0",
     "electron-rebuild": "^1.8.1",
     "eslint": "^5.1.0",
@@ -69,14 +69,13 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-import-resolver-webpack": "^0.10.1",
     "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-jsx-a11y": "^6.1.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.10.0",
     "eslint-plugin-vue": "^4.7.0",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
     "inject-loader": "^4.0.1",
-    "jest": "^23.4.0",
-    "mini-css-extract-plugin": "0.4.1",
+    "jest": "^23.4.1",
     "node-loader": "^0.6.0",
     "node-sass": "^4.9.2",
     "prettier": "^1.13.7",
@@ -88,7 +87,7 @@
     "vue-loader": "^15.2.4",
     "vue-style-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.16",
-    "webpack": "^4.16.0",
+    "webpack": "^4.16.1",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "3.1.4",
     "webpack-hot-middleware": "^2.22.2"
@@ -135,8 +134,7 @@
     "release": "build",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "test:watch": "jest --watch",
-    "train": "node src/utilities/train-test.js"
+    "test:watch": "jest --watch"
   },
   "version": "0.0.1"
 }

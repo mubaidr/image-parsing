@@ -26,6 +26,18 @@ const {
 } = require('./index')
 
 /**
+ * Report progress to the parent process
+ */
+function sendProgress(val) {
+  if (process) {
+    process.send({
+      type: 'progress',
+      value: val,
+    })
+  }
+}
+
+/**
  * Stops the training in the immediate iteration
  */
 function stop() {
@@ -66,7 +78,9 @@ async function train(
   // extract roll no & question image data from images
   for (let i = 0; i < imagePaths.length && trainingEnabled; i += 1) {
     const imgPath = imagePaths[i]
-    const sharpImage = sharp(imgPath).raw()
+    const sharpImage = sharp(imgPath)
+      .raw()
+      .flatten()
     const sharpImageClone = sharpImage.clone()
 
     // eslint-disable-next-line
@@ -111,12 +125,12 @@ async function train(
 }
 
 if (process) {
-  process.on('train-start', () => {
-    train()
-  })
-
-  process.on('train-stop', () => {
-    stop()
+  process.on('message', m => {
+    if (m && m.stop) {
+      stop()
+    } else {
+      train()
+    }
   })
 }
 

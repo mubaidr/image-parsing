@@ -8,6 +8,20 @@ const {
   getImagePaths,
 } = require('./index')
 
+// store reference to all workers
+let WORKER_PROCESSES
+
+/**
+ * Stops all worker processes
+ */
+function stop() {
+  for (let i = 0; i < WORKER_PROCESSES.length; i += 1) {
+    WORKER_PROCESSES[i].send({
+      stop: true,
+    })
+  }
+}
+
 /**
  * Start processing scanned image files to get result
  *
@@ -23,24 +37,18 @@ async function process(
   designFilePath,
   imagesDirectory,
   outputPath,
-  useWorkers
+  useWorkers,
 ) {
-  console.time('PREPARE-DATA')
   const imagePaths = await getImagePaths(imagesDirectory)
   const designData = await getDesignData(designFilePath)
-  console.timeEnd('PREPARE-DATA')
 
   if (!useWorkers) {
-    console.time('PROCESS-DATA-USING-SINGLE-THREAD')
-
     processTask(designData, imagePaths).then(res => {
-      console.timeEnd('PROCESS-DATA-USING-SINGLE-THREAD')
-
       console.log(res)
     })
   } else {
     const TOTAL_IMAGES = imagePaths.length
-    const WORKER_PROCESSES = await createWorkerProcesses(TOTAL_IMAGES)
+    WORKER_PROCESSES = await createWorkerProcesses(TOTAL_IMAGES)
     const TOTAL_PROCESS = WORKER_PROCESSES.length
     const STEP = Math.floor(TOTAL_IMAGES / TOTAL_PROCESS)
 
@@ -49,14 +57,19 @@ async function process(
       const endIndex = i === TOTAL_PROCESS - 1 ? TOTAL_IMAGES : (i + 1) * STEP
       const worker = WORKER_PROCESSES[i]
 
-      console.time(`PROCESS-DATA-USING-THREAD-${i}`)
       worker.send({
         designData,
         imagePaths: imagePaths.slice(startIndex, endIndex),
       })
-      worker.on('message', res => {
-        console.timeEnd(`PROCESS-DATA-USING-THREAD-${i}`)
-        console.log(res)
+      // eslint-disable-next-line
+      worker.on('message', m => {
+        if (m.progress) {
+          console.log('Progress: ', m)
+        } else if (m.completed) {
+          console.log('Completed: ', m)
+        } else {
+          console.log(' What do you want? : ', m)
+        }
       })
     }
   }
@@ -64,4 +77,5 @@ async function process(
 
 module.exports = {
   process,
+  stop,
 }
