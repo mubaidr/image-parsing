@@ -5,7 +5,7 @@ const path = require('path')
 const dataPaths = require('./data-paths')
 
 // default options
-const options = [
+const DEFAULTS = [
   path.join(dataPaths.testData, 'design.svg'),
   path.join(dataPaths.testData, 'images'),
   path.join(dataPaths.testData, 'result.csv'),
@@ -53,7 +53,7 @@ function stop() {
  * @param {String=} resultsFilePath Path to result data CSV.
  * @param {String=} neuralNetFilePath Path where trained network configuration will be saved.
  */
-async function train(
+async function process(
   designFilePath,
   imagesDirectory,
   resultsFilePath,
@@ -61,7 +61,7 @@ async function train(
 ) {
   // if no arguments are rpovided use the defualt options
   if (arguments.length === 0) {
-    this.train(...options)
+    this.process(...DEFAULTS)
     return
   }
   trainingEnabled = true
@@ -129,12 +129,12 @@ if (process) {
     if (m && m.stop) {
       stop()
     } else {
-      train()
+      process()
     }
   })
 }
 
 module.exports = {
-  train,
+  process,
   stop,
 }

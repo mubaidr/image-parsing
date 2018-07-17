@@ -1,3 +1,6 @@
+const path = require('path')
+const dataPaths = require('./data-paths')
+
 /**
  * Import utilty functions
  */
@@ -8,6 +11,14 @@ const {
   getImagePaths,
 } = require('./index')
 
+// default options
+const DEFAULTS = [
+  path.join(dataPaths.testData, 'design.svg'),
+  path.join(dataPaths.testData, 'images'),
+  dataPaths.trainingData,
+  path.join(dataPaths.testData, 'result-output.csv'),
+  true,
+]
 // store reference to all workers
 let WORKER_PROCESSES
 
@@ -39,6 +50,12 @@ async function process(
   outputPath,
   useWorkers,
 ) {
+  // if no arguments are rpovided use the defualt options
+  if (arguments.length === 0) {
+    this.process(...DEFAULTS)
+    return
+  }
+
   const imagePaths = await getImagePaths(imagesDirectory)
   const designData = await getDesignData(designFilePath)
 

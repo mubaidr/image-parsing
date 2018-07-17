@@ -53,7 +53,7 @@
 
 <script>
 import PreviewModal from './PreviewModal.vue'
-
+// eslint-disable-next-line
 const { remote } = require('electron')
 const fastGlob = require('fast-glob')
 

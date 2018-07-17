@@ -18,13 +18,11 @@ import loadFiles from './Templates/LoadFiles.vue'
 const trainingModule = require('../../utilities/train.js')
 
 export default {
-  name: 'About',
-
   components: { loadFiles },
 
   methods: {
     async startProcess() {
-      trainingModule.train()
+      trainingModule.process()
     },
 
     async stopProcess() {
