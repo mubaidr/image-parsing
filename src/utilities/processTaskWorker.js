@@ -13,6 +13,18 @@ const {
 let processingEnabled = true
 
 /**
+ * Report progress to the parent process
+ */
+function sendProgress(val) {
+  if (process) {
+    process.send({
+      progress: true,
+      value: val,
+    })
+  }
+}
+
+/**
  * Stops the current processing task
  */
 function stop() {
@@ -76,7 +88,7 @@ async function processTask(designData, imagePaths) {
             }
           }
         }
-
+        sendProgress(i)
         resolve(resultsJson)
       })
     })

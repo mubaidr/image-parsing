@@ -26,18 +26,6 @@ const {
 } = require('./index')
 
 /**
- * Report progress to the parent process
- */
-function sendProgress(val) {
-  if (process) {
-    process.send({
-      type: 'progress',
-      value: val,
-    })
-  }
-}
-
-/**
  * Stops the training in the immediate iteration
  */
 function stop() {
@@ -53,7 +41,7 @@ function stop() {
  * @param {String=} resultsFilePath Path to result data CSV.
  * @param {String=} neuralNetFilePath Path where trained network configuration will be saved.
  */
-async function process(
+async function start(
   designFilePath,
   imagesDirectory,
   resultsFilePath,
@@ -61,7 +49,7 @@ async function process(
 ) {
   // if no arguments are rpovided use the defualt options
   if (arguments.length === 0) {
-    this.process(...DEFAULTS)
+    start(...DEFAULTS)
     return
   }
   trainingEnabled = true
@@ -129,12 +117,12 @@ if (process) {
     if (m && m.stop) {
       stop()
     } else {
-      process()
+      start()
     }
   })
 }
 
 module.exports = {
-  process,
+  start,
   stop,
 }

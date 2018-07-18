@@ -22,7 +22,7 @@ export default {
 
   methods: {
     async startProcess() {
-      trainingModule.process()
+      trainingModule.start()
     },
 
     async stopProcess() {

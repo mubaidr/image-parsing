@@ -23,7 +23,7 @@ export default {
 
   methods: {
     async startProcess() {
-      processingModule.process()
+      processingModule.start()
     },
 
     async stopProcess() {

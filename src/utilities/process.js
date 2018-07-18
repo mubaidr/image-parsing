@@ -44,15 +44,10 @@ function stop() {
  *
  * @returns null
  */
-async function process(
-  designFilePath,
-  imagesDirectory,
-  outputPath,
-  useWorkers,
-) {
+async function start(designFilePath, imagesDirectory, outputPath, useWorkers) {
   // if no arguments are rpovided use the defualt options
   if (arguments.length === 0) {
-    this.process(...DEFAULTS)
+    start(...DEFAULTS)
     return
   }
 
@@ -93,6 +88,6 @@ async function process(
 }
 
 module.exports = {
-  process,
+  start,
   stop,
 }
