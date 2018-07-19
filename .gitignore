@@ -9,6 +9,7 @@ npm-debug.log
 npm-debug.log.*
 thumbs.db
 .tmp/
+!.tmp/.gitignore
 tmp/
 .cache
 dist

@@ -1,7 +1,7 @@
-const fs = require('fs')
 const brain = require('brain.js')
-const sharp = require('sharp')
+const fs = require('fs')
 const path = require('path')
+const sharp = require('sharp')
 const dataPaths = require('./data-paths')
 
 // default options
@@ -11,8 +11,6 @@ const DEFAULTS = [
   path.join(dataPaths.testData, 'result.csv'),
   dataPaths.trainingData,
 ]
-// controls if training is enabled
-let trainingEnabled = true
 
 /**
  * Import utilty functions
@@ -24,14 +22,6 @@ const {
   readCsvToJson,
   getQuestionsData,
 } = require('./index')
-
-/**
- * Stops the training in the immediate iteration
- */
-function stop() {
-  trainingEnabled = false
-  console.log('Traning stopped!')
-}
 
 /**
  *  Trains the network using provided data and saves the trained network configuration in the provided path (neuralNetFilePath).
@@ -52,8 +42,7 @@ async function start(
     start(...DEFAULTS)
     return
   }
-  trainingEnabled = true
-  console.log('Traning started!')
+  console.log('Training started!')
 
   const [designData, imagePaths, resultsData] = await Promise.all([
     getDesignData(designFilePath),
@@ -64,7 +53,7 @@ async function start(
   const promises = []
 
   // extract roll no & question image data from images
-  for (let i = 0; i < imagePaths.length && trainingEnabled; i += 1) {
+  for (let i = 0; i < imagePaths.length; i += 1) {
     const imgPath = imagePaths[i]
     const sharpImage = sharp(imgPath)
       .raw()
@@ -102,27 +91,26 @@ async function start(
       net.train(trainingData, {
         log: true,
         logPeriod: 1,
-        errorThresh: 0.001,
+        errorThresh: 0.0001,
       })
 
       // write trained network configuration to disk
       console.log('Traning done!')
       fs.writeFileSync(neuralNetFilePath, JSON.stringify(net.toJSON()))
+
+      if (process && process.send) {
+        process.send({ completed: true })
+      }
     }
   })
 }
 
-if (process) {
-  process.on('message', m => {
-    if (m && m.stop) {
-      stop()
-    } else {
-      start()
-    }
+if (process && process.send) {
+  process.on('message', () => {
+    start()
   })
 }
 
 module.exports = {
   start,
-  stop,
 }

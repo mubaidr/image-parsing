@@ -2,31 +2,58 @@
   <div class="section">
     <h1 class="title">Train Network</h1>
 
-    <button
-      class="button is-primary"
-      @click="startProcess">Start Training</button>
+    <div class="block has-text-centered">
+      <button
+        :disabled="running"
+        class="button is-primary"
+        @click="startProcess">Start Training</button>
 
-    <button
-      class="button is-danger"
-      @click="stopProcess">Stop Training</button>
+      <br>
+      <br>
+      <progress
+        v-show="running"
+        class="progress is-warning">0%</progress>
+
+        <!-- TODO: display logs here: -->
+    </div>
   </div>
 </template>
 
 <script>
-import loadFiles from './Templates/LoadFiles.vue'
+const { fork } = require('child_process')
 
-const trainingModule = require('../../utilities/train.js')
+const worker = fork(`${__dirname}/../../utilities/train.js`, [], {
+  silent: true,
+})
 
 export default {
-  components: { loadFiles },
+  data() {
+    return {
+      running: false,
+    }
+  },
 
   methods: {
-    async startProcess() {
-      trainingModule.start()
-    },
+    startProcess() {
+      worker.send({}, () => {
+        this.running = true
+      })
 
-    async stopProcess() {
-      trainingModule.stop()
+      worker.on('message', msg => {
+        if (msg.completed) {
+          this.running = false
+        }
+      })
+
+      // logging
+      worker.stdout.on('data', data => {
+        console.log(data.toString())
+      })
+
+      // error
+      worker.stderr.on('data', data => {
+        console.log(data.toString())
+      })
     },
   },
 }

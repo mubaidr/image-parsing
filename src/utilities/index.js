@@ -1,10 +1,11 @@
-const childProcess = require('child_process')
 const brain = require('brain.js')
 const cheerio = require('cheerio')
+const childProcess = require('child_process')
 const fastGlob = require('fast-glob')
 const fs = require('fs')
 const javascriptBarcodeReader = require('javascript-barcode-reader')
 const os = require('os')
+const dataPaths = require('./data-paths')
 // const javascriptBarcodeReader = require('../../../Javascript-Barcode-Reader/src')
 
 /**
@@ -65,7 +66,11 @@ async function createWorkerProcesses(imagesCount) {
   }
 
   for (let i = 0; i < NO_OF_CORES; i += 1) {
-    WORKERS.push(childProcess.fork(`${__dirname}/processTaskWorker.js`))
+    WORKERS.push(
+      childProcess.fork(`${__dirname}/processTaskWorker.js`, [], {
+        silent: true,
+      }),
+    )
   }
 
   return WORKERS
@@ -76,14 +81,14 @@ async function createWorkerProcesses(imagesCount) {
  * @param {String} designFilePath Path to the svg design file
  * @returns {Object} JSON object
  */
-async function getDesignData(path) {
+async function getDesignData(dir) {
   const designData = {
     questions: {},
   }
   const ROLL_NO_PATTERN = new RegExp(/rollnobarcode/gi)
   const QUESTION_PATTERN = new RegExp(/(q[1-9][0-9]?[ad])\b/gi)
 
-  const $ = cheerio.load(fs.readFileSync(path, 'utf8'))
+  const $ = cheerio.load(fs.readFileSync(dir, 'utf8'))
   const svgViewBox = $('svg')[0].attribs.viewBox.split(' ')
 
   designData.width = Math.ceil(svgViewBox[2] - svgViewBox[0])
@@ -170,7 +175,7 @@ async function getDesignData(path) {
  * @param {Array.<String>} format Array of extensions of valid image formats
  * @returns {Array.<String>} List of file paths
  */
-function getImagePaths(path) {
+function getImagePaths(dir) {
   const formats = [
     'png',
     'jpg',
@@ -184,9 +189,7 @@ function getImagePaths(path) {
     // 'dib',
   ]
 
-  return fastGlob(`${path}/*.{${formats.join(',')}}`, {
-    onlyFiles: true,
-  })
+  return fastGlob(`${dir}/*.{${formats.join(',')}}`, { onlyFiles: true })
 }
 
 /**
@@ -197,9 +200,7 @@ function getNeuralNet(src) {
   const net = new brain.NeuralNetwork()
 
   return net.fromJSON(
-    JSON.parse(
-      fs.readFileSync(src || `${__dirname}/../../src/data/training-data.json`),
-    ),
+    JSON.parse(fs.readFileSync(src || dataPaths.trainingData)),
   )
 }
 
@@ -226,37 +227,35 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
 
         img
           .extract({
-            left: Math.floor(q.x1 * SCALE) - 1,
-            top: Math.floor(q.y1 * SCALE) - 1,
-            width: Math.ceil((q.x2 - q.x1) * SCALE) + 2,
-            height: Math.ceil((q.y2 - q.y1) * SCALE) + 2,
+            left: Math.floor(q.x1 * SCALE),
+            top: Math.floor(q.y1 * SCALE),
+            width: Math.ceil((q.x2 - q.x1) * SCALE),
+            height: Math.ceil((q.y2 - q.y1) * SCALE),
           })
-          // .toColourspace('b-w')
-          // .threshold(175)
           // .png()
-          // .toFile(`${__dirname}\\tmp\\${`${rollNo}-${title}`}.png`, err => {
+          // .toFile(path.join(dataPaths.tmp, `${rollNo}-${title}.png`), err => {
           //   if (err) console.log(err)
-
           //   resolve()
           // })
-          .toBuffer()
-          .then(data => {
+          .toBuffer({ resolveWithObject: true })
+          .then(({ data }) => {
             const binaryData = []
 
             for (let i = 0; i < data.length; i += 3) {
               const r = i
               const g = i + 1
               const b = i + 2
-              const avg = (data[r] + data[g] + data[b]) / 3
+              const avg = Math.ceil((data[r] + data[g] + data[b]) / 3)
               const threshold = 15
 
               if (avg <= 80) {
                 // black pixel
                 binaryData.push(0)
               } else if (
-                (data[r] <= avg + threshold || data[r] >= avg - threshold) &&
-                (data[g] <= avg + threshold || data[g] >= avg - threshold) &&
-                (data[b] <= avg + threshold || data[b] >= avg - threshold)
+                data[r] <= avg + threshold &&
+                data[r] >= avg - threshold &&
+                (data[g] <= avg + threshold && data[g] >= avg - threshold) &&
+                (data[b] <= avg + threshold && data[b] >= avg - threshold)
               ) {
                 // grey pixel
                 binaryData.push(1)
@@ -265,9 +264,6 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
                 binaryData.push(0)
               }
             }
-
-            // eslint-disable-next-line
-            data = null
 
             if (IS_TEST_DATA) {
               // for training data
@@ -281,7 +277,7 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
               }
             } else {
               // for processing data
-              resolve({ title, binaryData })
+              resolve({ title, data: binaryData })
             }
           })
       })
@@ -338,12 +334,12 @@ async function getRollNoFromImage(designData, img) {
 
 /**
  *
- * @param {String} path CSV file path
+ * @param {String} dir CSV file path
  * @returns {Object} JSON Object
  */
-async function readCsvToJson(path) {
+async function readCsvToJson(dir) {
   const resultData = {}
-  const resultFile = fs.readFileSync(path, 'utf8')
+  const resultFile = fs.readFileSync(dir, 'utf8')
 
   const rows = resultFile.split('\n')
   const headerValues = rows[0]

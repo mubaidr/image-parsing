@@ -17,7 +17,7 @@ const DEFAULTS = [
   path.join(dataPaths.testData, 'images'),
   dataPaths.trainingData,
   path.join(dataPaths.testData, 'result-output.csv'),
-  true,
+  true, // enable for testing processTask
 ]
 // store reference to all workers
 let WORKER_PROCESSES
@@ -44,7 +44,13 @@ function stop() {
  *
  * @returns null
  */
-async function start(designFilePath, imagesDirectory, outputPath, useWorkers) {
+async function start(
+  designFilePath,
+  imagesDirectory,
+  neuralNetFilePath,
+  outputPath,
+  useWorkers,
+) {
   // if no arguments are rpovided use the defualt options
   if (arguments.length === 0) {
     start(...DEFAULTS)
@@ -73,7 +79,7 @@ async function start(designFilePath, imagesDirectory, outputPath, useWorkers) {
         designData,
         imagePaths: imagePaths.slice(startIndex, endIndex),
       })
-      // eslint-disable-next-line
+
       worker.on('message', m => {
         if (m.progress) {
           console.log('Progress: ', m)
@@ -82,6 +88,16 @@ async function start(designFilePath, imagesDirectory, outputPath, useWorkers) {
         } else {
           console.log(' What do you want? : ', m)
         }
+      })
+
+      // logging
+      worker.stdout.on('data', data => {
+        console.log(data.toString())
+      })
+
+      // error
+      worker.stderr.on('data', data => {
+        console.log(data.toString())
       })
     }
   }

@@ -16,11 +16,10 @@ let processingEnabled = true
  * Report progress to the parent process
  */
 function sendProgress(val) {
-  if (process) {
-    process.send({
-      progress: true,
-      value: val,
-    })
+  if (process && process.send) {
+    process.send({ progress: true, value: val })
+  } else {
+    console.log('progress: ', val)
   }
 }
 
@@ -113,18 +112,20 @@ async function processTask(designData, imagePaths) {
       return res
     })
     .catch(err => {
-      process.send(
-        {
-          error: err,
-        },
-        () => {
-          process.exit(1)
-        },
-      )
+      if (process && process.send) {
+        process.send(
+          {
+            error: err,
+          },
+          () => {
+            process.exit(0)
+          },
+        )
+      }
     })
 }
 
-if (process) {
+if (process && process.send) {
   process.on('message', m => {
     if (m && m.stop) {
       stop()

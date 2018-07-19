@@ -13,17 +13,20 @@
       file-type="design"/>
 
     <button
+      :disabled="running"
       class="button is-primary"
       @click="startProcess">Start Process</button>
 
     <button
+      :disabled="!running"
       class="button is-danger"
       @click="stopProcess">Stop Process</button>
 
+    <br>
+    <br>
     <progress
-      class="progress is-primary"
-      value="15"
-      max="100">15%</progress>
+      v-show="running"
+      class="progress is-warning">0%</progress>
   </div>
 </template>
 
@@ -35,12 +38,20 @@ const processingModule = require('../../utilities/process.js')
 export default {
   components: { loadFiles },
 
+  data() {
+    return {
+      running: false,
+    }
+  },
+
   methods: {
     async startProcess() {
+      this.running = true
       processingModule.start()
     },
 
     async stopProcess() {
+      this.running = false
       processingModule.stop()
     },
   },
