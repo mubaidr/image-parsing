@@ -15,9 +15,7 @@ const {
 const DEFAULTS = [
   path.join(dataPaths.testData, 'design.svg'),
   path.join(dataPaths.testData, 'images'),
-  dataPaths.trainingData,
-  path.join(dataPaths.testData, 'result-output.csv'),
-  true, // enable for testing processTask
+  true, // disable for testing processTask using in-process
 ]
 // store reference to all workers
 let WORKER_PROCESSES
@@ -27,9 +25,11 @@ let WORKER_PROCESSES
  */
 function stop() {
   for (let i = 0; i < WORKER_PROCESSES.length; i += 1) {
-    WORKER_PROCESSES[i].send({
-      stop: true,
-    })
+    if (WORKER_PROCESSES[i].connected) {
+      WORKER_PROCESSES[i].send({
+        stop: true,
+      })
+    }
   }
 }
 
@@ -45,21 +45,15 @@ function stop() {
  * @returns null
  */
 async function start(
-  designFilePath,
-  imagesDirectory,
-  neuralNetFilePath,
-  outputPath,
-  useWorkers,
+  designFilePath = DEFAULTS[0],
+  imagesDirectory = DEFAULTS[1],
+  useWorkers = DEFAULTS[2],
+  listner,
 ) {
-  // if no arguments are rpovided use the defualt options
-  if (arguments.length === 0) {
-    start(...DEFAULTS)
-    return
-  }
-
   const imagePaths = await getImagePaths(imagesDirectory)
   const designData = await getDesignData(designFilePath)
 
+  // For testing only
   if (!useWorkers) {
     processTask(designData, imagePaths).then(res => {
       console.log(res)
@@ -81,23 +75,31 @@ async function start(
       })
 
       worker.on('message', m => {
-        if (m.progress) {
+        if (listner) {
+          listner(m)
+        } else if (m.progress) {
           console.log('Progress: ', m)
         } else if (m.completed) {
           console.log('Completed: ', m)
-        } else {
-          console.log(' What do you want? : ', m)
         }
       })
 
       // logging
       worker.stdout.on('data', data => {
-        console.log(data.toString())
+        if (listner) {
+          listner({ log: data.toString() })
+        } else {
+          console.log(data.toString())
+        }
       })
 
       // error
       worker.stderr.on('data', data => {
-        console.log(data.toString())
+        if (listner) {
+          listner({ error: data.toString() })
+        } else {
+          console.log(data.toString())
+        }
       })
     }
   }

@@ -47,12 +47,16 @@ export default {
   methods: {
     async startProcess() {
       this.running = true
-      processingModule.start()
+      processingModule.start(this.listner)
     },
 
     async stopProcess() {
       this.running = false
       processingModule.stop()
+    },
+
+    listner(msg) {
+      console.log(msg)
     },
   },
 }

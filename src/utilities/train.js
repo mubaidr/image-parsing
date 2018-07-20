@@ -32,18 +32,11 @@ const {
  * @param {String=} neuralNetFilePath Path where trained network configuration will be saved.
  */
 async function start(
-  designFilePath,
-  imagesDirectory,
-  resultsFilePath,
-  neuralNetFilePath,
+  designFilePath = DEFAULTS[0],
+  imagesDirectory = DEFAULTS[1],
+  resultsFilePath = DEFAULTS[2],
+  neuralNetFilePath = DEFAULTS[3],
 ) {
-  // if no arguments are rpovided use the defualt options
-  if (arguments.length === 0) {
-    start(...DEFAULTS)
-    return
-  }
-  console.log('Training started!')
-
   const [designData, imagePaths, resultsData] = await Promise.all([
     getDesignData(designFilePath),
     getImagePaths(imagesDirectory),
