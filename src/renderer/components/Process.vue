@@ -56,7 +56,15 @@ export default {
     },
 
     listner(msg) {
-      console.log(msg)
+      if (msg.progress) {
+        console.log('progress: ', msg.progress)
+      } else if (msg.completed) {
+        console.log('completed: ', msg.completed)
+      } else if (msg.log) {
+        console.log('log: ', msg.log)
+      } else if (msg.error) {
+        console.log('error: ', msg.error)
+      }
     },
   },
 }

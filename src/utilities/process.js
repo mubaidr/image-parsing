@@ -45,10 +45,10 @@ function stop() {
  * @returns null
  */
 async function start(
+  listner,
   designFilePath = DEFAULTS[0],
   imagesDirectory = DEFAULTS[1],
   useWorkers = DEFAULTS[2],
-  listner,
 ) {
   const imagePaths = await getImagePaths(imagesDirectory)
   const designData = await getDesignData(designFilePath)

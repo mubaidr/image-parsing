@@ -47,21 +47,17 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    useContentSize: true,
-    width: 1000,
-    height: 700,
-    minWidth: 500,
-    minHeight: 350,
     backgroundColor: '#fff',
+    backgroundThrottling: false,
+    minHeight: 350,
+    minWidth: 500,
+    show: false,
+    useContentSize: true,
     webPreferences: {
       nodeIntegrationInWorker: false,
       webSecurity: true,
     },
-    show: false,
   })
-
-  mainWindow.setMenu(null)
-  mainWindow.loadURL(winURL)
 
   // Show when loaded
   mainWindow.on('ready-to-show', () => {
@@ -79,6 +75,9 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  mainWindow.loadURL(winURL)
+  mainWindow.setMenu(null)
 }
 
 app.on('ready', () => {
