@@ -90,16 +90,17 @@ async function start(
     if (trainingData.length > 0) {
       net.train(trainingData, {
         log: true,
-        logPeriod: 1,
+        logPeriod: 10,
         errorThresh: 0.0001,
       })
 
       // write trained network configuration to disk
-      console.log('Traning done!')
       fs.writeFileSync(neuralNetFilePath, JSON.stringify(net.toJSON()))
 
       if (process && process.send) {
         process.send({ completed: true })
+      } else {
+        console.log('Traning completed!')
       }
     }
   })

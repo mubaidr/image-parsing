@@ -14,7 +14,14 @@
         v-show="running"
         class="progress is-warning">0%</progress>
 
-        <!-- TODO: display logs here: -->
+      <br>
+      <div class="block">
+        <ul>
+          <li
+            v-for="(log,index) in logs"
+            :key="index">{{ log }}</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -22,19 +29,28 @@
 <script>
 const { fork } = require('child_process')
 
-const worker = fork(`${__dirname}/../../utilities/train.js`, [], {
-  silent: true,
-})
-
 export default {
   data() {
     return {
+      logs: [],
       running: false,
     }
   },
 
+  watch: {
+    running(val) {
+      if (val) {
+        this.logs = []
+      }
+    },
+  },
+
   methods: {
     startProcess() {
+      const worker = fork(`${__dirname}/../../utilities/train.js`, [], {
+        silent: true,
+      })
+
       worker.send({}, () => {
         this.running = true
       })
@@ -42,17 +58,18 @@ export default {
       worker.on('message', msg => {
         if (msg.completed) {
           this.running = false
+          this.logs.unshift('COMPLETED!')
         }
       })
 
       // logging
       worker.stdout.on('data', data => {
-        console.log(data.toString())
+        this.logs.unshift(data.toString())
       })
 
       // error
       worker.stderr.on('data', data => {
-        console.log(data.toString())
+        this.logs.unshift(data.toString())
       })
     },
   },
