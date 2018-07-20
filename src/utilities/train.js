@@ -98,7 +98,9 @@ async function start(
       fs.writeFileSync(neuralNetFilePath, JSON.stringify(net.toJSON()))
 
       if (process && process.send) {
-        process.send({ completed: true })
+        process.send({ completed: true }, () => {
+          process.exit(0)
+        })
       } else {
         console.log('Traning completed!')
       }
