@@ -24,11 +24,18 @@
 
     <br>
     <br>
-    <progress
-      v-show="running"
-      :value="progress"
-      class="progress is-primary is-large"
-      max="100">{ progress }%</progress>
+    <transition name="slide-up">
+      <div
+        v-show="running">
+        <div>
+          Processing: <strong>{{ processedImages }}/{{ totalImages }}</strong>, ETA: <strong>{{ (totalImages - processedImages) * 0.5 }}</strong>s
+        </div>
+        <progress
+          :value="progress"
+          class="progress is-primary is-large"
+          max="100">{ progress }%</progress>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -45,6 +52,8 @@ export default {
       running: false,
       processedImages: 0,
       totalImages: 0,
+      processedWorkers: 0,
+      totalWorkers: 0,
     }
   },
 
@@ -61,18 +70,24 @@ export default {
     progress(val) {
       if (val === 100) {
         this.running = false
-        this.processedImages = 0
-        this.totalImages = 0
       }
+    },
+
+    running() {
+      this.processedImages = 0
+      this.totalImages = 0
     },
   },
 
   methods: {
     async startProcess() {
       this.running = true
-      const { totalImages } = await processingModule.start(this.listner)
+      const { totalImages, totalWorkers } = await processingModule.start(
+        this.listner,
+      )
 
       this.totalImages = totalImages
+      this.totalWorkers = totalWorkers
     },
 
     async stopProcess() {
@@ -84,12 +99,17 @@ export default {
       if (msg.progress) {
         this.processedImages += 1
         // console.log('progress: ', msg.progress)
+      } else if (msg.completed) {
+        this.processedWorkers += 1
+        // TODO: collect result from msg.result
       } else if (msg.log) {
         console.log('log: ', msg.log)
       } else if (msg.error) {
         console.log('error: ', msg.error)
       }
     },
+
+    resultExtracted() {},
   },
 }
 </script>

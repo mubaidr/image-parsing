@@ -104,7 +104,10 @@ async function start(
     }
   }
 
-  return { totalImages: imagePaths.length }
+  return {
+    totalImages: imagePaths.length,
+    totalWorkers: WORKER_PROCESSES.length,
+  }
 }
 
 module.exports = {

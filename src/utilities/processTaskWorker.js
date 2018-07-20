@@ -15,7 +15,7 @@ let processingEnabled = true
 /**
  * Report progress to the parent process
  */
-function sendProgress(val) {
+async function sendProgress(val) {
   if (process && process.send) {
     process.send({ progress: true, value: val })
   } else {
@@ -35,94 +35,72 @@ function stop() {
  * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
  * @param {Array.<String>} imagePaths List of scanned images paths
  *
- * @returns {Object} Compiled result JSON
+ * @returns {Object} Extracted result JSON
  */
 async function processTask(designData, imagePaths) {
   const neuralNet = getNeuralNet()
-  const promises = []
+  const outputs = []
 
   processingEnabled = true
   for (let i = 0; i < imagePaths.length && processingEnabled; i += 1) {
-    const imagePath = imagePaths[i]
-    const sharpImage = sharp(imagePath)
+    const sharpImage = sharp(imagePaths[i])
       .raw()
       .flatten()
     const sharpImageClone = sharpImage.clone()
 
-    const promise = new Promise(resolve => {
-      Promise.all([
-        getRollNoFromImage(designData, sharpImage),
-        getQuestionsData(designData, sharpImageClone),
-      ]).then(res => {
-        const [rollNo, questionsData] = res
-        const questionsCount = questionsData.length
-        const resultsJson = {}
+    /* eslint-disable no-await-in-loop */
+    const rollNo = await getRollNoFromImage(designData, sharpImage)
+    const questionsData = await getQuestionsData(designData, sharpImageClone)
+    /* eslint-enable no-await-in-loop */
 
-        if (!resultsJson[rollNo]) resultsJson[rollNo] = {}
+    const resultsJson = {
+      [rollNo]: {},
+    }
 
-        for (let j = questionsCount - 1; j >= 0; j -= 1) {
-          const q = questionsData[j]
-          const pre = neuralNet.run(q.data)
-          let resultArray = []
+    for (let j = questionsData.length - 1; j >= 0; j -= 1) {
+      const q = questionsData[j]
+      const pre = neuralNet.run(q.data)
+      let resultArray = []
 
-          Object.keys(pre).forEach((key, index) => {
-            resultArray[index] = { key, val: pre[key] }
-          })
-          resultArray.sort((a, b) => b.val - a.val)
-
-          const topKeyValue = resultArray[0]
-
-          if (topKeyValue.val >= 0.95 && topKeyValue.key === '?') {
-            resultsJson[rollNo][q.title] = topKeyValue.key
-          } else {
-            resultArray = resultArray.filter(item => item.key !== '?')
-
-            if (
-              topKeyValue.val < 0.4 ||
-              topKeyValue.val - resultArray[1].val < 0.2
-            ) {
-              resultsJson[rollNo][q.title] = '*'
-            } else {
-              resultsJson[rollNo][q.title] = topKeyValue.key
-            }
-          }
-        }
-        sendProgress(i)
-        resolve(resultsJson)
+      Object.keys(pre).forEach(key => {
+        resultArray.push({ key, val: pre[key] })
       })
-    })
+      resultArray.sort((a, b) => b.val - a.val)
 
-    promises.push(promise)
+      const topKeyValue = resultArray[0]
+      if (topKeyValue.val >= 0.95 && topKeyValue.key === '?') {
+        resultsJson[rollNo][q.title] = topKeyValue.key
+      } else {
+        resultArray = resultArray.filter(item => item.key !== '?')
+
+        if (
+          topKeyValue.val < 0.4 ||
+          topKeyValue.val - resultArray[1].val < 0.2
+        ) {
+          resultsJson[rollNo][q.title] = '*'
+        } else {
+          resultsJson[rollNo][q.title] = topKeyValue.key
+        }
+      }
+    }
+
+    outputs.push(resultsJson)
+    sendProgress(i)
   }
 
-  // eslint-disable-next-line
-  return Promise.all(promises)
-    .then(res => {
-      if (process && process.send) {
-        process.send(
-          {
-            result: res,
-            completed: true,
-          },
-          () => {
-            process.exit(0)
-          },
-        )
-      }
-      return res
-    })
-    .catch(err => {
-      if (process && process.send) {
-        process.send(
-          {
-            error: err,
-          },
-          () => {
-            process.exit(0)
-          },
-        )
-      }
-    })
+  if (process && process.send) {
+    process.send(
+      {
+        result: outputs,
+        completed: true,
+      },
+      () => {
+        process.exit(0)
+      },
+    )
+  } else {
+    console.log('Results: ', outputs)
+  }
 }
 
 if (process && process.send) {

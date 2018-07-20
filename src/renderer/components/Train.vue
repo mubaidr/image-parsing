@@ -10,18 +10,21 @@
 
       <br>
       <br>
-      <progress
-        v-show="running"
-        class="progress is-warning">0%</progress>
-
-      <br>
-      <div class="block">
-        <ul>
-          <li
-            v-for="(log,index) in logs"
-            :key="index">{{ log }}</li>
-        </ul>
-      </div>
+      <transition name="slide-up">
+        <div
+          v-show="running">
+          <progress
+            class="progress is-warning">0%</progress>
+          <br>
+          <div class="block">
+            <ul>
+              <li
+                v-for="(log,index) in logs"
+                :key="index">{{ log }}</li>
+            </ul>
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
