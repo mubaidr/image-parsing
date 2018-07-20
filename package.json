@@ -38,7 +38,7 @@
     }
   },
   "dependencies": {
-    "brain.js": "^1.2.2",
+    "brain.js": "^1.2.4",
     "bulma-addons": "^0.1.11",
     "bulma-fluent": "^0.3.10",
     "cheerio": "1.0.0-rc.2",
@@ -47,8 +47,7 @@
     "javascript-barcode-reader": "^0.2.3",
     "sharp": "^0.20.5",
     "vue": "^2.5.16",
-    "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vue-router": "^3.0.1"
   },
   "description": "An electron-vue project",
   "devDependencies": {
@@ -61,7 +60,7 @@
     "del": "^3.0.0",
     "devtron": "^1.4.0",
     "electron": "^2.0.5",
-    "electron-builder": "^20.22.0",
+    "electron-builder": "^20.23.1",
     "electron-debug": "^2.0.0",
     "electron-rebuild": "^1.8.1",
     "eslint": "^5.1.0",
@@ -84,13 +83,13 @@
     "url-loader": "^1.0.1",
     "vue-devtools": "^4.1.4",
     "vue-html-loader": "^1.2.4",
-    "vue-loader": "^15.2.4",
-    "vue-style-loader": "^4.1.0",
+    "vue-loader": "^15.2.6",
+    "vue-style-loader": "^4.1.1",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^4.16.1",
-    "webpack-cli": "^3.0.8",
+    "webpack-cli": "^3.1.0",
     "webpack-dev-server": "3.1.4",
-    "webpack-hot-middleware": "^2.22.2"
+    "webpack-hot-middleware": "^2.22.3"
   },
   "jest": {
     "bail": true,
