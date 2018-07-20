@@ -103,6 +103,8 @@ async function start(
       })
     }
   }
+
+  return { totalImages: imagePaths.length }
 }
 
 module.exports = {

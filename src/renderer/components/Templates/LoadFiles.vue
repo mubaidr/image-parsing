@@ -10,7 +10,14 @@
           <span class="file-icon">
             <i class="fas fa-upload" />
           </span>
-          <span class="file-label">
+          <span
+            v-if="isFile"
+            class="file-label">
+            Choose a file...
+          </span>
+          <span
+            v-else
+            class="file-label">
             Choose a directory...
           </span>
         </span>
