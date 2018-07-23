@@ -89,8 +89,14 @@ async function start(
 
           // check if all process have returned result
           if (resultData.length === TOTAL_PROCESS) {
-            console.log('Result: ', resultData)
-            console.log('Verification: ', verifyData)
+            resultData = resultData.reduce(
+              (prev, curr) => prev.concat(curr),
+              [],
+            )
+
+            console.log('result: ', resultData)
+            console.log('verify: ', verifyData)
+            // TODO:  get inputs for verification data
           }
         } else if (m.verify) {
           verifyData.push(m)

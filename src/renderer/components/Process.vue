@@ -2,7 +2,7 @@
   <div class="section">
     <h1 class="title">Process</h1>
     <h2 class="subtitle">Process scanned images to generate result.</h2>
-
+    <!--TODO: Utilize user selected paths-->
     <h3 class="subtitle">Choose scanned images directory: </h3>
     <load-files
       file-type="image"/>
