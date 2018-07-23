@@ -95,17 +95,18 @@ export default {
       processingModule.stop()
     },
 
-    listner(msg) {
-      if (msg.progress) {
+    listner(m) {
+      if (m.progress) {
         this.processedImages += 1
-        // console.log('progress: ', msg.progress)
-      } else if (msg.completed) {
+        // console.log('progress: ', m.progress)
+      } else if (m.completed) {
         this.processedWorkers += 1
-        // TODO: collect result from msg.result
-      } else if (msg.log) {
-        console.log('log: ', msg.log)
-      } else if (msg.error) {
-        console.log('error: ', msg.error)
+      } else if (m.result) {
+        console.log('result: ', m)
+      } else if (m.log) {
+        console.log('log: ', m.log)
+      } else if (m.error) {
+        console.log('error: ', m.error)
       }
     },
 

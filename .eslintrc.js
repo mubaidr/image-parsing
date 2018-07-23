@@ -14,6 +14,7 @@ module.exports = {
   },
   plugins: ['vue'],
   rules: {
+    'no-loop-func': 0,
     semi: 0,
     'linebreak-style': 0,
     'no-continue': 0,

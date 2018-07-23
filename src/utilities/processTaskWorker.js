@@ -13,17 +13,6 @@ const {
 let processingEnabled = true
 
 /**
- * Report progress to the parent process
- */
-async function sendProgress(val) {
-  if (process && process.send) {
-    process.send({ progress: true, value: val })
-  } else {
-    console.log('progress: ', val)
-  }
-}
-
-/**
  * Stops the current processing task
  */
 function stop() {
@@ -60,34 +49,47 @@ async function processTask(designData, imagePaths) {
     for (let j = questionsData.length - 1; j >= 0; j -= 1) {
       const q = questionsData[j]
       const pre = neuralNet.run(q.data)
-      let resultArray = []
+      let entries = Object.entries(pre).sort((a, b) => b[1] - a[1])
+      let [first, second] = entries
 
-      Object.keys(pre).forEach(key => {
-        resultArray.push({ key, val: pre[key] })
-      })
-      resultArray.sort((a, b) => b.val - a.val)
-
-      const topKeyValue = resultArray[0]
-      if (topKeyValue.val >= 0.95 && topKeyValue.key === '?') {
-        resultsJson[rollNo][q.title] = topKeyValue.key
+      if (first[1] >= 0.95) {
+        ;[resultsJson[rollNo][q.title]] = first
       } else {
-        resultArray = resultArray.filter(item => item.key !== '?')
+        if (first[0] === '?' || second[0] === '?') {
+          // removes ? from the result array
+          entries = entries.filter(([key]) => key !== '?')
+          ;[first, second] = entries
+        }
 
-        if (
-          topKeyValue.val < 0.4 ||
-          topKeyValue.val - resultArray[1].val < 0.2
-        ) {
+        if (first[1] - second[1] >= 0.33) {
+          ;[resultsJson[rollNo][q.title]] = first
+        } else if (first[1] - second[1] <= 0.16) {
           resultsJson[rollNo][q.title] = '*'
+        } else if (process && process.send) {
+          // TODO: verify this data collection by adding more test data for *
+          process.send({
+            verify: true,
+            rollNo,
+            q,
+          })
         } else {
-          resultsJson[rollNo][q.title] = topKeyValue.key
+          console.log('Verification required: ', rollNo, q)
         }
       }
     }
 
+    // collect option selection
     outputs.push(resultsJson)
-    sendProgress(i)
+
+    // report progress status
+    if (process && process.send) {
+      process.send({ progress: true })
+    } else {
+      console.log('progress: ', i)
+    }
   }
 
+  // report completed status & exit process
   if (process && process.send) {
     process.send(
       {
@@ -103,6 +105,7 @@ async function processTask(designData, imagePaths) {
   }
 }
 
+// add message listner
 if (process && process.send) {
   process.on('message', m => {
     if (m && m.stop) {

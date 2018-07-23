@@ -11,6 +11,10 @@ const {
   getImagePaths,
 } = require('./index')
 
+// result collection
+let resultData = []
+const verifyData = []
+
 // default options
 const DEFAULTS = [
   path.join(dataPaths.testData, 'design.svg'),
@@ -50,6 +54,9 @@ async function start(
   imagesDirectory = DEFAULTS[1],
   useWorkers = DEFAULTS[2],
 ) {
+  // reset result collection
+  resultData = []
+
   const imagePaths = await getImagePaths(imagesDirectory)
   const designData = await getDesignData(designFilePath)
 
@@ -69,25 +76,44 @@ async function start(
       const endIndex = i === TOTAL_PROCESS - 1 ? TOTAL_IMAGES : (i + 1) * STEP
       const worker = WORKER_PROCESSES[i]
 
+      // initiate processing
       worker.send({
         designData,
         imagePaths: imagePaths.slice(startIndex, endIndex),
       })
 
       worker.on('message', m => {
+        // collect result from process
+        if (m.completed) {
+          resultData.push(m.result)
+
+          // check if all process have returned result
+          if (resultData.length === TOTAL_PROCESS) {
+            console.log('Result: ', resultData)
+            console.log('Verification: ', verifyData)
+          }
+        } else if (m.verify) {
+          verifyData.push(m)
+          console.log('Requires verifications')
+        }
+
+        // to display status in view
         if (listner) {
+          /* eslint-disable*/
+          // strip extra data from message object
+          m.result = null
+          m.verify = null
+          /* eslint-enable */
           listner(m)
-        } else if (m.progress) {
-          console.log('Progress: ', m)
-        } else if (m.completed) {
-          console.log('Completed: ', m)
         }
       })
 
       // logging
       worker.stdout.on('data', data => {
         if (listner) {
-          listner({ log: data.toString() })
+          listner({
+            log: data.toString(),
+          })
         } else {
           console.log(data.toString())
         }
@@ -96,7 +122,9 @@ async function start(
       // error
       worker.stderr.on('data', data => {
         if (listner) {
-          listner({ error: data.toString() })
+          listner({
+            error: data.toString(),
+          })
         } else {
           console.log(data.toString())
         }
