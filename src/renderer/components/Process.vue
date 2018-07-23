@@ -14,7 +14,7 @@
 
     <button
       :disabled="running"
-      class="button is-primary"
+      class="button is-dark"
       @click="startProcess">Start Process</button>
 
     <button

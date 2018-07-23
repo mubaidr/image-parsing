@@ -10,6 +10,7 @@ import './assets/fontawesome/css/fontawesome-all.css'
 
 import App from './App.vue'
 import router from './router'
+import store from './store'
 
 Vue.config.productionTip = false
 Vue.config.devtools = false
@@ -20,6 +21,7 @@ new Vue({
     App,
   },
   router,
+  store,
   template: '<App/>',
 }).$mount('#app')
 

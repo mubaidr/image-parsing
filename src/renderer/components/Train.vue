@@ -5,7 +5,7 @@
     <div class="block has-text-centered">
       <button
         :disabled="running"
-        class="button is-primary"
+        class="button is-dark"
         @click="startProcess">Start Training</button>
 
       <br>

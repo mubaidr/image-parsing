@@ -3,6 +3,9 @@ module.exports = {
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 8,
+    ecmaFeatures: {
+      experimentalObjectRestSpread: true,
+    },
   },
   env: {
     browser: true,
