@@ -40,18 +40,19 @@ function stop() {
 /**
  * Start processing scanned image files to get result
  *
- * @param {String} designFilePath design file path
+ * @param {Function} listner Callback function for updates
+ * @param {String?} designFilePath design file path
  * @param {String} imagesDirectory scanned images directory
- * @param {String} neuralNetFilePath neuralNet file path
- * @param {String} outputPath output path
+ * @param {String?} keyfile File path of key file/image
  * @param {Boolean} useWorkers Enable parrallel processing
  *
- * @returns null
+ * @returns {Object} {totalImages, totalWorkers}
  */
 async function start(
   listner,
   designFilePath = DEFAULTS[0],
   imagesDirectory = DEFAULTS[1],
+  keyfile,
   useWorkers = DEFAULTS[2],
 ) {
   // reset result collection
@@ -89,22 +90,30 @@ async function start(
 
           // check if all process have returned result
           if (resultData.length === TOTAL_PROCESS) {
+            // report view of completion
+            listner({
+              completed: true,
+            })
+
+            // prepare result array
             resultData = resultData.reduce(
               (prev, curr) => prev.concat(curr),
               [],
             )
 
+            // Initiate verification process
             console.log('result: ', resultData)
             console.log('verify: ', verifyData)
-            // TODO:  get inputs for verification data
+
+            // TODO: get inputs for verification data
+            // TODO: export result data
           }
         } else if (m.verify) {
           verifyData.push(m)
-          console.log('Requires verifications')
         }
 
         // to display status in view
-        if (listner) {
+        if (listner && !m.completed) {
           /* eslint-disable*/
           // strip extra data from message object
           m.result = null

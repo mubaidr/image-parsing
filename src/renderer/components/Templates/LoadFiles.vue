@@ -104,8 +104,6 @@ export default {
       if (!val) {
         this.files = []
       } else {
-        console.log(this.config.validFormats)
-
         // read files
         fastGlob(
           `${this.directory}/*.{${this.config.validFormats[this.fileType].join(

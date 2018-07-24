@@ -1,16 +1,68 @@
 <template>
   <div class="section">
     <h1 class="title">Process</h1>
-    <h2 class="subtitle">Process scanned images to generate result.</h2>
-    <!--TODO: Utilize user selected paths-->
-    <h3 class="subtitle">Choose scanned images directory: </h3>
-    <load-files
-      file-type="image"/>
+    <h2 class="subtitle is-6">Process scanned images to generate result.</h2>
+    <hr>
 
-    <h3 class="subtitle">Choose answer key file: </h3>
-    <load-files
-      :is-file="true"
-      file-type="image"/>
+    <p>Please choose directory containing scanned answer sheets and answer key file. </p>
+    <br>
+
+    <label class="subtitle is-6">Choose scanned images directory: </label>
+    <div
+      class="file has-name is-fullwidth">
+      <label class="file-label">
+        <button
+          class="file-input"
+          type="file"
+          name="resume"
+          @click="chooseDirectory"/>
+        <span class="file-cta">
+          <span class="file-icon">
+            <i class="fas fa-folder"/>
+          </span>
+          <span class="file-label">
+            Choose a directory
+          </span>
+        </span>
+        <span
+          v-show="imageDirectory"
+          class="file-name">
+          {{ imageDirectory }}
+        </span>
+      </label>
+    </div>
+
+    <br>
+    <label class="subtitle is-6">Choose answer key file: </label>
+    <div class="file has-name is-fullwidth">
+      <label class="file-label">
+        <button
+          class="file-input"
+          type="file"
+          name="resume"
+          @click="chooseFile"/>
+        <span class="file-cta">
+          <span class="file-icon">
+            <i class="fas fa-file"/>
+          </span>
+          <span class="file-label">
+            Choose a file…
+          </span>
+        </span>
+        <span
+          v-show="keyFile"
+          class="file-name">
+          {{ keyFile }}
+        </span>
+      </label>
+    </div>
+
+    <br>
+    <label class="subtitle is-6">Options:</label>
+    <p>Coming soon!</p>
+    <br>
+
+    <hr>
 
     <button
       :disabled="running"
@@ -22,38 +74,40 @@
       class="button is-danger"
       @click="stopProcess">Stop Process</button>
 
-    <br>
-    <br>
-    <transition name="slide-up">
-      <div
-        v-show="running">
-        <div>
-          Processing: <strong>{{ processedImages }}/{{ totalImages }}</strong>, ETA: <strong>{{ (totalImages - processedImages) * 0.5 }}</strong>s
+    <div
+      :class="{'is-active': running}"
+      class="modal">
+      <div class="modal-background"/>
+      <div class="modal-content">
+        <div
+          class="box">
+          <h3 class="title is-5">Processing</h3>
+          <div>
+            Processing image <strong>{{ processedImages }} of {{ totalImages }}</strong>, Estimated time remaining: <strong>{{ remainingTime }}</strong>
+          </div>
+          <progress
+            :value="progress"
+            class="progress is-primary is-large"
+            max="100">{ progress }%</progress>
         </div>
-        <progress
-          :value="progress"
-          class="progress is-primary is-large"
-          max="100">{ progress }%</progress>
       </div>
-    </transition>
+    </div>
   </div>
 </template>
 
 <script>
-import loadFiles from './Templates/LoadFiles.vue'
-
+// eslint-disable-next-line
+const { remote } = require('electron')
 const processingModule = require('../../utilities/process.js')
 
 export default {
-  components: { loadFiles },
-
   data() {
     return {
+      imageDirectory: null,
+      keyFile: null,
       running: false,
       processedImages: 0,
       totalImages: 0,
-      processedWorkers: 0,
-      totalWorkers: 0,
     }
   },
 
@@ -64,43 +118,48 @@ export default {
       }
       return 0
     },
+
+    remainingTime() {
+      const t = (this.totalImages - this.processedImages) * 0.5
+      return t ? `${t}s` : 'Calculating...'
+    },
   },
 
   watch: {
-    progress(val) {
-      if (val === 100) {
-        this.running = false
-      }
-    },
+    running(val) {
+      if (val) return
 
-    running() {
       this.processedImages = 0
       this.totalImages = 0
+
+      // TODO: add notification
     },
   },
 
   methods: {
     async startProcess() {
       this.running = true
-      const { totalImages, totalWorkers } = await processingModule.start(
-        this.listner,
-      )
 
+      const { totalImages } = await processingModule.start(
+        this.listner,
+        undefined,
+        this.imageDirectory,
+        this.keyFile,
+        true,
+      )
       this.totalImages = totalImages
-      this.totalWorkers = totalWorkers
     },
 
     async stopProcess() {
-      this.running = false
       processingModule.stop()
+      this.running = false
     },
 
     listner(m) {
       if (m.progress) {
         this.processedImages += 1
-        // console.log('progress: ', m.progress)
       } else if (m.completed) {
-        this.processedWorkers += 1
+        this.running = false
       } else if (m.result) {
         console.log('result: ', m)
       } else if (m.log) {
@@ -110,7 +169,17 @@ export default {
       }
     },
 
-    resultExtracted() {},
+    chooseDirectory() {
+      ;[this.imageDirectory] = remote.dialog.showOpenDialog({
+        properties: ['openDirectory'],
+      }) || [false]
+    },
+
+    chooseFile() {
+      ;[this.keyFile] = remote.dialog.showOpenDialog({
+        properties: ['openFile'],
+      }) || [false]
+    },
   },
 }
 </script>
