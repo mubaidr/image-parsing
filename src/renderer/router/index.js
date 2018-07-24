@@ -34,6 +34,14 @@ export default new Router({
       component: require('@/components/Process.vue').default,
     },
     {
+      path: '/compile',
+      meta: {
+        title: 'Compile',
+        icon: 'fa-tasks',
+      },
+      component: require('@/components/Compile.vue').default,
+    },
+    {
       path: '/train',
       meta: {
         title: 'Train',

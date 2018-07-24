@@ -42,6 +42,7 @@
     "bulma-addons": "^0.1.11",
     "bulma-fluent": "^0.3.10",
     "cheerio": "1.0.0-rc.2",
+    "downloadjs": "^1.4.7",
     "electron-store": "^2.0.0",
     "fast-glob": "^2.2.2",
     "javascript-barcode-reader": "^0.2.3",

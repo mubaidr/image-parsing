@@ -13,7 +13,7 @@ const {
 
 // result collection
 let resultData = []
-const verifyData = []
+let verifyData = []
 
 // default options
 const DEFAULTS = [
@@ -43,7 +43,6 @@ function stop() {
  * @param {Function} listner Callback function for updates
  * @param {String?} designFilePath design file path
  * @param {String} imagesDirectory scanned images directory
- * @param {String?} keyfile File path of key file/image
  * @param {Boolean} useWorkers Enable parrallel processing
  *
  * @returns {Object} {totalImages, totalWorkers}
@@ -52,11 +51,11 @@ async function start(
   listner,
   designFilePath = DEFAULTS[0],
   imagesDirectory = DEFAULTS[1],
-  keyfile,
   useWorkers = DEFAULTS[2],
 ) {
   // reset result collection
   resultData = []
+  verifyData = []
 
   const imagePaths = await getImagePaths(imagesDirectory)
   const designData = await getDesignData(designFilePath)
@@ -90,36 +89,33 @@ async function start(
 
           // check if all process have returned result
           if (resultData.length === TOTAL_PROCESS) {
-            // report view of completion
-            listner({
-              completed: true,
-            })
-
             // prepare result array
             resultData = resultData.reduce(
               (prev, curr) => prev.concat(curr),
               [],
             )
 
-            // Initiate verification process
-            console.log('result: ', resultData)
-            console.log('verify: ', verifyData)
+            if (verifyData.length > 0) {
+              // report view of completion
+              listner({
+                verification: true,
+              })
 
-            // TODO: get inputs for verification data
-            // TODO: export result data
+              console.log('verify: ', verifyData)
+              // TODO: get inputs for verification data
+            } else {
+              listner({ completed: true })
+
+              // TODO: export result data
+              console.log('result: ', resultData)
+            }
           }
         } else if (m.verify) {
           verifyData.push(m)
-        }
-
-        // to display status in view
-        if (listner && !m.completed) {
-          /* eslint-disable*/
-          // strip extra data from message object
-          m.result = null
-          m.verify = null
-          /* eslint-enable */
-          listner(m)
+        } else if (m.progress) {
+          if (listner) {
+            listner(m)
+          }
         }
       })
 

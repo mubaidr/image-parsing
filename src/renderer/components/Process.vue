@@ -4,9 +4,6 @@
     <h2 class="subtitle is-6">Process scanned images to generate result.</h2>
     <hr>
 
-    <p>Please choose directory containing scanned answer sheets and answer key file. </p>
-    <br>
-
     <label class="subtitle is-6">Choose scanned images directory: </label>
     <div
       class="file has-name is-fullwidth">
@@ -33,39 +30,14 @@
     </div>
 
     <br>
-    <label class="subtitle is-6">Choose answer key file: </label>
-    <div class="file has-name is-fullwidth">
-      <label class="file-label">
-        <button
-          class="file-input"
-          type="file"
-          name="resume"
-          @click="chooseFile"/>
-        <span class="file-cta">
-          <span class="file-icon">
-            <i class="fas fa-file"/>
-          </span>
-          <span class="file-label">
-            Choose a file…
-          </span>
-        </span>
-        <span
-          v-show="keyFile"
-          class="file-name">
-          {{ keyFile }}
-        </span>
-      </label>
-    </div>
-
-    <br>
     <label class="subtitle is-6">Options:</label>
-    <p>Coming soon!</p>
+    <p>...</p>
     <br>
 
     <hr>
 
     <button
-      :disabled="running"
+      :disabled="running || !imageDirectory"
       class="button is-dark"
       @click="startProcess">Start Process</button>
 
@@ -104,7 +76,6 @@ export default {
   data() {
     return {
       imageDirectory: null,
-      keyFile: null,
       running: false,
       processedImages: 0,
       totalImages: 0,
@@ -131,8 +102,6 @@ export default {
 
       this.processedImages = 0
       this.totalImages = 0
-
-      // TODO: add notification
     },
   },
 
@@ -144,7 +113,6 @@ export default {
         this.listner,
         undefined,
         this.imageDirectory,
-        this.keyFile,
         true,
       )
       this.totalImages = totalImages
@@ -160,8 +128,6 @@ export default {
         this.processedImages += 1
       } else if (m.completed) {
         this.running = false
-      } else if (m.result) {
-        console.log('result: ', m)
       } else if (m.log) {
         console.log('log: ', m.log)
       } else if (m.error) {
@@ -172,12 +138,6 @@ export default {
     chooseDirectory() {
       ;[this.imageDirectory] = remote.dialog.showOpenDialog({
         properties: ['openDirectory'],
-      }) || [false]
-    },
-
-    chooseFile() {
-      ;[this.keyFile] = remote.dialog.showOpenDialog({
-        properties: ['openFile'],
       }) || [false]
     },
   },
