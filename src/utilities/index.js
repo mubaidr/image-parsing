@@ -342,12 +342,13 @@ async function getRollNoFromImage(designData, img) {
  *
  *
  * @param {String} dir CSV file path or CSV data
- * @param {Boolean} isData true if dir is CSV data
+ * @param {Boolean} isPath true if dir is CSV data
  * @returns {Object} JSON Object
  */
-async function CSVToJSON(dir, isData) {
-  const resultData = {}
-  const resultFile = isData ? dir : fs.readFileSync(dir, 'utf8')
+async function CSVToJSON(dir, isPath) {
+  const resultFile = isPath ? fs.readFileSync(dir, 'utf8') : dir
+
+  const json = {}
 
   const rows = resultFile.split('\n')
   const headerValues = rows[0]
@@ -367,10 +368,10 @@ async function CSVToJSON(dir, isData) {
       obj[headerValues[j]] = values[j]
     }
 
-    resultData[values[rollNoIndex]] = obj
+    json[values[rollNoIndex]] = obj
   }
 
-  return resultData
+  return json
 }
 
 /**
@@ -379,7 +380,9 @@ async function CSVToJSON(dir, isData) {
  * @param {String} path JSON file path
  * @returns {Object} CSV String
  */
-function JSONToCSV(obj) {
+function JSONToCSV(dir, isPath) {
+  const obj = isPath ? JSON.parse(fs.readFileSync(dir, 'utf8')) : dir
+
   let header = 'ROLL NO'
   let csv = ''
 
