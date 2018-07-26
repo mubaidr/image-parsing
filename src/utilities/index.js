@@ -341,34 +341,49 @@ async function getRollNoFromImage(designData, img) {
 /**
  *
  *
- * @param {String} dir CSV file path or CSV data
- * @param {Boolean} isPath true if dir is CSV data
- * @returns {Object} JSON Object
+ * @param {String} str JSON object or JSON file path
+ * @param {Boolean} isPath True for path
+ * @param {Boolean} isKey True if the CSV file is answer key file
+ * @returns {Object} CSV String
  */
-async function CSVToJSON(dir, isPath) {
-  const resultFile = isPath ? fs.readFileSync(dir, 'utf8') : dir
-
+async function CSVToJSON(str, isPath, isKey) {
+  const resultFile = isPath ? fs.readFileSync(str, 'utf8') : str
   const json = {}
 
+  // extract rows and header names
   const rows = resultFile.split('\n')
   const headerValues = rows[0]
+    .replace(/(\s)|(\.)|(-)|(_)/gi, '')
+    .toLowerCase()
     .split(',')
-    .map(word => word.replace(/(\s)|(\.)|(-)|(_)/gi, '').toLowerCase())
 
-  const rollNoIndex =
-    headerValues.indexOf('rollno') ||
-    headerValues.indexOf('rollnumber') ||
-    headerValues.indexOf('roll#')
+  // extract index of roll no in header row
+  const rollNoIndex = headerValues.indexOf('rollno')
 
+  if (isKey) rows.length = 2
+  // iterate rows but skips header row
   for (let i = 1; i < rows.length; i += 1) {
-    const values = rows[i].split(',').map(word => word.toLowerCase())
     const obj = {}
+    const values = rows[i]
+      .replace(/(\s)|(\.)|(-)|(_)/gi, '')
+      .toLowerCase()
+      .split(',')
 
-    for (let j = 0; j < values.length; j += 1) {
-      obj[headerValues[j]] = values[j]
+    values.forEach((value, index) => {
+      if (index !== rollNoIndex) {
+        obj[headerValues[index]] = value
+      }
+    })
+
+    if (isKey) {
+      json.key = obj
+    } else {
+      const roll = values[rollNoIndex]
+
+      if (roll) {
+        json[roll] = obj
+      }
     }
-
-    json[values[rollNoIndex]] = obj
   }
 
   return json
@@ -377,11 +392,12 @@ async function CSVToJSON(dir, isPath) {
 /**
  *
  *
- * @param {String} path JSON file path
+ * @param {String} str JSON object or JSON file path
+ * @param {Boolean} isPath True for path
  * @returns {Object} CSV String
  */
-function JSONToCSV(dir, isPath) {
-  const obj = isPath ? JSON.parse(fs.readFileSync(dir, 'utf8')) : dir
+function JSONToCSV(str, isPath) {
+  const obj = isPath ? JSON.parse(fs.readFileSync(str, 'utf8')) : str
 
   let header = 'ROLL NO'
   let csv = ''

@@ -65,11 +65,6 @@
       class="button is-dark"
       @click="startProcess">Start Process</button>
 
-    <button
-      :disabled="!running"
-      class="button is-danger"
-      @click="stopProcess">Stop Process</button>
-
     <div
       :class="{'is-active': running}"
       class="modal">
@@ -87,14 +82,17 @@
 </template>
 
 <script>
+import { CSVToJSON, JSONToCSV } from '../../utilities'
+
 // eslint-disable-next-line
 const { remote } = require('electron')
 
 export default {
   data() {
     return {
-      resultFile: null,
-      keyFile: null,
+      resultFile:
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.csv',
+      keyFile: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.csv',
       running: false,
     }
   },
@@ -105,11 +103,12 @@ export default {
 
   methods: {
     async startProcess() {
-      console.log('start')
-    },
-
-    async stopProcess() {
-      console.log('stop')
+      Promise.all([
+        CSVToJSON(this.resultFile, true),
+        CSVToJSON(this.keyFile, true, true),
+      ]).then(([result, key]) => {
+        console.log(result, key)
+      })
     },
 
     chooseFileResult() {
@@ -117,6 +116,7 @@ export default {
         properties: ['openFile'],
       }) || [false]
     },
+
     chooseFileKey() {
       ;[this.keyFile] = remote.dialog.showOpenDialog({
         properties: ['openFile'],
