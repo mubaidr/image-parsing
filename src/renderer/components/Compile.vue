@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { CSVToJSON, JSONToCSV } from '../../utilities'
+import { CSVToJSON, compileResult } from '../../utilities'
 
 // eslint-disable-next-line
 const { remote } = require('electron')
@@ -107,7 +107,8 @@ export default {
         CSVToJSON(this.resultFile, true),
         CSVToJSON(this.keyFile, true, true),
       ]).then(([result, key]) => {
-        console.log(result, key)
+        // TODO: add inputs for obtainig marks info
+        compileResult(key, result, 3, 0.33)
       })
     },
 
