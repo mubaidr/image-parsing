@@ -9,8 +9,11 @@ const {
   createWorkerProcesses,
   getDesignData,
   getImagePaths,
+  exportResult,
 } = require('./index')
 
+// store reference to all workers
+let WORKER_PROCESSES
 // result collection
 let resultData = []
 let verifyData = []
@@ -21,8 +24,6 @@ const DEFAULTS = [
   path.join(dataPaths.testData, 'images'),
   true, // disable for testing processTask using in-process
 ]
-// store reference to all workers
-let WORKER_PROCESSES
 
 /**
  * Stops all worker processes
@@ -96,18 +97,17 @@ async function start(
             )
 
             if (verifyData.length > 0) {
-              // report view of completion
+              // report view of required verification
               listner({
                 verification: true,
               })
 
-              console.log('verify: ', verifyData)
-              // TODO: get inputs for verification data
+              // TODO verify data and then export
             } else {
+              // report view of completion
               listner({ completed: true })
-
-              // TODO: export result data
-              console.log('result: ', resultData)
+              // export result as csv
+              exportResult(resultData)
             }
           }
         } else if (m.verify) {

@@ -5,6 +5,7 @@ const fastGlob = require('fast-glob')
 const fs = require('fs')
 const javascriptBarcodeReader = require('javascript-barcode-reader')
 const os = require('os')
+const download = require('downloadjs')
 const dataPaths = require('./data-paths')
 // const javascriptBarcodeReader = require('../../../Javascript-Barcode-Reader/src')
 
@@ -78,6 +79,7 @@ async function createWorkerProcesses(imagesCount) {
 
 /**
  * Extracts position & dimensions of objects from SVG design File
+ *
  * @param {String} designFilePath Path to the svg design file
  * @returns {Object} JSON object
  */
@@ -171,6 +173,7 @@ async function getDesignData(dir) {
 
 /**
  * Return a list of valid image format files from the provided path
+ *
  * @param {String} path Path to sarch for images
  * @param {Array.<String>} format Array of extensions of valid image formats
  * @returns {Array.<String>} List of file paths
@@ -194,6 +197,7 @@ function getImagePaths(dir) {
 
 /**
  * Returns a trained neural network function
+ *
  * @returns {Function} Neural network function
  */
 function getNeuralNet(src) {
@@ -205,6 +209,7 @@ function getNeuralNet(src) {
 }
 
 /**
+ *
  *
  * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
  * @param {String} path Path of scanned image file
@@ -297,6 +302,7 @@ async function getQuestionsData(designData, img, resultsData, rollNo) {
 
 /**
  *
+ *
  * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
  * @param {String} path Path of scanned image file
  * @returns {String} Roll Number
@@ -334,12 +340,14 @@ async function getRollNoFromImage(designData, img) {
 
 /**
  *
- * @param {String} dir CSV file path
+ *
+ * @param {String} dir CSV file path or CSV data
+ * @param {Boolean} isData true if dir is CSV data
  * @returns {Object} JSON Object
  */
-async function readCsvToJson(dir) {
+async function CSVToJSON(dir, isData) {
   const resultData = {}
-  const resultFile = fs.readFileSync(dir, 'utf8')
+  const resultFile = isData ? dir : fs.readFileSync(dir, 'utf8')
 
   const rows = resultFile.split('\n')
   const headerValues = rows[0]
@@ -367,31 +375,60 @@ async function readCsvToJson(dir) {
 
 /**
  *
+ *
  * @param {String} path JSON file path
  * @returns {Object} CSV String
  */
-function readJsonToCsv(obj) {
-  let header = ''
+function JSONToCSV(obj) {
+  let header = 'ROLL NO'
   let csv = ''
 
-  const keys = Object.keys(obj)
+  // sort by roll number
+  obj.sort((a, b) => Object.keys(a)[0] - Object.keys(b)[0])
 
-  // Prepare header row
-  Object.keys(obj[keys[0]]).forEach(prop => {
-    header += `${prop[0].toUpperCase() + prop.substr(1)},`
-  })
-  header += 'RollNo'
+  // parse to csv
+  Object.values(obj).forEach((val, index) => {
+    const [[rollno, keys]] = Object.entries(val)
 
-  // prepare data rows
-  keys.forEach(key => {
-    Object.keys(obj[key]).forEach(prop => {
-      csv += `${obj[key][prop]},`
-    })
-    csv += key
+    // eslint-disable-next-line
     csv += '\n'
+    csv += rollno
+
+    // sort by question no
+    const keyEntries = Object.entries(keys).sort(
+      (a, b) => a[0].replace('q', '') - b[0].replace('q', ''),
+    )
+
+    // append to csv
+    for (let i = 0; i < keyEntries.length; i += 1) {
+      if (i !== keyEntries.length) {
+        csv += ','
+      }
+
+      csv += keyEntries[i][1].toUpperCase()
+
+      if (index === 0) {
+        header += `,${keyEntries[i][0].toUpperCase()}`
+      }
+    }
   })
 
-  return `${header}\n${csv}`
+  return `${header}${csv}`
+}
+
+/**
+ * Exports JSON result data as CSV
+ *
+ * @param {Object} resultData
+ */
+async function exportResult(resultData) {
+  const csv = await JSONToCSV(resultData)
+
+  try {
+    download(csv, 'result.csv', 'text/csv')
+  } catch (error) {
+    console.log('Result: ', csv)
+  }
 }
 
 module.exports = {
@@ -400,7 +437,8 @@ module.exports = {
   getImagePaths,
   getNeuralNet,
   getRollNoFromImage,
-  readCsvToJson,
-  readJsonToCsv,
+  CSVToJSON,
+  JSONToCSV,
   getQuestionsData,
+  exportResult,
 }
