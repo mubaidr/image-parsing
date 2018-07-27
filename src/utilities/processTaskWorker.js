@@ -49,21 +49,23 @@ async function processTask(designData, imagePaths) {
     for (let j = questionsData.length - 1; j >= 0; j -= 1) {
       const q = questionsData[j]
       const pre = neuralNet.run(q.data)
-      let entries = Object.entries(pre).sort((a, b) => b[1] - a[1])
-      let [first, second] = entries
 
-      if (first[1] >= 0.95) {
-        ;[resultsJson[rollNo][q.title]] = first
+      if (pre['?'] >= 0.95) {
+        resultsJson[rollNo][q.title] = '?'
       } else {
-        if (first[0] === '?' || second[0] === '?') {
-          // removes ? from the result array
-          entries = entries.filter(([key]) => key !== '?')
-          ;[first, second] = entries
-        }
+        const [first, second] = Object.entries(pre)
+          .filter(([key]) => key !== '?')
+          .sort((a, b) => b[1] - a[1])
 
         if (first[1] - second[1] >= 0.33) {
           ;[resultsJson[rollNo][q.title]] = first
-        } else if (first[1] - second[1] <= 0.16) {
+        } else {
+          resultsJson[rollNo][q.title] = '*'
+        }
+
+        // TODO: disable verification data for now
+        /*
+        if (first[1] - second[1] <= 0.16) {
           resultsJson[rollNo][q.title] = '*'
         } else {
           // verification required
@@ -73,6 +75,7 @@ async function processTask(designData, imagePaths) {
             q,
           })
         }
+        */
       }
     }
 

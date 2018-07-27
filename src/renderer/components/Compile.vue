@@ -100,8 +100,9 @@ const { remote } = require('electron')
 export default {
   data() {
     return {
-      resultFile: null,
-      keyFile: null,
+      resultFile:
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.csv',
+      keyFile: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.csv',
       correctMarks: 3,
       incorrectMarks: 1,
       running: false,

@@ -100,9 +100,8 @@ async function start(
               // report view of required verification
               listner({
                 verification: true,
+                verifyData,
               })
-
-              // TODO: verify data and then export
             } else {
               // report view of completion
               listner({ completed: true })
@@ -149,7 +148,14 @@ async function start(
   }
 }
 
+async function receiveVerifyData(vd) {
+  console.log('corrected verify Data: ', vd)
+  // TODO: merge with resultData
+  exportResult(resultData)
+}
+
 module.exports = {
   start,
   stop,
+  receiveVerifyData,
 }

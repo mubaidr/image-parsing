@@ -59,6 +59,8 @@
         </div>
       </div>
     </div>
+
+    <!-- TODO: add a wizard view/template for verification input-->
   </div>
 </template>
 
@@ -70,7 +72,8 @@ const processingModule = require('../../utilities/process.js')
 export default {
   data() {
     return {
-      imageDirectory: null,
+      imageDirectory:
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\images',
       running: false,
       processedImages: 0,
       totalImages: 0,
@@ -127,6 +130,11 @@ export default {
         console.log('log: ', m.log)
       } else if (m.error) {
         console.log('error: ', m.error)
+      }
+
+      // TODO: activate wizard to verify inputs
+      if (m.verification) {
+        console.log('recieved verify data: ', m.verifyData)
       }
     },
 
