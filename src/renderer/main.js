@@ -1,12 +1,12 @@
 import Vue from 'vue'
-import 'bulma-fluent/css/bulma.css'
-import 'bulma-addons/css/bulma.css'
-
-import './mixins'
+import 'bulma-fluent/bulma.sass'
+import 'bulma-addons/bulma.sass'
 
 import './assets/style/main.sass'
 import './assets/style/animations.sass'
 import './assets/fontawesome/css/fontawesome-all.css'
+
+import './mixins'
 
 import App from './App.vue'
 import router from './router'

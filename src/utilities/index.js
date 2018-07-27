@@ -437,17 +437,19 @@ function JSONToCSV(str, isPath) {
 }
 
 /**
- * Exports JSON result data as CSV
+ * Exports result data
  *
  * @param {Object} resultData Result data JSON format
+ * @param {String} name Name of the output file
+ * @param {Boolean} isCSV if the provided data is CSV
  */
-async function exportResult(resultData, name) {
-  const csv = await JSONToCSV(resultData)
+async function exportResult(resultData, name, isCSV) {
+  const csv = isCSV ? resultData : await JSONToCSV(resultData)
 
   try {
-    download(csv, name ? `${name}.csv` : 'result.csv', 'text/csv')
+    download(csv, name ? `${name}.csv` : 'output.csv', 'text/csv')
   } catch (error) {
-    console.log('Result: ', csv)
+    console.log('output: ', csv)
   }
 }
 
@@ -471,10 +473,7 @@ async function compileResult(keys, results, correctMarks, negativeMarks) {
       const [key, value] = keyEntries[i]
 
       // if user has not selected any option
-      if (value === '?') {
-        marks += correctMarks
-        continue
-      }
+      if (value === '?') continue
       // if question has multiple correct options
       if (value === '*') continue
       // if question has no right option
@@ -492,7 +491,17 @@ async function compileResult(keys, results, correctMarks, negativeMarks) {
     output.push({ [rollNo]: marks })
   })
 
-  exportResult(output, 'ResultMarks')
+  // convert to CSV
+  let str = 'ROLL NO,MARKS'
+  output.forEach(o => {
+    const [[rollNo, marks]] = Object.entries(o)
+
+    str += '\n'
+    str += `${rollNo},${marks}`
+  })
+
+  // export
+  exportResult(str, 'ResultMarks', true)
 }
 
 module.exports = {
