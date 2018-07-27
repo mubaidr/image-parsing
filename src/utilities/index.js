@@ -425,7 +425,9 @@ function JSONToCSV(str, isPath) {
         csv += ','
       }
 
-      csv += keyEntries[i][1].toUpperCase()
+      csv += keyEntries[i][1].toUpperCase
+        ? keyEntries[i][1].toUpperCase
+        : keyEntries[i][1]
 
       if (index === 0) {
         header += `,${keyEntries[i][0].toUpperCase()}`
@@ -465,6 +467,15 @@ async function exportResult(resultData, name, isCSV) {
 async function compileResult(keys, results, correctMarks, negativeMarks) {
   const keyEntries = Object.entries(keys.key)
   const output = []
+  let totalMarks = 0
+
+  for (let i = 0; i < keyEntries.length; i += 1) {
+    const [, value] = keyEntries[i]
+
+    if (value === '?' || value === '*') continue
+
+    totalMarks += correctMarks
+  }
 
   Object.entries(results).forEach(([rollNo, answers]) => {
     let marks = 0
@@ -488,20 +499,16 @@ async function compileResult(keys, results, correctMarks, negativeMarks) {
       }
     }
 
-    output.push({ [rollNo]: marks })
-  })
-
-  // convert to CSV
-  let str = 'ROLL NO,MARKS'
-  output.forEach(o => {
-    const [[rollNo, marks]] = Object.entries(o)
-
-    str += '\n'
-    str += `${rollNo},${marks}`
+    output.push({
+      [rollNo]: {
+        marks,
+        totalMarks,
+      },
+    })
   })
 
   // export
-  exportResult(str, 'ResultMarks', true)
+  exportResult(JSONToCSV(output), 'ResultMarks', true)
 }
 
 module.exports = {
