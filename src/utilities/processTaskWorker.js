@@ -65,15 +65,13 @@ async function processTask(designData, imagePaths) {
           ;[resultsJson[rollNo][q.title]] = first
         } else if (first[1] - second[1] <= 0.16) {
           resultsJson[rollNo][q.title] = '*'
-        } else if (process && process.send) {
-          // TODO: verify this data collection by adding more test data for *
+        } else {
+          // verification required
           process.send({
             verify: true,
             rollNo,
             q,
           })
-        } else {
-          console.log('Verification required: ', rollNo, q)
         }
       }
     }

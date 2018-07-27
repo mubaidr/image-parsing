@@ -102,7 +102,7 @@ async function start(
                 verification: true,
               })
 
-              // TODO verify data and then export
+              // TODO: verify data and then export
             } else {
               // report view of completion
               listner({ completed: true })

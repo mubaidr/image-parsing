@@ -121,7 +121,7 @@ export default {
     listner(m) {
       if (m.progress) {
         this.processedImages += 1
-      } else if (m.completed) {
+      } else if (m.completed || m.verification) {
         this.running = false
       } else if (m.log) {
         console.log('log: ', m.log)

@@ -314,7 +314,7 @@ async function getRollNoFromImage(designData, img) {
   const width = Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio)
   const height = Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio)
 
-  const { data } = await img
+  const { data, info } = await img
     .extract({
       left: Math.floor(rollNoPos.x1 * ratio),
       top: Math.floor(rollNoPos.y1 * ratio),
@@ -323,17 +323,22 @@ async function getRollNoFromImage(designData, img) {
     })
     .toBuffer({ resolveWithObject: true })
 
-  // add missing channel
   const newData = []
-  for (let i = 0; i < data.length; i += 3) {
-    newData.push(data[i])
-    newData.push(data[i + 1])
-    newData.push(data[i + 2])
-    newData.push(255)
+  if (info.channels < 4) {
+    for (let i = 0; i < data.length; i += info.channels) {
+      // copy current channels
+      for (let j = 0; j < info.channels; j += 1) {
+        newData.push(data[i + j])
+      }
+      // add missing channels
+      for (let k = 0; k < 4 - info.channels; k += 1) {
+        newData.push(255)
+      }
+    }
   }
 
   return javascriptBarcodeReader(
-    { data: newData, width, height },
+    { data: info.channels < 4 ? newData : data, width, height },
     { barcode: 'code-39' },
   )
 }
@@ -426,7 +431,7 @@ function JSONToCSV(str, isPath) {
       }
 
       csv += keyEntries[i][1].toUpperCase
-        ? keyEntries[i][1].toUpperCase
+        ? keyEntries[i][1].toUpperCase()
         : keyEntries[i][1]
 
       if (index === 0) {
