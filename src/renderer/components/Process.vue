@@ -2,9 +2,9 @@
   <div class="section">
     <h1 class="title">Process</h1>
     <h2 class="subtitle is-6">Process scanned images to generate result.</h2>
-    <hr>
 
-    <label class="subtitle is-6">Choose scanned images directory: </label>
+    <br>
+
     <div
       class="file has-name is-fullwidth">
       <label class="file-label">
@@ -22,7 +22,6 @@
           </span>
         </span>
         <span
-          v-show="imageDirectory"
           class="file-name">
           {{ imageDirectory }}
         </span>
@@ -30,11 +29,7 @@
     </div>
 
     <br>
-    <label class="subtitle is-6">Options:</label>
-    <p>...</p>
     <br>
-
-    <hr>
 
     <button
       :disabled="running || !imageDirectory"

@@ -1,10 +1,9 @@
 <template>
   <div class="section">
     <h1 class="title">Compile</h1>
-    <h2 class="subtitle is-6">Comile result.</h2>
-    <hr>
+    <h2 class="subtitle is-6">Compile result using extracted results and answer key.</h2>
+    <br>
 
-    <label class="subtitle is-6">Choose result file: </label>
     <div class="file has-name is-fullwidth">
       <label class="file-label">
         <button
@@ -17,7 +16,7 @@
             <i class="fas fa-file"/>
           </span>
           <span class="file-label">
-            Choose a file…
+            Result file
           </span>
         </span>
         <span
@@ -29,7 +28,6 @@
     </div>
 
     <br>
-    <label class="subtitle is-6">Choose answer key file: </label>
     <div class="file has-name is-fullwidth">
       <label class="file-label">
         <button
@@ -42,7 +40,7 @@
             <i class="fas fa-file"/>
           </span>
           <span class="file-label">
-            Choose a file…
+            Key file
           </span>
         </span>
         <span
@@ -54,30 +52,42 @@
     </div>
 
     <br>
-    <label class="subtitle is-6">Options:</label>
-    <p>Coming soon!</p>
-    <br>
-
-    <hr>
-
-    <button
-      :disabled="running"
-      class="button is-dark"
-      @click="startProcess">Start Process</button>
-
-    <div
-      :class="{'is-active': running}"
-      class="modal">
-      <div class="modal-background"/>
-      <div class="modal-content">
-        <div
-          class="box">
-          <h3 class="title is-5">Compiling</h3>
-          <progress
-            class="progress is-primary is-large"/>
+    <div class="block">
+      <div class="columns">
+        <div class="column">
+          <div class="field">
+            <label class="label">Correct Marks</label>
+            <div class="control">
+              <input
+                v-model="correctMarks"
+                class="input"
+                type="number"
+                placeholder="Marks earned for each correct answer">
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="field">
+            <label class="label">Negative Marks</label>
+            <div class="control">
+              <input
+                v-model="incorrectMarks"
+                class="input"
+                type="number"
+                step="0.01"
+                placeholder="Marks deducted for each incorrect answer">
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <br>
+
+    <button
+      :disabled="running || !isValid"
+      class="button is-dark"
+      @click="startProcess">Start Compilation</button>
   </div>
 </template>
 
@@ -93,11 +103,22 @@ export default {
       resultFile:
         'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.csv',
       keyFile: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.csv',
+      correctMarks: 3,
+      incorrectMarks: 0.33,
       running: false,
     }
   },
 
-  computed: {},
+  computed: {
+    isValid() {
+      return (
+        this.resultFile &&
+        this.keyFile &&
+        this.correctMarks &&
+        this.incorrectMarks
+      )
+    },
+  },
 
   watch: {},
 
@@ -107,8 +128,7 @@ export default {
         CSVToJSON(this.resultFile, true),
         CSVToJSON(this.keyFile, true, true),
       ]).then(([result, key]) => {
-        // TODO: add inputs for obtainig marks info
-        compileResult(key, result, 3, 0.33)
+        compileResult(key, result, this.correctMarks, this.incorrectMarks)
       })
     },
 
