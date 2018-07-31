@@ -46,6 +46,7 @@
     "electron-store": "^2.0.0",
     "fast-glob": "^2.2.2",
     "javascript-barcode-reader": "^0.2.3",
+    "physical-cpu-count": "^2.0.0",
     "sharp": "^0.20.5",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",

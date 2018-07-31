@@ -6,6 +6,7 @@ const fs = require('fs')
 const javascriptBarcodeReader = require('javascript-barcode-reader')
 const os = require('os')
 const download = require('downloadjs')
+const NO_OF_CORES = require('physical-cpu-count')
 const dataPaths = require('./data-paths')
 // const javascriptBarcodeReader = require('../../../Javascript-Barcode-Reader/src')
 
@@ -17,56 +18,17 @@ const dataPaths = require('./data-paths')
 async function createWorkerProcesses(imagesCount) {
   const WORKERS = []
 
-  let NO_OF_CORES = await new Promise(resolve => {
-    switch (os.platform()) {
-      case 'win32':
-        childProcess.exec('wmic CPU Get NumberOfCores', {}, (err, out) => {
-          resolve(
-            parseInt(
-              out
-                .replace(/\r/g, '')
-                .split('\n')[1]
-                .trim(),
-              10,
-            ),
-          )
-        })
-        break
-      case 'darwin':
-      case 'linux':
-        childProcess.exec('getconf _NPROCESSORS_ONLN', {}, (err, out) => {
-          resolve(parseInt(out, 10))
-        })
-        break
-      case 'freebsd':
-      case 'openbsd':
-        childProcess.exec('getconf NPROCESSORS_ONLN', {}, (err, out) => {
-          resolve(parseInt(out, 10))
-        })
-        break
-      case 'sunos':
-        childProcess.exec(
-          'kstat cpu_info|grep core_id|sort -u|wc -l',
-          {},
-          (err, out) => {
-            resolve(parseInt(out, 10))
-          },
-        )
-        break
-      default:
-        resolve()
-        break
-    }
-  })
+  const availMemory = (os.totalmem() - os.freemem()) / (1024 * 1024 * 1024)
+  let CORE_COUNT = Math.min(NO_OF_CORES, imagesCount)
 
-  NO_OF_CORES = Math.min(NO_OF_CORES || os.cpus().length / 2, imagesCount)
-
-  // If available ram is less than 500MB, use only two worker processes
-  if ((os.totalmem() - os.freemem()) / (1024 * 1024 * 1024) < 0.5) {
-    NO_OF_CORES = 2
+  // If available ram is less than 200MB/400MB, use only one/two worker processes respectively
+  if (availMemory < 0.2) {
+    CORE_COUNT = 1
+  } else if (availMemory < 0.4) {
+    CORE_COUNT = 2
   }
 
-  for (let i = 0; i < NO_OF_CORES; i += 1) {
+  for (let i = 0; i < CORE_COUNT; i += 1) {
     WORKERS.push(
       childProcess.fork(`${__dirname}/processTaskWorker.js`, [], {
         silent: true,
