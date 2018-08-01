@@ -320,12 +320,16 @@ async function CSVToJSON(str, isPath, isKey) {
   // extract rows and header names
   const rows = resultFile.split('\n')
   const headerValues = rows[0]
-    .replace(/(\s)|(\.)|(-)|(_)/gi, '')
+    .replace(/ /gi, '')
     .toLowerCase()
     .split(',')
 
   // extract index of roll no in header row
-  const rollNoIndex = headerValues.indexOf('rollno')
+  const rollNoIndex = Math.max(
+    headerValues.indexOf('rollno'),
+    headerValues.indexOf('roll#'),
+    headerValues.indexOf('rollnumber'),
+  )
 
   if (isKey) rows.length = 2
   // iterate rows but skips header row
@@ -333,7 +337,7 @@ async function CSVToJSON(str, isPath, isKey) {
     const obj = {}
     const values = rows[i]
       .replace(/(\s)|(\.)|(-)|(_)/gi, '')
-      .toLowerCase()
+      // .toLowerCase()
       .split(',')
 
     values.forEach((value, index) => {
@@ -364,7 +368,6 @@ async function CSVToJSON(str, isPath, isKey) {
  * @returns {Object} CSV String
  */
 function JSONToCSV(str, isPath) {
-  // TODO: fix convertion for marks data
   const obj = isPath ? JSON.parse(fs.readFileSync(str, 'utf8')) : str
 
   let header = 'ROLL NO'
@@ -475,7 +478,7 @@ async function compileResult(keys, results, correctMarks, negativeMarks) {
   })
 
   // export
-  exportResult(JSONToCSV(output), 'ResultMarks', true)
+  exportResult(await JSONToCSV(output), 'ResultMarks', true)
 }
 
 module.exports = {
