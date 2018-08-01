@@ -70,33 +70,43 @@ export default {
     },
 
     async generate() {
+      // to skip question groups
+      const QUESTION_PATTERN = new RegExp(/(q[1-9][0-9]?([a-d])?)/i)
       // const docDefinition = {}
       const data = await CSVToJSON(this.answerSheetPrepFile, true)
       const $ = cheerio.load(
         fs.readFileSync(path.join(dataPaths.testData, 'design.svg'), 'utf8'),
       )
 
-      Object.entries(data).forEach(([key, val]) => {
+      Object.entries(data).forEach(([key, cand]) => {
         // const advCode = key.substring(0, 3)
-        // const rollNo = key.substring(3)
+        const rollNo = key.substring(3)
+        // eslint-disable-next-line
+        cand['roll#'] = rollNo
 
-        // console.log(advCode, rollNo, val)
+        console.log(rollNo, cand)
 
         Object.values($('g')).forEach(group => {
-          const title = $(group)
-            .find('title')
-            .first()
-            .html()
+          const title = (
+            $(group)
+              .find('title')
+              .first()
+              .html() || ''
+          )
+            .trim()
+            .toLowerCase()
 
-          // console.log(title)
+          const isQuestionGroup = QUESTION_PATTERN.test(title)
 
-          if (title) {
-            switch (title.trim().toLowerCase()) {
-              case 'rollnobarcode':
-                console.log(group)
-                break
-              default:
-                break
+          if (!isQuestionGroup) {
+            const text = cand[title]
+
+            console.log(title)
+            // TODO: update answer sheet design file to use variables form the asnwer sheet data
+            if (text) {
+              $(group).append(
+                `<text x="4" y="839.47" class="st14" v:langID="1033">${text}</text>`,
+              )
             }
           }
         })
