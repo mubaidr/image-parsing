@@ -72,40 +72,44 @@ async function getDesignData(dir) {
   for (let i = 0; i < groups.length; i += 1) {
     const group = groups[i]
 
-    const title = $(group)
-      .find('title')
-      .first()
-      .html()
+    const title = (
+      $(group)
+        .find('title')
+        .first()
+        .html() || ''
+    )
       .trim()
       .toLowerCase()
+
+    if (!title) continue
 
     const isQuestionGroup = QUESTION_PATTERN.test(title)
     const isRollNoGroup =
       isQuestionGroup || gotRollNo ? false : ROLL_NO_PATTERN.test(title)
 
-    if (isQuestionGroup || isRollNoGroup) {
-      const transform = $(group)
-        .attr('transform')
-        .replace(/(translate)|\(|\)/gi, '')
-        .split(',')
-        .map(val => parseFloat(val))
+    if (!(isQuestionGroup || isRollNoGroup)) continue
 
-      const rect = $(group)
-        .find('rect')
-        .first()
+    const transform = $(group)
+      .attr('transform')
+      .replace(/(translate)|\(|\)/gi, '')
+      .split(',')
+      .map(val => parseFloat(val) || 0)
 
-      left = parseFloat(rect.attr('x'))
-      top = parseFloat(rect.attr('y'))
+    const rect = $(group)
+      .find('rect')
+      .first()
 
-      rx = parseFloat(rect.attr('rx')) || 0
-      ry = parseFloat(rect.attr('ry')) || 0
+    left = parseFloat(rect.attr('x') || 0)
+    top = parseFloat(rect.attr('y') || 0)
 
-      x = left - rx + transform[0]
-      y = top - ry + transform[1]
+    rx = parseFloat(rect.attr('rx') || 0)
+    ry = parseFloat(rect.attr('ry') || 0)
 
-      width = parseFloat(rect.attr('width')) + rx
-      height = parseFloat(rect.attr('height')) + ry
-    }
+    x = left - rx + transform[0]
+    y = top - ry + transform[1]
+
+    width = parseFloat(rect.attr('width') || 0) + rx
+    height = parseFloat(rect.attr('height') || 0) + ry
 
     if (isQuestionGroup) {
       const optionTitle = title.slice(-1)
