@@ -4634,9 +4634,9 @@ istanbul-reports@^1.3.0:
   dependencies:
     handlebars "^4.0.3"
 
-javascript-barcode-reader@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/javascript-barcode-reader/-/javascript-barcode-reader-0.2.3.tgz#365a42db1b0bcbc6709d17b38b02080011ddd23f"
+javascript-barcode-reader@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/javascript-barcode-reader/-/javascript-barcode-reader-0.3.0.tgz#a1a63f9ebc1e021bc19ccdc292e1cbf782ebdcbd"
 
 jest-changed-files@^23.4.2:
   version "23.4.2"
