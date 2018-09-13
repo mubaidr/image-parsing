@@ -2,13 +2,12 @@
   "comments": false,
   "presets": [
     [
-      "env",
+      "@babel/env",
       {
         "targets": {
-          "node": 8
+          "node": 10
         }
       }
-    ],
-    "stage-3"
+    ]
   ]
 }
