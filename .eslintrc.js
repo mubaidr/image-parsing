@@ -19,6 +19,7 @@ module.exports = {
   plugins: ['vue'],
   rules: {
     semi: 0,
+    'no-continue': 0,
     'comma-dangle': 0,
     'global-require': 0,
     'import/no-unresolved': 0,
