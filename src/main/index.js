@@ -1,5 +1,6 @@
 /* eslint-disable */
-import { app, BrowserWindow, ipcMain, Menu, MenuItem } from 'electron'
+import { app, BrowserWindow } from 'electron';
+
 /* eslint-enable */
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
@@ -11,12 +12,10 @@ if (process.env.NODE_ENV === 'development') {
   try {
     // eslint-disable-next-line
     require('electron-debug')({
-      showDevTools: true,
+      showDevTools: true
     })
   } catch (err) {
-    console.log(
-      'Failed to install `electron-debug`: Please set `NODE_ENV=production` before build to avoid installing debugging packages. ',
-    )
+    console.log('Failed to install `electron-debug`: Please set `NODE_ENV=production` before build to avoid installing debugging packages. ')
   }
 } else {
   winURL = `file://${__dirname}/index.html`
@@ -36,9 +35,7 @@ function installDevTools() {
     require('devtron').install() //eslint-disable-line
     require('vue-devtools').install() //eslint-disable-line
   } catch (err) {
-    console.log(
-      'Failed to install `devtron` & `vue-devtools`: Please set `NODE_ENV=production` before build to avoid installing debugging packages. ',
-    )
+    console.log('Failed to install `devtron` & `vue-devtools`: Please set `NODE_ENV=production` before build to avoid installing debugging packages. ')
   }
 }
 
@@ -47,37 +44,37 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
+    useContentSize: true,
     backgroundColor: '#fff',
-    backgroundThrottling: false,
     minHeight: 350,
     minWidth: 500,
-    show: false,
-    useContentSize: true,
     webPreferences: {
       nodeIntegrationInWorker: false,
-      webSecurity: true,
+      webSecurity: true
     },
+    show: false
   })
+
+  // mainWindow.setMenu(null)
+  mainWindow.loadURL(winURL)
+  mainWindow.setMenu(null)
 
   // Show when loaded
   mainWindow.on('ready-to-show', () => {
+    mainWindow.show()
+    mainWindow.focus()
+
     if (
       process.env.ELECTRON_ENV === 'development' ||
       process.argv.indexOf('--debug') !== -1
     ) {
       mainWindow.webContents.openDevTools()
     }
-
-    mainWindow.show()
-    mainWindow.focus()
   })
 
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-
-  mainWindow.loadURL(winURL)
-  mainWindow.setMenu(null)
 }
 
 app.on('ready', () => {
@@ -85,8 +82,6 @@ app.on('ready', () => {
 
   if (process.env.NODE_ENV === 'development') {
     installDevTools()
-  } else {
-    mainWindow.maximize()
   }
 })
 

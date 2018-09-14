@@ -8,9 +8,9 @@ node_modules/
 npm-debug.log
 npm-debug.log.*
 thumbs.db
+!.gitkeep
+data/tmp/
 .tmp/
-!.tmp/.gitignore
 tmp/
 .cache
 dist
-sample-data/

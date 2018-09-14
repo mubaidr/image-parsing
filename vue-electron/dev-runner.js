@@ -16,9 +16,7 @@ let electronProcess = null
 let manualRestart = false
 
 function startRenderer() {
-  rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(
-    rendererConfig.entry.renderer
-  )
+  rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(rendererConfig.entry.renderer)
 
   // eslint-disable-next-line
   return new Promise((resolve, reject) => {
@@ -52,16 +50,14 @@ function startRenderer() {
   })
 }
 
-/*
 function electronLog(data) {
   let log = ''
   data = data.toString().split(/\r?\n/)
-  data.forEach(line => {
+  data.forEach((line) => {
     log += `${line}\n`
   })
   console.info(log)
 }
-*/
 
 function startElectron() {
   electronProcess = spawn(electron, [
@@ -69,14 +65,12 @@ function startElectron() {
     path.join(__dirname, '../dist/electron/main.js')
   ])
 
-  /*
-    electronProcess.stdout.on('data', data => {
-      electronLog(data)
-    })
-    electronProcess.stderr.on('data', data => {
-      electronLog(data)
-    })
-  */
+  electronProcess.stdout.on('data', (data) => {
+    electronLog(data)
+  })
+  electronProcess.stderr.on('data', (data) => {
+    electronLog(data)
+  })
 
   electronProcess.on('close', () => {
     if (!manualRestart) process.exit()
@@ -105,18 +99,21 @@ function startMain() {
       resolve()
     })
 
-    compiler.watch({}, err => {
+    compiler.watch({}, (err) => {
       if (err) reject(err)
     })
   })
 }
 
 function init() {
+  console.log('\nStarting pack scripts...')
+
   Promise.all([startRenderer(), startMain()])
     .then(() => {
+      console.log('\nStarting electron...')
       startElectron()
     })
-    .catch(err => {
+    .catch((err) => {
       console.error('\nError: \n', err)
     })
 }

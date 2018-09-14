@@ -9,7 +9,6 @@ const rendererConfig = require('./webpack.renderer.config')
 function clean() {
   del.sync(['dist/*', 'build/*', '!build/icons', '!build/icons/icon.*'])
   console.log(`\nCleaned!`)
-  process.exit()
 }
 
 function pack(config) {

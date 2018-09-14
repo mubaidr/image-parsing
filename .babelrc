@@ -1,10 +1,10 @@
 {
-  "comments": false,
   "presets": [
     [
       "@babel/env",
       {
         "targets": {
+          "chrome": "66",
           "node": 10
         }
       }
