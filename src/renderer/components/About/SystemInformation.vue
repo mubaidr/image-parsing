@@ -33,11 +33,12 @@ export default {
     return {
       versions: process.versions,
       platform: require('os').platform(),
-      vue: require('vue/package.json').version
+      vue: require('vue/package.json').version,
     }
   },
-  created() {}
+  created() {},
 }
 </script>
 
-<style></style>
+<style>
+</style>

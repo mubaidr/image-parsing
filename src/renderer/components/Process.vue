@@ -83,7 +83,7 @@ export default {
   computed: {
     progress() {
       if (this.totalImages > 0) {
-        return Math.ceil(this.processedImages / this.totalImages * 100)
+        return Math.ceil((this.processedImages / this.totalImages) * 100)
       }
       return 0
     },
