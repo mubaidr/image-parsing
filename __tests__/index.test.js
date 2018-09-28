@@ -51,6 +51,7 @@ describe('utilities', () => {
   })
 })
 
+/*
 test('getQuestionsData', async () => {
   const sharpImage = sharp(path.join(dataPaths.testData, 'images', '10023.jpg'))
     .raw()
@@ -84,6 +85,7 @@ test('getRollNoFromImage', async () => {
 
   expect(rollNo).toBe(10023)
 })
+*/
 
 test('readCsvToJson', () => {
   const output = utilities.readCsvToJson(
