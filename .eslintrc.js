@@ -12,6 +12,8 @@ module.exports = {
   extends: ['airbnb-base', 'plugin:vue/recommended', 'prettier'],
   globals: {
     __static: true,
+    fabric: true,
+    Excel: true,
   },
   plugins: ['vue'],
   rules: {

@@ -83,6 +83,7 @@ async function start(
         imagePaths: imagePaths.slice(startIndex, endIndex),
       })
 
+      // eslint-disable-next-line
       worker.on('message', m => {
         // collect result from process
         if (m.completed) {
@@ -104,17 +105,17 @@ async function start(
               })
             } else {
               // report view of completion
-              listner({ completed: true })
+              listner({
+                completed: true,
+              })
               // export result as csv
               exportResult(resultData)
             }
           }
         } else if (m.verify) {
           verifyData.push(m)
-        } else if (m.progress) {
-          if (listner) {
-            listner(m)
-          }
+        } else if (m.progress && listner) {
+          listner(m)
         }
       })
 
