@@ -1,18 +1,19 @@
 const brain = require('brain.js')
 const cheerio = require('cheerio')
 const childProcess = require('child_process')
+const download = require('downloadjs')
 const fastGlob = require('fast-glob')
 const fs = require('fs')
 const javascriptBarcodeReader = require('javascript-barcode-reader')
-const os = require('os')
-const download = require('downloadjs')
 const NO_OF_CORES = require('physical-cpu-count')
+const os = require('os')
+const path = require('path')
+const sharp = require('sharp')
 const dataPaths = require('./data-paths')
-// const javascriptBarcodeReader = require('../../../Javascript-Barcode-Reader/src')
 
 /**
- * Create worker process equal to cpu cores
- *
+ * Create worker processes equal to cpu cores count
+ * @param {Number} imagesCount Minimum number of images in the current set
  * @returns {Array} array of child process forks
  */
 async function createWorkerProcesses(imagesCount) {
@@ -22,9 +23,9 @@ async function createWorkerProcesses(imagesCount) {
   let CORE_COUNT = Math.min(NO_OF_CORES, imagesCount)
 
   // If available ram is less than 200MB/400MB, use only one/two worker processes respectively
-  if (availMemory < 0.2) {
+  if (availMemory < 0.1) {
     CORE_COUNT = 1
-  } else if (availMemory < 0.4) {
+  } else if (availMemory < 0.2) {
     CORE_COUNT = 2
   }
 
@@ -175,95 +176,112 @@ function getNeuralNet(src) {
 }
 
 /**
+ * Logs provided image data to .tmp folder
+ * @param {sharp} img Sharp instance
+ * @param {String} name Name of file
+ */
+function logImageData(img, name) {
+  img.png().toFile(path.join(dataPaths.tmp, `${name}.png`), err => {
+    if (err) console.log(err)
+  })
+}
+
+/**
+ * Converts provided Raw image data to Bit array
+ * @param {RawImage} data Raw image pixel data array
+ * @param {Number} channels Number of channels in the data
+ */
+function convertToBitArray(data, channels) {
+  // convert image data to binary
+  const binaryData = []
+
+  for (let i = 0; i < data.length; i += channels) {
+    const r = i
+    const g = i + 1
+    const b = i + 2
+    const avg = Math.ceil((data[r] + data[g] + data[b]) / 3)
+    const threshold = 15
+    const upperLimit = avg + threshold
+    const lowerLimit = avg - threshold
+
+    if (avg <= 80) {
+      // black pixel
+      binaryData.push(0)
+    } else if (
+      data[r] <= upperLimit &&
+      data[r] >= lowerLimit &&
+      (data[g] <= upperLimit && data[g] >= lowerLimit) &&
+      (data[b] <= lowerLimit && data[b] >= lowerLimit)
+    ) {
+      // grey pixel
+      binaryData.push(1)
+    } else {
+      // color pixel
+      binaryData.push(0)
+    }
+  }
+
+  return binaryData
+}
+
+/**
+ *  Extracts questions data from provided Sharp Image and design data
  *
- *
- * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
- * @param {String} path Path of scanned image file
- * @param {Object=} resultsData Path to csv file for training data
- * @param {Number=} rollNo Roll no of the current scanned image
+ * @param {Object} design A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
+ * @param {sharp} img Path of scanned image file
+ * @param {Object=} results Path to csv file for training data
+ * @param {Number=} rollNumber Roll no of the current scanned image
  * @returns {Object} {title: {String}, data: {buffer}}
  */
-async function getQuestionsData(designData, img, resultsData, rollNo) {
+function getQuestionsData(design, img, results, rollNumber) {
   const SCALE = 0.25
-  const IS_TEST_DATA = resultsData && rollNo
+  const IS_TRAINING_DATA = results && rollNumber
 
-  return new Promise((resolveCol, rejectCol) => {
-    img.resize(designData.width * SCALE).max()
+  img.resize({
+    fit: sharp.fit.inside,
+    kernel: sharp.kernel.nearest,
+    width: design.width * SCALE,
+  })
 
-    const promises = []
-    // extract all questions portions
-    Object.keys(designData.questions).forEach(title => {
-      const p = new Promise(resolve => {
-        const q = designData.questions[title]
+  // return logImageData(img, 'test')
 
-        img
-          .extract({
-            left: Math.floor(q.x1 * SCALE),
-            top: Math.floor(q.y1 * SCALE),
-            width: Math.ceil((q.x2 - q.x1) * SCALE),
-            height: Math.ceil((q.y2 - q.y1) * SCALE),
-          })
-          // .png()
-          // .toFile(path.join(dataPaths.tmp, `${rollNo}-${title}.png`), err => {
-          //   if (err) console.log(err)
-          //   resolve()
-          // })
-          .toBuffer({ resolveWithObject: true })
-          .then(({ data }) => {
-            const binaryData = []
+  const promises = []
 
-            for (let i = 0; i < data.length; i += 3) {
-              const r = i
-              const g = i + 1
-              const b = i + 2
-              const avg = Math.ceil((data[r] + data[g] + data[b]) / 3)
-              const threshold = 15
+  // extract all questions portions
+  Object.entries(design.questions).forEach(([title, q]) => {
+    const promise = new Promise(resolve => {
+      img
+        .extract({
+          left: Math.floor(q.x1 * SCALE),
+          top: Math.floor(q.y1 * SCALE),
+          width: Math.ceil((q.x2 - q.x1) * SCALE),
+          height: Math.ceil((q.y2 - q.y1) * SCALE),
+        })
+        .toBuffer({ resolveWithObject: true })
+        .then(({ data, info }) => {
+          const binaryData = convertToBitArray(data, info.channels)
 
-              if (avg <= 80) {
-                // black pixel
-                binaryData.push(0)
-              } else if (
-                data[r] <= avg + threshold &&
-                data[r] >= avg - threshold &&
-                (data[g] <= avg + threshold && data[g] >= avg - threshold) &&
-                (data[b] <= avg + threshold && data[b] >= avg - threshold)
-              ) {
-                // grey pixel
-                binaryData.push(1)
-              } else {
-                // color pixel
-                binaryData.push(0)
-              }
-            }
+          if (IS_TRAINING_DATA) {
+            // for training data
+            if (results[rollNumber] && results[rollNumber][title] !== '*') {
+              const o = {}
+              o[results[rollNumber][title]] = 1
 
-            if (IS_TEST_DATA) {
-              // for training data
-              if (resultsData[rollNo] && resultsData[rollNo][title] !== '*') {
-                const o = {}
-                o[resultsData[rollNo][title]] = 1
-
-                resolve({ input: binaryData, output: o })
-              } else {
-                resolve(false)
-              }
+              resolve({ input: binaryData, output: o })
             } else {
-              // for processing data
-              resolve({ title, data: binaryData })
+              resolve(false)
             }
-          })
-      })
-
-      promises.push(p)
+          } else {
+            // for processing data
+            resolve({ title, data: binaryData })
+          }
+        })
     })
 
-    Promise.all(promises)
-      .then(res => {
-        resolveCol(res)
-      })
-      .catch(err => {
-        rejectCol(err)
-      })
+    promises.push(promise)
   })
+
+  return Promise.all(promises)
 }
 
 /**

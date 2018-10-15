@@ -22,7 +22,7 @@ let verifyData = []
 const DEFAULTS = [
   path.join(dataPaths.testData, 'design.svg'),
   path.join(dataPaths.testData, 'images'),
-  true, // disable for testing processTask using in-process
+  false, // disable for testing processTask using in-process
 ]
 
 /**
