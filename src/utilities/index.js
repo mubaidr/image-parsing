@@ -192,14 +192,15 @@ function logImageData(img, name) {
  * @param {Number} channels Number of channels in the data
  */
 function convertToBitArray(data, channels) {
+  console.log(channels)
   // convert image data to binary
   const binaryData = []
 
   for (let i = 0; i < data.length; i += channels) {
-    const r = i
-    const g = i + 1
-    const b = i + 2
-    const avg = Math.ceil((data[r] + data[g] + data[b]) / 3)
+    const r = data[i]
+    const g = data[i + 1]
+    const b = data[i + 2]
+    const avg = Math.ceil((r + g + b) / 3)
     const threshold = 15
     const upperLimit = avg + threshold
     const lowerLimit = avg - threshold
@@ -208,10 +209,10 @@ function convertToBitArray(data, channels) {
       // black pixel
       binaryData.push(0)
     } else if (
-      data[r] <= upperLimit &&
-      data[r] >= lowerLimit &&
-      (data[g] <= upperLimit && data[g] >= lowerLimit) &&
-      (data[b] <= lowerLimit && data[b] >= lowerLimit)
+      r <= upperLimit &&
+      r >= lowerLimit &&
+      (g <= upperLimit && g >= lowerLimit) &&
+      (b <= upperLimit && b >= lowerLimit)
     ) {
       // grey pixel
       binaryData.push(1)
@@ -264,10 +265,10 @@ function getQuestionsData(design, img, results, rollNumber) {
           if (IS_TRAINING_DATA) {
             // for training data
             if (results[rollNumber] && results[rollNumber][title] !== '*') {
-              const o = {}
-              o[results[rollNumber][title]] = 1
-
-              resolve({ input: binaryData, output: o })
+              resolve({
+                input: binaryData,
+                output: { [results[rollNumber][title]]: 1 },
+              })
             } else {
               resolve(false)
             }
@@ -298,7 +299,7 @@ async function getRollNoFromImage(designData, img) {
   const width = Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio)
   const height = Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio)
 
-  const { data, info } = await img
+  const { data } = await img
     .extract({
       left: Math.floor(rollNoPos.x1 * ratio),
       top: Math.floor(rollNoPos.y1 * ratio),
@@ -307,22 +308,8 @@ async function getRollNoFromImage(designData, img) {
     })
     .toBuffer({ resolveWithObject: true })
 
-  const newData = []
-  if (info.channels < 4) {
-    for (let i = 0; i < data.length; i += info.channels) {
-      // copy current channels
-      for (let j = 0; j < info.channels; j += 1) {
-        newData.push(data[i + j])
-      }
-      // add missing channels
-      for (let k = 0; k < 4 - info.channels; k += 1) {
-        newData.push(255)
-      }
-    }
-  }
-
   return javascriptBarcodeReader(
-    { data: info.channels < 4 ? newData : data, width, height },
+    { data, width, height },
     { barcode: 'code-39' },
   )
 }

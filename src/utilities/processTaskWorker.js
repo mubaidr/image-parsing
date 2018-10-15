@@ -41,7 +41,6 @@ async function processTask(designData, imagePaths) {
     const rollNo = await getRollNoFromImage(designData, sharpImage)
     const questionsData = await getQuestionsData(designData, sharpImageClone)
     /* eslint-enable no-await-in-loop */
-    console.log(questionsData[0])
     const resultsJson = {
       [rollNo]: {},
     }

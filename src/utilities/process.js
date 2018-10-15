@@ -64,7 +64,7 @@ async function start(
   // For testing only
   if (!useWorkers) {
     processTask(designData, imagePaths).then(res => {
-      console.log(res)
+      console.log('Non Worker Data: ', res)
     })
   } else {
     const TOTAL_IMAGES = imagePaths.length
