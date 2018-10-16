@@ -12,8 +12,6 @@
               <a
                 href="//github.com/mubaidr"
                 target="_blank">@mubaidr</a>
-              <br>
-              Full Stack Web Developer: Jack of all trades, master of "some".
             </p>
           </div>
         </div>

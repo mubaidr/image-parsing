@@ -20,9 +20,9 @@ async function createWorkerProcesses(imagesCount) {
   const WORKERS = []
 
   const availMemory = (os.totalmem() - os.freemem()) / (1024 * 1024 * 1024)
-  let CORE_COUNT = Math.min(NO_OF_CORES, imagesCount)
+  let CORE_COUNT = Math.min(NO_OF_CORES, imagesCount || Infinity)
 
-  // If available ram is less than 200MB/400MB, use only one/two worker processes respectively
+  // If available ram is less than 100MB/200MB, use only one/two worker processes respectively
   if (availMemory < 0.1) {
     CORE_COUNT = 1
   } else if (availMemory < 0.2) {
@@ -192,7 +192,6 @@ function logImageData(img, name) {
  * @param {Number} channels Number of channels in the data
  */
 function convertToBitArray(data, channels) {
-  console.log(channels)
   // convert image data to binary
   const binaryData = []
 
@@ -299,14 +298,14 @@ async function getRollNoFromImage(designData, img) {
   const width = Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio)
   const height = Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio)
 
-  const { data } = await img
+  const data = await img
     .extract({
       left: Math.floor(rollNoPos.x1 * ratio),
       top: Math.floor(rollNoPos.y1 * ratio),
       width,
       height,
     })
-    .toBuffer({ resolveWithObject: true })
+    .toBuffer()
 
   return javascriptBarcodeReader(
     { data, width, height },
@@ -464,8 +463,10 @@ async function compileResult(keys, results, correctMarks, negativeMarks) {
 
       // if user has not selected any option
       if (value === '?') continue
+
       // if question has multiple correct options
       if (value === '*') continue
+
       // if question has no right option
       if (answers[key] === '?') continue
 

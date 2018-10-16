@@ -65,40 +65,39 @@ async function start(
   }
 
   // collect data from lal promises
-  Promise.all(promises).then(results => {
-    const trainingData = []
-    const net = new brain.NeuralNetwork()
+  const results = await Promise.all(promises)
+  const net = new brain.NeuralNetwork()
+  const trainingData = []
 
-    // format data for network
-    results.forEach(result => {
-      result.forEach(data => {
-        trainingData.push({
-          input: data.input,
-          output: data.output,
-        })
+  // format data for network
+  results.forEach(result => {
+    result.forEach(data => {
+      trainingData.push({
+        input: data.input,
+        output: data.output,
       })
     })
-
-    // if data is collected, train network
-    if (trainingData.length > 0) {
-      net.train(trainingData, {
-        log: true,
-        logPeriod: 10,
-        errorThresh: 0.0001,
-      })
-
-      // write trained network configuration to disk
-      fs.writeFileSync(neuralNetFilePath, JSON.stringify(net.toJSON()))
-
-      if (process && process.send) {
-        process.send({ completed: true }, () => {
-          process.exit(0)
-        })
-      } else {
-        console.log('Traning completed!')
-      }
-    }
   })
+
+  // if data is collected, train network
+  if (trainingData.length > 0) {
+    net.train(trainingData, {
+      log: true,
+      logPeriod: 10,
+      errorThresh: 0.0001,
+    })
+
+    // write trained network configuration to disk
+    fs.writeFileSync(neuralNetFilePath, JSON.stringify(net.toJSON()))
+
+    if (process && process.send) {
+      process.send({ completed: true }, () => {
+        process.exit(0)
+      })
+    } else {
+      console.log('Traning completed!')
+    }
+  }
 }
 
 if (process && process.send) {

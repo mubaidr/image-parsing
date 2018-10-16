@@ -30,17 +30,23 @@ async function processTask(designData, imagePaths) {
   const neuralNet = getNeuralNet()
   const outputs = []
 
+  // processing state
   processingEnabled = true
+
+  // loop through all images
   for (let i = 0; i < imagePaths.length && processingEnabled; i += 1) {
     const sharpImage = sharp(imagePaths[i])
       .raw()
       .flatten()
     const sharpImageClone = sharpImage.clone()
 
-    /* eslint-disable no-await-in-loop */
-    const rollNo = await getRollNoFromImage(designData, sharpImage)
-    const questionsData = await getQuestionsData(designData, sharpImageClone)
-    /* eslint-enable no-await-in-loop */
+    // eslint-disable-next-line
+    const [rollNo, questionsData] = await Promise.all([
+      getRollNoFromImage(designData, sharpImage),
+      getQuestionsData(designData, sharpImageClone),
+    ])
+
+    // prepare output
     const resultsJson = {
       [rollNo]: {},
     }
