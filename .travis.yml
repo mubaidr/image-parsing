@@ -43,7 +43,6 @@ script:
         electronuserland/builder:wine
     fi
   - npm run build
-  - npm test
 
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
