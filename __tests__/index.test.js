@@ -1,10 +1,10 @@
 const brain = require('brain.js')
-const sharp = require('sharp')
+// const sharp = require('sharp')
 const path = require('path')
 const utilities = require('../src/utilities')
 const dataPaths = require('../src/utilities/data-paths')
 
-describe('utilities', () => {
+describe('Utlities should work as expectd', () => {
   test('createWorkerProcesses', async () => {
     const workers = await utilities.createWorkerProcesses(2)
 
@@ -49,6 +49,32 @@ describe('utilities', () => {
     expect(Object.keys(designData.questions).length).toBe(60)
     expect(designData.width * designData.height).toBeDefined()
   })
+
+  test('readCsvToJson', () => {
+    const output = utilities.CSVToJSON(
+      path.join(dataPaths.testData, 'result.csv'),
+    )
+
+    expect(output).toBeInstanceOf(Object)
+  })
+
+  test('readJsonToCsv', () => {
+    const output = utilities.JSONToCSV([
+      {
+        10023: {
+          q1: 'a',
+          q2: 'b',
+          q3: 'c',
+          q4: 'd',
+        },
+      },
+    ])
+
+    expect(typeof output).toBe('string')
+    expect(output.replace(/(?:\r\n|\r|\n)/gi, '')).toBe(
+      'Roll No,q1,q2,q3,q410023,a,b,c,d'.toUpperCase(),
+    )
+  })
 })
 
 /*
@@ -86,25 +112,3 @@ test('getRollNoFromImage', async () => {
   expect(rollNo).toBe(10023)
 })
 */
-
-test('readCsvToJson', () => {
-  const output = utilities.readCsvToJson(
-    path.join(dataPaths.testData, 'result.csv'),
-  )
-
-  expect(output).toBeInstanceOf(Object)
-})
-
-test('readJsonToCsv', () => {
-  const output = utilities.readJsonToCsv({
-    10023: {
-      q1: 'a',
-      q2: 'b',
-      q3: 'c',
-      q4: 'd',
-    },
-  })
-
-  expect(output).toBeInstanceOf(String)
-  expect(output).toBe('Q1,Q2,Q3,RollNo\\na,b,c,d,10023')
-})
