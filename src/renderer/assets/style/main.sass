@@ -1,13 +1,5 @@
-html
-  overflow-y: auto
-
-.has-minimum-height
-  &.is-340
-    min-height: 340px
-  &.is-480
-    min-height: 480px
-  &.is-640
-    min-height: 640px
+html, body
+  background-color: rgba(0,0,0,0)
 
 .is-hidden
   display: none
@@ -15,3 +7,24 @@ html
 // disbale text selection
 *::selection
   background: transparent
+
+img
+  box-shadow: none
+
+.navbar
+  -ms-overflow-style: scrollbar
+  -webkit-app-region: drag
+  input[type="submit"],
+  input[type="reset"],
+  input[type="button"],
+  input[type="text"],
+  input[type="radio"],
+  input[type="checkbox"],
+  select,
+  button,
+  textarea,
+  a,
+  button
+    -webkit-app-region: no-drag
+  h1, h2, h3, h4, h5, h6
+    -webkit-user-select: none

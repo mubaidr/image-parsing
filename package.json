@@ -40,7 +40,7 @@
   "dependencies": {
     "brain.js": "^1.4.2",
     "bulma-addons": "^0.1.12",
-    "bulma-fluent": "^0.3.14",
+    "bulma-pro": "^0.1.4",
     "cheerio": "1.0.0-rc.2",
     "downloadjs": "^1.4.7",
     "electron-store": "^2.0.0",

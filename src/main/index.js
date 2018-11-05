@@ -49,7 +49,7 @@ function createWindow() {
    */
   mainWindow = new BrowserWindow({
     useContentSize: true,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(0,0,0,0)',
     minHeight: 350,
     minWidth: 500,
     webPreferences: {
@@ -57,11 +57,14 @@ function createWindow() {
       webSecurity: true,
     },
     show: false,
+    transparent: true,
+    frame: false,
+    // toolbar: false,
   })
 
   // mainWindow.setMenu(null)
   mainWindow.loadURL(winURL)
-  mainWindow.setMenu(null)
+  // mainWindow.setMenu(null)
 
   // Show when loaded
   mainWindow.on('ready-to-show', () => {
