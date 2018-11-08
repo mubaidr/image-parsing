@@ -1,19 +1,16 @@
 /* eslint-disable */
 import { app, BrowserWindow } from 'electron'
-
 /* eslint-enable */
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
-
+console.log('ds sdsdsd ds')
 let mainWindow
 let winURL = 'http://localhost:9080'
 
 if (process.env.NODE_ENV === 'development') {
   try {
     // eslint-disable-next-line
-    require('electron-debug')({
-      showDevTools: true,
-    })
+    require('electron-debug')()
   } catch (err) {
     console.log(
       'Failed to install `electron-debug`: Please set `NODE_ENV=production` before build to avoid installing debugging packages. ',
@@ -48,21 +45,20 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    useContentSize: true,
-    backgroundColor: 'rgba(0,0,0,0)',
-    minHeight: 350,
-    minWidth: 500,
+    // useContentSize: true,
+    // backgroundColor: '#fff',
+    minHeight: 480,
+    minWidth: 480,
     webPreferences: {
       nodeIntegrationInWorker: false,
       webSecurity: true,
     },
     show: false,
-    transparent: true,
-    frame: false,
+    // transparent: true,
+    // frame: false,
     // toolbar: false,
   })
 
-  // mainWindow.setMenu(null)
   mainWindow.loadURL(winURL)
   // mainWindow.setMenu(null)
 

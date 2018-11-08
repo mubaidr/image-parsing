@@ -3,34 +3,33 @@ const electron = require('electron')
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const webpackHotMiddleware = require('webpack-hot-middleware')
+const kill = require('tree-kill')
 /* eslint-enable */
 
 const path = require('path')
-
 const { spawn } = require('child_process')
 
 const mainConfig = require('./webpack.main.config')
 const rendererConfig = require('./webpack.renderer.config')
 
 let electronProcess = null
-let manualRestart = false
+let oldElectronProcess = null
 
 function startRenderer() {
-  rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(rendererConfig.entry.renderer)
+  rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(
+    rendererConfig.entry.renderer,
+  )
 
   // eslint-disable-next-line
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     const compiler = webpack(rendererConfig)
     const hotMiddleware = webpackHotMiddleware(compiler, {
       log: false,
-      heartbeat: 2500
     })
 
     compiler.hooks.afterEmit.tap('afterEmit', () => {
-      hotMiddleware.publish({
-        action: 'reload'
-      })
-      console.info('\nCompiled renderer script.')
+      console.log('\nCompiled renderer script!')
+      console.log('\nWatching file changes...')
     })
 
     const server = new WebpackDevServer(compiler, {
@@ -43,79 +42,49 @@ function startRenderer() {
         ctx.middleware.waitUntilValid(() => {
           resolve()
         })
-      }
+      },
     })
 
     server.listen(9080)
   })
 }
 
-function electronLog(data) {
-  let log = ''
-  data = data.toString().split(/\r?\n/)
-  data.forEach((line) => {
-    log += `${line}\n`
-  })
-  console.info(log)
-}
+function restartElectron() {
+  console.log('\nStarting electron...')
 
-function startElectron() {
-  electronProcess = spawn(electron, [
-    '--inspect=5858',
-    path.join(__dirname, '../dist/electron/main.js')
-  ])
+  oldElectronProcess = electronProcess
 
-  electronProcess.stdout.on('data', (data) => {
-    electronLog(data)
-  })
-  electronProcess.stderr.on('data', (data) => {
-    electronLog(data)
-  })
+  electronProcess = spawn(
+    electron,
+    ['--inspect=5858', path.join(__dirname, '../dist/electron/main.js')],
+    {
+      detached: true,
+    },
+  )
 
-  electronProcess.on('close', () => {
-    if (!manualRestart) process.exit()
+  electronProcess.stdout.on('data', data => {
+    console.log(data.toString())
+
+    const { pid } = oldElectronProcess || { pid: null }
+    if (pid && process.kill(pid, 0)) {
+      kill(pid)
+      oldElectronProcess = null
+    }
   })
 }
 
 function startMain() {
-  return new Promise((resolve, reject) => {
-    const compiler = webpack(mainConfig)
-    // console.warn(mainConfig, Object.keys(compiler), Object.keys(compiler.hooks))
+  const compiler = webpack(mainConfig)
 
-    compiler.hooks.afterEmit.tap('afterEmit', () => {
-      if (electronProcess && electronProcess.kill) {
-        manualRestart = true
-        process.kill(electronProcess.pid)
-        electronProcess = null
+  compiler.hooks.afterEmit.tap('afterEmit', () => {
+    console.log('\nCompiled main script!')
+    restartElectron()
+    console.log('\nWatching file changes...')
+  })
 
-        startElectron()
-
-        setTimeout(() => {
-          manualRestart = false
-        }, 5000)
-      }
-
-      console.info('\nCompiled main script.')
-      resolve()
-    })
-
-    compiler.watch({}, (err) => {
-      if (err) reject(err)
-    })
+  compiler.watch({}, err => {
+    if (err) console.error(err)
   })
 }
 
-function init() {
-  console.log('\nStarting pack scripts...')
-
-  Promise.all([startRenderer(), startMain()])
-    .then(() => {
-      console.log('\nStarting electron...')
-      startElectron()
-    })
-    .catch((err) => {
-      console.error('\nError: \n', err)
-    })
-}
-
-init()
+startRenderer().then(startMain)
