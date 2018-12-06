@@ -13,10 +13,6 @@ const {
 
 // store reference to all workers
 let WORKER_PROCESSES
-// create optimized worker processes onload
-createWorkerProcesses().then(w => {
-  WORKER_PROCESSES = w
-})
 
 // result collection
 let resultData = []
@@ -66,7 +62,7 @@ async function start(
   ])
 
   const TOTAL_IMAGES = imagePaths.length
-  // WORKER_PROCESSES = await createWorkerProcesses(TOTAL_IMAGES)
+  WORKER_PROCESSES = await createWorkerProcesses(TOTAL_IMAGES)
   const TOTAL_PROCESS = WORKER_PROCESSES.length
   const STEP = Math.floor(TOTAL_IMAGES / TOTAL_PROCESS)
 

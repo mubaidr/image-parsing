@@ -151,12 +151,12 @@ function getImagePaths(dir) {
     'jpg',
     'jpeg',
     'jpe',
-    // 'jfif',
+    'jfif',
     'gif',
     'tif',
     'tiff',
     'bmp',
-    // 'dib',
+    'dib',
   ]
 
   return fastGlob(`${dir}/*.{${formats.join(',')}}`, { onlyFiles: true })
