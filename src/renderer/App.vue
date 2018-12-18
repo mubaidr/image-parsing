@@ -1,27 +1,17 @@
 <template>
   <div id="app">
-    <!-- <nav-bar></nav-bar> -->
-    <!-- <side-bar/> -->
     <div class="content-custom">
-      <transition
-        name="slide-up"
-        mode="out-in">
-        <router-view/>
-      </transition>
+      <Transition name="slide-up"
+mode="out-in">
+        <RouterView />
+      </Transition>
     </div>
-    <!-- <pre>
-    {{ options }}
-    </pre> -->
   </div>
 </template>
 
 <script>
-import SideBar from './components/Templates/SideBar.vue'
-
 export default {
   name: 'ImageParsing',
-
-  components: { SideBar },
 }
 </script>
 
