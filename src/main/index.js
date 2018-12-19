@@ -69,12 +69,13 @@ function createWindow() {
 
   // Show when loaded
   mainWindow.on('ready-to-show', () => {
+    mainWindow.setTitle(pkg.productName)
     mainWindow.show()
     mainWindow.focus()
 
     if (
-      process.env.ELECTRON_ENV === 'development' ||
-      process.argv.indexOf('--debug') !== -1
+      process.env.ELECTRON_ENV === 'development'
+      || process.argv.indexOf('--debug') !== -1
     ) {
       mainWindow.webContents.openDevTools()
     }
@@ -144,6 +145,9 @@ function setMenu() {
           },
         },
         { type: 'separator' },
+        { role: 'minimize' },
+        { role: 'togglefullscreen' },
+        { type: 'separator' },
         { role: 'quit', accelerator: 'Alt+F4' },
       ],
     },
@@ -184,10 +188,6 @@ function setMenu() {
       ],
     },
     {
-      label: 'Window',
-      submenu: [{ role: 'minimize' }, { role: 'togglefullscreen' }],
-    },
-    {
       role: 'help',
       submenu: [
         {
@@ -201,6 +201,7 @@ function setMenu() {
         {
           label: 'About',
           role: 'about',
+          accelerator: 'CommandOrControl+A',
           click() {
             sendMenuEvent({ route: '/about' })
           },
