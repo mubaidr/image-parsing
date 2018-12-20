@@ -16,9 +16,10 @@
           <td>Vue.js</td>
           <td>{{ vue }}</td>
         </tr>
-        <tr 
+        <tr
           v-for="lib in Object.keys(versions)"
-          :key="lib">
+          :key="lib"
+        >
           <td>{{ lib }}</td>
           <td>{{ versions[lib] }}</td>
         </tr>
@@ -28,6 +29,8 @@
 </template>
 
 <script>
+/* eslint-disable global-require */
+
 export default {
   data() {
     return {

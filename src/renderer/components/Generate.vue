@@ -1,7 +1,11 @@
 <template>
   <div class="section">
-    <h1 class="title">Generate</h1>
-    <h2 class="subtitle">Generate Answer Sheets.</h2>
+    <h1 class="title">
+      Generate
+    </h1>
+    <h2 class="subtitle">
+      Generate Answer Sheets.
+    </h2>
     <br>
 
     <div class="file has-name is-fullwidth">
@@ -10,10 +14,11 @@
           class="file-input"
           type="file"
           name="resume"
-          @click="chooseAnswerSheetPrepFile"/>
+          @click="chooseAnswerSheetPrepFile"
+        />
         <span class="file-cta">
           <span class="file-icon">
-            <i class="fas fa-file"/>
+            <i class="fas fa-file" />
           </span>
           <span class="file-label">
             Result file
@@ -21,7 +26,8 @@
         </span>
         <span
           v-show="answerSheetPrepFile"
-          class="file-name">
+          class="file-name"
+        >
           {{ answerSheetPrepFile }}
         </span>
       </label>
@@ -32,7 +38,10 @@
     <button
       :disabled="!isValid"
       class="button is-dark"
-      @click="generate">Generate</button>
+      @click="generate"
+    >
+      Generate
+    </button>
   </div>
 </template>
 

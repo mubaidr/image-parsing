@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+
 import Vue from 'vue'
 import Router from 'vue-router'
 

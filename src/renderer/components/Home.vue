@@ -7,38 +7,45 @@
           <figure class="image is-128x128">
             <img
               src="../../../IconDesigns/512icontype11.png"
-              alt="Placeholder image">
+              alt="Placeholder image"
+            >
           </figure>
         </div>
         <div class="content has-text-centered">
           <h1 class="title is-1">
             Image Parsing
           </h1>
-          <p class="subtitle is-5">Generate answeer sheets and extract results from the scanned answer sheets. </p>
+          <p class="subtitle is-5">
+            Generate answeer sheets and extract results from the scanned answer sheets.
+          </p>
         </div>
         <br>
         <div class="columns">
           <div class="column is-3 is-offset-3">
-            <router-link
+            <RouterLink
               to="generate"
-              class="button is-primary is-fullwidth">
+              class="button is-primary is-fullwidth"
+            >
               <span class="icon">
                 <i
-                  class="fa fa-file-alt"/>
+                  class="fa fa-file-alt"
+                />
               </span>
               <span>Generate</span>
-            </router-link>
+            </RouterLink>
           </div>
           <div class="column is-3">
-            <router-link
+            <RouterLink
               to="process"
-              class="button is-primary is-fullwidth">
+              class="button is-primary is-fullwidth"
+            >
               <span class="icon">
                 <i
-                  class="fa fa-play"/>
+                  class="fa fa-play"
+                />
               </span>
               <span>Process</span>
-            </router-link>
+            </RouterLink>
           </div>
         </div>
       </div>

@@ -14,9 +14,9 @@
 
     <div class="right">
       <ul>
-        <li><i class="far fa-window-minimize"/></li>
-        <li><i class="far fa-window-restore"/></li>
-        <li><i class="fas fa-close"/></li>
+        <li><i class="far fa-window-minimize" /></li>
+        <li><i class="far fa-window-restore" /></li>
+        <li><i class="fas fa-close" /></li>
       </ul>
     </div>
   </div>

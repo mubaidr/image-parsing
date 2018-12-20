@@ -74,8 +74,8 @@ function createWindow() {
     mainWindow.focus()
 
     if (
-      process.env.ELECTRON_ENV === 'development'
-      || process.argv.indexOf('--debug') !== -1
+      process.env.ELECTRON_ENV === 'development' ||
+      process.argv.indexOf('--debug') !== -1
     ) {
       mainWindow.webContents.openDevTools()
     }

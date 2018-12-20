@@ -1,7 +1,11 @@
 <template>
   <div class="section">
-    <h1 class="title">Compile</h1>
-    <h2 class="subtitle is-6">Compile result using extracted results and answer key.</h2>
+    <h1 class="title">
+      Compile
+    </h1>
+    <h2 class="subtitle is-6">
+      Compile result using extracted results and answer key.
+    </h2>
     <br>
 
     <div class="file has-name is-fullwidth">
@@ -10,10 +14,11 @@
           class="file-input"
           type="file"
           name="resume"
-          @click="chooseFileResult"/>
+          @click="chooseFileResult"
+        />
         <span class="file-cta">
           <span class="file-icon">
-            <i class="fas fa-file"/>
+            <i class="fas fa-file" />
           </span>
           <span class="file-label">
             Result file
@@ -21,7 +26,8 @@
         </span>
         <span
           v-show="resultFile"
-          class="file-name">
+          class="file-name"
+        >
           {{ resultFile }}
         </span>
       </label>
@@ -34,10 +40,11 @@
           class="file-input"
           type="file"
           name="resume"
-          @click="chooseFileKey"/>
+          @click="chooseFileKey"
+        />
         <span class="file-cta">
           <span class="file-icon">
-            <i class="fas fa-file"/>
+            <i class="fas fa-file" />
           </span>
           <span class="file-label">
             Key file
@@ -45,7 +52,8 @@
         </span>
         <span
           v-show="keyFile"
-          class="file-name">
+          class="file-name"
+        >
           {{ keyFile }}
         </span>
       </label>
@@ -56,26 +64,32 @@
       <div class="columns">
         <div class="column">
           <div class="field">
-            <label class="label">Correct Marks</label>
+            <label class="label">
+              Correct Marks
+            </label>
             <div class="control">
               <input
                 v-model="correctMarks"
                 class="input"
                 type="number"
-                placeholder="Marks earned for each correct answer">
+                placeholder="Marks earned for each correct answer"
+              >
             </div>
           </div>
         </div>
         <div class="column">
           <div class="field">
-            <label class="label">Negative Marks</label>
+            <label class="label">
+              Negative Marks
+            </label>
             <div class="control">
               <input
                 v-model="incorrectMarks"
                 class="input"
                 type="number"
                 step="0.01"
-                placeholder="Marks deducted for each incorrect answer">
+                placeholder="Marks deducted for each incorrect answer"
+              >
             </div>
           </div>
         </div>
@@ -87,7 +101,10 @@
     <button
       :disabled="running || !isValid"
       class="button is-dark"
-      @click="startProcess">Start Compilation</button>
+      @click="startProcess"
+    >
+      Start Compilation
+    </button>
   </div>
 </template>
 

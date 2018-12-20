@@ -5,19 +5,22 @@
         <button
           class="file-input"
           name="resume"
-          @click="choosePath" />
+          @click="choosePath"
+        />
         <span class="file-cta">
           <span class="file-icon">
             <i class="fas fa-upload" />
           </span>
           <span
             v-if="isFile"
-            class="file-label">
+            class="file-label"
+          >
             Choose a file...
           </span>
           <span
             v-else
-            class="file-label">
+            class="file-label"
+          >
             Choose a directory...
           </span>
         </span>
@@ -31,29 +34,35 @@
     </div>
     <nav
       v-if="directory"
-      class="panel">
+      class="panel"
+    >
       <template v-if="directory && filteredFiles.length">
         <div class="fixed-height">
           <a
             v-for="(file,index) in filteredFiles"
-            :class="{'is-active' : file === selectedFile}"
             :key="index"
+            :class="{'is-active' : file === selectedFile}"
             class="panel-block"
-            @click="selectedFile = file">
+            @click="selectedFile = file"
+          >
             {{ extractName(file) }}
           </a>
         </div>
       </template>
       <template v-if="directory && !filteredFiles.length">
-        <div class="notification is-warning">Selected directory does not contains any {{ fileType }} files. </div>
+        <div class="notification is-warning">
+          Selected directory does not contains any {{ fileType }} files.
+        </div>
       </template>
     </nav>
     <div
       v-show="selectedFile"
-      class="block has-text-centered">
-      <preview-modal
+      class="block has-text-centered"
+    >
+      <PreviewModal
         :file-path="selectedFile"
-        :file-type="fileType" />
+        :file-type="fileType"
+      />
     </div>
   </div>
 </template>

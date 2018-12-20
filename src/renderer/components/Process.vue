@@ -1,28 +1,35 @@
 <template>
   <div class="section">
-    <h1 class="title">Process</h1>
-    <h2 class="subtitle is-6">Process scanned images to generate result.</h2>
+    <h1 class="title">
+      Process
+    </h1>
+    <h2 class="subtitle is-6">
+      Process scanned images to generate result.
+    </h2>
 
     <br>
 
     <div
-      class="file has-name is-fullwidth">
+      class="file has-name is-fullwidth"
+    >
       <label class="file-label">
         <button
           class="file-input"
           type="file"
           name="resume"
-          @click="chooseDirectory"/>
+          @click="chooseDirectory"
+        />
         <span class="file-cta">
           <span class="file-icon">
-            <i class="fas fa-folder"/>
+            <i class="fas fa-folder" />
           </span>
           <span class="file-label">
             Choose a directory
           </span>
         </span>
         <span
-          class="file-name">
+          class="file-name"
+        >
           {{ imageDirectory }}
         </span>
       </label>
@@ -34,28 +41,41 @@
     <button
       :disabled="running || !imageDirectory"
       class="button is-dark"
-      @click="startProcess">Start Process</button>
+      @click="startProcess"
+    >
+      Start Process
+    </button>
 
     <button
       :disabled="!running"
       class="button is-danger"
-      @click="stopProcess">Stop Process</button>
+      @click="stopProcess"
+    >
+      Stop Process
+    </button>
 
     <div
       :class="{'is-active': running}"
-      class="modal">
-      <div class="modal-background"/>
+      class="modal"
+    >
+      <div class="modal-background" />
       <div class="modal-content">
         <div
-          class="box">
-          <h3 class="title is-5">Processing</h3>
+          class="box"
+        >
+          <h3 class="title is-5">
+            Processing
+          </h3>
           <div>
             Processing image <strong>{{ processedImages }} of {{ totalImages }}</strong>, Estimated time remaining: <strong>{{ remainingTime }}</strong>
           </div>
           <progress
             :value="progress"
             class="progress is-primary is-large"
-            max="100">{ progress }%</progress>
+            max="100"
+          >
+            { progress }%
+          </progress>
         </div>
       </div>
     </div>

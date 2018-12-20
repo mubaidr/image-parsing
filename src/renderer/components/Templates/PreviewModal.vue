@@ -4,7 +4,8 @@
       <figure class="image">
         <img
           :src="filePathData"
-          alt="Loading preview...">
+          alt="Loading preview..."
+        >
       </figure>
     </template>
     <template v-else-if="fileType === 'design'">
@@ -12,27 +13,30 @@
         <canvas
           ref="previewCanvas"
           width="1240"
-          height="1754" />
+          height="1754"
+        />
       </template>
       <template v-else-if="fileExtension === 'svg'">
         <img
           :src="filePathData"
-          alt="Loading preview...">
+          alt="Loading preview..."
+        >
       </template>
     </template>
     <template v-else-if="fileType === 'excel'">
       <div>
         <table>
-
-          <head/>
+          <head />
 
           <body>
             <tr
               v-for="(row, rowIndex) in excelData"
-              :key="rowIndex">
+              :key="rowIndex"
+            >
               <td
                 v-for="(col, colIndex) in row"
-                :key="colIndex">
+                :key="colIndex"
+              >
                 {{ col }}
               </td>
             </tr>
