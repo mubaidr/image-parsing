@@ -60,6 +60,14 @@ export default new Router({
       component: require('@/components/About.vue').default,
     },
     {
+      path: '/help',
+      meta: {
+        title: 'Help',
+        icon: 'fa-info-circle',
+      },
+      component: require('@/components/Help.vue').default,
+    },
+    {
       path: '*',
       redirect: '/home',
     },

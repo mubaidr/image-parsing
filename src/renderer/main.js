@@ -12,6 +12,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+// eslint-disable-next-line
+const { ipcRenderer } = require('electron')
+
 Vue.config.productionTip = false
 Vue.config.devtools = false
 
@@ -29,3 +32,9 @@ new Vue({
 if (module && module.hot) {
   module.hot.accept()
 }
+
+ipcRenderer.addListener('event', (e, data) => {
+  if (data.route) {
+    router.push(data.route)
+  }
+})

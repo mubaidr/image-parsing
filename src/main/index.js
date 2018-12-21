@@ -127,9 +127,7 @@ app.on('ready', () => {
  */
 
 function sendMenuEvent(e) {
-  console.log(e)
-
-  // mainWindow.eve
+  mainWindow.webContents.send('event', e)
 }
 
 function setMenu() {
