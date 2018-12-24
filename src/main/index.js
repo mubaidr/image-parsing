@@ -9,6 +9,23 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
 let mainWindow
 let winURL = 'http://localhost:9080'
+const gotTheLock = app.requestSingleInstanceLock()
+
+// only allow single instance of application
+
+// eslint-disable-next-line
+app.on('second-instance', (commandLine, workingDirectory) => {
+  // Someone tried to run a second instance, we should focus our window.
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore()
+    mainWindow.focus()
+  }
+})
+
+if (!gotTheLock) {
+  app.quit()
+  process.exit(0)
+}
 
 if (process.env.NODE_ENV === 'development') {
   try {
