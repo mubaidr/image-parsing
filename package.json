@@ -44,7 +44,7 @@
     "cheerio": "1.0.0-rc.2",
     "downloadjs": "^1.4.7",
     "electron-store": "^2.0.0",
-    "fast-glob": "^2.2.4",
+    "fast-glob": "^2.2.6",
     "javascript-barcode-reader": "^0.4.7",
     "pdfmake": "^0.1.40",
     "physical-cpu-count": "^2.0.0",
