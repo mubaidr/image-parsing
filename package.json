@@ -45,7 +45,7 @@
     "downloadjs": "^1.4.7",
     "electron-store": "^2.0.0",
     "fast-glob": "^2.2.4",
-    "javascript-barcode-reader": "^0.4.7",
+    "javascript-barcode-reader": "^0.4.10",
     "pdfmake": "^0.1.40",
     "physical-cpu-count": "^2.0.0",
     "sharp": "^0.21.1",
