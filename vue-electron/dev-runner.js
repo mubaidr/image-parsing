@@ -15,6 +15,7 @@ const mainConfig = require('./webpack.main.config')
 const rendererConfig = require('./webpack.renderer.config')
 
 let electronProcess = null
+let manualRestart = false
 
 async function startRenderer() {
   // eslint-disable-next-line
@@ -56,16 +57,23 @@ function restartElectron() {
     electron,
     [path.join(__dirname, '..', '/dist/electron/main.js')],
     {
-      detached: false,
+      detached: true,
     }
   )
+
+  // eslint-disable-next-line
+  electronProcess.on('exit', (code, signal) => {
+    if (!manualRestart) process.exit(0)
+  })
 }
 
 function startMain() {
   const compiler = webpack(mainConfig)
 
   compiler.hooks.afterEmit.tap('afterEmit', () => {
+    manualRestart = true
     restartElectron()
+    manualRestart = false
   })
 
   compiler.watch({}, err => {

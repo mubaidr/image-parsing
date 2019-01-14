@@ -3,8 +3,14 @@ const { app, BrowserWindow, Menu } = require('electron')
 /* eslint-enable */
 const pkg = require('../../package.json')
 
-const isDev = process.env.NODE_ENV === 'development'
+// disable electron warning
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
+
 const gotTheLock = app.requestSingleInstanceLock()
+const isDev =
+  process.env.NODE_ENV === 'development' ||
+  process.env.ELECTRON_ENV === 'development' ||
+  process.argv.indexOf('--debug') > -1
 let mainWindow
 
 // only allow single instance of application
@@ -22,12 +28,14 @@ if (!isDev) {
     app.quit()
     process.exit(0)
   }
+} else {
+  // eslint-disable-next-line
+  require('electron-debug')()
 }
 
 async function installDevTools() {
   try {
     /* eslint-disable */
-    require('electron-debug')()
     require('devtron').install()
     require('vue-devtools').install()
     /* eslint-enable */
@@ -42,8 +50,9 @@ function createWindow() {
    */
   mainWindow = new BrowserWindow({
     minHeight: 480,
-    minWidth: 480,
+    minWidth: 800,
     webPreferences: {
+      nodeIntegration: true,
       nodeIntegrationInWorker: false,
       webSecurity: true,
     },
@@ -71,10 +80,7 @@ function createWindow() {
     mainWindow.show()
     mainWindow.focus()
 
-    if (
-      process.env.ELECTRON_ENV === 'development' ||
-      process.argv.indexOf('--debug') !== -1
-    ) {
+    if (isDev) {
       mainWindow.webContents.openDevTools()
     }
   })
