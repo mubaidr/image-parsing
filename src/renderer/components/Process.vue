@@ -1,17 +1,11 @@
 <template>
   <div class="section">
-    <h1 class="title">
-      Process
-    </h1>
-    <h2 class="subtitle is-6">
-      Process scanned images to generate result.
-    </h2>
+    <h1 class="title">Process</h1>
+    <h2 class="subtitle is-6">Process scanned images to generate result.</h2>
 
-    <br>
+    <br />
 
-    <div
-      class="file has-name is-fullwidth"
-    >
+    <div class="file has-name is-fullwidth">
       <label class="file-label">
         <button
           class="file-input"
@@ -20,23 +14,15 @@
           @click="chooseDirectory"
         />
         <span class="file-cta">
-          <span class="file-icon">
-            <i class="fas fa-folder" />
-          </span>
-          <span class="file-label">
-            Choose a directory
-          </span>
+          <span class="file-icon"> <i class="fas fa-folder" /> </span>
+          <span class="file-label"> Choose a directory </span>
         </span>
-        <span
-          class="file-name"
-        >
-          {{ imageDirectory }}
-        </span>
+        <span class="file-name"> {{ imageDirectory }} </span>
       </label>
     </div>
 
-    <br>
-    <br>
+    <br />
+    <br />
 
     <button
       :disabled="running || !imageDirectory"
@@ -46,28 +32,19 @@
       Start Process
     </button>
 
-    <button
-      :disabled="!running"
-      class="button is-danger"
-      @click="stopProcess"
-    >
+    <button :disabled="!running" class="button is-danger" @click="stopProcess">
       Stop Process
     </button>
 
-    <div
-      :class="{'is-active': running}"
-      class="modal"
-    >
+    <div :class="{ 'is-active': running }" class="modal">
       <div class="modal-background" />
       <div class="modal-content">
-        <div
-          class="box"
-        >
-          <h3 class="title is-5">
-            Processing
-          </h3>
+        <div class="box">
+          <h3 class="title is-5">Processing</h3>
           <div>
-            Processing image <strong>{{ processedImages }} of {{ totalImages }}</strong>, Estimated time remaining: <strong>{{ remainingTime }}</strong>
+            Processing image
+            <strong>{{ processedImages }} of {{ totalImages }}</strong
+            >, Estimated time remaining: <strong>{{ remainingTime }}</strong>
           </div>
           <progress
             :value="progress"
@@ -131,7 +108,7 @@ export default {
         this.listner,
         undefined,
         this.imageDirectory,
-        true,
+        true
       )
       this.totalImages = totalImages
     },
@@ -167,5 +144,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

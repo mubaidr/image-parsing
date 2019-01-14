@@ -1,14 +1,15 @@
 process.env.BABEL_ENV = 'main'
 
 const path = require('path')
+
 const { dependencies } = require('../package.json')
 
 const mainConfig = {
   mode: process.env.NODE_ENV,
   entry: {
-    main: path.join(__dirname, '../src/main/index.js'),
+    main: path.join(__dirname, '..', '/src/main/index.js'),
   },
-  externals: [...Object.keys(dependencies || {})],
+  externals: [...Object.keys(dependencies)],
   module: {
     rules: [
       {
@@ -29,7 +30,7 @@ const mainConfig = {
   output: {
     filename: '[name].js',
     libraryTarget: 'commonjs2',
-    path: path.join(__dirname, '../dist/electron'),
+    path: path.join(__dirname, '..', '/dist/electron'),
   },
   resolve: {
     extensions: ['.js', '.json', '.node'],

@@ -3,60 +3,36 @@ const { app, BrowserWindow, Menu } = require('electron')
 /* eslint-enable */
 const pkg = require('../../package.json')
 
-app.setName(pkg.productName)
-
-process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
-
-let mainWindow
-let winURL = 'http://localhost:9080'
+const isDev = process.env.NODE_ENV === 'development'
 const gotTheLock = app.requestSingleInstanceLock()
+let mainWindow
 
 // only allow single instance of application
-
-// eslint-disable-next-line
-app.on('second-instance', (commandLine, workingDirectory) => {
-  // Someone tried to run a second instance, we should focus our window.
-  if (mainWindow) {
-    if (mainWindow.isMinimized()) mainWindow.restore()
-    mainWindow.focus()
-  }
-})
-
-if (!gotTheLock) {
-  app.quit()
-  process.exit(0)
-}
-
-if (process.env.NODE_ENV === 'development') {
-  try {
+if (!isDev) {
+  if (gotTheLock) {
     // eslint-disable-next-line
-    require('electron-debug')()
-  } catch (err) {
-    console.log(
-      'Failed to install `electron-debug`: Please set `NODE_ENV=production` before build to avoid installing debugging packages. ',
-    )
+    app.on('second-instance', (commandLine, workingDirectory) => {
+      // Someone tried to run a second instance, we should focus our window.
+      if (mainWindow && mainWindow.isMinimized()) {
+        mainWindow.restore()
+      }
+      mainWindow.focus()
+    })
+  } else {
+    app.quit()
+    process.exit(0)
   }
-} else {
-  winURL = `file://${__dirname}/index.html`
-
-  /**
-   * Set `__static` path to static files in production
-   * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
-   */
-  // eslint-disable-next-line
-  global.__static = require('path')
-    .join(__dirname, '/static')
-    .replace(/\\/g, '\\\\') // eslint-disable-line
 }
 
-function installDevTools() {
+async function installDevTools() {
   try {
-    require('devtron').install() //eslint-disable-line
-    require('vue-devtools').install() //eslint-disable-line
+    /* eslint-disable */
+    require('electron-debug')()
+    require('devtron').install()
+    require('vue-devtools').install()
+    /* eslint-enable */
   } catch (err) {
-    console.log(
-      'Failed to install `devtron` & `vue-devtools`: Please set `NODE_ENV=production` before build to avoid installing debugging packages. ',
-    )
+    console.log(err)
   }
 }
 
@@ -65,8 +41,6 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    // useContentSize: true,
-    // backgroundColor: '#fff',
     minHeight: 480,
     minWidth: 480,
     webPreferences: {
@@ -74,15 +48,22 @@ function createWindow() {
       webSecurity: true,
     },
     show: false,
-    // transparent: true,
-    // frame: false,
-    // toolbar: false,
   })
 
   // eslint-disable-next-line
   setMenu()
-  mainWindow.loadURL(winURL)
-  // mainWindow.setMenu(null)
+
+  // load root file/url
+  if (isDev) {
+    mainWindow.loadURL('http://localhost:9080')
+  } else {
+    mainWindow.loadFile(`file://${__dirname}/index.html`)
+
+    // eslint-disable-next-line
+    global.__static = require('path')
+      .join(__dirname, '/static')
+      .replace(/\\/g, '\\\\')
+  }
 
   // Show when loaded
   mainWindow.on('ready-to-show', () => {
@@ -99,14 +80,16 @@ function createWindow() {
   })
 
   mainWindow.on('closed', () => {
+    console.log('closed')
     mainWindow = null
   })
 }
 
 app.on('ready', () => {
+  app.setName(pkg.productName)
   createWindow()
 
-  if (process.env.NODE_ENV === 'development') {
+  if (isDev) {
     installDevTools()
   }
 })
@@ -247,7 +230,7 @@ function setMenu() {
       {
         label: 'Speech',
         submenu: [{ role: 'startspeaking' }, { role: 'stopspeaking' }],
-      },
+      }
     )
 
     // Window menu

@@ -104,7 +104,7 @@ async function processTask(designData, imagePaths) {
       },
       () => {
         process.exit(0)
-      },
+      }
     )
   } else {
     console.log('Results: ', outputs)

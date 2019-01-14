@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'development'
+
 /* eslint-disable*/
 const electron = require('electron')
 const webpack = require('webpack')
@@ -13,13 +15,8 @@ const mainConfig = require('./webpack.main.config')
 const rendererConfig = require('./webpack.renderer.config')
 
 let electronProcess = null
-let oldElectronProcess = null
 
-function startRenderer() {
-  rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(
-    rendererConfig.entry.renderer,
-  )
-
+async function startRenderer() {
   // eslint-disable-next-line
   return new Promise(resolve => {
     const compiler = webpack(rendererConfig)
@@ -28,12 +25,10 @@ function startRenderer() {
     })
 
     compiler.hooks.afterEmit.tap('afterEmit', () => {
-      console.log('\nCompiled renderer script!')
-      console.log('\nWatching file changes...')
+      // renderer compiled
     })
 
     const server = new WebpackDevServer(compiler, {
-      contentBase: path.join(__dirname, '../'),
       hot: true,
       quiet: true,
       before(app, ctx) {
@@ -50,36 +45,27 @@ function startRenderer() {
 }
 
 function restartElectron() {
-  console.log('\nStarting electron...')
-
-  oldElectronProcess = electronProcess
+  const { pid } = electronProcess || {}
+  if (pid) {
+    kill(pid, err => {
+      if (err) console.error(err)
+    })
+  }
 
   electronProcess = spawn(
     electron,
-    ['--inspect=5858', path.join(__dirname, '../dist/electron/main.js')],
+    [path.join(__dirname, '..', '/dist/electron/main.js')],
     {
-      // detached: true,
-    },
-  )
-
-  electronProcess.stdout.on('data', data => {
-    console.log(data.toString())
-
-    const { pid } = oldElectronProcess || { pid: null }
-    if (pid && process.kill(pid, 0)) {
-      kill(pid)
-      oldElectronProcess = null
+      detached: false,
     }
-  })
+  )
 }
 
 function startMain() {
   const compiler = webpack(mainConfig)
 
   compiler.hooks.afterEmit.tap('afterEmit', () => {
-    console.log('\nCompiled main script!')
     restartElectron()
-    console.log('\nWatching file changes...')
   })
 
   compiler.watch({}, err => {

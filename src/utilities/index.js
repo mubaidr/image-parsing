@@ -33,7 +33,7 @@ async function createWorkerProcesses(imagesCount) {
     WORKERS.push(
       childProcess.fork(`${__dirname}/processTaskWorker.js`, [], {
         silent: true,
-      }),
+      })
     )
   }
 
@@ -171,7 +171,7 @@ function getNeuralNet(src) {
   const net = new brain.NeuralNetwork()
 
   return net.fromJSON(
-    JSON.parse(fs.readFileSync(src || dataPaths.trainingData)),
+    JSON.parse(fs.readFileSync(src || dataPaths.trainingData))
   )
 }
 
@@ -180,6 +180,7 @@ function getNeuralNet(src) {
  * @param {sharp} img Sharp instance
  * @param {String} name Name of file
  */
+// eslint-disable-next-line
 function logImageData(img, name) {
   img.png().toFile(path.join(dataPaths.tmp, `${name}.png`), err => {
     if (err) console.log(err)
@@ -309,7 +310,7 @@ async function getRollNoFromImage(designData, img) {
 
   return javascriptBarcodeReader(
     { data, width, height },
-    { barcode: 'code-39' },
+    { barcode: 'code-39' }
   )
 }
 
@@ -336,7 +337,7 @@ async function CSVToJSON(str, isPath, isKey) {
   const rollNoIndex = Math.max(
     headerValues.indexOf('rollno'),
     headerValues.indexOf('roll#'),
-    headerValues.indexOf('rollnumber'),
+    headerValues.indexOf('rollnumber')
   )
 
   if (isKey) rows.length = 2
@@ -394,7 +395,7 @@ function JSONToCSV(str, isPath) {
 
     // sort by question no
     const keyEntries = Object.entries(keys).sort(
-      (a, b) => a[0].replace('q', '') - b[0].replace('q', ''),
+      (a, b) => a[0].replace('q', '') - b[0].replace('q', '')
     )
 
     // append to csv

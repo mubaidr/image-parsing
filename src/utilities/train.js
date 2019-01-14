@@ -35,7 +35,7 @@ async function start(
   designFilePath = DEFAULTS[0],
   imagesDirectory = DEFAULTS[1],
   resultsFilePath = DEFAULTS[2],
-  neuralNetFilePath = DEFAULTS[3],
+  neuralNetFilePath = DEFAULTS[3]
 ) {
   const [designData, imagePaths, resultsData] = await Promise.all([
     getDesignData(designFilePath),
@@ -59,7 +59,7 @@ async function start(
     // if roll no is found only then add training data
     if (rollNo) {
       promises.push(
-        getQuestionsData(designData, sharpImageClone, resultsData, rollNo),
+        getQuestionsData(designData, sharpImageClone, resultsData, rollNo)
       )
     }
   }

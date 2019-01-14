@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import 'bulma-pro/bulma.sass'
-import 'bulma-addons/bulma.sass'
 
 import './assets/style/main.sass'
 import './assets/style/animations.sass'
@@ -10,7 +9,6 @@ import './mixins'
 
 import App from './App.vue'
 import router from './router'
-import store from './store'
 
 // eslint-disable-next-line
 const { ipcRenderer } = require('electron')
@@ -24,7 +22,6 @@ new Vue({
     App,
   },
   router,
-  store,
   template: '<App/>',
 }).$mount('#app')
 
@@ -33,6 +30,7 @@ if (module && module.hot) {
   module.hot.accept()
 }
 
+// menu routes handler
 ipcRenderer.addListener('event', (e, data) => {
   if (data.route) {
     router.push(data.route)

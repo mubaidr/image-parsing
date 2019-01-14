@@ -24,11 +24,12 @@ const whiteListedModules = ['vue']
 const rendererConfig = {
   mode: process.env.NODE_ENV,
   entry: {
-    renderer: path.join(__dirname, '../src/renderer/main.js'),
+    renderer: path.join(__dirname, '..', '/src/renderer/main.js'),
+    devClient: path.resolve('./dev-client.js'),
   },
   externals: [
     ...Object.keys(dependencies || {}).filter(
-      d => !whiteListedModules.includes(d),
+      d => !whiteListedModules.includes(d)
     ),
   ],
   module: {
@@ -149,7 +150,7 @@ if (process.env.NODE_ENV === 'production') {
         from: path.join(__dirname, '../static'),
         to: path.join(__dirname, '../dist/electron/static'),
       },
-    ]),
+    ])
   )
 }
 

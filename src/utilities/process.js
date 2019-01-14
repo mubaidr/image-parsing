@@ -50,7 +50,7 @@ function stop() {
 async function start(
   listner,
   designFilePath = DEFAULTS[0],
-  imagesDirectory = DEFAULTS[1],
+  imagesDirectory = DEFAULTS[1]
 ) {
   // reset result collection
   resultData = []

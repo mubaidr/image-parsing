@@ -1,12 +1,7 @@
 <template>
   <div id="app">
     <div class="content-custom">
-      <Transition
-        name="slide-up"
-        mode="out-in"
-      >
-        <RouterView />
-      </Transition>
+      <Transition name="slide-up" mode="out-in"> <RouterView /> </Transition>
     </div>
   </div>
 </template>
@@ -17,5 +12,4 @@ export default {
 }
 </script>
 
-<style lang="sass">
-</style>
+<style lang="sass"></style>

@@ -13,8 +13,6 @@ module.exports = {
   extends: ['airbnb-base', 'plugin:vue/recommended', 'prettier'],
   globals: {
     __static: true,
-    fabric: true,
-    Excel: true,
   },
   plugins: ['vue'],
   rules: {
@@ -26,7 +24,6 @@ module.exports = {
     'no-underscore-dangle': 0,
     semi: 0,
     // allow debugger during development
-    'no-unused-vars': process.env.NODE_ENV === 'production' ? 2 : 0,
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
   },
 }

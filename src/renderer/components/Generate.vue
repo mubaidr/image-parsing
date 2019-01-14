@@ -1,12 +1,8 @@
 <template>
   <div class="section">
-    <h1 class="title">
-      Generate
-    </h1>
-    <h2 class="subtitle">
-      Generate Answer Sheets.
-    </h2>
-    <br>
+    <h1 class="title">Generate</h1>
+    <h2 class="subtitle">Generate Answer Sheets.</h2>
+    <br />
 
     <div class="file has-name is-fullwidth">
       <label class="file-label">
@@ -17,29 +13,18 @@
           @click="chooseAnswerSheetPrepFile"
         />
         <span class="file-cta">
-          <span class="file-icon">
-            <i class="fas fa-file" />
-          </span>
-          <span class="file-label">
-            Result file
-          </span>
+          <span class="file-icon"> <i class="fas fa-file" /> </span>
+          <span class="file-label"> Result file </span>
         </span>
-        <span
-          v-show="answerSheetPrepFile"
-          class="file-name"
-        >
+        <span v-show="answerSheetPrepFile" class="file-name">
           {{ answerSheetPrepFile }}
         </span>
       </label>
     </div>
 
-    <br>
+    <br />
 
-    <button
-      :disabled="!isValid"
-      class="button is-dark"
-      @click="generate"
-    >
+    <button :disabled="!isValid" class="button is-dark" @click="generate">
       Generate
     </button>
   </div>
@@ -84,7 +69,7 @@ export default {
       // const docDefinition = {}
       const data = await CSVToJSON(this.answerSheetPrepFile, true)
       const $ = cheerio.load(
-        fs.readFileSync(path.join(dataPaths.testData, 'design.svg'), 'utf8'),
+        fs.readFileSync(path.join(dataPaths.testData, 'design.svg'), 'utf8')
       )
 
       Object.entries(data).forEach(([key, cand]) => {
@@ -114,7 +99,7 @@ export default {
             // TODO: update answer sheet design file to use variables form the asnwer sheet data
             if (text) {
               $(group).append(
-                `<text x="4" y="839.47" class="st14" v:langID="1033">${text}</text>`,
+                `<text x="4" y="839.47" class="st14" v:langID="1033">${text}</text>`
               )
             }
           }
@@ -130,5 +115,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>
