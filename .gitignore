@@ -14,3 +14,5 @@ data/tmp/
 tmp/
 .cache
 dist
+coverage
+__coverage__
