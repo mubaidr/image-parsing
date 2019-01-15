@@ -3,14 +3,13 @@ const { app, BrowserWindow, Menu } = require('electron')
 /* eslint-enable */
 const pkg = require('../../package.json')
 
+const { productName } = pkg.build
+
 // disable electron warning
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
 const gotTheLock = app.requestSingleInstanceLock()
-const isDev =
-  process.env.NODE_ENV === 'development' ||
-  process.env.ELECTRON_ENV === 'development' ||
-  process.argv.indexOf('--debug') > -1
+const isDev = process.env.NODE_ENV === 'development'
 let mainWindow
 
 // only allow single instance of application
@@ -66,7 +65,7 @@ function createWindow() {
   if (isDev) {
     mainWindow.loadURL('http://localhost:9080')
   } else {
-    mainWindow.loadFile(`file://${__dirname}/index.html`)
+    mainWindow.loadURL(`file://${__dirname}/index.html`)
 
     // eslint-disable-next-line
     global.__static = require('path')
@@ -76,11 +75,11 @@ function createWindow() {
 
   // Show when loaded
   mainWindow.on('ready-to-show', () => {
-    mainWindow.setTitle(pkg.productName)
+    mainWindow.setTitle(productName)
     mainWindow.show()
     mainWindow.focus()
 
-    if (isDev) {
+    if (isDev || process.argv.indexOf('--debug') > -1) {
       mainWindow.webContents.openDevTools()
     }
   })
@@ -92,7 +91,7 @@ function createWindow() {
 }
 
 app.on('ready', () => {
-  app.setName(pkg.productName)
+  app.setName(productName)
   createWindow()
 
   if (isDev) {

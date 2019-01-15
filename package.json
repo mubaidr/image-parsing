@@ -5,9 +5,6 @@
   },
   "build": {
     "appId": "org.mubaidr.image-parsing",
-    "directories": {
-      "output": "build"
-    },
     "dmg": {
       "contents": [
         {
@@ -59,9 +56,7 @@
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.5",
     "copy-webpack-plugin": "^4.6.0",
-    "cross-env": "^5.2.0",
     "css-loader": "^2.1.0",
-    "del": "^3.0.0",
     "devtron": "^1.4.0",
     "electron": "4.0.1",
     "electron-builder": "^20.38.4",
@@ -117,15 +112,13 @@
     "url": "git+https://github.com/mubaidr/image-parsing.git"
   },
   "scripts": {
-    "build": "yarn run pack && electron-builder",
-    "build:dir": "yarn run pack && electron-builder --dir",
-    "build:linux": "yarn run pack && electron-builder --linux",
-    "build:mac": "yarn run pack && electron-builder --mac",
-    "build:win": "yarn run pack && electron-builder --win",
-    "build:win-app": "yarn run pack && electron-builder",
+    "build": "npm run pack && electron-builder",
+    "build:linux": "npm run pack && electron-builder --linux",
+    "build:mac": "npm run pack && electron-builder --mac",
+    "build:win": "npm run pack && electron-builder --win",
     "dev": "node vue-electron/dev-runner.js",
     "lint": "eslint --ext .js,.vue --fix src __tests__ && prettier --write ./src/**/*{.js,.vue}",
-    "pack": "yarn run pack:main && yarn run pack:renderer",
+    "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "webpack --mode production --hide-modules --config vue-electron/webpack.main.config.js",
     "pack:renderer": "webpack --mode production --hide-modules --config vue-electron/webpack.renderer.config.js",
     "postinstall": "electron-builder install-app-deps",

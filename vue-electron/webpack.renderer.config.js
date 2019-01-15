@@ -1,4 +1,4 @@
-process.env.BABEL_ENV = 'renderer'
+process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 
 const path = require('path')
 
@@ -6,7 +6,6 @@ const path = require('path')
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-// const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const { dependencies } = require('../package.json')
@@ -25,7 +24,6 @@ const rendererConfig = {
   mode: process.env.NODE_ENV,
   entry: {
     renderer: path.join(__dirname, '..', '/src/renderer/main.js'),
-    // devClient: path.resolve('./dev-client.js'),
   },
   externals: [
     ...Object.keys(dependencies || {}).filter(
