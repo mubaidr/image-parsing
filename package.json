@@ -44,7 +44,7 @@
     "javascript-barcode-reader": "^0.4.10",
     "physical-cpu-count": "^2.0.0",
     "sharp": "^0.21.2",
-    "vue": "^2.5.22",
+    "vue": "^2.6.4",
     "vue-router": "^3.0.2"
   },
   "description": "An electron-vue project",
@@ -86,7 +86,7 @@
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^15.5.1",
     "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.5.22",
+    "vue-template-compiler": "^2.6.4",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14",
