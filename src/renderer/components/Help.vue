@@ -1,10 +1,16 @@
 <template>
   <div class="section">
-    <h1 class="title">Help</h1>
+    <h1 class="title">
+      Help
+    </h1>
     <br />
-    <h2 class="subtitle is-4">Coming soon...</h2>
+    <h2 class="subtitle is-4">
+      Coming soon...
+    </h2>
 
-    <h2 class="subtitle is-4">System Information</h2>
+    <h2 class="subtitle is-4">
+      System Information
+    </h2>
     <SystemInformation />
     <br />
   </div>

@@ -1,6 +1,8 @@
 <template>
   <div class="section">
-    <h1 class="title">Compile</h1>
+    <h1 class="title">
+      Compile
+    </h1>
     <h2 class="subtitle is-6">
       Compile result using extracted results and answer key.
     </h2>
@@ -9,16 +11,22 @@
     <div class="file has-name is-fullwidth">
       <label class="file-label">
         <button
+          @click="chooseFileResult"
           class="file-input"
           type="file"
           name="resume"
-          @click="chooseFileResult"
         />
         <span class="file-cta">
-          <span class="file-icon"> <i class="fas fa-file" /> </span>
-          <span class="file-label"> Result file </span>
+          <span class="file-icon">
+            <i class="fas fa-file" />
+          </span>
+          <span class="file-label">
+            Result file
+          </span>
         </span>
-        <span v-show="resultFile" class="file-name"> {{ resultFile }} </span>
+        <span v-show="resultFile" class="file-name">
+          {{ resultFile }}
+        </span>
       </label>
     </div>
 
@@ -26,16 +34,22 @@
     <div class="file has-name is-fullwidth">
       <label class="file-label">
         <button
+          @click="chooseFileKey"
           class="file-input"
           type="file"
           name="resume"
-          @click="chooseFileKey"
         />
         <span class="file-cta">
-          <span class="file-icon"> <i class="fas fa-file" /> </span>
-          <span class="file-label"> Key file </span>
+          <span class="file-icon">
+            <i class="fas fa-file" />
+          </span>
+          <span class="file-label">
+            Key file
+          </span>
         </span>
-        <span v-show="keyFile" class="file-name"> {{ keyFile }} </span>
+        <span v-show="keyFile" class="file-name">
+          {{ keyFile }}
+        </span>
       </label>
     </div>
 
@@ -44,7 +58,9 @@
       <div class="columns">
         <div class="column">
           <div class="field">
-            <label class="label"> Correct Marks </label>
+            <label class="label">
+              Correct Marks
+            </label>
             <div class="control">
               <input
                 v-model="correctMarks"
@@ -57,7 +73,9 @@
         </div>
         <div class="column">
           <div class="field">
-            <label class="label"> Negative Marks </label>
+            <label class="label">
+              Negative Marks
+            </label>
             <div class="control">
               <input
                 v-model="incorrectMarks"
@@ -76,8 +94,8 @@
 
     <button
       :disabled="running || !isValid"
-      class="button is-dark"
       @click="startProcess"
+      class="button is-dark"
     >
       Start Compilation
     </button>

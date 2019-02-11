@@ -6,9 +6,14 @@ const path = require('path')
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const { dependencies } = require('../package.json')
+
+const isDevMode = process.env.NODE_ENV !== 'production'
+
 /* eslint-enable */
 
 /**
@@ -23,7 +28,7 @@ const whiteListedModules = []
 const rendererConfig = {
   mode: process.env.NODE_ENV,
   entry: {
-    renderer: path.join(__dirname, '..', '/src/renderer/main.js'),
+    renderer: path.join(__dirname, '../src/renderer/main.js'),
   },
   externals: [
     ...Object.keys(dependencies || {}).filter(
@@ -34,19 +39,34 @@ const rendererConfig = {
     rules: [
       {
         test: /\.scss$/,
-        use: ['vue-style-loader', 'css-loader', 'sass-loader'],
+        use: [
+          isDevMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
+        ],
       },
       {
         test: /\.sass$/,
-        use: ['vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax'],
+        use: [
+          isDevMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader?indentedSyntax',
+        ],
       },
       {
         test: /\.less$/,
-        use: ['vue-style-loader', 'css-loader', 'less-loader'],
+        use: [
+          isDevMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader',
+        ],
       },
       {
         test: /\.css$/,
-        use: ['vue-style-loader', 'css-loader'],
+        use: [
+          isDevMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+        ],
       },
       {
         test: /\.html$/,
@@ -118,22 +138,18 @@ const rendererConfig = {
           ? path.resolve(__dirname, '../node_modules')
           : false,
     }),
+    new ScriptExtHtmlWebpackPlugin({
+      async: [/runtime/],
+      defaultAttribute: 'defer',
+    }),
     new VueLoaderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    // new MiniCssExtractPlugin()
   ],
-  output: {
-    filename: '[name].js',
-    libraryTarget: 'commonjs2',
-    path: path.join(__dirname, '../dist/electron'),
-  },
   resolve: {
     alias: {
       '@': path.join(__dirname, '../src/renderer'),
-      // vue$: 'vue/dist/vue.esm.js',
-      fabric$: path.join(__dirname, '../src/renderer/assets/script/fabric.js'),
+      vue$: 'vue/dist/vue.common.js',
     },
-    extensions: ['.js', '.vue', '.json', '.css', '.node'],
+    extensions: ['.js', '.vue', '.json', '.css', 'sass', 'scss', '.node'],
   },
   target: 'electron-renderer',
 }
@@ -143,13 +159,19 @@ const rendererConfig = {
  */
 if (process.env.NODE_ENV === 'production') {
   rendererConfig.plugins.push(
+    new MiniCssExtractPlugin({
+      filename: isDevMode ? '[name].css' : '[name].[hash].css',
+      chunkFilename: isDevMode ? '[id].css' : '[id].[hash].css',
+    }),
     new CopyWebpackPlugin([
       {
         from: path.join(__dirname, '../static'),
-        to: path.join(__dirname, '../dist/electron/static'),
+        to: path.join(__dirname, '../dist/static'),
       },
     ])
   )
+} else {
+  rendererConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
 }
 
 module.exports = rendererConfig

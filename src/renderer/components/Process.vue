@@ -1,23 +1,33 @@
 <template>
   <div class="section">
-    <h1 class="title">Process</h1>
-    <h2 class="subtitle is-6">Process scanned images to generate result.</h2>
+    <h1 class="title">
+      Process
+    </h1>
+    <h2 class="subtitle is-6">
+      Process scanned images to generate result.
+    </h2>
 
     <br />
 
     <div class="file has-name is-fullwidth">
       <label class="file-label">
         <button
+          @click="chooseDirectory"
           class="file-input"
           type="file"
           name="resume"
-          @click="chooseDirectory"
         />
         <span class="file-cta">
-          <span class="file-icon"> <i class="fas fa-folder" /> </span>
-          <span class="file-label"> Choose a directory </span>
+          <span class="file-icon">
+            <i class="fas fa-folder" />
+          </span>
+          <span class="file-label">
+            Choose a directory
+          </span>
         </span>
-        <span class="file-name"> {{ imageDirectory }} </span>
+        <span class="file-name">
+          {{ imageDirectory }}
+        </span>
       </label>
     </div>
 
@@ -26,13 +36,13 @@
 
     <button
       :disabled="running || !imageDirectory"
-      class="button is-dark"
       @click="startProcess"
+      class="button is-dark"
     >
       Start Process
     </button>
 
-    <button :disabled="!running" class="button is-danger" @click="stopProcess">
+    <button :disabled="!running" @click="stopProcess" class="button is-danger">
       Stop Process
     </button>
 
@@ -40,7 +50,9 @@
       <div class="modal-background" />
       <div class="modal-content">
         <div class="box">
-          <h3 class="title is-5">Processing</h3>
+          <h3 class="title is-5">
+            Processing
+          </h3>
           <div>
             Processing image
             <strong>{{ processedImages }} of {{ totalImages }}</strong

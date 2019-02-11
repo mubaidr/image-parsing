@@ -1,15 +1,14 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 
 const path = require('path')
-
-const { dependencies, devDependencies } = require('../package.json')
+const { dependencies } = require('../package.json')
 
 const mainConfig = {
-  mode: process.env.NODE_ENV,
+  mode: process.env.NODE_ENV || 'production',
   entry: {
-    main: path.join(__dirname, '..', '/src/main/index.js'),
+    main: path.join(__dirname, '../src/main/index.js'),
   },
-  externals: [...Object.keys(dependencies), ...Object.keys(devDependencies)],
+  externals: [...Object.keys(dependencies || {})],
   module: {
     rules: [
       {
@@ -30,7 +29,7 @@ const mainConfig = {
   output: {
     filename: '[name].js',
     libraryTarget: 'commonjs2',
-    path: path.join(__dirname, '..', '/dist/electron'),
+    path: path.join(__dirname, '../dist'),
   },
   resolve: {
     extensions: ['.js', '.json', '.node'],

@@ -1,9 +1,11 @@
 <template>
   <div class="section">
-    <h1 class="title">Train Network</h1>
+    <h1 class="title">
+      Train Network
+    </h1>
 
     <div class="block has-text-centered">
-      <button :disabled="running" class="button is-dark" @click="startProcess">
+      <button :disabled="running" @click="startProcess" class="button is-dark">
         Start Training
       </button>
 
@@ -11,10 +13,15 @@
       <br />
       <Transition name="slide-up">
         <div v-show="running">
-          <progress class="progress is-warning"> 0% </progress> <br />
+          <progress class="progress is-warning">
+            0%
+          </progress>
+          <br />
           <div class="block">
             <ul>
-              <li v-for="(log, index) in logs" :key="index">{{ log }}</li>
+              <li v-for="(log, index) in logs" :key="index">
+                {{ log }}
+              </li>
             </ul>
           </div>
         </div>

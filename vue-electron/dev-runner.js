@@ -15,7 +15,7 @@ const mainConfig = require('./webpack.main.config')
 const rendererConfig = require('./webpack.renderer.config')
 
 let electronProcess = null
-let manualRestart = false
+let manualRestart = null
 
 async function startRenderer() {
   rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(
@@ -30,10 +30,12 @@ async function startRenderer() {
     })
 
     compiler.hooks.afterEmit.tap('afterEmit', () => {
-      // renderer compiled
+      console.log('\nCompiled renderer script!')
+      console.log('\nWatching file changes...')
     })
 
     const server = new WebpackDevServer(compiler, {
+      contentBase: path.join(__dirname, '../'),
       hot: true,
       quiet: true,
       before(app, ctx) {
@@ -50,6 +52,8 @@ async function startRenderer() {
 }
 
 function restartElectron() {
+  console.log('\nStarting electron...')
+
   const { pid } = electronProcess || {}
   if (pid) {
     kill(pid, err => {
@@ -61,8 +65,8 @@ function restartElectron() {
     electron,
     [path.join(__dirname, '..', '/dist/electron/main.js')],
     {
-      detached: true,
-    }
+      detached: false,
+    },
   )
 
   // eslint-disable-next-line
@@ -75,9 +79,11 @@ function startMain() {
   const compiler = webpack(mainConfig)
 
   compiler.hooks.afterEmit.tap('afterEmit', () => {
+    console.log('\nCompiled main script!')
     manualRestart = true
     restartElectron()
     manualRestart = false
+    console.log('\nWatching file changes...')
   })
 
   compiler.watch({}, err => {
