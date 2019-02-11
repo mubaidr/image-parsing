@@ -1,7 +1,6 @@
 const brain = require('brain.js')
 const cheerio = require('cheerio')
 const childProcess = require('child_process')
-const download = require('downloadjs')
 const fastGlob = require('fast-glob')
 const fs = require('fs')
 const javascriptBarcodeReader = require('javascript-barcode-reader')
@@ -428,7 +427,8 @@ async function exportResult(resultData, name, isCSV) {
   const csv = isCSV ? resultData : await JSONToCSV(resultData)
 
   try {
-    download(csv, name ? `${name}.csv` : 'output.csv', 'text/csv')
+    // TODO: implement download
+    alert('implement download')
   } catch (error) {
     console.log('output: ', csv)
   }

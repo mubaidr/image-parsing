@@ -3,11 +3,13 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 const path = require('path')
 
 /* eslint-disable*/
+const fg = require('fast-glob')
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const PurgecssPlugin = require('purgecss-webpack-plugin')
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const { dependencies } = require('../package.json')
@@ -138,16 +140,12 @@ const rendererConfig = {
           ? path.resolve(__dirname, '../node_modules')
           : false,
     }),
-    new ScriptExtHtmlWebpackPlugin({
-      async: [/runtime/],
-      defaultAttribute: 'defer',
-    }),
     new VueLoaderPlugin(),
   ],
   resolve: {
     alias: {
       '@': path.join(__dirname, '../src/renderer'),
-      vue$: 'vue/dist/vue.common.js',
+      // vue$: 'vue/dist/vue.common.js',
     },
     extensions: ['.js', '.vue', '.json', '.css', 'sass', 'scss', '.node'],
   },
@@ -159,9 +157,19 @@ const rendererConfig = {
  */
 if (process.env.NODE_ENV === 'production') {
   rendererConfig.plugins.push(
+    new ScriptExtHtmlWebpackPlugin({
+      async: [/runtime/],
+      defaultAttribute: 'defer',
+    }),
     new MiniCssExtractPlugin({
       filename: isDevMode ? '[name].css' : '[name].[hash].css',
       chunkFilename: isDevMode ? '[id].css' : '[id].[hash].css',
+    }),
+    new PurgecssPlugin({
+      paths: fg.sync([`./src/renderer/**/*`], {
+        onlyFiles: true,
+        absolute: true,
+      }),
     }),
     new CopyWebpackPlugin([
       {

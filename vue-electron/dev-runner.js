@@ -19,7 +19,7 @@ let manualRestart = null
 
 async function startRenderer() {
   rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(
-    rendererConfig.entry.renderer,
+    rendererConfig.entry.renderer
   )
 
   // eslint-disable-next-line
@@ -63,10 +63,10 @@ function restartElectron() {
 
   electronProcess = spawn(
     electron,
-    [path.join(__dirname, '..', '/dist/electron/main.js')],
+    [path.join(__dirname, '..', '/dist/main.js')],
     {
       detached: false,
-    },
+    }
   )
 
   // eslint-disable-next-line
