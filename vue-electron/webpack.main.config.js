@@ -1,12 +1,10 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'production'
-
 const path = require('path')
 const { dependencies, devDependencies } = require('../package.json')
 
 const isDevMode = process.env.NODE_ENV !== 'production'
 
 const mainConfig = {
-  mode: 'development',
+  mode: process.env.NODE_ENV || 'development',
   devtool: isDevMode ? 'source-map' : undefined,
   entry: {
     main: path.join(__dirname, '../src/main/index.js'),

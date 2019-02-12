@@ -31,7 +31,7 @@
     "javascript-barcode-reader": "^0.4.10",
     "physical-cpu-count": "^2.0.0",
     "sharp": "^0.21.3",
-    "vue": "^2.6.5",
+    "vue": "^2.6.6",
     "vue-router": "^3.0.2"
   },
   "description": "An electron-vue project",
@@ -61,7 +61,7 @@
     "inject-loader": "^4.0.1",
     "jest": "^24.1.0",
     "mini-css-extract-plugin": "^0.5.0",
-    "node-abi": "^2.7.0",
+    "node-abi": "^2.7.1",
     "node-loader": "^0.6.0",
     "node-sass": "^4.11.0",
     "prettier": "^1.16.4",
@@ -77,7 +77,7 @@
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^15.6.2",
     "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.6.5",
+    "vue-template-compiler": "^2.6.6",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14",
@@ -110,13 +110,10 @@
     "dev": "node vue-electron/dev-runner.js",
     "lint": "eslint --ext .js,.vue --fix src __tests__ && prettier --write ./src/**/*{.js,.vue}",
     "pack": "npm run pack:main && npm run pack:renderer",
-    "pack:main": "webpack --mode production --hide-modules --config vue-electron/webpack.main.config.js",
-    "pack:renderer": "webpack --mode production --hide-modules --config vue-electron/webpack.renderer.config.js",
-    "postinstall": "electron-builder install-app-deps",
+    "pack:main": "webpack --mode production --env.NODE_ENV=production --hide-modules --config vue-electron/webpack.main.config.js",
+    "pack:renderer": "webpack --mode production --env.NODE_ENV=production --hide-modules --config vue-electron/webpack.renderer.config.js",
     "release": "build",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test": "jest"
   },
   "version": "0.0.1"
 }

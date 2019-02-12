@@ -1,5 +1,3 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'production'
-
 const path = require('path')
 
 /* eslint-disable*/
@@ -16,6 +14,8 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 const isDevMode = process.env.NODE_ENV !== 'production'
 
+console.log('=======================', process.env.NODE_ENV)
+
 /* eslint-enable */
 
 /**
@@ -27,12 +27,14 @@ const isDevMode = process.env.NODE_ENV !== 'production'
  */
 
 const rendererConfig = {
-  mode: 'development',
+  mode: process.env.NODE_ENV || 'development',
   devtool: isDevMode ? 'source-map' : undefined,
   entry: {
     renderer: path.join(__dirname, '../src/renderer/main.js'),
   },
-  // externals: [],
+  externals: {
+    sharp: 'sharp',
+  },
   module: {
     rules: [
       {
