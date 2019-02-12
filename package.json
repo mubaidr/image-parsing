@@ -4,34 +4,22 @@
     "url": "https://github.com/mubaidr/image-parsing/issues"
   },
   "build": {
-    "appId": "org.mubaidr.image-parsing",
-    "dmg": {
-      "contents": [
-        {
-          "path": "/Applications",
-          "type": "link",
-          "x": 410,
-          "y": 150
-        },
-        {
-          "type": "file",
-          "x": 130,
-          "y": 150
-        }
-      ]
-    },
+    "appId": "mubaidr.image-parsing",
     "files": [
       "dist/**/*"
     ],
     "linux": {
-      "icon": "build/icons"
+      "icon": "build/icons",
+      "target": "7z"
     },
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "icon": "build/icons/icon.icns",
+      "target": "7z"
     },
-    "productName": "image-parsing",
+    "productName": "Image Parsing",
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "build/icons/icon.ico",
+      "target": "7z"
     }
   },
   "dependencies": {
@@ -124,7 +112,7 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "webpack --mode production --hide-modules --config vue-electron/webpack.main.config.js",
     "pack:renderer": "webpack --mode production --hide-modules --config vue-electron/webpack.renderer.config.js",
-    "postinstall": "",
+    "postinstall": "electron-builder install-app-deps",
     "release": "build",
     "test": "jest",
     "test:coverage": "jest --coverage",

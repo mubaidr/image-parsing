@@ -82,6 +82,14 @@ async function processTask(designData, imagePaths) {
         }
         */
       }
+
+      // TODO: test without neural network
+      // console.log(
+      //   resultsJson[rollNo][q.title],
+      //   q.data.reduce((res, pixel) => {
+      //     return (res + pixel) / 2
+      //   }, 0)
+      // )
     }
 
     // collect option selection

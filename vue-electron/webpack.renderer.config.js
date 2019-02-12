@@ -12,7 +12,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const PurgecssPlugin = require('purgecss-webpack-plugin')
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const { dependencies } = require('../package.json')
+// const { dependencies, devDependencies } = require('../package.json')
 
 const isDevMode = process.env.NODE_ENV !== 'production'
 
@@ -25,18 +25,14 @@ const isDevMode = process.env.NODE_ENV !== 'production'
  * that provide pure *.vue files that need compiling
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/webpack-configurations.html#white-listing-externals
  */
-const whiteListedModules = []
 
 const rendererConfig = {
-  mode: process.env.NODE_ENV,
+  mode: 'development',
+  devtool: isDevMode ? 'source-map' : undefined,
   entry: {
     renderer: path.join(__dirname, '../src/renderer/main.js'),
   },
-  externals: [
-    ...Object.keys(dependencies || {}).filter(
-      d => !whiteListedModules.includes(d)
-    ),
-  ],
+  // externals: [],
   module: {
     rules: [
       {
@@ -135,19 +131,14 @@ const rendererConfig = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
-      nodeModules:
-        process.env.NODE_ENV !== 'production'
-          ? path.resolve(__dirname, '../node_modules')
-          : false,
     }),
     new VueLoaderPlugin(),
   ],
   resolve: {
     alias: {
       '@': path.join(__dirname, '../src/renderer'),
-      // vue$: 'vue/dist/vue.common.js',
     },
-    extensions: ['.js', '.vue', '.json', '.css', 'sass', 'scss', '.node'],
+    // modules: ['../node_modules'],
   },
   target: 'electron-renderer',
 }
@@ -162,8 +153,7 @@ if (process.env.NODE_ENV === 'production') {
       defaultAttribute: 'defer',
     }),
     new MiniCssExtractPlugin({
-      filename: isDevMode ? '[name].css' : '[name].[hash].css',
-      chunkFilename: isDevMode ? '[id].css' : '[id].[hash].css',
+      filename: '[name].css',
     }),
     new PurgecssPlugin({
       paths: fg.sync([`./src/renderer/**/*`], {

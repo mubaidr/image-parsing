@@ -4,6 +4,12 @@ const path = require('path')
 const sharp = require('sharp')
 const dataPaths = require('./data-paths')
 
+// TODO: test these options
+sharp.cache(false)
+// sharp.cache({ items: 0 })
+// sharp.cache({ files: 0 })
+sharp.concurrency(0)
+
 // default options
 const DEFAULTS = [
   path.join(dataPaths.testData, 'design.svg'),
@@ -64,7 +70,11 @@ async function start(
     }
   }
 
-  // collect data from lal promises
+  // TODO: debug sharp usage
+  console.log('Cache: ', sharp.cache())
+  console.log('Concurrency: ', sharp.concurrency())
+
+  // collect data from all promises
   const results = await Promise.all(promises)
   const net = new brain.NeuralNetwork()
   const trainingData = []

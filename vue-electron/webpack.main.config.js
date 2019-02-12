@@ -1,14 +1,17 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 
 const path = require('path')
-const { dependencies } = require('../package.json')
+const { dependencies, devDependencies } = require('../package.json')
+
+const isDevMode = process.env.NODE_ENV !== 'production'
 
 const mainConfig = {
-  mode: process.env.NODE_ENV || 'production',
+  mode: 'development',
+  devtool: isDevMode ? 'source-map' : undefined,
   entry: {
     main: path.join(__dirname, '../src/main/index.js'),
   },
-  externals: [...Object.keys(dependencies || {})],
+  externals: Object.keys(dependencies).concat(Object.keys(devDependencies)),
   module: {
     rules: [
       {
@@ -31,9 +34,7 @@ const mainConfig = {
     libraryTarget: 'commonjs2',
     path: path.join(__dirname, '../dist'),
   },
-  resolve: {
-    extensions: ['.js', '.json', '.node'],
-  },
+  resolve: {},
   target: 'electron-main',
 }
 
