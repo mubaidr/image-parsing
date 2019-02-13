@@ -43,6 +43,7 @@
     "babel-jest": "^24.1.0",
     "babel-loader": "^8.0.5",
     "copy-webpack-plugin": "^4.6.0",
+    "cross-env": "^5.2.0",
     "css-loader": "^2.1.0",
     "devtron": "^1.4.0",
     "electron": "4.0.4",
@@ -103,15 +104,15 @@
     "url": "git+https://github.com/mubaidr/image-parsing.git"
   },
   "scripts": {
-    "build": "npm run pack && electron-builder",
+    "build": "cross-env NODE_ENV=production npm run pack && electron-builder",
     "build:linux": "npm run pack && electron-builder --linux",
     "build:mac": "npm run pack && electron-builder --mac",
     "build:win": "npm run pack && electron-builder --win",
-    "dev": "node vue-electron/dev-runner.js",
+    "dev": "cross-env NODE_ENV=development node _scripts/dev-runner.js",
     "lint": "eslint --ext .js,.vue --fix src __tests__ && prettier --write ./src/**/*{.js,.vue}",
     "pack": "npm run pack:main && npm run pack:renderer",
-    "pack:main": "webpack --mode production --env.NODE_ENV=production --hide-modules --config vue-electron/webpack.main.config.js",
-    "pack:renderer": "webpack --mode production --env.NODE_ENV=production --hide-modules --config vue-electron/webpack.renderer.config.js",
+    "pack:main": "webpack --hide-modules --config _scripts/webpack.main.config.js",
+    "pack:renderer": "webpack --hide-modules --config _scripts/webpack.renderer.config.js",
     "release": "build",
     "test": "jest"
   },

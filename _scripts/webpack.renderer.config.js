@@ -10,30 +10,20 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const PurgecssPlugin = require('purgecss-webpack-plugin')
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-// const { dependencies, devDependencies } = require('../package.json')
-
-const isDevMode = process.env.NODE_ENV !== 'production'
-
-console.log('=======================', process.env.NODE_ENV)
-
 /* eslint-enable */
 
-/**
- * List of node_modules to include in webpack bundle
- *
- * Required for specific packages like Vue UI libraries
- * that provide pure *.vue files that need compiling
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/webpack-configurations.html#white-listing-externals
- */
+// const { dependencies } = require('../package.json')
+
+const isDevMode = process.env.NODE_ENV === 'development'
 
 const rendererConfig = {
-  mode: process.env.NODE_ENV || 'development',
+  mode: isDevMode ? 'development' : 'production',
   devtool: isDevMode ? 'source-map' : undefined,
   entry: {
     renderer: path.join(__dirname, '../src/renderer/main.js'),
   },
   externals: {
-    sharp: 'sharp',
+    // ...Object.keys(dependencies),
   },
   module: {
     rules: [
@@ -86,7 +76,7 @@ const rendererConfig = {
         use: {
           loader: 'vue-loader',
           options: {
-            extractCSS: process.env.NODE_ENV === 'production',
+            extractCSS: !isDevMode,
             loaders: {
               sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1',
               scss: 'vue-style-loader!css-loader!sass-loader',
@@ -126,13 +116,13 @@ const rendererConfig = {
     ],
   },
   node: {
-    __dirname: process.env.NODE_ENV !== 'production',
-    __filename: process.env.NODE_ENV !== 'production',
+    __dirname: isDevMode,
+    __filename: isDevMode,
   },
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: path.resolve(__dirname, '../src/index.ejs'),
+      template: path.resolve(__dirname, '../src/index.html'),
     }),
     new VueLoaderPlugin(),
   ],
@@ -140,7 +130,6 @@ const rendererConfig = {
     alias: {
       '@': path.join(__dirname, '../src/renderer'),
     },
-    // modules: ['../node_modules'],
   },
   target: 'electron-renderer',
 }
@@ -148,7 +137,9 @@ const rendererConfig = {
 /**
  * Adjust rendererConfig for production settings
  */
-if (process.env.NODE_ENV === 'production') {
+if (isDevMode) {
+  rendererConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
+} else {
   rendererConfig.plugins.push(
     new ScriptExtHtmlWebpackPlugin({
       async: [/runtime/],
@@ -165,13 +156,11 @@ if (process.env.NODE_ENV === 'production') {
     }),
     new CopyWebpackPlugin([
       {
-        from: path.join(__dirname, '../static'),
-        to: path.join(__dirname, '../dist/static'),
+        from: path.join(__dirname, '../src/data'),
+        to: path.join(__dirname, '../dist/data'),
       },
     ])
   )
-} else {
-  rendererConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
 }
 
 module.exports = rendererConfig

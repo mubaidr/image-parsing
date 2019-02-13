@@ -1,5 +1,3 @@
-process.env.NODE_ENV = 'development'
-
 /* eslint-disable*/
 const electron = require('electron')
 const webpack = require('webpack')

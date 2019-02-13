@@ -1,15 +1,15 @@
 const path = require('path')
-const { dependencies, devDependencies } = require('../package.json')
+const { devDependencies } = require('../package.json')
 
-const isDevMode = process.env.NODE_ENV !== 'production'
+const isDevMode = process.env.NODE_ENV === 'development'
 
 const mainConfig = {
-  mode: process.env.NODE_ENV || 'development',
+  mode: isDevMode ? 'development' : 'production',
   devtool: isDevMode ? 'source-map' : undefined,
   entry: {
     main: path.join(__dirname, '../src/main/index.js'),
   },
-  externals: Object.keys(dependencies).concat(Object.keys(devDependencies)),
+  externals: Object.keys(devDependencies),
   module: {
     rules: [
       {
@@ -24,8 +24,8 @@ const mainConfig = {
     ],
   },
   node: {
-    __dirname: process.env.NODE_ENV !== 'production',
-    __filename: process.env.NODE_ENV !== 'production',
+    __dirname: isDevMode,
+    __filename: isDevMode,
   },
   output: {
     filename: '[name].js',
