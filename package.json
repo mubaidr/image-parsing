@@ -5,21 +5,28 @@
   },
   "build": {
     "appId": "com.mubaidr.image-parsing",
+    "asar": false,
+    "directories": {
+      "output": "./build/"
+    },
     "files": [
-      "dist/**/*"
+      "!**/node_modules/**",
+      "**/node_modules/sharp/build/**/*",
+      "./dist/**/*",
+      "_icons/icon.*"
     ],
     "linux": {
-      "icon": "_icons/icon.png",
+      "icon": "./_icons/icon.png",
       "target": "AppImage"
     },
     "mac": {
-      "icon": "_icons/icon.icns",
+      "icon": "./_icons/icon.icns",
       "target": "dmg"
     },
     "npmRebuild": false,
     "productName": "Image Parsing",
     "win": {
-      "icon": "_icons/icon.ico",
+      "icon": "./_icons/icon.ico",
       "target": "msi"
     }
   },

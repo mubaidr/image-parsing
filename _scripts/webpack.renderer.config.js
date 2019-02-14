@@ -12,8 +12,6 @@ const PurgecssPlugin = require('purgecss-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 /* eslint-enable */
 
-const { dependencies, devDependencies } = require('../package.json')
-
 const isDevMode = process.env.NODE_ENV === 'development'
 
 const rendererConfig = {
@@ -23,8 +21,7 @@ const rendererConfig = {
     renderer: path.join(__dirname, '../src/renderer/main.js'),
   },
   externals: {
-    ...Object.keys(dependencies),
-    ...Object.keys(devDependencies),
+    sharp: 'require("sharp")',
   },
   module: {
     rules: [
