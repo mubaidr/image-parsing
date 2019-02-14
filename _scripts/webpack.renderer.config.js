@@ -12,7 +12,7 @@ const PurgecssPlugin = require('purgecss-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 /* eslint-enable */
 
-// const { dependencies } = require('../package.json')
+const { dependencies, devDependencies } = require('../package.json')
 
 const isDevMode = process.env.NODE_ENV === 'development'
 
@@ -23,7 +23,8 @@ const rendererConfig = {
     renderer: path.join(__dirname, '../src/renderer/main.js'),
   },
   externals: {
-    // ...Object.keys(dependencies),
+    ...Object.keys(dependencies),
+    ...Object.keys(devDependencies),
   },
   module: {
     rules: [
@@ -129,6 +130,7 @@ const rendererConfig = {
   resolve: {
     alias: {
       '@': path.join(__dirname, '../src/renderer'),
+      vue: 'vue/dist/vue.common',
     },
   },
   target: 'electron-renderer',

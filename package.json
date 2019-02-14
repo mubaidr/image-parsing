@@ -4,22 +4,23 @@
     "url": "https://github.com/mubaidr/image-parsing/issues"
   },
   "build": {
-    "appId": "mubaidr.image-parsing",
+    "appId": "com.mubaidr.image-parsing",
     "files": [
       "dist/**/*"
     ],
     "linux": {
-      "icon": "build/icons",
-      "target": "7z"
+      "icon": "_icons/icon.png",
+      "target": "AppImage"
     },
     "mac": {
-      "icon": "build/icons/icon.icns",
-      "target": "7z"
+      "icon": "_icons/icon.icns",
+      "target": "dmg"
     },
+    "npmRebuild": false,
     "productName": "Image Parsing",
     "win": {
-      "icon": "build/icons/icon.ico",
-      "target": "7z"
+      "icon": "_icons/icon.ico",
+      "target": "msi"
     }
   },
   "dependencies": {
@@ -28,7 +29,7 @@
     "cheerio": "1.0.0-rc.2",
     "electron-settings": "^3.2.0",
     "fast-glob": "^2.2.6",
-    "javascript-barcode-reader": "^0.4.10",
+    "javascript-barcode-reader": "^0.4.11",
     "physical-cpu-count": "^2.0.0",
     "sharp": "^0.21.3",
     "vue": "^2.6.6",
@@ -109,10 +110,11 @@
     "build:mac": "npm run pack && electron-builder --mac",
     "build:win": "npm run pack && electron-builder --win",
     "dev": "cross-env NODE_ENV=development node _scripts/dev-runner.js",
-    "lint": "eslint --ext .js,.vue --fix src __tests__ && prettier --write ./src/**/*{.js,.vue}",
+    "lint": "eslint --ext .js,.vue --fix src __tests__ && prettier --write ./src/**/*.js",
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "webpack --hide-modules --config _scripts/webpack.main.config.js",
     "pack:renderer": "webpack --hide-modules --config _scripts/webpack.renderer.config.js",
+    "postinstall": "node ./node_modules/sharp/install/dll-copy.js",
     "release": "build",
     "test": "jest"
   },

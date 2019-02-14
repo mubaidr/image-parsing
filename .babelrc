@@ -4,8 +4,8 @@
       "@babel/preset-env",
       {
         "targets": {
-          "chrome": "66",
-          "node": 10
+          "chrome": "69",
+          "node": "10.11.0"
         }
       }
     ]

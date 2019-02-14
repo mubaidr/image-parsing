@@ -12,9 +12,7 @@
           </figure>
         </div>
         <div class="content has-text-centered">
-          <h1 class="title is-1">
-Image Parsing
-</h1>
+          <h1 class="title is-1">Image Parsing</h1>
           <p class="subtitle is-5">
             Generate answeer sheets and extract results from the scanned answer
             sheets.
@@ -28,7 +26,7 @@ Image Parsing
               to="generate"
             >
               <span class="icon">
-                <i class="fa fa-file-alt" />
+                <i class="fa fa-file-alt"/>
               </span>
               <span>Generate</span>
             </RouterLink>
@@ -39,7 +37,7 @@ Image Parsing
               to="process"
             >
               <span class="icon">
-                <i class="fa fa-play" />
+                <i class="fa fa-play"/>
               </span>
               <span>Process</span>
             </RouterLink>
