@@ -5,9 +5,9 @@
   },
   "build": {
     "appId": "com.mubaidr.image-parsing",
-    "asar": true,
+    "asar": false,
     "directories": {
-      "output": "./build/"
+      "output": "build/"
     },
     "dmg": {
       "contents": [
@@ -29,12 +29,11 @@
       }
     },
     "files": [
-      "!**/node_modules/**",
-      "./dist/**/*",
+      "dist/**/*",
       "_icons/icon.*"
     ],
     "linux": {
-      "icon": "./_icons/icon.png",
+      "icon": "_icons/icon.png",
       "target": [
         "deb",
         "snap",
@@ -43,7 +42,7 @@
     },
     "mac": {
       "category": "public.app-category.utilities",
-      "icon": "./_icons/icon.icns",
+      "icon": "_icons/icon.icns",
       "target": [
         "dmg",
         "zip"
@@ -57,7 +56,7 @@
     },
     "productName": "Image Parsing",
     "win": {
-      "icon": "./_icons/icon.ico",
+      "icon": "_icons/icon.ico",
       "target": [
         "nsis",
         "zip",
@@ -139,7 +138,7 @@
     ]
   },
   "license": "MIT",
-  "main": "./dist/main.js",
+  "main": "dist/main.js",
   "name": "image-parsing",
   "productName": "Image Parsing",
   "repository": {
@@ -148,15 +147,16 @@
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production npm run pack && electron-builder",
+    "build:dir": "cross-env NODE_ENV=production npm run pack && electron-builder --dir",
     "build:linux": "npm run pack && electron-builder --linux",
     "build:mac": "npm run pack && electron-builder --mac",
     "build:win": "npm run pack && electron-builder --win",
     "dev": "node _scripts/dev-runner.js",
-    "lint": "eslint --ext .js,.vue --fix src __tests__ && prettier --write ./src/**/*.js",
+    "lint": "eslint --ext .js,.vue --fix src __tests__ && prettier --write src/**/*.js",
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "webpack --hide-modules --config _scripts/webpack.main.config.js",
     "pack:renderer": "webpack --hide-modules --config _scripts/webpack.renderer.config.js",
-    "postinstall": "node ./node_modules/sharp/install/dll-copy.js",
+    "postinstall": "node node_modules/sharp/install/dll-copy.js",
     "release": "build",
     "test": "jest"
   },
