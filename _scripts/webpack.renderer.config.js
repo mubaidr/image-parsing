@@ -20,9 +20,7 @@ const rendererConfig = {
   entry: {
     renderer: path.join(__dirname, '../src/renderer/main.js'),
   },
-  externals: {
-    sharp: 'require("sharp")',
-  },
+  externals: {},
   module: {
     rules: [
       {
