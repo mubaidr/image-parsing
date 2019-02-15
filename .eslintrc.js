@@ -24,7 +24,7 @@ module.exports = {
     'import/extensions': 0,
     'import/no-unresolved': 0,
     'linebreak-style': 0,
-    'no-console': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'no-console': 0,
     'no-continue': 0,
     'no-underscore-dangle': 0,
     semi: 0,

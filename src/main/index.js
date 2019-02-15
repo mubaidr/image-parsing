@@ -1,9 +1,8 @@
+import { build } from '../../package.json'
+
 /* eslint-disable import/no-extraneous-dependencies */
 const { app, BrowserWindow, Menu } = require('electron')
 /* eslint-enable */
-const pkg = require('../../package.json')
-
-const { productName } = pkg.build
 
 // disable electron warning
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
@@ -11,6 +10,7 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 const gotTheLock = app.requestSingleInstanceLock()
 const isDev = process.env.NODE_ENV === 'development'
 let mainWindow
+const { productName } = build
 
 // only allow single instance of application
 if (!isDev) {
