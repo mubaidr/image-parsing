@@ -13,19 +13,12 @@ const PurgecssPlugin = require('purgecss-webpack-plugin')
 // const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const { dependencies } = require('../package.json')
+const { dependencies, devDependencies } = require('../package.json')
 /* eslint-enable */
 
+const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
-
-/**
- * List of node_modules to include in webpack bundle
- *
- * Required for specific packages like Vue UI libraries
- * that provide pure *.vue files that need compiling
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/webpack-configurations.html#white-listing-externals
- */
-const whiteListedModules = ['vue', 'sharp']
+const whiteListedModules = ['vue']
 
 const config = {
   mode: process.env.NODE_ENV,
@@ -38,11 +31,7 @@ const config = {
     pathinfo: false,
     filename: '[name].js',
   },
-  externals: [
-    ...Object.keys(dependencies || {}).filter(
-      d => !whiteListedModules.includes(d)
-    ),
-  ],
+  externals: externals.filter(d => !whiteListedModules.includes(d)),
   module: {
     rules: [
       {

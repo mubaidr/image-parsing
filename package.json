@@ -69,6 +69,7 @@
     "brain.js": "^1.6.1",
     "bulma-pro": "^0.1.4",
     "cheerio": "1.0.0-rc.2",
+    "csvtojson": "^2.0.8",
     "electron-settings": "^3.2.0",
     "fast-glob": "^2.2.6",
     "javascript-barcode-reader": "^0.4.11",
@@ -79,7 +80,7 @@
   },
   "description": "An electron-vue project",
   "devDependencies": {
-    "@babel/core": "^7.2.2",
+    "@babel/core": "^7.3.3",
     "@babel/preset-env": "^7.3.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
@@ -90,7 +91,7 @@
     "electron": "4.0.5",
     "electron-builder": "^20.38.5",
     "electron-debug": "^2.1.0",
-    "eslint": "^5.13.0",
+    "eslint": "^5.14.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^4.0.0",
     "eslint-import-resolver-webpack": "^0.11.0",
@@ -116,7 +117,7 @@
     "vue-loader": "^15.6.2",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.6",
-    "webpack": "^4.29.3",
+    "webpack": "^4.29.4",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14",
     "webpack-hot-middleware": "^2.24.3"
@@ -128,10 +129,10 @@
       "!src/utilities/tmp/"
     ],
     "coverageDirectory": "coverage",
+    "tansform": {},
     "testPathIgnorePatterns": [
       "__tests__/.eslintrc.js"
-    ],
-    "tansform": {}
+    ]
   },
   "license": "MIT",
   "main": "dist/main.js",
@@ -144,15 +145,12 @@
   "scripts": {
     "build": "npm run pack && electron-builder",
     "build:dir": "npm run pack && electron-builder --dir",
-    "build:linux": "npm run pack && electron-builder --linux",
-    "build:mac": "npm run pack && electron-builder --mac",
-    "build:win": "npm run pack && electron-builder --win",
     "dev": "node _scripts/dev-runner.js",
     "lint": "eslint --ext .js,.vue --fix src __tests__ && prettier --write src/**/*.js",
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "webpack --hide-modules --config _scripts/webpack.main.config.js",
     "pack:renderer": "webpack --hide-modules --config _scripts/webpack.renderer.config.js",
-    "postinstall": "node node_modules/sharp/install/dll-copy.js",
+    "postinstall": "",
     "release": "build",
     "test": "jest"
   },

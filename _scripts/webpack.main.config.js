@@ -1,16 +1,18 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 
 const path = require('path')
-const { dependencies } = require('../package.json')
+const { dependencies, devDependencies } = require('../package.json')
 
+const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
+const whiteListedModules = []
 
 const config = {
   mode: process.env.NODE_ENV,
   entry: {
     main: path.join(__dirname, '../src/main/index.js'),
   },
-  externals: [...Object.keys(dependencies || {})],
+  externals: externals.filter(d => !whiteListedModules.includes(d)),
   module: {
     rules: [
       {

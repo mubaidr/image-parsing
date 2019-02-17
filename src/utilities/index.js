@@ -1,6 +1,7 @@
 const brain = require('brain.js')
 const cheerio = require('cheerio')
 const childProcess = require('child_process')
+const csvtojson = require('csvtojson')
 const fastGlob = require('fast-glob')
 const fs = require('fs')
 const javascriptBarcodeReader = require('javascript-barcode-reader')
@@ -322,50 +323,27 @@ async function getRollNoFromImage(designData, img) {
  * @returns {Object} CSV String
  */
 async function CSVToJSON(str, isPath, isKey) {
-  const resultFile = isPath ? fs.readFileSync(str, 'utf8') : str
-  const json = {}
+  const csv = csvtojson()
+  let obj
+  let arr
 
-  // extract rows and header names
-  const rows = resultFile.split('\n')
-  const headerValues = rows[0]
-    .replace(/ /gi, '')
-    .toLowerCase()
-    .split(',')
-
-  // extract index of roll no in header row
-  const rollNoIndex = Math.max(
-    headerValues.indexOf('rollno'),
-    headerValues.indexOf('roll#'),
-    headerValues.indexOf('rollnumber')
-  )
-
-  if (isKey) rows.length = 2
-  // iterate rows but skips header row
-  for (let i = 1; i < rows.length; i += 1) {
-    const obj = {}
-    const values = rows[i]
-      .replace(/(\s)|(\.)|(-)|(_)/gi, '')
-      // .toLowerCase()
-      .split(',')
-
-    values.forEach((value, index) => {
-      if (index !== rollNoIndex) {
-        obj[headerValues[index]] = value
-      }
-    })
-
-    if (isKey) {
-      json.key = obj
-    } else {
-      const roll = values[rollNoIndex]
-
-      if (roll) {
-        json[roll] = obj
-      }
-    }
+  if (isPath) {
+    arr = await csv.fromFile(str)
+  } else {
+    arr = await csv.fromString(str)
   }
 
-  return json
+  if (isKey) {
+    obj = arr[0]
+  } else {
+    obj = {}
+
+    arr.forEach(item => {
+      obj[item.RollNo] = item
+    })
+  }
+
+  return obj
 }
 
 /**
