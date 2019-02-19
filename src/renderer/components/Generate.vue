@@ -46,7 +46,7 @@ const path = require('path')
 const fs = require('fs')
 const cheerio = require('cheerio')
 // eslint-disable-next-line
-const { remote } = require('electron')
+const { dialog, getCurrentWindow } = require('electron').remote
 
 const dataPaths = require('../../utilities/data-paths.js')
 
@@ -66,7 +66,7 @@ export default {
 
   methods: {
     chooseAnswerSheetPrepFile() {
-      ;[this.answerSheetPrepFile] = remote.dialog.showOpenDialog({
+      ;[this.answerSheetPrepFile] = dialog.showOpenDialog(getCurrentWindow(), {
         properties: ['openFile'],
       }) || [false]
     },

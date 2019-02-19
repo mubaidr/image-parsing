@@ -7,8 +7,9 @@ if (fs.existsSync(tmp)) {
   fs.readdir(tmp, (err, files) => {
     if (err) console.log(err)
 
-    // eslint-disable-next-line
-    for (const file of files) {
+    for (let i = 0; i < files.length; i += 1) {
+      const file = files[i]
+
       fs.unlink(path.join(tmp, file), error => {
         if (error) console.log(error)
       })
@@ -29,4 +30,13 @@ module.exports = {
   renderer: path.resolve('src/renderer'),
   utiltities: path.resolve('src/utilities'),
   testData: path.resolve('__tests__/test-data'),
+  DEFAULTS: {
+    design: path.resolve('__tests__/test-data', 'design.svg'),
+    images: path.resolve('__tests__/test-data', 'images'),
+    result: path.resolve('__tests__/test-data', 'result.csv'),
+    questionsModel: path.resolve('src/data/questions-model.json'),
+    rollNoModel: path.resolve('src/data/questions-model.json'),
+    postModel: path.resolve('src/data/questions-model.json'),
+    centreModel: path.resolve('src/data/questions-model.json'),
+  },
 }

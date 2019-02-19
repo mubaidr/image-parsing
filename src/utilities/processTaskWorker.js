@@ -1,19 +1,21 @@
 const sharp = require('sharp')
 
-/**
- * Import utilty functions
- */
-const {
-  getRollNoFromImage,
-  getQuestionsData,
-  getNeuralNet,
-} = require('./index')
+const { getRollNoFromImage } = require('./images')
+const { getQuestionsData } = require('./questions')
+const { getNeuralNet } = require('./index')
 
 // controls if processing is enabled
 let processingEnabled = true
 
 /**
- * Stops the current processing task
+ * Set Start status to the current processing task
+ */
+function start() {
+  processingEnabled = true
+}
+
+/**
+ * Set Stop status to the current processing task
  */
 function stop() {
   processingEnabled = false
@@ -31,7 +33,7 @@ async function processTask(designData, imagePaths) {
   const outputs = []
 
   // processing state
-  processingEnabled = true
+  start()
 
   // loop through all images
   for (let i = 0; i < imagePaths.length && processingEnabled; i += 1) {
@@ -40,7 +42,6 @@ async function processTask(designData, imagePaths) {
       .flatten()
     const sharpImageClone = sharpImage.clone()
 
-    // eslint-disable-next-line
     const [rollNo, questionsData] = await Promise.all([
       getRollNoFromImage(designData, sharpImage),
       getQuestionsData(designData, sharpImageClone),

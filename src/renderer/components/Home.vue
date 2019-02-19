@@ -43,6 +43,16 @@
             </RouterLink>
           </div>
         </div>
+
+        <RouterLink
+          class="button is-primary is-fullwidth"
+          to="train"
+        >
+          <span class="icon">
+            <i class="fa fa-play"/>
+          </span>
+          <span>Train</span>
+        </RouterLink>
       </div>
     </section>
   </div>

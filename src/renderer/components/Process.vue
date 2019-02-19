@@ -75,7 +75,7 @@
 
 <script>
 // eslint-disable-next-line
-const { remote } = require('electron')
+const { dialog, getCurrentWindow } = require('electron').remote
 const processingModule = require('../../utilities/process.js')
 
 export default {
@@ -148,7 +148,7 @@ export default {
     },
 
     chooseDirectory() {
-      ;[this.imageDirectory] = remote.dialog.showOpenDialog({
+      ;[this.imageDirectory] = dialog.showOpenDialog(getCurrentWindow(), {
         properties: ['openDirectory'],
       }) || [false]
     },

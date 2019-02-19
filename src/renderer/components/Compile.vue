@@ -106,7 +106,7 @@
 import { CSVToJSON, compileResult } from '../../utilities'
 
 // eslint-disable-next-line
-const { remote } = require('electron')
+const { dialog, getCurrentWindow } = require('electron').remote
 
 export default {
   data() {
@@ -144,13 +144,13 @@ export default {
     },
 
     chooseFileResult() {
-      ;[this.resultFile] = remote.dialog.showOpenDialog({
+      ;[this.resultFile] = dialog.showOpenDialog(getCurrentWindow(), {
         properties: ['openFile'],
       }) || [false]
     },
 
     chooseFileKey() {
-      ;[this.keyFile] = remote.dialog.showOpenDialog({
+      ;[this.keyFile] = dialog.showOpenDialog(getCurrentWindow(), {
         properties: ['openFile'],
       }) || [false]
     },

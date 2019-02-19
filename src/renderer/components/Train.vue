@@ -12,10 +12,13 @@
       <br>
       <br>
       <Transition name="slide-up">
-        <div v-show="running">
-          <progress class="progress is-warning">0%</progress>
+        <div>
+          <progress
+            v-show="running"
+            class="progress is-warning"
+          >0%</progress>
           <br>
-          <div class="block">
+          <div class="block log">
             <ul>
               <li
                 :key="index"
@@ -73,10 +76,15 @@ export default {
       // error
       worker.stderr.on('data', data => {
         this.logs.unshift(data.toString())
+        this.running = false
       })
     },
   },
 }
 </script>
 
-<style></style>
+<style lang="sass">
+.log
+  text-align: left
+  font-size: smaller
+</style>

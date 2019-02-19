@@ -15,6 +15,7 @@ const isDev = process.env.NODE_ENV === 'development'
 
 Vue.config.devtools = isDev
 Vue.config.performance = isDev
+Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({

@@ -1,15 +1,11 @@
 const path = require('path')
+
 const dataPaths = require('./data-paths')
 
-/**
- * Import utilty functions
- */
-const {
-  createWorkerProcesses,
-  getDesignData,
-  getImagePaths,
-  exportResult,
-} = require('./index')
+const { createWorkerProcesses } = require('./workers')
+const { getDesignData } = require('./design')
+const { getImagePaths } = require('./images')
+const { exportResult } = require('./result')
 
 // store reference to all workers
 let WORKER_PROCESSES
@@ -77,7 +73,6 @@ async function start(
       imagePaths: imagePaths.slice(startIndex, endIndex),
     })
 
-    // eslint-disable-next-line
     worker.on('message', m => {
       // collect result from process
       if (m.completed) {
