@@ -1,6 +1,7 @@
 const javascriptBarcodeReader = require('javascript-barcode-reader')
 const fastGlob = require('fast-glob')
 const path = require('path')
+// const sharp = require('sharp')
 const dataPaths = require('./data-paths')
 
 /**

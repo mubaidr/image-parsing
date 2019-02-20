@@ -64,8 +64,6 @@ async function start(
   // write trained network configuration to disk
   fs.writeFileSync(neuralNetFilePath, JSON.stringify(net.toJSON()))
 
-  // TODO: export as module
-
   if (process && process.send) {
     process.send({ completed: true }, () => {
       process.exit(0)

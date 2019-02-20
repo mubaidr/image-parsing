@@ -56,23 +56,23 @@ async function getDesignData(dir) {
       .attr('transform')
       .replace(/(translate)|\(|\)/gi, '')
       .split(',')
-      .map(val => parseFloat(val) || 0)
+      .map(val => parseInt(val, 10) || 0)
 
     const rect = $(group)
       .find('rect')
       .first()
 
-    left = parseFloat(rect.attr('x') || 0)
-    top = parseFloat(rect.attr('y') || 0)
+    left = parseInt(rect.attr('x'), 10) || 0
+    top = parseInt(rect.attr('y'), 10) || 0
 
-    rx = parseFloat(rect.attr('rx') || 0)
-    ry = parseFloat(rect.attr('ry') || 0)
+    rx = parseInt(rect.attr('rx'), 10) || 0
+    ry = parseInt(rect.attr('ry'), 10) || 0
 
     x = left - rx + transform[0]
     y = top - ry + transform[1]
 
-    width = parseFloat(rect.attr('width') || 0) + rx
-    height = parseFloat(rect.attr('height') || 0) + ry
+    width = parseInt(rect.attr('width'), 10) || 0 + rx
+    height = parseInt(rect.attr('height'), 10) || 0 + ry
 
     if (isQuestionGroup) {
       const optionTitle = title.slice(-1)
@@ -83,12 +83,12 @@ async function getDesignData(dir) {
       }
 
       if (optionTitle === OPTIONS.A) {
-        designData.questions[questionNumber].x1 = x
-        designData.questions[questionNumber].y1 = y
+        designData.questions[questionNumber].x1 = x - 1
+        designData.questions[questionNumber].y1 = y - 1
       } else {
         // donot check last option to suport any number of options
-        designData.questions[questionNumber].x2 = x + width
-        designData.questions[questionNumber].y2 = y + height
+        designData.questions[questionNumber].x2 = x + width + 1
+        designData.questions[questionNumber].y2 = y + height + 1
       }
     } else if (isRollNoGroup) {
       designData.rollNo = { x1: x, y1: y, x2: x + width, y2: y + height }

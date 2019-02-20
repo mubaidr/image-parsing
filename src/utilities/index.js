@@ -1,5 +1,6 @@
 const brain = require('brain.js')
 const fs = require('fs')
+
 const dataPaths = require('./data-paths')
 
 /**
@@ -7,11 +8,11 @@ const dataPaths = require('./data-paths')
  *
  * @returns {Function} Neural network function
  */
-function getNeuralNet(src) {
+function getQuestionsNeuralNet(src) {
   const net = new brain.NeuralNetwork()
 
   return net.fromJSON(
-    JSON.parse(fs.readFileSync(src || dataPaths.trainingData))
+    JSON.parse(fs.readFileSync(src || dataPaths.DEFAULTS.questionsModel))
   )
 }
 
@@ -54,6 +55,6 @@ function convertToBitArray(data, channels) {
 }
 
 module.exports = {
-  getNeuralNet,
+  getQuestionsNeuralNet,
   convertToBitArray,
 }

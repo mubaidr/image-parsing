@@ -1,6 +1,7 @@
 const sharp = require('sharp')
 
 const { convertToBitArray } = require('./index')
+// const { logImageData } = require('./images')
 
 /**
  *  Extracts questions data from provided Sharp Image and design data
@@ -12,15 +13,20 @@ const { convertToBitArray } = require('./index')
  * @returns {Object} {title: {String}, data: {buffer}}
  */
 async function getQuestionsData(design, img, results, rollNumber) {
+  const SCALE = 0.5
   const META = await img.metadata()
-  const SCALE = design.width / META.width
+  const TARGET_SIZE = design.width * SCALE
   const IS_TRAINING_DATA = results && rollNumber
 
+  // resize if image is larger than design
   img.resize({
     fit: sharp.fit.inside,
     kernel: sharp.kernel.nearest,
-    width: design.width * SCALE,
+    width: TARGET_SIZE,
   })
+
+  // debug
+  // logImageData(img, `${rollNumber}`)
 
   const data = []
   const questions = Object.entries(design.questions)
@@ -34,7 +40,12 @@ async function getQuestionsData(design, img, results, rollNumber) {
       width: Math.ceil((q.x2 - q.x1) * SCALE),
       height: Math.ceil((q.y2 - q.y1) * SCALE),
     }
-    const buffer = await img.extract(opt).toBuffer()
+    img.extract(opt)
+
+    // debug
+    // logImageData(img, `${rollNumber}-${title}`)
+
+    const buffer = await img.toBuffer()
     const binaryData = convertToBitArray(buffer, META.channels)
 
     if (IS_TRAINING_DATA) {

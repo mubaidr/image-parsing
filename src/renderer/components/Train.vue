@@ -6,28 +6,25 @@
       <button
         :disabled="running"
         @click="startProcess"
-        class="button is-dark"
-      >Start Training</button>
+        class="button is-primary"
+      >Start</button>
 
-      <br>
-      <br>
-      <Transition name="slide-up">
-        <div>
-          <progress
-            v-show="running"
-            class="progress is-warning"
-          >0%</progress>
-          <br>
-          <div class="block log">
-            <ul>
-              <li
-                :key="index"
-                v-for="(log, index) in logs"
-              >{{ log }}</li>
-            </ul>
-          </div>
-        </div>
-      </Transition>
+      <div v-show="running">
+        <atom-spinner
+          :animation-duration="1000"
+          :rhombus-size="70"
+          color="#ff1d5e"
+        />
+      </div>
+
+      <div class="block log">
+        <ul>
+          <li
+            :key="index"
+            v-for="(log, index) in logs"
+          >{{ log }}</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -85,6 +82,5 @@ export default {
 
 <style lang="sass">
 .log
-  text-align: left
   font-size: smaller
 </style>
