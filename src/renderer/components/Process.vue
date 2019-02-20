@@ -44,7 +44,7 @@
     >
       <tr>
         <th>Total</th>
-        <th>Remaining</th>
+        <th>Processed</th>
         <th>Time remaining</th>
         <th></th>
       </tr>
@@ -84,7 +84,10 @@ export default {
     remainingTime() {
       if (this.perImageTime === 0) return 'Calculating...'
 
-      const ms = (this.totalImages - this.totalWorkers) * this.perImageTime
+      const ms =
+        1000 +
+        ((this.totalImages - this.processedImages) * this.perImageTime) /
+          this.totalWorkers
       return this.toHHMMSS(ms)
     },
   },
@@ -121,7 +124,7 @@ export default {
       if (m.progress) {
         this.processedImages += 1
 
-        this.perImageTime = m.time
+        if (!this.perImageTime) this.perImageTime = m.time
       } else if (m.completed || m.verification) {
         this.running = false
       } else if (m.log) {
