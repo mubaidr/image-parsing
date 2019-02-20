@@ -6,7 +6,7 @@ import './assets/style/animations.sass'
 import './assets/fontawesome/css/fontawesome-all.css'
 import 'epic-spinners/dist/lib/epic-spinners.min.css'
 
-import { AtomSpinner } from 'epic-spinners/dist/lib/epic-spinners.min.js'
+import { AtomSpinner, LoopingRhombusesSpinner } from 'epic-spinners/src/lib'
 
 import App from './App.vue'
 import router from './router'
@@ -22,6 +22,7 @@ Vue.config.productionTip = false
 
 /** register spinners */
 Vue.component('atom-spinner', AtomSpinner)
+Vue.component('looping-rhombuses-spinner', LoopingRhombusesSpinner)
 
 /* eslint-disable no-new */
 new Vue({

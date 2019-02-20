@@ -10,11 +10,7 @@
       >Start</button>
 
       <div v-show="running">
-        <atom-spinner
-          :animation-duration="1000"
-          :rhombus-size="70"
-          color="#ff1d5e"
-        />
+        <looping-rhombuses-spinner color="#ff1d5e"/>
       </div>
 
       <div class="block log">

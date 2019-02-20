@@ -67,7 +67,7 @@
   },
   "dependencies": {
     "brain.js": "^1.6.1",
-    "bulma-pro": "^0.1.4",
+    "bulma-pro": "^0.1.5",
     "chart.js": "^2.7.3",
     "cheerio": "1.0.0-rc.2",
     "csvtojson": "^2.0.8",
@@ -83,7 +83,7 @@
     "vee-validate": "^2.1.7",
     "vue": "^2.6.6",
     "vue-chartjs": "^3.4.0",
-    "vue-good-table": "^2.16.0",
+    "vue-good-table": "^2.16.1",
     "vue-router": "^3.0.2",
     "vue-select": "^2.5.1"
   },

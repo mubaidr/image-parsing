@@ -1,104 +1,90 @@
 <template>
   <div class="section">
-    <h1 class="title">
-      Compile
-    </h1>
-    <h2 class="subtitle is-6">
-      Compile result using extracted results and answer key.
-    </h2>
-    <br />
+    <h1 class="title">Compile</h1>
+    <h2 class="subtitle is-6">Compile result using extracted results and answer key.</h2>
+    <br>
 
     <div class="file has-name is-fullwidth">
       <label class="file-label">
         <button
           @click="chooseFileResult"
           class="file-input"
-          type="file"
           name="resume"
         />
         <span class="file-cta">
           <span class="file-icon">
-            <i class="fas fa-file" />
+            <i class="fas fa-file"/>
           </span>
-          <span class="file-label">
-            Result file
-          </span>
+          <span class="file-label">Result file</span>
         </span>
-        <span v-show="resultFile" class="file-name">
-          {{ resultFile }}
-        </span>
+        <span
+          v-show="resultFile"
+          class="file-name"
+        >{{ resultFile }}</span>
       </label>
     </div>
 
-    <br />
+    <br>
     <div class="file has-name is-fullwidth">
       <label class="file-label">
         <button
           @click="chooseFileKey"
           class="file-input"
-          type="file"
           name="resume"
         />
         <span class="file-cta">
           <span class="file-icon">
-            <i class="fas fa-file" />
+            <i class="fas fa-file"/>
           </span>
-          <span class="file-label">
-            Key file
-          </span>
+          <span class="file-label">Key file</span>
         </span>
-        <span v-show="keyFile" class="file-name">
-          {{ keyFile }}
-        </span>
+        <span
+          v-show="keyFile"
+          class="file-name"
+        >{{ keyFile }}</span>
       </label>
     </div>
 
-    <br />
+    <br>
     <div class="block">
       <div class="columns">
         <div class="column">
           <div class="field">
-            <label class="label">
-              Correct Marks
-            </label>
+            <label class="label">Correct Marks</label>
             <div class="control">
               <input
                 v-model="correctMarks"
                 class="input"
-                type="number"
                 placeholder="Marks earned for each correct answer"
-              />
+                type="number"
+              >
             </div>
           </div>
         </div>
         <div class="column">
           <div class="field">
-            <label class="label">
-              Negative Marks
-            </label>
+            <label class="label">Negative Marks</label>
             <div class="control">
               <input
                 v-model="incorrectMarks"
                 class="input"
-                type="number"
-                step="0.01"
                 placeholder="Marks deducted for each incorrect answer"
-              />
+                step="0.01"
+                type="number"
+              >
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <br />
+    <br>
 
     <button
       :disabled="running || !isValid"
       @click="startProcess"
-      class="button is-dark"
-    >
-      Start Compilation
-    </button>
+      class="button is-primary"
+    >Start Compilation</button>
   </div>
 </template>
 

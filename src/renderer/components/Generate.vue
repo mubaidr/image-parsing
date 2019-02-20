@@ -1,40 +1,36 @@
 <template>
   <div class="section">
-    <h1 class="title">
-      Generate
-    </h1>
-    <h2 class="subtitle">
-      Generate Answer Sheets.
-    </h2>
-    <br />
+    <h1 class="title">Generate</h1>
+    <h2 class="subtitle">Generate Answer Sheets.</h2>
+    <br>
 
     <div class="file has-name is-fullwidth">
       <label class="file-label">
         <button
           @click="chooseAnswerSheetPrepFile"
           class="file-input"
-          type="file"
           name="resume"
         />
         <span class="file-cta">
           <span class="file-icon">
-            <i class="fas fa-file" />
+            <i class="fas fa-file"/>
           </span>
-          <span class="file-label">
-            Result file
-          </span>
+          <span class="file-label">Result file</span>
         </span>
-        <span v-show="answerSheetPrepFile" class="file-name">
-          {{ answerSheetPrepFile }}
-        </span>
+        <span
+          v-show="answerSheetPrepFile"
+          class="file-name"
+        >{{ answerSheetPrepFile }}</span>
       </label>
     </div>
 
-    <br />
+    <br>
 
-    <button :disabled="!isValid" @click="generate" class="button is-dark">
-      Generate
-    </button>
+    <button
+      :disabled="!isValid"
+      @click="generate"
+      class="button is-primary"
+    >Generate</button>
   </div>
 </template>
 

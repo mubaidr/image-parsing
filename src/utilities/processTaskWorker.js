@@ -2,7 +2,7 @@ const sharp = require('sharp')
 
 const { getRollNoFromImage } = require('./images')
 const { getQuestionsData } = require('./questions')
-const { getNeuralNet } = require('./index')
+const { getQuestionsNeuralNet } = require('./index')
 
 // controls if processing is enabled
 let processingEnabled = true
@@ -14,11 +14,22 @@ function start() {
   processingEnabled = true
 }
 
-/**
- * Set Stop status to the current processing task
- */
+// stops process in immediate next loop
 function stop() {
   processingEnabled = false
+
+  process.exit(0)
+}
+
+// sends progress to parent
+async function sendProgress(p) {
+  if (process && process.send) {
+    process.send(p, () => {
+      if (p.completed) stop()
+    })
+  } else {
+    console.log('Results: ', p)
+  }
 }
 
 /**
@@ -29,14 +40,12 @@ function stop() {
  * @returns {Object} Extracted result JSON
  */
 async function processTask(designData, imagePaths) {
-  const neuralNet = getNeuralNet()
-  const outputs = []
-
-  // processing state
-  start()
+  const neuralNet = getQuestionsNeuralNet()
+  const results = []
 
   // loop through all images
   for (let i = 0; i < imagePaths.length && processingEnabled; i += 1) {
+    const startTime = Date.now()
     const sharpImage = sharp(imagePaths[i])
       .raw()
       .flatten()
@@ -48,76 +57,42 @@ async function processTask(designData, imagePaths) {
     ])
 
     // prepare output
-    const resultsJson = {
+    const result = {
       [rollNo]: {},
     }
 
     for (let j = questionsData.length - 1; j >= 0; j -= 1) {
-      const q = questionsData[j]
-      const pre = neuralNet.run(q.data)
+      const { title, data } = questionsData[j]
+      const pre = neuralNet.run(data)
 
       if (pre['?'] >= 0.95) {
-        resultsJson[rollNo][q.title] = '?'
+        result[rollNo][title] = '?'
       } else {
-        const [first, second] = Object.entries(pre)
-          .filter(([key]) => key !== '?')
-          .sort((a, b) => b[1] - a[1])
+        const [first, second] = Object.entries(pre).sort((a, b) => b[1] - a[1])
 
         if (first[1] - second[1] >= 0.33) {
-          ;[resultsJson[rollNo][q.title]] = first
+          ;[result[rollNo][title]] = first
         } else {
-          resultsJson[rollNo][q.title] = '*'
+          result[rollNo][title] = '*'
         }
-
-        // TODO: disable verification data for now
-        /*
-        if (first[1] - second[1] <= 0.16) {
-          resultsJson[rollNo][q.title] = '*'
-        } else {
-          // verification required
-          process.send({
-            verify: true,
-            rollNo,
-            q,
-          })
-        }
-        */
       }
 
-      // TODO: test without neural network
-      // console.log(
-      //   resultsJson[rollNo][q.title],
-      //   q.data.reduce((res, pixel) => {
-      //     return (res + pixel) / 2
-      //   }, 0)
-      // )
+      // collect option selection
+      results.push(result)
     }
-
-    // collect option selection
-    outputs.push(resultsJson)
 
     // report progress status
-    if (process && process.send) {
-      process.send({ progress: true })
-    } else {
-      console.log('progress: ', i)
-    }
+    sendProgress({
+      progress: true,
+      time: Date.now() - startTime,
+    })
   }
 
   // report completed status & exit process
-  if (process && process.send) {
-    process.send(
-      {
-        result: outputs,
-        completed: true,
-      },
-      () => {
-        process.exit(0)
-      }
-    )
-  } else {
-    console.log('Results: ', outputs)
-  }
+  sendProgress({
+    result: results,
+    completed: true,
+  })
 }
 
 // add message listner
@@ -126,6 +101,7 @@ if (process && process.send) {
     if (m && m.stop) {
       stop()
     } else {
+      start()
       processTask(m.designData, m.imagePaths)
     }
   })

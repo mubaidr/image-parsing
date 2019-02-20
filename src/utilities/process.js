@@ -1,24 +1,13 @@
-const path = require('path')
-
 const dataPaths = require('./data-paths')
-
 const { createWorkerProcesses } = require('./workers')
 const { getDesignData } = require('./design')
 const { getImagePaths } = require('./images')
-const { exportResult } = require('./result')
 
 // store reference to all workers
 let WORKER_PROCESSES
 
 // result collection
-let resultData = []
-let verifyData = []
-
-// default options
-const DEFAULTS = [
-  path.join(dataPaths.testData, 'design.svg'),
-  path.join(dataPaths.testData, 'images'),
-]
+const results = []
 
 /**
  * Stops all worker processes
@@ -45,12 +34,11 @@ function stop() {
  */
 async function start(
   listner,
-  designFilePath = DEFAULTS[0],
-  imagesDirectory = DEFAULTS[1]
+  imagesDirectory = dataPaths.DEFAULTS.images,
+  designFilePath = dataPaths.DEFAULTS.design
 ) {
   // reset result collection
-  resultData = []
-  verifyData = []
+  results.length = 0
 
   const [imagePaths, designData] = await Promise.all([
     getImagePaths(imagesDirectory),
@@ -76,32 +64,20 @@ async function start(
     worker.on('message', m => {
       // collect result from process
       if (m.completed) {
-        resultData.push(m.result)
+        results.push(m.result)
 
         // check if all process have returned result
-        if (resultData.length === TOTAL_PROCESS) {
-          // prepare result array
-          resultData = resultData.reduce((prev, curr) => prev.concat(curr), [])
-
-          if (verifyData.length > 0) {
-            // report view of required verification
-            listner({
-              verification: true,
-              verifyData,
-            })
-          } else {
-            // report view of completion
-            listner({
-              completed: true,
-            })
-            // export result as csv
-            exportResult(resultData)
-          }
+        if (results.length === TOTAL_PROCESS) {
+          // report view of completion
+          listner({
+            completed: true,
+            resultData: results,
+          })
         }
-      } else if (m.verify) {
-        verifyData.push(m)
       } else if (m.progress && listner) {
         listner(m)
+      } else {
+        console.log(m)
       }
     })
 
@@ -134,14 +110,7 @@ async function start(
   }
 }
 
-async function receiveVerifyData(vd) {
-  console.log('corrected verify Data: ', vd)
-  // TODO: merge with resultData
-  exportResult(resultData)
-}
-
 module.exports = {
   start,
   stop,
-  receiveVerifyData,
 }
