@@ -1,6 +1,6 @@
 <template>
   <div class="section">
-    <h1 class="title">Train Network</h1>
+    <h1 class="title is-4">Train Network</h1>
 
     <div class="block has-text-centered">
       <button

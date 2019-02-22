@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="hero is-info">
+    <section class="hero is-white">
       <div class="hero-body">
         <br>
         <div class="block has-text-centered">
@@ -12,8 +12,8 @@
           </figure>
         </div>
         <div class="content has-text-centered">
-          <h1 class="title is-1">Image Parsing</h1>
-          <p class="subtitle is-5">
+          <h1 class="title is-4">Image Parsing</h1>
+          <p class="subtitle is-6">
             Generate answeer sheets and extract results from the scanned answer
             sheets.
           </p>
@@ -22,7 +22,7 @@
         <div class="columns">
           <div class="column is-3 is-offset-3">
             <RouterLink
-              class="button is-primary is-fullwidth"
+              class="button is-info is-fullwidth"
               to="generate"
             >
               <span class="icon">
@@ -33,7 +33,7 @@
           </div>
           <div class="column is-3">
             <RouterLink
-              class="button is-primary is-fullwidth"
+              class="button is-info is-fullwidth"
               to="process"
             >
               <span class="icon">
@@ -45,7 +45,7 @@
         </div>
 
         <RouterLink
-          class="button is-primary is-fullwidth"
+          class="button is-info is-fullwidth"
           to="train"
         >
           <span class="icon">

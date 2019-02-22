@@ -1,7 +1,7 @@
 <template>
   <div class="section">
-    <h1 class="title">Generate</h1>
-    <h2 class="subtitle">Generate Answer Sheets.</h2>
+    <h1 class="title is-4">Generate</h1>
+    <h2 class="subtitle is-6">Generate Answer Sheets.</h2>
     <br>
 
     <div class="file has-name is-fullwidth">

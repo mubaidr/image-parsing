@@ -1,8 +1,7 @@
 <template>
   <div class="section">
-    <h1 class="title">About</h1>
-    <br>
-    <h2 class="subtitle is-4">Developed By</h2>
+    <h1 class="title is-4">About</h1>
+    <h2 class="subtitle is-6">Developed By</h2>
     <div class="box">
       <article class="media">
         <div class="media-content">

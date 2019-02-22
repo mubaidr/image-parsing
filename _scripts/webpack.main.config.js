@@ -1,7 +1,10 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 
 const path = require('path')
-const { dependencies, devDependencies } = require('../package.json')
+// eslint-disable-next-line
+const webpack = require('webpack')
+
+const { dependencies, devDependencies, build } = require('../package.json')
 
 const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
@@ -36,6 +39,11 @@ const config = {
     __dirname: isDevMode,
     __filename: isDevMode,
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.PRODUCT_NAME': JSON.stringify(build.productName),
+    }),
+  ],
   output: {
     filename: '[name].js',
     libraryTarget: 'commonjs2',

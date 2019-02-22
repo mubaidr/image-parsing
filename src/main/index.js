@@ -48,8 +48,10 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
+    backgroundColor: '#fff',
     minHeight: 480,
-    minWidth: 800,
+    minWidth: 640,
+    // useContentSize: false,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: false,

@@ -1,62 +1,55 @@
 <template>
   <div class="section">
-    <h1 class="title">Process</h1>
+    <h1 class="title is-4">Process</h1>
     <h2 class="subtitle is-6">Process scanned images to generate result.</h2>
 
-    <div class="file has-name is-fullwidth">
-      <label class="file-label">
+    <div class="columns">
+      <div class="column is-10">
+        <div class="file has-name is-fullwidth">
+          <label class="file-label">
+            <button
+              @click="chooseDirectory"
+              class="file-input"
+              name="resume"
+            />
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-folder"/>
+              </span>
+              <span class="file-label">Choose directory</span>
+            </span>
+            <span class="file-name">{{ imageDirectory }}</span>
+          </label>
+        </div>
+      </div>
+      <div class="column is-2">
         <button
-          @click="chooseDirectory"
-          class="file-input"
-          name="resume"
-        />
-        <span class="file-cta">
-          <span class="file-icon">
-            <i class="fas fa-folder"/>
+          :disabled="!imageDirectory"
+          @click="startProcess"
+          v-show="!running"
+          class="button is-primary is-fullwidth"
+        >
+          <span class="icon">
+            <i class="fa fa-play"/>
           </span>
-          <span class="file-label">Choose a directory</span>
-        </span>
-        <span class="file-name">{{ imageDirectory }}</span>
-      </label>
+          <span>Start</span>
+        </button>
+
+        <button
+          :disabled="!running"
+          @click="stopProcess"
+          v-show="running"
+          class="button is-warning is-fullwidth"
+        >
+          <span class="icon">
+            <i class="fa fa-stop"/>
+          </span>
+          <span>Stop</span>
+        </button>
+      </div>
     </div>
 
-    <br>
-
-    <button
-      :disabled="running || !imageDirectory"
-      @click="startProcess"
-      class="button is-primary"
-    >Start Process</button>
-
-    <button
-      :disabled="!running"
-      @click="stopProcess"
-      class="button is-danger"
-    >Stop Process</button>
-
-    <br>
-    <br>
-    <br>
-
-    <table
-      v-show="running"
-      class="table is-bordered is-fullwidth"
-    >
-      <tr>
-        <th>Total</th>
-        <th>Processed</th>
-        <th>Time remaining</th>
-        <th></th>
-      </tr>
-      <tr>
-        <td>{{ totalImages }}</td>
-        <td>{{ processedImages }}</td>
-        <td>{{ remainingTime }}</td>
-        <td>
-          <looping-rhombuses-spinner color="#ff1d5e"/>
-        </td>
-      </tr>
-    </table>
+    <!-- TODO: show toast with progress and estimated time remaining -->
   </div>
 </template>
 
@@ -82,13 +75,14 @@ export default {
 
   computed: {
     remainingTime() {
-      if (this.perImageTime === 0) return 'Calculating...'
+      if (this.perImageTime === 0) return 'Calculating'
 
       const ms =
-        1000 +
+        500 +
         ((this.totalImages - this.processedImages) * this.perImageTime) /
           this.totalWorkers
-      return this.toHHMMSS(ms)
+
+      return this.toHHMMSS(Math.round(ms / 500) * 500)
     },
   },
 
@@ -113,6 +107,10 @@ export default {
       )
       this.totalImages = totalImages
       this.totalWorkers = totalWorkers
+
+      this.$toasted.show('processing...', {
+        icon: 'check',
+      })
     },
 
     async stopProcess() {
@@ -141,22 +139,26 @@ export default {
     },
 
     toHHMMSS(ms) {
+      let str = ''
       const input = ms / 1000
 
-      let hours = Math.floor(input / 3600)
-      let minutes = Math.floor((input - hours * 3600) / 60)
-      let seconds = input - hours * 3600 - minutes * 60
+      const hours = Math.floor(input / 3600)
+      const minutes = Math.floor((input - hours * 3600) / 60)
+      const seconds = input - hours * 3600 - minutes * 60
 
-      if (hours < 10) {
-        hours = `0${hours}`
+      if (hours) {
+        str += `${hours} hours `
       }
-      if (minutes < 10) {
-        minutes = `0${minutes}`
+
+      if (minutes) {
+        str += `${minutes} minutes `
       }
-      if (seconds < 10) {
-        seconds = `0${seconds}`
+
+      if (seconds) {
+        str += `${seconds} seconds `
       }
-      return `${hours}:${minutes}:${seconds}`
+
+      return str
     },
   },
 }

@@ -85,7 +85,8 @@
     "vue-chartjs": "^3.4.0",
     "vue-good-table": "^2.16.1",
     "vue-router": "^3.0.2",
-    "vue-select": "^2.5.1"
+    "vue-select": "^2.5.1",
+    "vue-toasted": "^1.1.26"
   },
   "description": "An electron-vue project",
   "devDependencies": {
@@ -94,7 +95,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
-    "copy-webpack-plugin": "^4.6.0",
+    "copy-webpack-plugin": "^5.0.0",
     "css-loader": "^2.1.0",
     "devtron": "^1.4.0",
     "electron": "4.0.5",
@@ -128,7 +129,7 @@
     "vue-template-compiler": "^2.6.6",
     "webpack": "^4.29.5",
     "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.1.14",
+    "webpack-dev-server": "^3.2.0",
     "webpack-hot-middleware": "^2.24.3"
   },
   "jest": {
