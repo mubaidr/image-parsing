@@ -64,14 +64,14 @@ async function start(
     worker.on('message', m => {
       // collect result from process
       if (m.completed) {
-        results.push(m.result)
+        results.push(m.results)
 
         // check if all process have returned result
         if (results.length === TOTAL_PROCESS) {
           // report view of completion
           listner({
             completed: true,
-            resultData: results,
+            results,
           })
         }
       } else if (m.progress && listner) {

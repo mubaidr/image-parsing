@@ -58,7 +58,7 @@ async function processTask(designData, imagePaths) {
 
     // prepare output
     const result = {
-      [rollNo]: {},
+      rollNo,
     }
 
     for (let j = questionsData.length - 1; j >= 0; j -= 1) {
@@ -66,20 +66,20 @@ async function processTask(designData, imagePaths) {
       const pre = neuralNet.run(data)
 
       if (pre['?'] >= 0.95) {
-        result[rollNo][title] = '?'
+        result[title] = '?'
       } else {
         const [first, second] = Object.entries(pre).sort((a, b) => b[1] - a[1])
 
         if (first[1] - second[1] >= 0.33) {
-          ;[result[rollNo][title]] = first
+          ;[result[title]] = first
         } else {
-          result[rollNo][title] = '*'
+          result[title] = '*'
         }
       }
-
-      // collect option selection
-      results.push(result)
     }
+
+    // collect option selection
+    results.push(result)
 
     // report progress status
     sendProgress({
@@ -90,7 +90,7 @@ async function processTask(designData, imagePaths) {
 
   // report completed status & exit process
   sendProgress({
-    result: results,
+    results,
     completed: true,
   })
 }

@@ -79,14 +79,14 @@
     "json2csv": "^4.3.4",
     "physical-cpu-count": "^2.0.0",
     "sharp": "^0.21.3",
+    "uuid": "^3.3.2",
     "v-tooltip": "^2.0.0-rc.33",
     "vee-validate": "^2.1.7",
     "vue": "^2.6.6",
     "vue-chartjs": "^3.4.0",
     "vue-good-table": "^2.16.1",
     "vue-router": "^3.0.2",
-    "vue-select": "^2.5.1",
-    "vue-toasted": "^1.1.26"
+    "vue-select": "^2.5.1"
   },
   "description": "An electron-vue project",
   "devDependencies": {

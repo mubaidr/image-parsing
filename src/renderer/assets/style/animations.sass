@@ -121,6 +121,14 @@
   opacity: 0
   transform: translateY(-10px)
 
+/* Route change animations */
+.slide-down-enter-active, .slide-down-leave-active
+  transition: all 0.1s ease-out
+
+.slide-down-enter, .slide-down-leave-to
+  opacity: 0
+  transform: translateY(10px)
+
 /* Test right */
 .slide-right-enter-active, .slide-right-leave-active
   transition: all 0.1s ease-out
@@ -136,3 +144,16 @@
 .slide-left-enter, .slide-left-leave-to
   opacity: 0
   transform: translateX(10px)
+
+/* Rotation*/
+@keyframes rotation
+  0%
+    transform: scale(1.5) rotate(0deg)
+
+  100%
+    transform: scale(1.5) rotate(360deg)
+
+.fa-spinner
+  margin-right: 1em
+  transform: scale(1.5)
+  animation: rotation 1s infinite linear

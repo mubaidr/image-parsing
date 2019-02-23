@@ -152,7 +152,12 @@ const config = {
   ],
   resolve: {
     alias: {
-      '@': path.join(__dirname, '../src/renderer'),
+      '@': path.join(__dirname, '../src/'),
+      '@renderer': path.join(__dirname, '../src/renderer'),
+      '@components': path.join(__dirname, '../src/renderer/components'),
+      '@assets': path.join(__dirname, '../src/renderer/assets'),
+      '@utilities': path.join(__dirname, '../src/utilities'),
+      '@data': path.join(__dirname, '../src/data'),
       vue$: 'vue/dist/vue.common.js',
     },
     extensions: ['.js', '.vue', '.json', '.css', 'sass', 'scss', '.node'],

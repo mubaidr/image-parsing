@@ -17,7 +17,7 @@ const router = new Router({
         title: 'Home',
         icon: 'fa-home',
       },
-      component: require('@/components/Home.vue').default,
+      component: require('@/renderer/components/Home.vue').default,
     },
     {
       path: '/generate',
@@ -25,7 +25,7 @@ const router = new Router({
         title: 'Generate',
         icon: 'fa-file-alt',
       },
-      component: require('@/components/Generate.vue').default,
+      component: require('@/renderer/components/Generate.vue').default,
     },
     {
       path: '/process',
@@ -33,7 +33,7 @@ const router = new Router({
         title: 'Process',
         icon: 'fa-play',
       },
-      component: require('@/components/Process.vue').default,
+      component: require('@/renderer/components/Process.vue').default,
     },
     {
       path: '/compile',
@@ -41,7 +41,7 @@ const router = new Router({
         title: 'Compile',
         icon: 'fa-tasks',
       },
-      component: require('@/components/Compile.vue').default,
+      component: require('@/renderer/components/Compile.vue').default,
     },
     {
       path: '/train',
@@ -49,7 +49,7 @@ const router = new Router({
         title: 'Train',
         icon: 'fa-vials',
       },
-      component: require('@/components/Train.vue').default,
+      component: require('@/renderer/components/Train.vue').default,
     },
     {
       path: '/about',
@@ -57,7 +57,7 @@ const router = new Router({
         title: 'About',
         icon: 'fa-info-circle',
       },
-      component: require('@/components/About.vue').default,
+      component: require('@/renderer/components/About.vue').default,
     },
     {
       path: '/help',
@@ -65,7 +65,7 @@ const router = new Router({
         title: 'Help',
         icon: 'fa-info-circle',
       },
-      component: require('@/components/Help.vue').default,
+      component: require('@/renderer/components/Help.vue').default,
     },
     {
       path: '*',

@@ -1,5 +1,8 @@
 <template>
-  <div id="app" class="container-fluid">
+  <div
+    id="app"
+    class="container-fluid"
+  >
     <Transition
       mode="out-in"
       name="slide-up"
