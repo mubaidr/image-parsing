@@ -12,7 +12,7 @@
         v-if="!extractedResult"
       />
       <review-result
-        :data="extractedResult"
+        :results="extractedResult"
         v-else
       />
     </Transition>
@@ -24,6 +24,8 @@ import extractResult from '@components/Process/Extract.vue'
 import reviewResult from '@components/Process/Review.vue'
 
 export default {
+  name: 'Process',
+
   components: {
     extractResult,
     reviewResult,

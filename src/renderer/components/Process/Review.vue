@@ -1,41 +1,45 @@
 <template>
-  <div>
+  <div>lolian bc
     <vue-good-table
-      :columns="[{
-          label: 'Name',
-          field: 'name',
-        },
-        {
-          label: 'Age',
-          field: 'age',
-          type: 'number',
-        },]"
-      :rows="data"
-    />
+      :fixed-header="true"
+      :line-numbers="true"
+      :rows="results"
+      :sort-options="{
+        enabled: true,
+      }"
+    >
+      <div slot="emptystate">This will show up when there are no rows</div>
+      <div slot="table-actions">This will show up on the top right of the table.</div>
+      <div slot="table-actions-bottom">This will show up on the bottom of the table.</div>
+    </vue-good-table>
+    {{results}}
   </div>
 </template>
 
 <script>
 export default {
+  name: 'ReviewResult',
+
   props: {
-    data: {
-      type: Object,
+    results: {
+      type: Array,
       default: () => {
-        return {}
+        return []
       },
     },
   },
 
   data() {
-    return {
-      columns: [],
-      rows: [],
-    }
+    return {}
   },
 
-  mounted() {
-    console.log(this.data.length, this.data[0].length, this.data)
+  computed: {
+    columns() {
+      return {}
+    },
   },
+
+  mounted() {},
 }
 </script>
 

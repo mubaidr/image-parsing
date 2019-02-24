@@ -20,9 +20,9 @@ let electronProcess = null
 let manualRestart = null
 
 async function startRenderer() {
-  rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(
-    rendererConfig.entry.renderer
-  )
+  // rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(
+  //   rendererConfig.entry.renderer
+  // )
 
   // eslint-disable-next-line
   return new Promise(resolve => {
@@ -39,7 +39,10 @@ async function startRenderer() {
     const server = new WebpackDevServer(compiler, {
       contentBase: path.join(__dirname, '../'),
       hot: true,
-      quiet: true,
+      inline: true,
+      noInfo: true,
+      overlay: true,
+      stats: 'errors-only',
       before(app, ctx) {
         app.use(hotMiddleware)
 

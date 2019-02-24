@@ -38,8 +38,6 @@ async function start(
   designFilePath = dataPaths.DEFAULTS.design
 ) {
   // reset result collection
-  results.length = 0
-
   const [imagePaths, designData] = await Promise.all([
     getImagePaths(imagesDirectory),
     getDesignData(designFilePath),
@@ -64,15 +62,19 @@ async function start(
     worker.on('message', m => {
       // collect result from process
       if (m.completed) {
-        results.push(m.results)
+        results.concat(m.results)
 
         // check if all process have returned result
         if (results.length === TOTAL_PROCESS) {
           // report view of completion
           listner({
             completed: true,
+            // reduce into object format
             results,
           })
+
+          // reset results array
+          results.length = 0
         }
       } else if (m.progress && listner) {
         listner(m)

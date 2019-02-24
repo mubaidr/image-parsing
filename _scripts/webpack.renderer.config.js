@@ -21,7 +21,7 @@ const isDevMode = process.env.NODE_ENV === 'development'
 const whiteListedModules = ['vue']
 
 const config = {
-  mode: process.env.NODE_ENV,
+  devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
     renderer: path.join(__dirname, '../src/renderer/main.js'),
   },
@@ -169,7 +169,12 @@ const config = {
  * Adjust rendererConfig for production settings
  */
 if (isDevMode) {
-  config.plugins.push(new webpack.HotModuleReplacementPlugin())
+  // any dev only config
+  config.plugins.push(
+    new webpack.HotModuleReplacementPlugin({
+      multiStep: true,
+    })
+  )
 } else {
   config.plugins.push(
     new ScriptExtHtmlWebpackPlugin({

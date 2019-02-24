@@ -85,6 +85,7 @@
     "vue": "^2.6.7",
     "vue-chartjs": "^3.4.0",
     "vue-good-table": "^2.16.2",
+    "vue-good-wizard": "^1.4.1",
     "vue-router": "^3.0.2",
     "vue-select": "^2.5.1"
   },

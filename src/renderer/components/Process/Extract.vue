@@ -72,6 +72,8 @@ const { dialog, getCurrentWindow } = require('electron').remote
 const processingModule = require('@utilities/process.js')
 
 export default {
+  name: 'ExtractResult',
+
   data() {
     return {
       imageDirectory:
