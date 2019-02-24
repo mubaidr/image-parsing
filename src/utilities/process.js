@@ -7,7 +7,7 @@ const { getImagePaths } = require('./images')
 let WORKER_PROCESSES
 
 // result collection
-const results = []
+let results = []
 
 /**
  * Stops all worker processes
@@ -62,18 +62,15 @@ async function start(
     worker.on('message', m => {
       // collect result from process
       if (m.completed) {
-        results.concat(m.results)
+        results = results.concat(m.results)
 
         // check if all process have returned result
-        if (results.length === TOTAL_PROCESS) {
+        if (results.length === TOTAL_IMAGES) {
           // report view of completion
           listner({
-            completed: true,
-            // reduce into object format
             results,
           })
 
-          // reset results array
           results.length = 0
         }
       } else if (m.progress && listner) {

@@ -1,5 +1,3 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'production'
-
 const path = require('path')
 // eslint-disable-next-line
 const webpack = require('webpack')
@@ -11,6 +9,7 @@ const isDevMode = process.env.NODE_ENV === 'development'
 const whiteListedModules = []
 
 const config = {
+  mode: process.env.NODE_ENV,
   devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
     main: path.join(__dirname, '../src/main/index.js'),

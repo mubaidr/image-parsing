@@ -42,7 +42,7 @@ async function startRenderer() {
       inline: true,
       noInfo: true,
       overlay: true,
-      stats: 'errors-only',
+      stats: 'minimal',
       before(app, ctx) {
         app.use(hotMiddleware)
 

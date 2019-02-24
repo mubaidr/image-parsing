@@ -53,9 +53,9 @@
             <label class="label">Correct Marks</label>
             <div class="control">
               <input
+                v-model="correctMarks"
                 class="input"
                 placeholder="Marks earned for each correct answer"
-                v-model="correctMarks"
                 type="number"
               >
             </div>
@@ -66,10 +66,10 @@
             <label class="label">Negative Marks</label>
             <div class="control">
               <input
+                v-model="incorrectMarks"
                 class="input"
                 placeholder="Marks deducted for each incorrect answer"
                 step="0.01"
-                v-model="incorrectMarks"
                 type="number"
               >
             </div>

@@ -136,10 +136,10 @@ export default {
         this.processedImages += 1
 
         if (!this.perImageTime) this.perImageTime = m.time
-      } else if (m.completed) {
+      } else if (m.results) {
         this.running = false
 
-        this.$emit('completed', m.results)
+        this.$emit('results', m.results)
       } else if (m.log) {
         console.log('log: ', m.log)
       } else if (m.error) {
@@ -148,10 +148,12 @@ export default {
     },
 
     chooseDirectory() {
-      this.imageDirectory = dialog.showOpenDialog(getCurrentWindow(), {
+      const dir = dialog.showOpenDialog(getCurrentWindow(), {
         defaultPath: this.imageDirectory,
         properties: ['openDirectory'],
-      })[0]
+      })
+
+      this.imageDirectory = dir ? dir[0] : null
     },
 
     toHHMMSS(s) {

@@ -159,8 +159,8 @@
     "dev": "node _scripts/dev-runner.js",
     "lint": "eslint --ext .js,.vue --fix src __tests__ && prettier --write src/**/*.js",
     "pack": "npm run pack:main && npm run pack:renderer",
-    "pack:main": "webpack --hide-modules --config _scripts/webpack.main.config.js",
-    "pack:renderer": "webpack --hide-modules --config _scripts/webpack.renderer.config.js",
+    "pack:main": "webpack --mode=production --env.NODE_ENV=production --hide-modules --config _scripts/webpack.main.config.js",
+    "pack:renderer": "webpack --mode=production --env.NODE_ENV=production --hide-modules --config _scripts/webpack.renderer.config.js",
     "postinstall": "electron-builder install-app-deps",
     "release": "build",
     "test": "jest"

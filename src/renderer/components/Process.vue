@@ -8,7 +8,7 @@
       name="slide-left"
     >
       <extract-result
-        @completed="getExtractedResult"
+        @results="getExtractedResult"
         v-if="!extractedResult"
       />
       <review-result
@@ -41,9 +41,7 @@ export default {
 
   methods: {
     getExtractedResult(r) {
-      window.setTimeout(() => {
-        this.extractedResult = r
-      }, 100)
+      this.$set(this, 'extractedResult', r)
     },
   },
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>lolian bc
+  <div>
     <vue-good-table
       :fixed-header="true"
       :line-numbers="true"
@@ -35,7 +35,7 @@ export default {
 
   computed: {
     columns() {
-      return {}
+      return []
     },
   },
 
