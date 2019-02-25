@@ -28,7 +28,7 @@
           >-->
           <!-- {{props}} -->
           <button
-            @click="openPreview(props.formattedRow.id)"
+            @click="openPreview(props.formattedRow)"
             class="button is-info"
           >
             <span class="icon">
@@ -51,7 +51,7 @@
                 </span>
               </button>
             </div>
-            <img :src="props.formattedRow[props.column.field]">
+            <img :src="imageSource">
           </modal>
         </span>
         <span v-else>{{props.formattedRow[props.column.field]}}</span>
@@ -62,6 +62,8 @@
 </template>
 
 <script>
+const imageUtilities = require('../../../utilities/images.js')
+
 export default {
   name: 'ReviewResult',
 
@@ -77,6 +79,7 @@ export default {
   data() {
     return {
       finalResults: [],
+      imageSource: null,
     }
   },
 
@@ -107,14 +110,21 @@ export default {
   },
 
   methods: {
-    openPreview(id) {
-      this.$modal.show(id)
+    openPreview(row) {
+      this.setImageSource(row.img)
+
+      this.$modal.show(row.id)
     },
     closePreview(id) {
       this.$modal.hide(id)
     },
     toProperCase(item) {
       return item[0].toUpperCase() + item.substr(1)
+    },
+    setImageSource(src) {
+      imageUtilities.convertImage(src).then(s => {
+        this.imageSource = s
+      })
     },
   },
 }

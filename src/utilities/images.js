@@ -2,9 +2,32 @@ const javascriptBarcodeReader = require('javascript-barcode-reader')
 const fastGlob = require('fast-glob')
 const path = require('path')
 const uuid = require('uuid')
-// const sharp = require('sharp')
+const sharp = require('sharp')
 
 const dataPaths = require('./data-paths')
+
+async function convertImage(src) {
+  const ext = src.split('.').pop()
+  const isSupported = [
+    'png',
+    'jpg',
+    'jpeg',
+    'jpe',
+    'jfif',
+    'gif',
+    'bmp',
+  ].includes(ext)
+
+  if (isSupported) return src
+
+  const newUrl = path.join(dataPaths.tmp, `${uuid()}.jpg`)
+
+  await sharp(src)
+    .jpeg()
+    .toFile(newUrl)
+
+  return newUrl
+}
 
 /**
  * Return a list of valid image format files from the provided path
@@ -83,6 +106,7 @@ function logImageData(img, name) {
 }
 
 module.exports = {
+  convertImage,
   getImagePaths,
   logImageData,
   getRollNoFromImage,
