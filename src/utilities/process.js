@@ -5,6 +5,7 @@ const { getImagePaths } = require('./images')
 
 // store reference to all workers
 let WORKER_PROCESSES
+let TOTAL_IMAGES
 
 // result collection
 let results = []
@@ -12,38 +13,78 @@ let results = []
 /**
  * Stops all worker processes
  */
-function stop() {
+async function stop() {
   for (let i = 0; i < WORKER_PROCESSES.length; i += 1) {
+    // exit workers
     if (WORKER_PROCESSES[i].connected) {
-      WORKER_PROCESSES[i].send({
-        stop: true,
-      })
+      WORKER_PROCESSES[i].kill()
     }
   }
+
+  WORKER_PROCESSES.length = 0
+  TOTAL_IMAGES.length = 0
+  // results.length = 0
+}
+
+async function addWorkerHandlers(worker, callback) {
+  // results collection and progress
+  worker.on('message', data => {
+    if (data.completed) {
+      results = results.concat(data.results)
+
+      // check if all process have returned result
+      if (results.length === TOTAL_IMAGES) {
+        // report view of completion
+        callback({
+          results,
+        })
+
+        // exit all workers & reset data
+        stop()
+      }
+    } else if (data.progress) {
+      callback(data)
+    }
+  })
+
+  // logging
+  worker.stdout.on('data', data => {
+    callback({
+      log: data.toString(),
+    })
+  })
+
+  // error
+  worker.stderr.on('data', data => {
+    callback({
+      error: data.toString(),
+    })
+  })
 }
 
 /**
  * Start processing scanned image files to get result
  *
- * @param {Function} listner Callback function for updates
- * @param {String?} designFilePath design file path
+ * @param {Function} callback Callback function for updates
  * @param {String} imagesDirectory scanned images directory
- * @param {Boolean} useWorkers Enable parrallel processing
+ * @param {String} keyFilePath design file path
  *
  * @returns {Object} {totalImages, totalWorkers}
  */
 async function start(
-  listner,
-  imagesDirectory = dataPaths.DEFAULTS.images,
-  designFilePath = dataPaths.DEFAULTS.design
+  callback,
+  imagesDirectory = dataPaths.DEFAULTS.images
+  // keyFilePath = dataPaths.DEFAULTS.key
 ) {
   // reset result collection
   const [imagePaths, designData] = await Promise.all([
     getImagePaths(imagesDirectory),
-    getDesignData(designFilePath),
+    getDesignData(dataPaths.DEFAULTS.design),
   ])
 
-  const TOTAL_IMAGES = imagePaths.length
+  // TODO: parse key file is csv otherwise send it to worker
+
+  TOTAL_IMAGES = imagePaths.length
   WORKER_PROCESSES = await createWorkerProcesses(TOTAL_IMAGES)
   const TOTAL_PROCESS = WORKER_PROCESSES.length
   const STEP = Math.floor(TOTAL_IMAGES / TOTAL_PROCESS)
@@ -59,52 +100,12 @@ async function start(
       imagePaths: imagePaths.slice(startIndex, endIndex),
     })
 
-    worker.on('message', m => {
-      // collect result from process
-      if (m.completed) {
-        results = results.concat(m.results)
-
-        // check if all process have returned result
-        if (results.length === TOTAL_IMAGES) {
-          // report view of completion
-          listner({
-            results,
-          })
-
-          results.length = 0
-        }
-      } else if (m.progress && listner) {
-        listner(m)
-      } else {
-        console.log(m)
-      }
-    })
-
-    // logging
-    worker.stdout.on('data', data => {
-      if (listner) {
-        listner({
-          log: data.toString(),
-        })
-      } else {
-        console.log(data.toString())
-      }
-    })
-
-    // error
-    worker.stderr.on('data', data => {
-      if (listner) {
-        listner({
-          error: data.toString(),
-        })
-      } else {
-        console.log(data.toString())
-      }
-    })
+    // add handlers
+    addWorkerHandlers(worker, callback)
   }
 
   return {
-    totalImages: imagePaths.length,
+    totalImages: TOTAL_IMAGES,
     totalWorkers: WORKER_PROCESSES.length,
   }
 }

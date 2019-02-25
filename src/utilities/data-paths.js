@@ -36,6 +36,7 @@ module.exports = {
     design: path.resolve('__tests__/test-data', 'design.svg'),
     images: path.resolve('__tests__/test-data', 'images'),
     result: path.resolve('__tests__/test-data', 'result.csv'),
+    key: path.resolve('__tests__/test-data/key', 'key.jpg'),
     questionsModel: path.resolve('src/data/questions-model.json'),
     rollNoModel: path.resolve('src/data/questions-model.json'),
     postModel: path.resolve('src/data/questions-model.json'),

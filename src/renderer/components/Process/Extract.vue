@@ -5,7 +5,7 @@
         <label class="file-label">
           <button
             :disabled="running"
-            @click="chooseDirectory"
+            @click="chooseDirectoryImages"
             class="file-input"
             name="resume"
           />
@@ -20,9 +20,33 @@
       </div>
       <p class="help">Choose the directory which contains scanned answer sheets.</p>
     </div>
+
+    <div class="field">
+      <div class="file has-name is-fullwidth">
+        <label class="file-label">
+          <button
+            :disabled="running"
+            @click="chooseFileKey"
+            class="file-input"
+            name="resume"
+          />
+          <span class="file-cta">
+            <span class="file-icon">
+              <i class="fas fa-folder"/>
+            </span>
+            <span class="file-label">Choose Key File</span>
+          </span>
+          <span class="file-name">{{ keyFile }}</span>
+        </label>
+      </div>
+      <p class="help">Choose the Key file (scanned or csv)</p>
+    </div>
+
+    <br>
+
     <div class="buttons">
       <button
-        :disabled="running || !imageDirectory"
+        :disabled="running || !inputIsValid"
         @click="toggleProcess"
         class="button is-primary"
       >
@@ -69,32 +93,37 @@
 <script>
 // eslint-disable-next-line
 const { dialog, getCurrentWindow } = require('electron').remote
-const processingModule = require('@utilities/process.js')
+
+const processingModule = require('../../../utilities/process.js')
+const dataPaths = require('../../../utilities/data-paths.js')
 
 export default {
   name: 'ExtractResult',
 
   data() {
     return {
-      imageDirectory:
-        'D:\\Current\\image-parsing\\__tests__\\test-data\\images',
+      imageDirectory: dataPaths.DEFAULTS.images,
+      keyFile: dataPaths.DEFAULTS.key,
       running: false,
       processedImages: 0,
       totalImages: 0,
       totalWorkers: 0,
-      perImageTime: 0,
+      perImageTime: 1,
       startTime: 0,
       endTime: 0,
     }
   },
 
   computed: {
-    remainingTime() {
-      if (this.perImageTime === 0) return '...'
+    inputIsValid() {
+      return this.imageDirectory && this.keyFile
+    },
 
+    remainingTime() {
       const ms =
         500 +
-        ((this.totalImages - this.processedImages) * this.perImageTime) /
+        ((this.totalImages - this.processedImages) *
+          (this.perImageTime || 1000)) /
           this.totalWorkers
 
       return this.toHHMMSS(Math.round(ms / 500) * 500)
@@ -112,20 +141,19 @@ export default {
     },
   },
 
-  mounted() {
-    // this.$emit('mounted')
-  },
-
   methods: {
     toggleProcess() {
       if (this.running) {
         processingModule.stop()
       } else {
         processingModule
-          .start(this.listner, this.imageDirectory)
+          .start(this.listner, this.imageDirectory, this.keyFile)
           .then(({ totalImages, totalWorkers }) => {
             this.totalImages = totalImages
             this.totalWorkers = totalWorkers
+          })
+          .catch(err => {
+            dialog.showErrorBox('Error', err)
           })
       }
       this.running = !this.running
@@ -147,13 +175,22 @@ export default {
       }
     },
 
-    chooseDirectory() {
+    chooseDirectoryImages() {
       const dir = dialog.showOpenDialog(getCurrentWindow(), {
         defaultPath: this.imageDirectory,
         properties: ['openDirectory'],
       })
 
       this.imageDirectory = dir ? dir[0] : null
+    },
+
+    chooseFileKey() {
+      const dir = dialog.showOpenDialog(getCurrentWindow(), {
+        defaultPath: this.keyFile,
+        properties: ['openFile'],
+      })
+
+      this.keyFile = dir ? dir[0] : null
     },
 
     toHHMMSS(s) {

@@ -7,12 +7,12 @@
       mode="out-in"
       name="slide-left"
     >
-      <extract-result
-        @results="getExtractedResult"
-        v-if="!extractedResult"
-      />
       <review-result
         :results="extractedResult"
+        v-if="extractedResult"
+      />
+      <extract-result
+        @results="getExtractedResult"
         v-else
       />
     </Transition>
@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import extractResult from '@components/Process/Extract.vue'
-import reviewResult from '@components/Process/Review.vue'
+import extractResult from './Process/Extract.vue'
+import reviewResult from './Process/Review.vue'
 
 export default {
   name: 'Process',

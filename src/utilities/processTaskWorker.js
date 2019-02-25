@@ -4,32 +4,11 @@ const { getRollNoFromImage } = require('./images')
 const { getQuestionsData } = require('./questions')
 const { getQuestionsNeuralNet } = require('./index')
 
-// controls if processing is enabled
-let processingEnabled = true
-
-/**
- * Set Start status to the current processing task
- */
-function start() {
-  processingEnabled = true
-}
-
-// stops process in immediate next loop
-function stop() {
-  processingEnabled = false
-
-  process.exit(0)
-}
-
 // sends progress to parent
 async function sendProgress(p) {
-  if (process && process.send) {
-    process.send(p, () => {
-      if (p.completed) stop()
-    })
-  } else {
-    console.log('Results: ', p)
-  }
+  process.send(p, () => {
+    if (p.completed) process.exit(0)
+  })
 }
 
 /**
@@ -44,24 +23,20 @@ async function processTask(designData, imagePaths) {
   const results = []
 
   // loop through all images
-  for (let i = 0; i < imagePaths.length && processingEnabled; i += 1) {
+  for (let i = 0; i < imagePaths.length; i += 1) {
     const startTime = Date.now()
-    const sharpImage = sharp(imagePaths[i])
+    const img = imagePaths[i]
+    const sharpImage = sharp(img)
       .raw()
       .flatten()
     const sharpImageClone = sharpImage.clone()
 
-    const [rollNo, questionsData] = await Promise.all([
+    const [result, questionsData] = await Promise.all([
       getRollNoFromImage(designData, sharpImage),
       getQuestionsData(designData, sharpImageClone),
     ])
 
-    // prepare output
-    const result = {
-      rollNo,
-    }
-
-    for (let j = questionsData.length - 1; j >= 0; j -= 1) {
+    for (let j = 0; j < questionsData.length; j += 1) {
       const { title, data } = questionsData[j]
       const pre = neuralNet.run(data)
 
@@ -78,6 +53,9 @@ async function processTask(designData, imagePaths) {
       }
     }
 
+    // store img reference
+    result.img = img
+
     // collect option selection
     results.push(result)
 
@@ -90,24 +68,16 @@ async function processTask(designData, imagePaths) {
 
   // report completed status & exit process
   sendProgress({
-    results,
     completed: true,
+    results,
   })
 }
 
 // add message listner
-if (process && process.send) {
-  process.on('message', m => {
-    if (m && m.stop) {
-      stop()
-    } else {
-      start()
-      processTask(m.designData, m.imagePaths)
-    }
-  })
-}
+process.on('message', m => {
+  processTask(m.designData, m.imagePaths)
+})
 
 module.exports = {
   processTask,
-  stop,
 }

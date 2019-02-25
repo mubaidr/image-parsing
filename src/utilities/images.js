@@ -1,7 +1,9 @@
 const javascriptBarcodeReader = require('javascript-barcode-reader')
 const fastGlob = require('fast-glob')
 const path = require('path')
+const uuid = require('uuid')
 // const sharp = require('sharp')
+
 const dataPaths = require('./data-paths')
 
 /**
@@ -33,9 +35,12 @@ function getImagePaths(dir) {
  *
  * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
  * @param {String} path Path of scanned image file
- * @returns {String} Roll Number
+ * @returns {Object} Roll Number
  */
 async function getRollNoFromImage(designData, img) {
+  const obj = {
+    id: uuid(),
+  }
   const metadata = await img.metadata()
   const rollNoPos = designData.rollNo
   const ratio = metadata.width / designData.width
@@ -51,10 +56,16 @@ async function getRollNoFromImage(designData, img) {
     })
     .toBuffer()
 
-  return javascriptBarcodeReader(
-    { data, width, height },
-    { barcode: 'code-39' }
-  )
+  try {
+    obj.rollNo = await javascriptBarcodeReader(
+      { data, width, height },
+      { barcode: 'code-39' }
+    )
+  } catch (err) {
+    obj.rollNo = null
+  }
+
+  return obj
 }
 
 /**

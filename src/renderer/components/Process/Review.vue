@@ -1,17 +1,13 @@
 <template>
   <div>
     <vue-good-table
-      :fixed-header="true"
+      :columns="columns"
       :line-numbers="true"
-      :rows="results"
+      :rows="finalResults"
       :sort-options="{
         enabled: true,
       }"
-    >
-      <div slot="emptystate">This will show up when there are no rows</div>
-      <div slot="table-actions">This will show up on the top right of the table.</div>
-      <div slot="table-actions-bottom">This will show up on the bottom of the table.</div>
-    </vue-good-table>
+    ></vue-good-table>
     {{results}}
   </div>
 </template>
@@ -30,16 +26,43 @@ export default {
   },
 
   data() {
-    return {}
+    return {
+      finalResults: [],
+    }
   },
 
   computed: {
     columns() {
-      return []
+      return [
+        {
+          label: 'ID',
+          field: 'id',
+          filterable: true,
+        },
+        {
+          label: 'rollNo',
+          field: 'rollNo',
+          type: 'number',
+          filterable: true,
+        },
+        {
+          label: 'img',
+          field: 'img',
+          filterable: true,
+          html: true,
+          formatFn: item => {
+            return `<img src="${item}"/>`
+          },
+        },
+      ]
     },
   },
 
-  mounted() {},
+  created() {
+    window.setTimeout(() => {
+      this.$set(this, 'finalResults', this.results)
+    }, 0)
+  },
 }
 </script>
 
