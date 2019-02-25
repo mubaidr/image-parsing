@@ -79,7 +79,6 @@ function createWindow() {
   mainWindow.on('ready-to-show', () => {
     mainWindow.setTitle(productName)
 
-
     if (isDev || process.argv.indexOf('--debug') > -1) {
       mainWindow.webContents.openDevTools()
     }

@@ -7,8 +7,12 @@
         enabled: true,
         mode: 'pages',
         perPage: 10,
+        position: 'top',
       }"
       :rows="finalResults"
+      :search-options="{
+        enabled: true,
+      }"
       :sort-options="{
         enabled: true,
       }"
@@ -22,14 +26,14 @@
             :src="props.formattedRow[props.column.field]"
             @click="openPreview(props.formattedRow.id)"
           >-->
+          <!-- {{props}} -->
           <button
             @click="openPreview(props.formattedRow.id)"
-            class="button is-light is-small"
+            class="button is-info"
           >
             <span class="icon">
               <i class="fa fa-image"/>
             </span>
-            <span>Preview</span>
           </button>
           <modal
             :name="props.formattedRow.id"
@@ -78,17 +82,20 @@ export default {
 
   computed: {
     columns() {
-      const columns = []
+      const columns = [
+        { field: 'id', hidden: true },
+        { label: '', field: 'img', sortable: false },
+        { label: 'Roll #', field: 'rollNo', sortable: true },
+      ]
 
       Object.keys(this.finalResults[0]).forEach(item => {
-        const column = {
-          label: this.toProperCase(item),
-          field: item,
-          hidden: item.includes('id'),
-          sortable: true,
+        // insert questions
+        if (item[0] === 'Q') {
+          columns.push({
+            label: this.toProperCase(item),
+            field: item,
+          })
         }
-
-        columns.push(column)
       })
 
       return columns
@@ -122,4 +129,9 @@ export default {
     vertical-align: middle
   th
     cursor: pointer
+
+.vgt-wrap
+  button,
+  input[type=text]
+      height: auto!important
 </style>
