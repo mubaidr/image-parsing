@@ -10,12 +10,14 @@ import './assets/style/animations.sass'
 import './assets/fontawesome/css/fontawesome-all.css'
 import 'epic-spinners/dist/lib/epic-spinners.min.css'
 
+import VModal from 'vue-js-modal'
 import VueGoodTablePlugin from 'vue-good-table'
 import { AtomSpinner, LoopingRhombusesSpinner } from 'epic-spinners/src/lib'
 
 import App from './App.vue'
 import router from './router'
 
+Vue.use(VModal)
 Vue.use(VueGoodTablePlugin)
 
 // eslint-disable-next-line

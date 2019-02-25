@@ -78,12 +78,14 @@ function createWindow() {
   // Show when loaded
   mainWindow.on('ready-to-show', () => {
     mainWindow.setTitle(productName)
-    mainWindow.show()
-    mainWindow.focus()
+
 
     if (isDev || process.argv.indexOf('--debug') > -1) {
       mainWindow.webContents.openDevTools()
     }
+
+    mainWindow.show()
+    mainWindow.focus()
   })
 
   mainWindow.on('closed', () => {
