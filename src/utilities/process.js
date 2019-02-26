@@ -8,12 +8,14 @@ let WORKER_PROCESSES
 let TOTAL_IMAGES
 
 // result collection
-let results = []
+let RESULTS = []
 
 /**
  * Stops all worker processes
  */
 async function stop() {
+  if (!WORKER_PROCESSES) return
+
   for (let i = 0; i < WORKER_PROCESSES.length; i += 1) {
     // exit workers
     if (WORKER_PROCESSES[i].connected) {
@@ -23,20 +25,20 @@ async function stop() {
 
   WORKER_PROCESSES.length = 0
   TOTAL_IMAGES.length = 0
-  // results.length = 0
+  RESULTS.length = 0
 }
 
 async function addWorkerHandlers(worker, callback) {
   // results collection and progress
   worker.on('message', data => {
     if (data.completed) {
-      results = results.concat(data.results)
+      RESULTS = RESULTS.concat(data.results)
 
       // check if all process have returned result
-      if (results.length === TOTAL_IMAGES) {
+      if (RESULTS.length === TOTAL_IMAGES) {
         // report view of completion
         callback({
-          results,
+          results: [...RESULTS],
         })
 
         // exit all workers & reset data

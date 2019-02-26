@@ -10,7 +10,10 @@
       >Start</button>
 
       <div v-show="running">
-        <looping-rhombuses-spinner color="#ff1d5e"/>
+        <span class="icon">
+          <i class="fa fa-spinner"/>
+        </span>
+        <span>Training network...</span>
       </div>
 
       <div class="block log">

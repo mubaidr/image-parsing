@@ -110,7 +110,7 @@ export default {
       processedImages: 0,
       totalImages: 0,
       totalWorkers: 0,
-      perImageTime: 1,
+      perImageTime: 0,
       startTime: 0,
       endTime: 0,
     }
@@ -123,12 +123,8 @@ export default {
 
     remainingTime() {
       const ms =
-        500 +
-        ((this.totalImages - this.processedImages) *
-          (this.perImageTime || 1000)) /
-          this.totalWorkers
-
-      return this.toHHMMSS(Math.round(ms / 500) * 500)
+        (this.totalImages - this.processedImages) * (this.perImageTime || 500)
+      return this.toHHMMSS(ms)
     },
   },
 
@@ -208,7 +204,7 @@ export default {
       const input = s / 1000
       const hours = Math.floor(input / 3600)
       const minutes = Math.floor((input - hours * 3600) / 60)
-      const seconds = input - hours * 3600 - minutes * 60
+      const seconds = (input - hours * 3600 - minutes * 60).toFixed(2)
 
       if (hours) {
         str += `${hours} hours `
