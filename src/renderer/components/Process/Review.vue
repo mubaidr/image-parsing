@@ -12,6 +12,9 @@
       :rows="finalResults"
       :search-options="{
         enabled: true,
+        skipDiacritics: true,
+        searchFn: searchFunction,
+        placeholder: 'Filter data by roll number'
       }"
       :sort-options="{
         enabled: true,
@@ -22,24 +25,21 @@
         slot-scope="props"
       >
         <span v-if="props.column.field == 'img'">
-          <!-- <img
-            :src="props.formattedRow[props.column.field]"
-            @click="openPreview(props.formattedRow.id)"
-          >-->
-          <!-- {{props}} -->
           <button
             @click="openPreview(props.formattedRow)"
-            class="button is-info"
+            class="button is-light"
           >
             <span class="icon">
               <i class="fa fa-image"/>
             </span>
           </button>
           <modal
+            :adaptive="true"
             :name="props.formattedRow.id"
             :scrollable="true"
             @click="closePreview(props.formattedRow.id)"
             height="auto"
+            pivot-y:number="0.25"
           >
             <div class="has-text-right">
               <button
@@ -88,7 +88,14 @@ export default {
       const columns = [
         { field: 'id', hidden: true },
         { label: '', field: 'img', sortable: false },
-        { label: 'Roll #', field: 'rollNo', sortable: true },
+        {
+          label: 'Roll #',
+          field: 'rollNo',
+          sortable: true,
+          // filterOptions: {
+          //   enabled: true,
+          // },
+        },
       ]
 
       Object.keys(this.finalResults[0]).forEach(item => {
@@ -111,9 +118,11 @@ export default {
 
   methods: {
     openPreview(row) {
-      this.setImageSource(row.img)
+      convertImage(row.img).then(s => {
+        this.imageSource = s
 
-      this.$modal.show(row.id)
+        this.$modal.show(row.id)
+      })
     },
     closePreview(id) {
       this.$modal.hide(id)
@@ -121,10 +130,12 @@ export default {
     toProperCase(item) {
       return item[0].toUpperCase() + item.substr(1)
     },
-    setImageSource(src) {
-      convertImage(src).then(s => {
-        this.imageSource = s
-      })
+    searchFunction(row, col, cellValue, searchTerm) {
+      if (col.field === 'rollNo') {
+        return cellValue.includes(searchTerm)
+      }
+
+      return false
     },
   },
 }
