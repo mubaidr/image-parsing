@@ -62,7 +62,7 @@
 </template>
 
 <script>
-const imageUtilities = require('../../../utilities/images.js')
+const { convertImage } = require('../../../utilities/images.js')
 
 export default {
   name: 'ReviewResult',
@@ -122,7 +122,7 @@ export default {
       return item[0].toUpperCase() + item.substr(1)
     },
     setImageSource(src) {
-      imageUtilities.convertImage(src).then(s => {
+      convertImage(src).then(s => {
         this.imageSource = s
       })
     },

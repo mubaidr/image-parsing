@@ -1,6 +1,4 @@
-const sharp = require('sharp')
-
-const { getRollNoFromImage } = require('./images')
+const { getRollNoFromImage, getSharpObjectFromSource } = require('./images')
 const { getQuestionsData } = require('./questions')
 const { getQuestionsNeuralNet } = require('./index')
 
@@ -26,14 +24,11 @@ async function processTask(designData, imagePaths) {
   for (let i = 0; i < imagePaths.length; i += 1) {
     const startTime = Date.now()
     const img = imagePaths[i]
-    const sharpImage = sharp(img)
-      .raw()
-      .flatten()
-    const sharpImageClone = sharpImage.clone()
+    const sharpImage = getSharpObjectFromSource(img).raw()
 
     const [result, questionsData] = await Promise.all([
       getRollNoFromImage(designData, sharpImage),
-      getQuestionsData(designData, sharpImageClone),
+      getQuestionsData(designData, sharpImage.clone()),
     ])
 
     for (let j = 0; j < questionsData.length; j += 1) {

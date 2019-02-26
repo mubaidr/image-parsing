@@ -7,18 +7,33 @@ const sharp = require('sharp')
 const { IMAGES, NATIVE_IMAGES } = require('./valid-types')
 const dataPaths = require('./data-paths')
 
+const CACHE = {}
+
+function getSharpObjectFromSource(src) {
+  return (
+    sharp(src)
+      // .jpeg()
+      .flatten()
+  )
+}
+
 async function convertImage(src) {
-  const isSupported = NATIVE_IMAGES.includes(src.split('.').pop())
+  // native supported images
+  if (NATIVE_IMAGES.includes(src.split('.').pop())) return src
 
-  if (isSupported) return src
+  // check cache
+  const cached = CACHE[src]
+  if (cached) return cached
 
-  const newUrl = path.join(dataPaths.tmp, `${uuid()}.jpg`)
+  // generate random tmp url
+  const url = path.join(dataPaths.tmp, `${uuid()}.jpg`)
+  CACHE[src] = url
 
-  await sharp(src)
-    .jpeg()
-    .toFile(newUrl)
+  // save file for preview
+  await getSharpObjectFromSource(src).toFile(url)
 
-  return newUrl
+  // returns new url
+  return url
 }
 
 /**
@@ -72,16 +87,19 @@ async function getRollNoFromImage(designData, img) {
 
 /**
  * Logs provided image data to .tmp folder
- * @param {sharp} img Sharp instance
- * @param {String} name Name of file
+ * @param {sharp | string} img Sharp instance or image source
+ * @param {string} name Name of file
  */
-function logImageData(img, name) {
-  img
-    .clone()
-    .jpeg()
-    .toFile(path.join(dataPaths.tmp, `${name || uuid()}.jpeg`), err => {
-      if (err) console.log(err)
-    })
+async function logImageData(src, name) {
+  let img
+
+  if (typeof src === 'string') {
+    img = getSharpObjectFromSource(src)
+  } else {
+    img = src.clone()
+  }
+
+  return img.jpeg().toFile(path.join(dataPaths.tmp, `${name || uuid()}.jpg`))
 }
 
 module.exports = {
@@ -89,4 +107,5 @@ module.exports = {
   getImagePaths,
   logImageData,
   getRollNoFromImage,
+  getSharpObjectFromSource,
 }
