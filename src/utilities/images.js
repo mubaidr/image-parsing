@@ -4,19 +4,11 @@ const path = require('path')
 const uuid = require('uuid')
 const sharp = require('sharp')
 
+const { IMAGES, NATIVE_IMAGES } = require('./valid-types')
 const dataPaths = require('./data-paths')
 
 async function convertImage(src) {
-  const ext = src.split('.').pop()
-  const isSupported = [
-    'png',
-    'jpg',
-    'jpeg',
-    'jpe',
-    'jfif',
-    'gif',
-    'bmp',
-  ].includes(ext)
+  const isSupported = NATIVE_IMAGES.includes(src.split('.').pop())
 
   if (isSupported) return src
 
@@ -37,20 +29,7 @@ async function convertImage(src) {
  * @returns {Array.<String>} List of file paths
  */
 function getImagePaths(dir) {
-  const formats = [
-    'png',
-    'jpg',
-    'jpeg',
-    'jpe',
-    'jfif',
-    'gif',
-    'tif',
-    'tiff',
-    'bmp',
-    'dib',
-  ]
-
-  return fastGlob(`${dir}/*.{${formats.join(',')}}`, { onlyFiles: true })
+  return fastGlob(`${dir}/*.{${IMAGES.join(',')}}`, { onlyFiles: true })
 }
 
 /**
@@ -99,8 +78,8 @@ async function getRollNoFromImage(designData, img) {
 function logImageData(img, name) {
   img
     .clone()
-    .png()
-    .toFile(path.join(dataPaths.tmp, `${name}.png`), err => {
+    .jpeg()
+    .toFile(path.join(dataPaths.tmp, `${name || uuid()}.jpeg`), err => {
       if (err) console.log(err)
     })
 }

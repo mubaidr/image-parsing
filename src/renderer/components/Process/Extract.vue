@@ -26,7 +26,7 @@
         <label class="file-label">
           <button
             :disabled="running"
-            @click="chooseFileKey"
+            @click="chooseKeyFile"
             class="file-input"
             name="resume"
           />
@@ -93,6 +93,8 @@
 <script>
 // eslint-disable-next-line
 const { dialog, getCurrentWindow } = require('electron').remote
+
+const { KEY } = require('../../../utilities/valid-types.js')
 
 const processingModule = require('../../../utilities/process.js')
 const dataPaths = require('../../../utilities/data-paths.js')
@@ -177,6 +179,7 @@ export default {
 
     chooseDirectoryImages() {
       const dir = dialog.showOpenDialog(getCurrentWindow(), {
+        title: 'Choose directory containing scanned answer sheets',
         defaultPath: this.imageDirectory,
         properties: ['openDirectory'],
       })
@@ -184,10 +187,17 @@ export default {
       this.imageDirectory = dir ? dir[0] : null
     },
 
-    chooseFileKey() {
+    chooseKeyFile() {
       const dir = dialog.showOpenDialog(getCurrentWindow(), {
+        title: 'Choose result-key file',
         defaultPath: this.keyFile,
         properties: ['openFile'],
+        filters: [
+          {
+            name: 'Key File',
+            extensions: KEY,
+          },
+        ],
       })
 
       this.keyFile = dir ? dir[0] : null
