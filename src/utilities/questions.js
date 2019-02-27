@@ -25,9 +25,6 @@ async function getQuestionsData(design, img, results, rollNumber) {
     width: TARGET_SIZE,
   })
 
-  // debug
-  // logImageData(img, `${rollNumber}`)
-
   const data = []
   const questions = Object.entries(design.questions)
 
@@ -38,9 +35,12 @@ async function getQuestionsData(design, img, results, rollNumber) {
       left: Math.floor(q.x1 * SCALE),
       top: Math.floor(q.y1 * SCALE),
       width: Math.ceil((q.x2 - q.x1) * SCALE),
-      height: Math.ceil((q.y2 - q.y1) * SCALE),
+      height: Math.ceil((q.y2 - q.y1) * SCALE * 1.5),
     }
     img.extract(opt)
+
+    // debug
+    // logImageData(img, `${title}`)
 
     // debug
     // logImageData(img, `${rollNumber}-${title}`)

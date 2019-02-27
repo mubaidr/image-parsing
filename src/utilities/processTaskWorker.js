@@ -35,12 +35,15 @@ async function processTask(designData, imagePaths) {
       const { title, data } = questionsData[j]
       const pre = neuralNet.run(data)
 
-      if (pre['?'] >= 0.95) {
+      if (pre['?'] > 0.7) {
         result[title] = '?'
       } else {
         const [first, second] = Object.entries(pre).sort((a, b) => b[1] - a[1])
 
-        if (first[1] - second[1] >= 0.33) {
+        if (
+          first[1] - second[1] >= 0.3 || // 30% more sure than any other option
+          (first[i] >= 0.25 && second[1] < 0.1) // only feasible option above 25%
+        ) {
           ;[result[title]] = first
         } else {
           result[title] = '*'

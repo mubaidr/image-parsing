@@ -12,10 +12,6 @@
           <td>Platform</td>
           <td>{{ platform }}</td>
         </tr>
-        <tr>
-          <td>Vue.js</td>
-          <td>{{ Vue.version }}</td>
-        </tr>
         <tr
           :key="lib"
           v-for="lib in Object.keys(versions)"
@@ -36,9 +32,9 @@ export default {
     return {
       versions: process.versions,
       platform: require('os').platform(),
-      // vue: require('vue/package.json').version,
     }
   },
+
   created() {},
 }
 </script>

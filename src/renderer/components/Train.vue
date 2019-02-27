@@ -60,7 +60,6 @@ export default {
       worker.on('message', msg => {
         if (msg.completed) {
           this.running = false
-          this.logs.unshift('COMPLETED!')
         }
       })
 

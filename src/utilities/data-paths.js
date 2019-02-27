@@ -3,25 +3,29 @@ const path = require('path')
 
 const tmp = path.resolve('.tmp')
 
-fs.exists(tmp, exist => {
-  if (exist) {
-    fs.readdir(tmp, (err, files) => {
-      if (err) console.log(err)
+async function prepareDir() {
+  fs.exists(tmp, exist => {
+    if (exist) {
+      fs.readdir(tmp, (err, files) => {
+        if (err) console.log(err)
 
-      for (let i = 0; i < files.length; i += 1) {
-        const file = files[i]
+        for (let i = 0; i < files.length; i += 1) {
+          const file = files[i]
 
-        fs.unlink(path.join(tmp, file), error => {
-          if (error) console.log(error)
-        })
-      }
-    })
-  } else {
-    fs.mkdir(tmp, err => {
-      if (err) console.log(err)
-    })
-  }
-})
+          fs.unlink(path.join(tmp, file), error => {
+            if (error) console.log(error)
+          })
+        }
+      })
+    } else {
+      fs.mkdir(tmp, err => {
+        if (err) console.log(err)
+      })
+    }
+  })
+}
+
+prepareDir()
 
 module.exports = {
   tmp: path.resolve('.tmp'),

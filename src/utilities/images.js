@@ -10,11 +10,9 @@ const dataPaths = require('./data-paths')
 const CACHE = {}
 
 function getSharpObjectFromSource(src) {
-  return (
-    sharp(src)
-      // .jpeg()
-      .flatten()
-  )
+  return sharp(src)
+  // .jpeg()
+  // .flatten()
 }
 
 async function convertImage(src) {

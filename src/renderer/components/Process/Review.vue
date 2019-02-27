@@ -18,6 +18,7 @@
       }"
       :sort-options="{
         enabled: true,
+        initialSortBy: {field: 'rollNo', type: 'asc'}
       }"
     >
       <template
@@ -131,7 +132,7 @@ export default {
       return item[0].toUpperCase() + item.substr(1)
     },
     searchFunction(row, col, cellValue, searchTerm) {
-      if (col.field === 'rollNo') {
+      if (col.field === 'rollNo' && cellValue) {
         return cellValue.includes(searchTerm)
       }
 
