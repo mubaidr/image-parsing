@@ -42,7 +42,7 @@ async function processTask(designData, imagePaths) {
 
         if (
           first[1] - second[1] >= 0.3 || // 30% more sure than any other option
-          (first[i] >= 0.25 && second[1] < 0.1) // only feasible option above 25%
+          (first[1] >= 0.20 && second[1] < 0.1) // only feasible option above 25%
         ) {
           ;[result[title]] = first
         } else {

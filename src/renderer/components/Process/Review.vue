@@ -1,4 +1,5 @@
 <template>
+  import { constants } from 'http2';
   <div>
     <vue-good-table
       :columns="columns"
@@ -20,6 +21,7 @@
         enabled: true,
         initialSortBy: {field: 'rollNo', type: 'asc'}
       }"
+      @on-row-dblclick="onRowDoubleClick"
       style-class="vgt-table condensed"
     >
       <template
@@ -56,20 +58,31 @@
             <img :src="imageSource">
           </modal>
         </span>
-        <span v-else-if="props.column.field == 'rollNo' && !props.formattedRow[props.column.field]">
+        <span v-else-if="props.column.field == 'rollNo'">
           <div class="field">
             <div class="control has-icons-left">
               <input
+                :class="{'is-danger' : !props.formattedRow[props.column.field]}"
+                :disabled="props.formattedRow[props.column.field]"
                 class="input is-small"
                 maxlength="9"
                 minlength="5"
                 pattern="/[1-9]{2}[a-z]-[0-9]{5}/gim"
                 placeholder="Roll #"
                 required
-                v-model="finalResults[0]['rollNo']"
+                v-model="finalResults[props.row.originalIndex]['rollNo']"
                 type="text"
               >
-              <span class="icon is-small is-left has-text-danger">
+              <span
+                v-if="props.formattedRow[props.column.field]"
+                class="icon is-small is-left has-text-success"
+              >
+                <i class="fas fa-check"></i>
+              </span>
+              <span
+                v-else
+                class="icon is-small is-left has-text-danger"
+              >
                 <i class="fas fa-exclamation"></i>
               </span>
             </div>
@@ -146,18 +159,25 @@ export default {
         this.$modal.show(row.id)
       })
     },
+
     closePreview(id) {
       this.$modal.hide(id)
     },
+
     toProperCase(item) {
       return item[0].toUpperCase() + item.substr(1)
     },
+
     searchFunction(row, col, cellValue, searchTerm) {
       if (col.field === 'rollNo' && cellValue) {
         return cellValue.includes(searchTerm)
       }
 
       return false
+    },
+
+    onRowDoubleClick(params) {
+      this.openPreview(params.row)
     },
   },
 }
