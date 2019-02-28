@@ -3,10 +3,10 @@ import 'bulma-pro/bulma.sass'
 
 // import the styles
 import 'vue-good-table/dist/vue-good-table.css'
+import 'material-design-icons/iconfont/material-icons.css'
 
 import './assets/style/main.sass'
 import './assets/style/animations.sass'
-import './assets/fontawesome/css/fontawesome-all.css'
 
 import VModal from 'vue-js-modal'
 import VueGoodTablePlugin from 'vue-good-table'
@@ -34,11 +34,6 @@ new Vue({
   router,
   template: '<App/>',
 }).$mount('#app')
-
-/* Enable webpack hot reloading */
-if (module && module.hot) {
-  module.hot.accept()
-}
 
 // menu routes handler
 ipcRenderer.addListener('event', (e, data) => {

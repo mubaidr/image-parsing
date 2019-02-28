@@ -12,9 +12,7 @@
           name="resume"
         />
         <span class="file-cta">
-          <span class="file-icon">
-            <i class="fas fa-file"/>
-          </span>
+          <i class="material-icons">folder_open</i>
           <span class="file-label">Result file</span>
         </span>
         <span
@@ -53,9 +51,9 @@
             <label class="label">Correct Marks</label>
             <div class="control">
               <input
-                v-model="correctMarks"
                 class="input"
                 placeholder="Marks earned for each correct answer"
+                v-model="correctMarks"
                 type="number"
               >
             </div>
@@ -66,10 +64,10 @@
             <label class="label">Negative Marks</label>
             <div class="control">
               <input
-                v-model="incorrectMarks"
                 class="input"
                 placeholder="Marks deducted for each incorrect answer"
                 step="0.01"
+                v-model="incorrectMarks"
                 type="number"
               >
             </div>

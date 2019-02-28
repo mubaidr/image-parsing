@@ -1,6 +1,8 @@
-// disbale text selection
-*::selection
-  background: transparent
+body
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
 
 img
   box-shadow: none
@@ -8,8 +10,11 @@ img
 .section
   padding-top: 1.5em
 
-.button
-  cursor: default
+.center-aligned
+  text-align: center
+
+.material-icons
+  padding-right: 0.25em
 
 .fixed
   position: fixed
@@ -21,10 +26,5 @@ img
   div
     margin: 0 auto
 
-.center-aligned
-  text-align: center
-
-.control.has-icons-left,
-.control.has-icons-right
-  .icon
-    height: 2.5em
+.has-pointer
+  cursor: pointer

@@ -1,5 +1,4 @@
 <template>
-  import { constants } from 'http2';
   <div>
     <vue-good-table
       :columns="columns"
@@ -8,9 +7,9 @@
         enabled: true,
         mode: 'pages',
         perPage: 10,
-        position: 'top',
+        position: 'bottom',
       }"
-      :rows="finalResults"
+      :rows="results"
       :search-options="{
         enabled: true,
         skipDiacritics: true,
@@ -22,21 +21,20 @@
         initialSortBy: {field: 'rollNo', type: 'asc'}
       }"
       @on-row-dblclick="onRowDoubleClick"
-      style-class="vgt-table condensed"
+      style-class="vgt-table"
     >
       <template
         slot="table-row"
         slot-scope="props"
       >
-        <span v-if="props.column.field == 'img'">
-          <button
+        <template v-if="props.column.field == 'img'">
+          <a
             @click="openPreview(props.formattedRow)"
-            class="button is-small is-light"
+            href="#"
           >
-            <span class="icon is-small">
-              <i class="fa fa-image"/>
-            </span>
-          </button>
+            <i class="material-icons md-36">image</i>
+          </a>
+
           <modal
             :adaptive="true"
             :name="props.formattedRow.id"
@@ -50,45 +48,21 @@
                 @click="closePreview(props.formattedRow.id)"
                 class="button is-danger is-small"
               >
-                <span class="is-small icon">
-                  <i class="fa fa-times"/>
-                </span>
+                <i class="material-icons">close</i>
               </button>
             </div>
             <img :src="imageSource">
           </modal>
-        </span>
-        <span v-else-if="props.column.field == 'rollNo'">
-          <div class="field">
-            <div class="control has-icons-left">
-              <input
-                :class="{'is-danger' : !props.formattedRow[props.column.field]}"
-                :disabled="props.formattedRow[props.column.field]"
-                class="input is-small"
-                maxlength="9"
-                minlength="5"
-                pattern="/[1-9]{2}[a-z]-[0-9]{5}/gim"
-                placeholder="Roll #"
-                required
-                v-model="finalResults[props.row.originalIndex]['rollNo']"
-                type="text"
-              >
-              <span
-                v-if="props.formattedRow[props.column.field]"
-                class="icon is-small is-left has-text-success"
-              >
-                <i class="fas fa-check"></i>
-              </span>
-              <span
-                v-else
-                class="icon is-small is-left has-text-danger"
-              >
-                <i class="fas fa-exclamation"></i>
-              </span>
-            </div>
-          </div>
-        </span>
-        <span v-else>{{props.formattedRow[props.column.field]}}</span>
+        </template>
+        <template
+          v-else-if="props.column.field == 'rollNo' && !props.formattedRow[props.column.field]"
+        >
+          <i
+            @click="openPreview(props.formattedRow)"
+            class="material-icons has-text-warning has-pointer"
+          >warning</i>
+        </template>
+        <template v-else>{{props.formattedRow[props.column.field]}}</template>
       </template>
     </vue-good-table>
     <!-- {{finalResults}} -->
@@ -139,6 +113,8 @@ export default {
           columns.push({
             label: this.toProperCase(item),
             field: item,
+            globalSearchDisabled: true,
+            sortable: false,
           })
         }
       })
@@ -184,20 +160,30 @@ export default {
 </script>
 
 <style lang="sass">
-.vgt-table,
 .vgt-table
   th, td
-    padding: 0.25em 1.25em
-    text-align: center
-    vertical-align: middle
+    padding: 0.5em!important
+    padding-right: 2em!important
+    text-align: center!important
+    vertical-align: middle!important
+    .left-align
+      text-align: center!important
+      vertical-align: middle!important
+    .material-icons
+      display: block
   th
     cursor: pointer
-  input
-    min-width: 90px
-    padding-left: 1.75em!important
 
-.vgt-wrap
-  button,
-  input[type=text]
-      height: auto!important
+.vgt-input
+  border-radius: 0!important
+  height: 2em!important
+
+.vgt-wrap__footer
+  border-top: none!important
+
+.vgt-global-search__input
+  padding-left: 42px!important
+  .input__icon
+    top: 7px
+    left: 2px!important
 </style>

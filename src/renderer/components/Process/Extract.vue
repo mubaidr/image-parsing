@@ -10,9 +10,7 @@
             name="resume"
           />
           <span class="file-cta">
-            <span class="file-icon">
-              <i class="fas fa-folder"/>
-            </span>
+            <i class="material-icons">folder_open</i>
             <span class="file-label">Choose directory</span>
           </span>
           <span class="file-name">{{ imageDirectory }}</span>
@@ -31,15 +29,13 @@
             name="resume"
           />
           <span class="file-cta">
-            <span class="file-icon">
-              <i class="fas fa-folder"/>
-            </span>
+            <i class="material-icons">insert_drive_file</i>
             <span class="file-label">Choose Key File</span>
           </span>
           <span class="file-name">{{ keyFile }}</span>
         </label>
       </div>
-      <p class="help">Choose the Key file (scanned or csv)</p>
+      <p class="help">Choose the Key file</p>
     </div>
 
     <br>
@@ -50,11 +46,8 @@
         @click="toggleProcess"
         class="button is-primary"
       >
-        <span class="icon">
-          <i class="fa fa-play"/>
-        </span>
-
-        <span>Start</span>
+        <i class="material-icons">play_arrow</i>
+        <span>Process</span>
       </button>
 
       <button
@@ -62,9 +55,7 @@
         @click="toggleProcess"
         class="button is-danger"
       >
-        <span class="icon">
-          <i class="fa fa-stop"/>
-        </span>
+        <i class="material-icons">stop</i>
         <span>Stop</span>
       </button>
     </div>
@@ -76,11 +67,10 @@
       >
         <div
           v-show="running"
-          class="notification is-dark"
+          class="notification is-info"
         >
-          <span class="icon">
-            <i class="fa fa-spinner"/>
-          </span> Processed
+          <i class="material-icons is-pulled-left rotating">fiber_smart_record</i>
+          Processed
           <strong>{{processedImages}}</strong> of
           <strong>{{totalImages}}</strong>. Remaining Time:
           <strong>{{remainingTime}}</strong>

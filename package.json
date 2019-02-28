@@ -76,6 +76,7 @@
     "fast-glob": "^2.2.6",
     "javascript-barcode-reader": "^0.4.11",
     "json2csv": "^4.3.5",
+    "material-design-icons": "^3.0.1",
     "physical-cpu-count": "^2.0.0",
     "sharp": "^0.21.3",
     "uuid": "^3.3.2",

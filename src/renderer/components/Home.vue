@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="hero is-light">
+    <section class="hero is-dark">
       <div class="hero-body">
         <br>
         <div class="block has-text-centered">
@@ -22,23 +22,19 @@
         <div class="columns">
           <div class="column is-3 is-offset-3">
             <RouterLink
-              class="button is-dark is-fullwidth"
+              class="button is-light is-fullwidth"
               to="generate"
             >
-              <span class="icon">
-                <i class="fa fa-file-alt"/>
-              </span>
+              <i class="material-icons">view_carousel</i>
               <span>Generate</span>
             </RouterLink>
           </div>
           <div class="column is-3">
             <RouterLink
-              class="button is-dark is-fullwidth"
+              class="button is-light is-fullwidth"
               to="process"
             >
-              <span class="icon">
-                <i class="fa fa-play"/>
-              </span>
+              <i class="material-icons">flash_on</i>
               <span>Process</span>
             </RouterLink>
           </div>
@@ -47,12 +43,9 @@
         <div class="columns">
           <div class="column is-2 is-offset-5">
             <RouterLink
-              class="button is-white is-small is-fullwidth"
+              class="button is-dark is-small is-fullwidth"
               to="train"
             >
-              <span class="icon">
-                <i class="fa fa-cogs"/>
-              </span>
               <span>Train</span>
             </RouterLink>
           </div>
