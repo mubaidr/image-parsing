@@ -14,14 +14,13 @@
         enabled: true,
         skipDiacritics: true,
         searchFn: searchFunction,
-        placeholder: 'Filter data by roll number'
+        placeholder: 'Filter table by roll number'
       }"
       :sort-options="{
         enabled: true,
         initialSortBy: {field: 'rollNo', type: 'asc'}
       }"
       @on-row-dblclick="onRowDoubleClick"
-      style-class="vgt-table"
     >
       <template
         slot="table-row"
@@ -35,23 +34,55 @@
             <i class="material-icons md-36">image</i>
           </a>
 
+          <!-- Modal -->
           <modal
             :adaptive="true"
             :name="props.formattedRow.id"
             :scrollable="true"
             @click="closePreview(props.formattedRow.id)"
             height="auto"
+            max-width="640px"
             pivot-y:number="0.25"
+            width="480px"
           >
-            <div class="has-text-right">
-              <button
-                @click="closePreview(props.formattedRow.id)"
-                class="button is-danger is-small"
-              >
-                <i class="material-icons">close</i>
-              </button>
+            <button
+              @click="closePreview(props.formattedRow.id)"
+              class="button is-danger is-small top-right-absolute"
+            >
+              <i class="material-icons">close</i>
+            </button>
+            <!-- Form -->
+            <div class="section">
+              <div class="field">
+                <br>
+                <div class="columns">
+                  <div class="column is-2">
+                    <button class="button is-info">Previous</button>
+                  </div>
+                  <div class="column">
+                    <div class="control">
+                  <input
+                    :id="props.formattedRow.id"
+                    :ref="props.formattedRow.id"
+                    class="input is-info"
+                    maxlength="9"
+                    minlength="5"
+                    pattern="/[1-9]{2}[a-z]-[0-9]{5}/gim"
+                    placeholder="Roll #"
+                    required
+                    v-model="finalResults[props.row.originalIndex]['rollNo']"
+                    type="text"
+                  >
+                </div>
+                  </div>
+                  <div class="column is-2">
+                    <button class="button is-info">Next</button>
+                  </div>
+                </div>
+              </div>
+              <!-- Preview -->
+              <img :src="imageSource">
             </div>
-            <img :src="imageSource">
           </modal>
         </template>
         <template
@@ -101,9 +132,7 @@ export default {
           label: 'Roll #',
           field: 'rollNo',
           sortable: true,
-          // filterOptions: {
-          //   enabled: true,
-          // },
+          thClass: 'wide-col',
         },
       ]
 
@@ -130,9 +159,16 @@ export default {
   methods: {
     openPreview(row) {
       convertImage(row.img).then(s => {
+        // set image source
         this.imageSource = s
 
+        // open modal
         this.$modal.show(row.id)
+
+        console.log(row.id, Object.keys(this.$refs))
+
+        // focus text box
+        this.$refs[row.id].focus()
       })
     },
 
@@ -160,23 +196,19 @@ export default {
 </script>
 
 <style lang="sass">
+.top-right-absolute
+  position: absolute
+  right: 0
+
 .vgt-table
   th, td
     padding: 0.5em!important
-    padding-right: 2em!important
     text-align: center!important
     vertical-align: middle!important
-    .left-align
-      text-align: center!important
-      vertical-align: middle!important
     .material-icons
       display: block
   th
     cursor: pointer
-
-.vgt-input
-  border-radius: 0!important
-  height: 2em!important
 
 .vgt-wrap__footer
   border-top: none!important
@@ -186,4 +218,19 @@ export default {
   .input__icon
     top: 7px
     left: 2px!important
+
+.wide-col
+  min-width: 95px
+
+.vgt-wrap__footer.vgt-clearfix
+  padding: 0.5em 1em
+  input, select
+    height: 2em!important
+
+.footer__navigation__page-info
+  input.footer__navigation__page-info__current-entry
+    height: 2em!important
+
+.vgt-input
+  border-radius: 0!important
 </style>

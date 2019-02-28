@@ -35,7 +35,7 @@
           <span class="file-name">{{ keyFile }}</span>
         </label>
       </div>
-      <p class="help">Choose the Key file</p>
+      <p class="help">Choose the key file</p>
     </div>
 
     <br>

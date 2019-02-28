@@ -10,19 +10,13 @@ const whiteListedModules = []
 
 const config = {
   mode: process.env.NODE_ENV,
-  devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
+  devtool: isDevMode ? 'cheap-eval-source-map' : false,
   entry: {
     main: path.join(__dirname, '../src/main/index.js'),
   },
   externals: externals.filter(d => !whiteListedModules.includes(d)),
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'eslint-loader',
-      },
       {
         test: /\.js$/,
         use: 'babel-loader',

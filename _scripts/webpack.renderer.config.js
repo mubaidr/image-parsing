@@ -20,7 +20,7 @@ const whiteListedModules = ['vue']
 
 const config = {
   mode: process.env.NODE_ENV,
-  devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
+  devtool: isDevMode ? 'cheap-eval-source-map' : false,
   entry: {
     renderer: path.join(__dirname, '../src/renderer/main.js'),
   },
@@ -39,27 +39,11 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.scss$/,
-        use: [
-          isDevMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader',
-        ],
-      },
-      {
         test: /\.sass$/,
         use: [
           isDevMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
           'sass-loader?indentedSyntax',
-        ],
-      },
-      {
-        test: /\.less$/,
-        use: [
-          isDevMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
-          'less-loader',
         ],
       },
       {
@@ -72,12 +56,6 @@ const config = {
       {
         test: /\.html$/,
         use: 'vue-html-loader',
-      },
-      {
-        enforce: 'pre',
-        test: /\.(js|vue)$/,
-        exclude: /node_modules/,
-        loader: 'eslint-loader',
       },
       {
         test: /\.js$/,
@@ -103,21 +81,13 @@ const config = {
         },
       },
       {
-        test: /\.(png|jpe?g|gif|tiff|bmp|webp|svg)(\?.*)?$/,
+        test: /\.(png|jpe?g|gif|tif?f|bmp|webp|svg)(\?.*)?$/,
         use: {
           loader: 'url-loader',
           query: {
             limit: 10000,
             name: 'imgs/[name]--[folder].[ext]',
           },
-        },
-      },
-      {
-        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-        loader: 'url-loader',
-        options: {
-          limit: 10000,
-          name: 'media/[name]--[folder].[ext]',
         },
       },
       {
