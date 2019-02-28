@@ -41,44 +41,40 @@
             :scrollable="true"
             @click="closePreview(props.formattedRow.id)"
             height="auto"
-            max-width="640px"
+            max-width:number="640"
             pivot-y:number="0.25"
-            width="480px"
+            width:number="480"
           >
-            <button
-              @click="closePreview(props.formattedRow.id)"
-              class="button is-danger is-small top-right-absolute"
-            >
-              <i class="material-icons">close</i>
-            </button>
+            <div slot="top-right">
+              <button
+                @click="closePreview(props.formattedRow.id)"
+                class="button is-danger is-small"
+              >
+                <i class="material-icons">close</i>
+              </button>
+            </div>
+
             <!-- Form -->
             <div class="section">
-              <div class="field">
-                <br>
-                <div class="columns">
-                  <div class="column is-2">
-                    <button class="button is-info">Previous</button>
-                  </div>
-                  <div class="column">
-                    <div class="control">
-                  <input
-                    :id="props.formattedRow.id"
-                    :ref="props.formattedRow.id"
-                    class="input is-info"
-                    maxlength="9"
-                    minlength="5"
-                    pattern="/[1-9]{2}[a-z]-[0-9]{5}/gim"
-                    placeholder="Roll #"
-                    required
-                    v-model="finalResults[props.row.originalIndex]['rollNo']"
-                    type="text"
-                  >
-                </div>
-                  </div>
-                  <div class="column is-2">
-                    <button class="button is-info">Next</button>
-                  </div>
-                </div>
+              <div class="field has-addons">
+                <button class="button is-info">
+                  <i class="material-icons">skip_previous</i>Previous
+                </button>
+                <input
+                  :id="props.formattedRow.id"
+                  :ref="props.formattedRow.id"
+                  class="input is-info"
+                  maxlength="9"
+                  minlength="5"
+                  pattern="/[1-9]{2}[a-z]-[0-9]{5}/gim"
+                  placeholder="Roll #"
+                  required
+                  v-model="finalResults[props.row.originalIndex]['rollNo']"
+                  type="text"
+                >
+                <button class="button is-info">
+                  <i class="material-icons">skip_next</i>Next
+                </button>
               </div>
               <!-- Preview -->
               <img :src="imageSource">
@@ -233,4 +229,8 @@ export default {
 
 .vgt-input
   border-radius: 0!important
+
+.v--modal-overlay
+  background: rgba(0,0,0,0.80)
+
 </style>
