@@ -20,6 +20,7 @@
         enabled: true,
         initialSortBy: {field: 'rollNo', type: 'asc'}
       }"
+      style-class="vgt-table condensed"
     >
       <template
         slot="table-row"
@@ -28,9 +29,9 @@
         <span v-if="props.column.field == 'img'">
           <button
             @click="openPreview(props.formattedRow)"
-            class="button is-light"
+            class="button is-small is-light"
           >
-            <span class="icon">
+            <span class="icon is-small">
               <i class="fa fa-image"/>
             </span>
           </button>
@@ -47,7 +48,7 @@
                 @click="closePreview(props.formattedRow.id)"
                 class="button is-danger is-small"
               >
-                <span class="icon">
+                <span class="is-small icon">
                   <i class="fa fa-times"/>
                 </span>
               </button>
@@ -55,9 +56,29 @@
             <img :src="imageSource">
           </modal>
         </span>
+        <span v-else-if="props.column.field == 'rollNo' && !props.formattedRow[props.column.field]">
+          <div class="field">
+            <div class="control has-icons-left">
+              <input
+                class="input is-small"
+                maxlength="9"
+                minlength="5"
+                pattern="/[1-9]{2}[a-z]-[0-9]{5}/gim"
+                placeholder="Roll #"
+                required
+                v-model="finalResults[0]['rollNo']"
+                type="text"
+              >
+              <span class="icon is-small is-left has-text-danger">
+                <i class="fas fa-exclamation"></i>
+              </span>
+            </div>
+          </div>
+        </span>
         <span v-else>{{props.formattedRow[props.column.field]}}</span>
       </template>
     </vue-good-table>
+    <!-- {{finalResults}} -->
     <!-- {{columns}} -->
   </div>
 </template>
@@ -143,14 +164,17 @@ export default {
 </script>
 
 <style lang="sass">
-.vgt-table.bordered,
-.vgt-table.bordered
+.vgt-table,
+.vgt-table
   th, td
     padding: 0.25em 1.25em
     text-align: center
     vertical-align: middle
   th
     cursor: pointer
+  input
+    min-width: 90px
+    padding-left: 1.75em!important
 
 .vgt-wrap
   button,
