@@ -1,9 +1,12 @@
 <template>
   <div class="modal is-active">
-    <div class="modal-background" @click="closeModal"></div>
+    <div
+      @click="closeModal"
+      class="modal-background"
+    ></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Modal title</p>
+        <p class="modal-card-title">Answer Sheet</p>
         <button
           @click="closeModal"
           aria-label="close"
@@ -17,14 +20,7 @@
           v-show="imageSource"
         >
       </section>
-      <footer class="modal-card-foot">
-        <button class="button is-info">
-          <i class="material-icons">skip_previous</i>
-        </button>
-        <button class="button is-info">
-          <i class="material-icons">skip_next</i>
-        </button>
-      </footer>
+      <footer class="modal-card-foot"></footer>
     </div>
   </div>
 </template>
