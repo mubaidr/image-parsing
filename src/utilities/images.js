@@ -76,10 +76,10 @@ async function getRollNoFromImage(designData, img) {
       { data, width, height },
       { barcode: 'code-39' }
     )
-    obj.hsValidRollNo = true
+    obj.hasValidRollNo = true
   } catch (err) {
     obj.rollNo = null
-    obj.hsValidRollNo = false
+    obj.hasValidRollNo = false
   }
 
   return obj

@@ -29,7 +29,7 @@
             name="resume"
           />
           <span class="file-cta">
-            <i class="material-icons">insert_drive_file</i>
+            <i class="material-icons">attach_file</i>
             <span class="file-label">Choose Key File</span>
           </span>
           <span class="file-name">{{ keyFile }}</span>

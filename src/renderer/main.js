@@ -8,13 +8,13 @@ import 'material-design-icons/iconfont/material-icons.css'
 import './assets/style/main.sass'
 import './assets/style/animations.sass'
 
-import VModal from 'vue-js-modal'
+// import VModal from 'vue-js-modal'
 import VueGoodTablePlugin from 'vue-good-table'
 
 import App from './App.vue'
 import router from './router'
 
-Vue.use(VModal)
+// Vue.use(VModal)
 Vue.use(VueGoodTablePlugin)
 
 // eslint-disable-next-line
