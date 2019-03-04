@@ -10,7 +10,7 @@
         <button
           @click="closeModal"
           aria-label="close"
-          class="delete is-large"
+          class="delete"
         ></button>
       </header>
       <section class="modal-card-body">
@@ -20,7 +20,34 @@
           v-show="imageSource"
         >
       </section>
-      <footer class="modal-card-foot"></footer>
+      <footer class="modal-card-foot">
+        <div class="columns">
+          <div class="column is-3">
+            <a class="button is-pulled-left is-info">
+              <i class="material-icons">skip_previous</i>
+            </a>
+          </div>
+          <div class="column">
+            <div class="field">
+              <p class="control">
+                <input
+                  :class="row.rollNo ? 'is-success': 'is-danger'"
+                  :disabled="row.rollNo"
+                  class="input"
+                  placeholder="Roll No"
+                  v-model="row.rollNo"
+                  type="text"
+                >
+              </p>
+            </div>
+          </div>
+          <div class="column is-3">
+            <a class="button is-pulled-right is-info">
+              <i class="material-icons">skip_next</i>
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   </div>
 </template>
@@ -32,7 +59,7 @@ export default {
   name: 'ModalPreview',
 
   props: {
-    row: {
+    selectedRow: {
       type: Object,
       default() {
         return null
@@ -42,11 +69,14 @@ export default {
 
   data() {
     return {
+      row: null,
       imageSource: null,
     }
   },
 
   mounted() {
+    this.row = this.selectedRow
+
     convertImage(this.row.img).then(src => {
       this.imageSource = src
     })
@@ -61,5 +91,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="sass">
+.modal-card-foot
+  .columns
+    width: calc(100% + 1.5rem)
 </style>

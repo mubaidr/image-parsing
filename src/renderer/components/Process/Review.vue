@@ -41,7 +41,7 @@
       name="slide-up"
     >
       <modal-preview
-        :row="selectedRow"
+        :selected-row="selectedRow"
         @close-modal="unSelectRow"
         v-if="selectedRow"
       />
@@ -70,19 +70,20 @@ export default {
 
   data() {
     return {
-      // finalResults: [],
       selectedRow: null,
     }
   },
 
   computed: {
+    // TODO implement sorting and filtering
     columns() {
       return Object.keys(this.results[0]).map(col => col)
     },
   },
 
   created() {
-    // this.$set(this, 'finalResults', this.results)
+    window.removeEventListener('keydown', null)
+    window.addEventListener('keydown', this.handleKeyDown)
   },
 
   methods: {
@@ -92,6 +93,39 @@ export default {
 
     unSelectRow() {
       this.selectedRow = null
+    },
+
+    selectNextRow() {
+      // TODO: implement next row method
+      console.log('next row')
+    },
+
+    selectPreviousRow() {
+      // TODO: implement next row method
+      console.log('previous row')
+    },
+
+    handleKeyDown(e) {
+      switch (e.key) {
+        case 'Escape':
+          this.unSelectRow()
+          break
+        case 'Tab':
+          if (e.shiftKey) this.selectPreviousRow()
+          else this.selectNextRow()
+          break
+        case ' ':
+        case 'ArrowRight':
+        case 'ArrowDown':
+          this.selectNextRow()
+          break
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          this.selectPreviousRow()
+          break
+        default:
+          break
+      }
     },
   },
 }

@@ -25,7 +25,7 @@ async function prepareDir() {
   })
 }
 
-// prepareDir()
+prepareDir()
 
 module.exports = {
   tmp: path.resolve('.tmp'),
