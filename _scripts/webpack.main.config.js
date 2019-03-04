@@ -10,7 +10,7 @@ const whiteListedModules = []
 
 const config = {
   mode: process.env.NODE_ENV,
-  devtool: isDevMode ? 'cheap-eval-source-map' : false,
+  devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
     main: path.join(__dirname, '../src/main/index.js'),
   },
@@ -42,9 +42,7 @@ const config = {
     libraryTarget: 'commonjs2',
     path: path.join(__dirname, '../dist'),
   },
-  resolve: {
-    extensions: ['.js', '.json', '.node'],
-  },
+  resolve: {},
   target: 'electron-main',
 }
 

@@ -20,7 +20,7 @@ const whiteListedModules = ['vue']
 
 const config = {
   mode: process.env.NODE_ENV,
-  devtool: isDevMode ? 'cheap-eval-source-map' : false,
+  devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
     renderer: path.join(__dirname, '../src/renderer/main.js'),
   },
@@ -31,11 +31,6 @@ const config = {
     filename: '[name].js',
   },
   externals: externals.filter(d => !whiteListedModules.includes(d)),
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-    },
-  },
   module: {
     rules: [
       {
@@ -49,7 +44,7 @@ const config = {
       {
         test: /\.css$/,
         use: [
-          isDevMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
+          isDevMode ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
         ],
       },
@@ -122,14 +117,8 @@ const config = {
   resolve: {
     alias: {
       '@': path.join(__dirname, '../src/'),
-      '@renderer': path.join(__dirname, '../src/renderer'),
-      '@components': path.join(__dirname, '../src/renderer/components'),
-      '@assets': path.join(__dirname, '../src/renderer/assets'),
-      '@utilities': path.join(__dirname, '../src/utilities'),
-      '@data': path.join(__dirname, '../src/data'),
       vue$: 'vue/dist/vue.common.js',
     },
-    extensions: ['.js', '.vue', '.json', '.css', 'sass', 'scss', '.node'],
   },
   target: 'electron-renderer',
 }
@@ -162,6 +151,12 @@ if (isDevMode) {
     //   },
     // ])
   )
+
+  config.optimization = {
+    splitChunks: {
+      chunks: 'all',
+    },
+  }
 }
 
 module.exports = config

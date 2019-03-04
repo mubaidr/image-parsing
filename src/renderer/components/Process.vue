@@ -1,8 +1,7 @@
 <template>
   <div class="section">
-    <h1 class="title is-5">Process</h1>
-    <h2 class="subtitle is-6">Process scanned images to generate result.</h2>
-
+    <!-- <h1 class="title is-5">Process</h1>
+    <h2 class="subtitle is-6">Process scanned images to generate result.</h2>-->
     <Transition
       mode="out-in"
       name="slide-left"
