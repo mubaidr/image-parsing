@@ -17,38 +17,27 @@
             Generate answeer sheets and extract results from the scanned answer
             sheets.
           </p>
-        </div>
-        <br>
-        <div class="columns">
-          <div class="column is-3 is-offset-3">
-            <RouterLink
-              class="button is-dark is-fullwidth"
-              to="generate"
-            >
-              <i class="material-icons">view_carousel</i>
-              <span>Generate</span>
-            </RouterLink>
-          </div>
-          <div class="column is-3">
-            <RouterLink
-              class="button is-dark is-fullwidth"
-              to="process"
-            >
-              <i class="material-icons">flash_on</i>
-              <span>Process</span>
-            </RouterLink>
-          </div>
-        </div>
-
-        <div class="columns">
-          <div class="column is-2 is-offset-5">
-            <RouterLink
-              class="button is-white is-small is-fullwidth"
-              to="train"
-            >
-              <span>Train</span>
-            </RouterLink>
-          </div>
+          <RouterLink
+            class="button is-dark"
+            to="generate"
+          >
+            <i class="material-icons">view_carousel</i>
+            <span>Generate</span>
+          </RouterLink>
+          <RouterLink
+            class="button is-dark"
+            to="process"
+          >
+            <i class="material-icons">flash_on</i>
+            <span>Process</span>
+          </RouterLink>
+          <br>
+          <RouterLink
+            class="button is-white is-small is-fullwidth"
+            to="train"
+          >
+            <span>Train</span>
+          </RouterLink>
         </div>
       </div>
     </section>

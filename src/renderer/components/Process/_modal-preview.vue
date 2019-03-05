@@ -4,24 +4,14 @@
       @click="closeModal"
       class="modal-background"
     ></div>
+    <button
+      @click="closeModal"
+      aria-label="close"
+      class="delete is-large is-top-right"
+    ></button>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Answer Sheet</p>
-        <button
-          @click="closeModal"
-          aria-label="close"
-          class="delete"
-        ></button>
-      </header>
-      <section class="modal-card-body">
-        <!-- Preview -->
-        <img
-          :src="imageSource"
-          v-show="imageSource"
-        >
-      </section>
-      <footer class="modal-card-foot">
-        <div class="columns">
+        <div class="columns is-mobile">
           <div class="column is-3">
             <a
               @click="previous"
@@ -34,7 +24,7 @@
             <div class="field">
               <p class="control">
                 <input
-                  :class="{'is-warning' : !row.hasValidRollNo}"
+                  :class="{'is-danger' : !row.hasValidRollNo}"
                   :readonly="row.hasValidRollNo"
                   class="input has-text-centered is-uppercase has-text-weight-bold is-family-code"
                   ref="txt_roll_no"
@@ -54,7 +44,15 @@
             </a>
           </div>
         </div>
-      </footer>
+      </header>
+
+      <section class="modal-card-body">
+        <!-- Preview -->
+        <img
+          :src="imageSource"
+          v-show="imageSource"
+        >
+      </section>
     </div>
   </div>
 </template>
@@ -125,7 +123,13 @@ export default {
 </script>
 
 <style lang="sass">
-.modal-card-foot
+.modal-card-head
   .columns
     width: calc(100% + 1.5rem)
+
+.delete.is-top-right
+  position: absolute
+  top: 0
+  right: 0
+  z-index: 99999
 </style>
