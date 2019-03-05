@@ -23,7 +23,10 @@
       <footer class="modal-card-foot">
         <div class="columns">
           <div class="column is-3">
-            <a class="button is-pulled-left is-info">
+            <a
+              @click="previous"
+              class="button is-pulled-left is-info"
+            >
               <i class="material-icons">skip_previous</i>
             </a>
           </div>
@@ -31,9 +34,10 @@
             <div class="field">
               <p class="control">
                 <input
-                  :class="row.rollNo ? 'is-success': 'is-danger'"
-                  :disabled="row.rollNo"
-                  class="input"
+                  :class="{'is-warning' : !row.hasValidRollNo}"
+                  :readonly="row.hasValidRollNo"
+                  class="input has-text-centered is-uppercase has-text-weight-bold is-family-code"
+                  ref="txt_roll_no"
                   placeholder="Roll No"
                   v-model="row.rollNo"
                   type="text"
@@ -42,7 +46,10 @@
             </div>
           </div>
           <div class="column is-3">
-            <a class="button is-pulled-right is-info">
+            <a
+              @click="next"
+              class="button is-pulled-right is-info"
+            >
               <i class="material-icons">skip_next</i>
             </a>
           </div>
@@ -74,7 +81,19 @@ export default {
     }
   },
 
-  mounted() {
+  watch: {
+    selectedRow(val) {
+      this.row = val
+
+      convertImage(this.row.img).then(src => {
+        this.imageSource = src
+      })
+
+      this.$refs.txt_roll_no.focus()
+    },
+  },
+
+  created() {
     this.row = this.selectedRow
 
     convertImage(this.row.img).then(src => {
@@ -82,10 +101,24 @@ export default {
     })
   },
 
+  mounted() {
+    this.$refs.txt_roll_no.focus()
+  },
+
   methods: {
     closeModal() {
       this.$emit('close-modal')
+
       this.imageSource = null
+      this.row = null
+    },
+
+    next() {
+      this.$emit('next')
+    },
+
+    previous() {
+      this.$emit('previous')
     },
   },
 }

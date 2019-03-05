@@ -3,19 +3,11 @@
     <!-- Toolbar -->
     <div class="field has-addons spaced">
       <p class="control">
-        <input
-          class="input is-small"
-          placeholder="Filter By Roll No"
-          v-model="filterQuery"
-          type="text"
-        >
-      </p>
-      <p class="control">
         <button
           @click="toggleSortOrder"
           class="button is-light is-small"
         >
-          Sort By Roll No &nbsp;
+          Sort &nbsp;
           <i
             v-if="sortOrder === 'asc'"
             class="material-icons has-pointer"
@@ -25,6 +17,14 @@
             class="material-icons has-pointer"
           >arrow_drop_down</i>
         </button>
+      </p>
+      <p class="control">
+        <input
+          class="input is-small"
+          placeholder="Filter"
+          v-model="filterQuery"
+          type="text"
+        >
       </p>
     </div>
 
@@ -41,8 +41,8 @@
       <tbody>
         <tr
           :key="result.id"
-          v-for="result in filteredResults"
-          v-on:dblclick="selectRow(result)"
+          v-for="(result, index) in filteredResults"
+          v-on:dblclick="selectRow(index)"
         >
           <template v-for="([column, value]) in Object.entries(result)">
             <td
@@ -51,9 +51,10 @@
             >
               <template v-if="column === 'rollNo' && !result.hasValidRollNo">
                 <i
-                  @click="selectRow(result)"
+                  @click="selectRow(index)"
                   class="material-icons has-text-warning has-pointer"
-                >warning</i>
+                >error_outline</i>
+                {{result.rollNo}}
               </template>
               <template v-else>{{value}}</template>
             </td>
@@ -71,9 +72,12 @@
       <modal-preview
         :selected-row="selectedRow"
         @close-modal="unSelectRow"
+        @next="selectNextRow"
+        @previous="selectPreviousRow"
         v-if="selectedRow"
       />
     </Transition>
+    {{results}}
   </div>
 </template>
 
@@ -98,13 +102,20 @@ export default {
 
   data() {
     return {
-      selectedRow: null,
+      selectedIndex: null,
       sortOrder: 'asc',
       filterQuery: '',
     }
   },
 
   computed: {
+    selectedRow() {
+      if (this.selectedIndex !== null && this.filteredResults.length > 0)
+        return this.filteredResults[this.selectedIndex]
+
+      return null
+    },
+
     filteredResults() {
       return this.results
         .filter(r => {
@@ -130,22 +141,32 @@ export default {
   },
 
   methods: {
-    selectRow(row) {
-      this.selectedRow = row
+    selectRow(index) {
+      this.selectedIndex = index
     },
 
     unSelectRow() {
-      this.selectedRow = null
+      this.selectedIndex = null
     },
 
     selectNextRow() {
-      // TODO: implement next row method
-      console.log('next row')
+      const nextIndex = this.selectedIndex + 1
+
+      if (nextIndex < this.filteredResults.length) {
+        this.selectedIndex = nextIndex
+      } else {
+        this.unSelectRow()
+      }
     },
 
     selectPreviousRow() {
-      // TODO: implement next row method
-      console.log('previous row')
+      const nextIndex = this.selectedIndex - 1
+
+      if (nextIndex > -1) {
+        this.selectedIndex = nextIndex
+      } else {
+        this.unSelectRow()
+      }
     },
 
     toggleSortOrder() {
@@ -154,22 +175,21 @@ export default {
     },
 
     handleKeyDown(e) {
+      if (this.selectedIndex === null) return
+
+      if (e.shiftKey) {
+        if (e.key === 'Tab') this.selectPreviousRow()
+
+        return
+      }
+
       switch (e.key) {
         case 'Escape':
           this.unSelectRow()
           break
         case 'Tab':
-          if (e.shiftKey) this.selectPreviousRow()
-          else this.selectNextRow()
-          break
-        case ' ':
-        case 'ArrowRight':
-        case 'ArrowDown':
+        case 'Enter':
           this.selectNextRow()
-          break
-        case 'ArrowLeft':
-        case 'ArrowUp':
-          this.selectPreviousRow()
           break
         default:
           break
@@ -185,6 +205,8 @@ export default {
     margin-right: 1em
 
 table.has-text-centered
+  thead
+    background-color: rgba(0,0,0,0.05)
   th.sortable
     cursor: pointer
     padding: 0.25em 1.5em
