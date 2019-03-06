@@ -95,12 +95,12 @@
     </div>
 
     <!-- Preview component -->
-    <!-- TODO add update data handle -->
     <Transition
       mode="out-in"
       name="slide-up"
     >
       <modal-preview
+        :image-source="imageSource"
         :selected-row="selectedRow"
         @close-modal="unSelectRow"
         @next="selectNextRow"
@@ -114,6 +114,8 @@
 
 <script>
 import modalPreview from './_modal-preview.vue'
+
+const { convertImage } = require('../../../utilities/images.js')
 
 export default {
   name: 'ReviewResult',
@@ -134,6 +136,7 @@ export default {
   data() {
     return {
       selectedIndex: null,
+      imageSource: null,
       sortOrder: 'asc',
       filterQuery: '',
     }
@@ -163,6 +166,18 @@ export default {
 
     columns() {
       return Object.keys(this.results[0]).map(col => col)
+    },
+  },
+
+  watch: {
+    async selectedRow(row) {
+      if (row) {
+        await convertImage(row.img).then(src => {
+          this.imageSource = src
+        })
+      } else {
+        this.imageSource = ''
+      }
     },
   },
 
@@ -252,6 +267,7 @@ export default {
   overflow-x: scroll
 
 table.has-text-centered
+  font-size: small
   thead
     background-color: #f0f0f0
   th, td

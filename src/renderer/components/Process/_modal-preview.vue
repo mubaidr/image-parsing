@@ -58,8 +58,6 @@
 </template>
 
 <script>
-const { convertImage } = require('../../../utilities/images.js')
-
 export default {
   name: 'ModalPreview',
 
@@ -70,12 +68,18 @@ export default {
         return null
       },
     },
+
+    imageSource: {
+      type: String,
+      default() {
+        return ''
+      },
+    },
   },
 
   data() {
     return {
       row: null,
-      imageSource: null,
     }
   },
 
@@ -83,20 +87,12 @@ export default {
     selectedRow(val) {
       this.row = val
 
-      convertImage(this.row.img).then(src => {
-        this.imageSource = src
-      })
-
       this.$refs.txt_roll_no.focus()
     },
   },
 
   created() {
     this.row = this.selectedRow
-
-    convertImage(this.row.img).then(src => {
-      this.imageSource = src
-    })
   },
 
   mounted() {
@@ -106,8 +102,6 @@ export default {
   methods: {
     closeModal() {
       this.$emit('close-modal')
-
-      this.imageSource = null
       this.row = null
     },
 
