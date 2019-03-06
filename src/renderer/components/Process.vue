@@ -35,10 +35,9 @@ export default {
   data() {
     return {
       extractedResult: null,
+      extractedKey: null,
     }
   },
-
-  watch: {},
 
   mounted() {
     // stop old workers
@@ -46,8 +45,9 @@ export default {
   },
 
   methods: {
-    getExtractedResult(r) {
-      this.$set(this, 'extractedResult', r)
+    getExtractedResult(m) {
+      this.$set(this, 'extractedKey', m.key)
+      this.$set(this, 'extractedResult', m.results)
     },
   },
 }

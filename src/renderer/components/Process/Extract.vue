@@ -5,7 +5,7 @@
         <label class="file-label">
           <button
             :disabled="running"
-            @click="chooseDirectoryImages"
+            @click="chooseImageDirectory"
             class="file-input"
             name="resume"
           />
@@ -24,7 +24,7 @@
         <label class="file-label">
           <button
             :disabled="running"
-            @click="chooseKeyFile"
+            @click="choosekeyFilePath"
             class="file-input"
             name="resume"
           />
@@ -32,7 +32,7 @@
             <i class="material-icons">attach_file</i>
             <span class="file-label">Choose Key File</span>
           </span>
-          <span class="file-name">{{ keyFile }}</span>
+          <span class="file-name">{{ keyFilePath }}</span>
         </label>
       </div>
       <p class="help">Choose the key file</p>
@@ -46,7 +46,7 @@
         @click="toggleProcess"
         class="button is-primary"
       >
-        <i class="material-icons">play_arrow</i>
+        <i class="material-icons">flash_on</i>
         <span>Process</span>
       </button>
 
@@ -95,7 +95,7 @@ export default {
   data() {
     return {
       imageDirectory: dataPaths.DEFAULTS.images,
-      keyFile: dataPaths.DEFAULTS.key,
+      keyFilePath: dataPaths.DEFAULTS.key,
       running: false,
       processedImages: 0,
       totalImages: 0,
@@ -108,7 +108,7 @@ export default {
 
   computed: {
     inputIsValid() {
-      return this.imageDirectory && this.keyFile
+      return this.imageDirectory && this.keyFilePath
     },
 
     remainingTime() {
@@ -118,24 +118,18 @@ export default {
     },
   },
 
-  watch: {
-    running(val) {
-      if (val) return
-
-      this.processedImages = 0
-      this.totalImages = 0
-      this.totalWorkers = 0
-      this.perImageTime = 0
-    },
-  },
-
   methods: {
     toggleProcess() {
       if (this.running) {
         processingModule.stop()
+
+        this.processedImages = 0
+        this.totalImages = 0
+        this.totalWorkers = 0
+        this.perImageTime = 0
       } else {
         processingModule
-          .start(this.listner, this.imageDirectory, this.keyFile)
+          .start(this.listner, this.imageDirectory, this.keyFilePath)
           .then(({ totalImages, totalWorkers }) => {
             this.totalImages = totalImages
             this.totalWorkers = totalWorkers
@@ -155,7 +149,7 @@ export default {
       } else if (m.results) {
         this.running = false
 
-        this.$emit('results', m.results)
+        this.$emit('results', m) // m contains both key and results
       } else if (m.log) {
         console.log('log: ', m.log)
       } else if (m.error) {
@@ -163,7 +157,7 @@ export default {
       }
     },
 
-    chooseDirectoryImages() {
+    chooseImageDirectory() {
       const dir = dialog.showOpenDialog(getCurrentWindow(), {
         title: 'Choose directory containing scanned answer sheets',
         defaultPath: this.imageDirectory,
@@ -173,10 +167,10 @@ export default {
       this.imageDirectory = dir ? dir[0] : null
     },
 
-    chooseKeyFile() {
+    choosekeyFilePath() {
       const dir = dialog.showOpenDialog(getCurrentWindow(), {
         title: 'Choose result-key file',
-        defaultPath: this.keyFile,
+        defaultPath: this.keyFilePath,
         properties: ['openFile'],
         filters: [
           {
@@ -186,7 +180,7 @@ export default {
         ],
       })
 
-      this.keyFile = dir ? dir[0] : null
+      this.keyFilePath = dir ? dir[0] : null
     },
 
     toHHMMSS(s) {

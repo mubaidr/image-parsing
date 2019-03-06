@@ -10,7 +10,8 @@
               @click="toggleSortOrder"
               class="button is-info is-small"
             >
-              Sort &nbsp;
+              <i class="material-icons">sort</i>
+              <span>&nbsp; Sort &nbsp;</span>
               <i
                 v-if="sortOrder === 'asc'"
                 class="material-icons has-pointer"
@@ -40,19 +41,33 @@
           <a
             @click="analyzeResult"
             class="button is-info is-small"
-          >Analyze</a>
+          >
+            <i class="material-icons">assessment</i> &nbsp; Analyze
+          </a>
         </p>
         <p class="level-item">
           <a
             @click="exportResult"
             class="button is-info is-small"
-          >Export</a>
+          >
+            <i class="material-icons">cloud_upload</i> &nbsp; Import
+          </a>
+        </p>
+        <p class="level-item">
+          <a
+            @click="exportResult"
+            class="button is-info is-small"
+          >
+            <i class="material-icons">cloud_download</i> &nbsp; Export
+          </a>
         </p>
         <p class="level-item">
           <a
             @click="compileResult"
             class="button is-success is-small"
-          >Compile Results</a>
+          >
+            <i class="material-icons">save</i> &nbsp; Compile
+          </a>
         </p>
       </div>
     </nav>
@@ -62,10 +77,11 @@
       <table class="table is-hoverable is-narrow has-text-centered">
         <thead>
           <tr>
+            <th>#</th>
             <th
-              :key="column"
+              :key="column.label"
               v-for="column in columns"
-            >{{column}}</th>
+            >{{column.title}}</th>
           </tr>
         </thead>
         <tbody>
@@ -74,26 +90,19 @@
             v-for="(result, index) in filteredResults"
             v-on:dblclick="selectRow(index)"
           >
+            <td>{{index + 1}}</td>
             <template v-for="([column, value]) in Object.entries(result)">
               <td
-                :key="result.id + '-' +column"
-                v-if="columns.includes(column)"
-              >
-                <template v-if="column === 'rollNo' && !result.hasValidRollNo">
-                  <i
-                    @click="selectRow(index)"
-                    class="material-icons has-text-warning has-pointer"
-                  >error_outline</i>
-                  {{result.rollNo}}
-                </template>
-                <template v-else>{{value}}</template>
-              </td>
+                :class="{'has-background-danger': !result.hasValidRollNo && column ==='rollNo'}"
+                :key="result.id + '-' + column"
+                v-if="columns[column]"
+              >{{value}}</td>
             </template>
           </tr>
         </tbody>
       </table>
     </div>
-
+    <!-- TODO: add pagination -->
     <!-- Preview component -->
     <Transition
       mode="out-in"
@@ -109,6 +118,7 @@
       />
     </Transition>
     <!-- {{results}} -->
+    <!-- {{columns}} -->
   </div>
 </template>
 
@@ -165,7 +175,23 @@ export default {
     },
 
     columns() {
-      return Object.keys(this.results[0]).map(col => col)
+      // rename and hide columns
+      const columns = {}
+      const hiddenColumns = ['id', 'img', 'hasValidRollNo']
+      const renameColumns = {
+        rollNo: 'Roll #',
+      }
+
+      Object.keys(this.results[0])
+        .filter(col => hiddenColumns.indexOf(col) === -1)
+        .forEach(col => {
+          columns[col] = {
+            title: renameColumns[col] || col,
+            label: col,
+          }
+        })
+
+      return columns
     },
   },
 
@@ -267,11 +293,15 @@ export default {
   overflow-x: scroll
 
 table.has-text-centered
-  font-size: small
+  .has-background-danger
+    color: #fff
   thead
     background-color: #f0f0f0
   th, td
-    text-align: center
+    text-align: left
     font-weight: normal
-    // vertical-align: middle
+    vertical-align: middle
+
+.wide-column
+  min-width: 200px
 </style>

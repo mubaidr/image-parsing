@@ -1,16 +1,21 @@
-const { JSONToCSV } = require('./csv')
+const { JSONToCSV, CSVToJSON } = require('./csv')
 
 // eslint-disable-next-line
 const { dialog, getCurrentWindow } = require('electron').remote
+
+async function readKeyFile(src) {
+  const ext = src.split('.').pop()
+
+  console.log(ext, CSVToJSON)
+}
 
 /**
  * Exports result data
  *
  * @param {Object} resultData Result data JSON format
- * @param {String} name Name of the output file
  * @param {Boolean} isCSV if the provided data is CSV
  */
-async function exportResult(resultData, name, isCSV) {
+async function exportResult(resultData, isCSV) {
   const csv = isCSV ? resultData : await JSONToCSV(resultData)
 
   dialog.showSaveDialog(getCurrentWindow(), {}, filename => {
@@ -74,10 +79,11 @@ async function compileResult(keys, results, correctMarks, negativeMarks) {
   })
 
   // export
-  exportResult(await JSONToCSV(output), 'ResultMarks', true)
+  exportResult(await JSONToCSV(output), true)
 }
 
 module.exports = {
+  readKeyFile,
   exportResult,
   compileResult,
 }
