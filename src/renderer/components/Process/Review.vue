@@ -13,12 +13,12 @@
               <i class="material-icons">sort</i>
               <span>&nbsp; Sort &nbsp;</span>
               <i
-                v-if="sortOrder === 'asc'"
                 class="material-icons has-pointer"
+                v-if="sortOrder === 'asc'"
               >arrow_drop_up</i>
               <i
-                v-else
                 class="material-icons has-pointer"
+                v-else
               >arrow_drop_down</i>
             </button>
           </p>
@@ -28,8 +28,8 @@
             <input
               class="input is-info is-small"
               placeholder="Filter"
-              v-model="filterQuery"
               type="text"
+              v-model="filterQuery"
             >
           </p>
         </div>
@@ -39,18 +39,18 @@
       <div class="level-right">
         <p class="level-item">
           <a
-            @click="analyzeResult"
+            @click="importResult"
             class="button is-info is-small"
           >
-            <i class="material-icons">assessment</i> &nbsp; Analyze
+            <i class="material-icons">cloud_upload</i> &nbsp; Import
           </a>
         </p>
         <p class="level-item">
           <a
-            @click="exportResult"
+            @click="analyzeResult"
             class="button is-info is-small"
           >
-            <i class="material-icons">cloud_upload</i> &nbsp; Import
+            <i class="material-icons">assessment</i> &nbsp; Analyze
           </a>
         </p>
         <p class="level-item">
@@ -71,36 +71,51 @@
         </p>
       </div>
     </nav>
-
+    <!-- {{filteredResults}} -->
     <!-- Data list -->
     <div class="scroll-container">
-      <table class="table is-hoverable is-narrow has-text-centered">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th
-              :key="column.label"
-              v-for="column in columns"
-            >{{column.title}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            :key="result.id"
-            v-for="(result, index) in filteredResults"
-            v-on:dblclick="selectRow(index)"
-          >
-            <td>{{index + 1}}</td>
-            <template v-for="([column, value]) in Object.entries(result)">
-              <td
-                :class="{'has-background-danger': !result.hasValidRollNo && column ==='rollNo'}"
-                :key="result.id + '-' + column"
-                v-if="columns[column]"
-              >{{value}}</td>
-            </template>
-          </tr>
-        </tbody>
-      </table>
+      <Transition
+        mode="out-in"
+        name="slide-up"
+      >
+        <template v-if="filteredResults.length !== 0">
+          <table class="table is-hoverable is-narrow has-text-centered">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th
+                  :key="column.label"
+                  v-for="column in columns"
+                >{{column.title}}</th>
+              </tr>
+            </thead>
+            <tbody
+              is="transition-group"
+              mode="out-in"
+              name="slide-left"
+            >
+              <tr
+                :key="result.id"
+                v-for="(result, index) in filteredResults"
+                v-on:dblclick="selectRow(index)"
+              >
+                <td>{{index + 1}}</td>
+                <template v-for="([column, value]) in Object.entries(result)">
+                  <td
+                    :class="{'has-background-danger': !result.hasValidRollNo && column ==='rollNo'}"
+                    :key="result.id + '-' + column"
+                    v-if="columns[column]"
+                  >{{value}}</td>
+                </template>
+              </tr>
+            </tbody>
+          </table>
+        </template>
+        <template v-else>
+          <!-- TODO: add notification message -->
+          no data found
+        </template>
+      </Transition>
     </div>
     <!-- TODO: add pagination -->
     <!-- Preview component -->
@@ -279,6 +294,10 @@ export default {
     exportResult() {
       // TODO export results
     },
+
+    importResult() {
+      // TODO import results
+    },
   },
 }
 </script>
@@ -290,7 +309,7 @@ export default {
 
 .scroll-container
   max-width: 100%
-  overflow-x: scroll
+  overflow-x: auto
 
 table.has-text-centered
   .has-background-danger
