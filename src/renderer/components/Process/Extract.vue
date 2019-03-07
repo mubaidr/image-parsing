@@ -60,15 +60,15 @@
       </button>
     </div>
 
-    <div class="fixed">
+    <div
+      v-show="running"
+      class="fixed"
+    >
       <Transition
         mode="out-in"
         name="slide-down"
       >
-        <div
-          v-show="running"
-          class="notification is-info"
-        >
+        <div class="notification is-info">
           <i class="material-icons is-pulled-left rotating">fiber_smart_record</i>
           Processed
           <strong>{{processedImages}}</strong> of

@@ -5,98 +5,122 @@
       <!-- Left side -->
       <div class="level-left">
         <div class="level-item">
-          <p class="control">
-            <button
-              @click="toggleSortOrder"
-              class="button is-info is-small"
-            >
-              <i class="material-icons">sort</i>
-              <span>&nbsp; Sort &nbsp;</span>
-              <i
-                class="material-icons has-pointer"
-                v-if="sortOrder === 'asc'"
-              >arrow_drop_up</i>
-              <i
-                class="material-icons has-pointer"
-                v-else
-              >arrow_drop_down</i>
-            </button>
-          </p>
-        </div>
-        <div class="level-item">
-          <p class="control">
-            <input
-              class="input is-info is-small"
-              placeholder="Filter"
-              type="text"
-              v-model="filterQuery"
-            >
-          </p>
+          <div class="field has-addons">
+            <p class="control">
+              <button
+                @click="toggleSortOrder"
+                class="button is-small"
+              >
+                <span>Sort</span>
+                <span class="icon">
+                  <i
+                    v-if="sortOrder === 'asc'"
+                    class="material-icons has-pointer"
+                  >arrow_drop_up</i>
+                  <i
+                    v-else
+                    class="material-icons has-pointer"
+                  >arrow_drop_down</i>
+                </span>
+              </button>
+            </p>
+            <p class="control">
+              <input
+                class="input is-small"
+                placeholder="Filter"
+                v-model="filterQuery"
+                type="text"
+              >
+            </p>
+          </div>
         </div>
       </div>
 
       <!-- Right side -->
       <div class="level-right">
-        <p class="level-item">
-          <a
-            @click="importResult"
-            class="button is-info is-small"
-          >
-            <i class="material-icons">cloud_upload</i> &nbsp; Import
-          </a>
-        </p>
-        <p class="level-item">
-          <a
-            @click="analyzeResult"
-            class="button is-info is-small"
-          >
-            <i class="material-icons">assessment</i> &nbsp; Analyze
-          </a>
-        </p>
-        <p class="level-item">
-          <a
-            @click="exportResult"
-            class="button is-info is-small"
-          >
-            <i class="material-icons">cloud_download</i> &nbsp; Export
-          </a>
-        </p>
-        <p class="level-item">
-          <a
-            @click="compileResult"
-            class="button is-success is-small"
-          >
-            <i class="material-icons">save</i> &nbsp; Compile
-          </a>
-        </p>
+        <div class="level-item">
+          <div class="field has-addons">
+            <p class="control">
+              <a
+                @click="importResult"
+                class="button is-small"
+              >
+                <span class="icon">
+                  <i class="material-icons">cloud_upload</i>
+                </span>
+                <span>Import</span>
+              </a>
+            </p>
+            <p class="control">
+              <a
+                @click="exportResult"
+                class="button is-small"
+              >
+                <span class="icon">
+                  <i class="material-icons">cloud_download</i>
+                </span>
+                <span>Export</span>
+              </a>
+            </p>
+            <p class="control">
+              <a
+                @click="analyzeResult"
+                class="button is-small"
+              >
+                <span class="icon">
+                  <i class="material-icons">assessment</i>
+                </span>
+                <span>Analyze</span>
+              </a>
+            </p>
+            <p class="control">
+              <a
+                @click="compileResult"
+                class="button is-small is-success"
+              >
+                <span class="icon">
+                  <i class="material-icons">save</i>
+                </span>
+                <span>Compile</span>
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </nav>
-    <!-- {{filteredResults}} -->
+
     <!-- Data list -->
-    <div class="scroll-container">
-      <Transition
-        mode="out-in"
-        name="slide-up"
+    <transition
+      mode="out-in"
+      name="slide-up"
+    >
+      <!-- Show table when data is loaded -->
+      <div
+        key="table"
+        class="scroll-container"
+        v-if="results.length > 0"
       >
-        <template v-if="filteredResults.length !== 0">
-          <table class="table is-hoverable is-narrow has-text-centered">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th
-                  :key="column.label"
-                  v-for="column in columns"
-                >{{column.title}}</th>
-              </tr>
-            </thead>
-            <tbody
-              is="transition-group"
-              mode="out-in"
-              name="slide-left"
-            >
+        <table class="table is-hoverable is-narrow has-text-centered">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th
+                :key="column.label"
+                v-for="column in columns"
+              >{{column.title}}</th>
+            </tr>
+          </thead>
+          <tbody
+            is="transition-group"
+            mode="out-in"
+            name="list-complete"
+          >
+            <!-- Show table rows if data rows are available -->
+            <template v-if="filteredResults.length > 0">
               <tr
                 :key="result.id"
                 v-for="(result, index) in filteredResults"
+                class="list-complete-item"
                 v-on:dblclick="selectRow(index)"
               >
                 <td>{{index + 1}}</td>
@@ -108,15 +132,46 @@
                   >{{value}}</td>
                 </template>
               </tr>
-            </tbody>
-          </table>
-        </template>
-        <template v-else>
-          <!-- TODO: add notification message -->
-          no data found
-        </template>
-      </Transition>
-    </div>
+            </template>
+            <!-- Show message if now data rows are available -->
+            <template v-else>
+              <tr
+                key="message-row"
+                class="list-complete-item"
+              >
+                <td
+                  :colspan="Object.keys(columns).length + 1"
+                  class="has-text-left"
+                >
+                  <span class="tag is-warning">No data found...</span>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+      <!-- Show message when no data is loaded -->
+      <div
+        key="message"
+        v-else
+      >
+        <article class="message is-info">
+          <div class="message-header">
+            <p>Info</p>
+            <button
+              aria-label="delete"
+              class="delete"
+            ></button>
+          </div>
+          <div class="message-body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum
+            <a>felis venenatis</a> efficitur. Aenean ac
+            <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.
+          </div>
+        </article>
+      </div>
+    </transition>
     <!-- TODO: add pagination -->
     <!-- Preview component -->
     <Transition
@@ -186,6 +241,11 @@ export default {
           return this.sortOrder === 'asc'
             ? a.rollNo - b.rollNo
             : b.rollNo - a.rollNo
+        })
+        .map((r, index) => {
+          const cr = r
+          cr.id = r.id || index
+          return r
         })
     },
 
@@ -312,6 +372,7 @@ export default {
   overflow-x: auto
 
 table.has-text-centered
+  font-size: small
   .has-background-danger
     color: #fff
   thead
@@ -320,6 +381,10 @@ table.has-text-centered
     text-align: left
     font-weight: normal
     vertical-align: middle
+  th:nth-child(1)
+    min-width: 40px
+  th:nth-child(2)
+    min-width: 60px
 
 .wide-column
   min-width: 200px
