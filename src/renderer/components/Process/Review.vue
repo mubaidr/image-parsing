@@ -12,25 +12,26 @@
                 class="button is-small"
               >
                 <span>Sort</span>
-                <span class="icon">
-                  <i
-                    v-if="sortOrder === 'asc'"
-                    class="material-icons has-pointer"
-                  >arrow_drop_up</i>
-                  <i
-                    v-else
-                    class="material-icons has-pointer"
-                  >arrow_drop_down</i>
-                </span>
+                <i
+                  v-if="sortOrder === 'asc'"
+                  class="material-icons has-pointer"
+                >arrow_drop_up</i>
+                <i
+                  v-else
+                  class="material-icons has-pointer"
+                >arrow_drop_down</i>
               </button>
             </p>
-            <p class="control">
+            <p class="control has-icons-right">
               <input
                 class="input is-small"
                 placeholder="Filter"
                 v-model="filterQuery"
                 type="text"
               >
+              <span class="icon is-small is-right">
+                <i class="material-icons">search</i>
+              </span>
             </p>
           </div>
         </div>
@@ -45,9 +46,7 @@
                 @click="importResult"
                 class="button is-small"
               >
-                <span class="icon">
-                  <i class="material-icons">cloud_upload</i>
-                </span>
+                <!-- <i class="material-icons">cloud_upload</i> -->
                 <span>Import</span>
               </a>
             </p>
@@ -56,9 +55,7 @@
                 @click="exportResult"
                 class="button is-small"
               >
-                <span class="icon">
-                  <i class="material-icons">cloud_download</i>
-                </span>
+                <!-- <i class="material-icons">cloud_download</i> -->
                 <span>Export</span>
               </a>
             </p>
@@ -67,9 +64,7 @@
                 @click="analyzeResult"
                 class="button is-small"
               >
-                <span class="icon">
-                  <i class="material-icons">assessment</i>
-                </span>
+                <!-- <i class="material-icons">assessment</i> -->
                 <span>Analyze</span>
               </a>
             </p>
@@ -78,9 +73,7 @@
                 @click="compileResult"
                 class="button is-small is-success"
               >
-                <span class="icon">
-                  <i class="material-icons">save</i>
-                </span>
+                <!-- <i class="material-icons">save</i> -->
                 <span>Compile</span>
               </a>
             </p>
@@ -97,58 +90,59 @@
       <!-- Show table when data is loaded -->
       <div
         key="table"
-        class="scroll-container"
         v-if="results.length > 0"
       >
-        <table class="table is-hoverable is-narrow has-text-centered">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th
-                :key="column.label"
-                v-for="column in columns"
-              >{{column.title}}</th>
-            </tr>
-          </thead>
-          <tbody
-            is="transition-group"
-            mode="out-in"
-            name="list-complete"
-          >
-            <!-- Show table rows if data rows are available -->
-            <template v-if="filteredResults.length > 0">
-              <tr
-                :key="result.id"
-                v-for="(result, index) in filteredResults"
-                class="list-complete-item"
-                v-on:dblclick="selectRow(index)"
-              >
-                <td>{{index + 1}}</td>
-                <template v-for="([column, value]) in Object.entries(result)">
-                  <td
-                    :class="{'has-background-danger': !result.hasValidRollNo && column ==='rollNo'}"
-                    :key="result.id + '-' + column"
-                    v-if="columns[column]"
-                  >{{value}}</td>
-                </template>
+        <div class="scroll-container">
+          <table class="table is-hoverable is-narrow has-text-centered">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th
+                  :key="column.label"
+                  v-for="column in columns"
+                >{{column.title}}</th>
               </tr>
-            </template>
-            <!-- Show message if now data rows are available -->
-            <template v-else>
-              <tr
-                key="message-row"
-                class="list-complete-item"
-              >
-                <td
-                  :colspan="Object.keys(columns).length + 1"
-                  class="has-text-left"
+            </thead>
+            <tbody
+              is="transition-group"
+              mode="out-in"
+              name="list-complete"
+            >
+              <!-- Show table rows if data rows are available -->
+              <template v-if="filteredResults.length > 0">
+                <tr
+                  :key="result.id"
+                  v-for="(result, index) in filteredResults"
+                  class="list-complete-item"
+                  v-on:dblclick="selectRow(index)"
                 >
-                  <span class="tag is-warning">No data found...</span>
-                </td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
+                  <td>{{index + 1}}</td>
+                  <template v-for="([column, value]) in Object.entries(result)">
+                    <td
+                      :class="{'has-background-danger': !result.hasValidRollNo && column ==='rollNo'}"
+                      :key="result.id + '-' + column"
+                      v-if="columns[column]"
+                    >{{value}}</td>
+                  </template>
+                </tr>
+              </template>
+              <!-- Show message if now data rows are available -->
+              <template v-else>
+                <tr
+                  key="message-row"
+                  class="list-complete-item"
+                >
+                  <td
+                    :colspan="Object.keys(columns).length + 1"
+                    class="has-text-left"
+                  >
+                    <span class="tag is-warning">No data found...</span>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
       </div>
       <!-- Show message when no data is loaded -->
       <div
@@ -363,20 +357,15 @@ export default {
 </script>
 
 <style lang="sass">
-.field.has-addons.spaced
-  .control
-    margin-right: 1em
-
 .scroll-container
-  max-width: 100%
+  width: 100%
+  min-height: 296px
   overflow-x: auto
 
 table.has-text-centered
   font-size: small
   .has-background-danger
     color: #fff
-  thead
-    background-color: #f0f0f0
   th, td
     text-align: left
     font-weight: normal
@@ -384,8 +373,5 @@ table.has-text-centered
   th:nth-child(1)
     min-width: 40px
   th:nth-child(2)
-    min-width: 60px
-
-.wide-column
-  min-width: 200px
+    min-width: 65px
 </style>

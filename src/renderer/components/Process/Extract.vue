@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="field">
-      <div class="file has-name is-fullwidth">
+      <div class="file is-small has-name is-fullwidth">
         <label class="file-label">
           <button
             :disabled="running"
@@ -20,7 +20,7 @@
     </div>
 
     <div class="field">
-      <div class="file has-name is-fullwidth">
+      <div class="file is-small has-name is-fullwidth">
         <label class="file-label">
           <button
             :disabled="running"
@@ -44,7 +44,7 @@
       <button
         :disabled="running || !inputIsValid"
         @click="toggleProcess"
-        class="button is-primary"
+        class="button is-small is-primary"
       >
         <i class="material-icons">flash_on</i>
         <span>Process</span>
@@ -53,7 +53,7 @@
       <button
         :disabled="!running"
         @click="toggleProcess"
-        class="button is-danger"
+        class="button is-small is-danger"
       >
         <i class="material-icons">stop</i>
         <span>Stop</span>
