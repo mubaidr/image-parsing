@@ -10,10 +10,12 @@ const NATIVE_IMAGES = [
   'svg',
 ]
 const IMAGES = ['tif', 'tiff', 'dib', ...NATIVE_IMAGES]
-const KEY = ['xls', 'xlsm', 'xlsx', 'csv', ...IMAGES]
+const NATIVE_KEYS = ['xlsx', 'xlsm', 'csv', 'xls']
+const KEY = [...NATIVE_KEYS, ...IMAGES]
 
 module.exports = {
   IMAGES,
   KEY,
+  NATIVE_KEYS,
   NATIVE_IMAGES,
 }

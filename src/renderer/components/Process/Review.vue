@@ -93,7 +93,10 @@
         v-if="results.length > 0"
       >
         <div class="scroll-container">
-          <table class="table is-hoverable is-narrow has-text-centered">
+          <table
+            ref="tbl_data"
+            class="table is-hoverable is-narrow has-text-centered"
+          >
             <thead>
               <tr>
                 <th>#</th>
@@ -189,6 +192,12 @@
 <script>
 import modalPreview from './_modal-preview.vue'
 
+// eslint-disable-next-line
+const { dialog, getCurrentWindow } = require('electron').remote
+
+const { NATIVE_KEYS } = require('../../../utilities/valid-types.js')
+
+const { exportHTMLtoExcel } = require('../../../utilities/excel.js')
 const { convertImage } = require('../../../utilities/images.js')
 
 export default {
@@ -346,11 +355,35 @@ export default {
     },
 
     exportResult() {
-      // TODO export results
+      const dir = dialog.showSaveDialog(getCurrentWindow(), {
+        title: 'Save result file',
+        // defaultPath: this.imageDirectory,
+        properties: ['saveFile'],
+        filters: [
+          {
+            name: 'Excel File',
+            extensions: NATIVE_KEYS,
+          },
+        ],
+      })
+
+      exportHTMLtoExcel(this.$refs.tbl_data, dir)
     },
 
     importResult() {
-      // TODO import results
+      const dir = dialog.showOpenDialog(getCurrentWindow(), {
+        title: 'Choose result-key file',
+        defaultPath: this.keyFilePath,
+        properties: ['openFile'],
+        filters: [
+          {
+            name: 'Key File',
+            extensions: NATIVE_KEYS,
+          },
+        ],
+      })
+
+      console.log(dir)
     },
   },
 }
