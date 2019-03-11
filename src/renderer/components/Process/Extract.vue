@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h1 class="title is-5">Process</h1>
+    <h2 class="subtitle is-6">Process scanned images to generate result.</h2>
     <div class="field">
       <div class="file is-small has-name is-fullwidth">
         <label class="file-label">
@@ -29,7 +31,7 @@
             name="resume"
           />
           <span class="file-cta">
-            <i class="material-icons">attach_file</i>
+            <i class="material-icons">insert_drive_file</i>
             <span class="file-label">Choose Key File</span>
           </span>
           <span class="file-name">{{ keyFilePath }}</span>

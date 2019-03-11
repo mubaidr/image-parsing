@@ -1,7 +1,11 @@
 const XLSX = require('xlsx')
 
 async function importExcelToJSON(src) {
-  return {}
+  const json = XLSX.utils.sheet_to_json(src, {
+    blankrows: false,
+    header: 1,
+  })
+  return json
 }
 
 async function exportHTMLtoExcel(tbl, dest) {

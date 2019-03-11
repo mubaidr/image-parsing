@@ -43,38 +43,11 @@
           <div class="field has-addons">
             <p class="control">
               <a
-                @click="importResult"
-                class="button is-small"
-              >
-                <!-- <i class="material-icons">cloud_upload</i> -->
-                <span>Import</span>
-              </a>
-            </p>
-            <p class="control">
-              <a
                 @click="exportResult"
-                class="button is-small"
-              >
-                <!-- <i class="material-icons">cloud_download</i> -->
-                <span>Export</span>
-              </a>
-            </p>
-            <p class="control">
-              <a
-                @click="analyzeResult"
-                class="button is-small"
-              >
-                <!-- <i class="material-icons">assessment</i> -->
-                <span>Analyze</span>
-              </a>
-            </p>
-            <p class="control">
-              <a
-                @click="compileResult"
                 class="button is-small is-success"
               >
-                <!-- <i class="material-icons">save</i> -->
-                <span>Compile</span>
+                <i class="material-icons">save</i>
+                <span>Export Results</span>
               </a>
             </p>
           </div>
@@ -195,6 +168,7 @@ import modalPreview from './_modal-preview.vue'
 // eslint-disable-next-line
 const { dialog, getCurrentWindow } = require('electron').remote
 
+const { home } = require('../../../utilities/data-paths.js')
 const { NATIVE_KEYS } = require('../../../utilities/valid-types.js')
 
 const { exportHTMLtoExcel } = require('../../../utilities/excel.js')
@@ -346,44 +320,24 @@ export default {
       }
     },
 
-    analyzeResult() {
-      // TODO analyze results
-    },
-
-    compileResult() {
-      // TODO compile results
-    },
-
     exportResult() {
-      const dir = dialog.showSaveDialog(getCurrentWindow(), {
-        title: 'Save result file',
-        // defaultPath: this.imageDirectory,
-        properties: ['saveFile'],
-        filters: [
-          {
-            name: 'Excel File',
-            extensions: NATIVE_KEYS,
-          },
-        ],
-      })
-
-      exportHTMLtoExcel(this.$refs.tbl_data, dir)
-    },
-
-    importResult() {
-      const dir = dialog.showOpenDialog(getCurrentWindow(), {
-        title: 'Choose result-key file',
-        defaultPath: this.keyFilePath,
-        properties: ['openFile'],
-        filters: [
-          {
-            name: 'Key File',
-            extensions: NATIVE_KEYS,
-          },
-        ],
-      })
-
-      console.log(dir)
+      dialog.showSaveDialog(
+        getCurrentWindow(),
+        {
+          title: 'Choose destination for result file',
+          defaultPath: home,
+          properties: ['saveFile'],
+          filters: [
+            {
+              name: 'Excel File',
+              extensions: NATIVE_KEYS,
+            },
+          ],
+        },
+        dir => {
+          if (dir) exportHTMLtoExcel(this.$refs.tbl_data, dir)
+        }
+      )
     },
   },
 }
@@ -396,6 +350,8 @@ export default {
   overflow-x: auto
 
 table.has-text-centered
+  thead
+    border: 1px solid #dbdbdb
   font-size: small
   .has-background-danger
     color: #fff
@@ -403,6 +359,8 @@ table.has-text-centered
     text-align: left
     font-weight: normal
     vertical-align: middle
+  th
+    border-width: 0
   th:nth-child(1)
     min-width: 40px
   th:nth-child(2)

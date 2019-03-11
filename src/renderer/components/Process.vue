@@ -46,7 +46,6 @@ export default {
 
   methods: {
     getExtractedResult(m) {
-      this.$set(this, 'extractedKey', m.key)
       this.$set(this, 'extractedResult', m.results)
     },
   },
