@@ -9,7 +9,7 @@
             <p class="control">
               <button
                 @click="toggleSortOrder"
-                class="button is-small"
+                class="button"
               >
                 <span>Sort</span>
                 <i
@@ -24,12 +24,12 @@
             </p>
             <p class="control has-icons-right">
               <input
-                class="input is-small"
+                class="input"
                 placeholder="Filter"
                 v-model="filterQuery"
                 type="text"
               >
-              <span class="icon is-small is-right">
+              <span class="icon is-right">
                 <i class="material-icons">search</i>
               </span>
             </p>
@@ -44,7 +44,7 @@
             <p class="control">
               <a
                 @click="exportResult"
-                class="button is-small is-success"
+                class="button is-success"
               >
                 <i class="material-icons">save</i>
                 <span>Export Results</span>

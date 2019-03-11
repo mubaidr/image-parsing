@@ -2,92 +2,94 @@
   <div class="section">
     <h1 class="title is-4">Compile</h1>
     <h2 class="subtitle is-6">Compile result using extracted results and answer key.</h2>
-    <br>
 
-    <div class="file has-name is-fullwidth">
-      <label class="file-label">
-        <button
-          @click="chooseFileResult"
-          class="file-input"
-          name="resume"
-        />
-        <span class="file-cta">
-          <i class="material-icons">folder_open</i>
-          <span class="file-label">Result file</span>
-        </span>
-        <span
-          v-show="resultFile"
-          class="file-name"
-        >{{ resultFile }}</span>
-      </label>
-    </div>
+    <form class="control">
+      <div class="field">
+        <div class="file has-name is-fullwidth">
+          <label class="file-label">
+            <button
+              :disabled="running"
+              @click="chooseResultFile"
+              class="file-input"
+              name="resume"
+            />
+            <span class="file-cta">
+              <i class="material-icons">list</i>
+              <span class="file-label">Choose result File</span>
+            </span>
+            <span class="file-name">{{ resultFilePath }}</span>
+          </label>
+        </div>
+        <p class="help">Choose the result file</p>
+      </div>
 
-    <br>
-    <div class="file has-name is-fullwidth">
-      <label class="file-label">
-        <button
-          @click="chooseFileKey"
-          class="file-input"
-          name="resume"
-        />
-        <span class="file-cta">
-          <span class="file-icon">
-            <i class="fas fa-file"/>
-          </span>
-          <span class="file-label">Key file</span>
-        </span>
-        <span
-          v-show="keyFile"
-          class="file-name"
-        >{{ keyFile }}</span>
-      </label>
-    </div>
+      <div class="field">
+        <div class="file has-name is-fullwidth">
+          <label class="file-label">
+            <button
+              :disabled="running"
+              @click="chooseKeyFile"
+              class="file-input"
+              name="resume"
+            />
+            <span class="file-cta">
+              <i class="material-icons">insert_drive_file</i>
+              <span class="file-label">Choose Key File</span>
+            </span>
+            <span class="file-name">{{ keyFilePath }}</span>
+          </label>
+        </div>
+        <p class="help">Choose the key file</p>
+      </div>
 
-    <br>
-    <div class="block">
-      <div class="columns">
-        <div class="column">
+      <div class="columns is-multiline">
+        <div class="column is-6">
           <div class="field">
             <label class="label">Correct Marks</label>
             <div class="control">
               <input
-                v-model="correctMarks"
                 class="input"
                 placeholder="Marks earned for each correct answer"
+                v-model="correctMarks"
                 type="number"
               >
             </div>
           </div>
         </div>
-        <div class="column">
+        <div class="column is-6">
           <div class="field">
             <label class="label">Negative Marks</label>
             <div class="control">
               <input
-                v-model="incorrectMarks"
                 class="input"
                 placeholder="Marks deducted for each incorrect answer"
                 step="0.01"
+                v-model="incorrectMarks"
                 type="number"
               >
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <br>
+      <br>
 
-    <button
-      :disabled="running || !isValid"
-      @click="startProcess"
-      class="button is-primary"
-    >Start Compilation</button>
+      <div class="buttons">
+        <button
+          :disabled="running || !inputIsValid"
+          @click="compile"
+          class="button is-primary"
+        >
+          <i class="material-icons">assessment</i>
+          <span>Compile Result</span>
+        </button>
+      </div>
+    </form>
   </div>
 </template>
 
 <script>
-import { CSVToJSON, compileResult } from '../../utilities'
+const { NATIVE_KEYS, KEY } = require('../../utilities/valid-types.js')
 
 // eslint-disable-next-line
 const { dialog, getCurrentWindow } = require('electron').remote
@@ -95,9 +97,9 @@ const { dialog, getCurrentWindow } = require('electron').remote
 export default {
   data() {
     return {
-      resultFile:
+      resultFilePath:
         'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.csv',
-      keyFile: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.csv',
+      keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.csv',
       correctMarks: 3,
       incorrectMarks: 1,
       running: false,
@@ -105,38 +107,51 @@ export default {
   },
 
   computed: {
-    isValid() {
+    inputIsValid() {
       return (
-        this.resultFile &&
-        this.keyFile &&
+        this.resultFilePath &&
+        this.keyFilePath &&
         this.correctMarks &&
         this.incorrectMarks
       )
     },
   },
 
-  watch: {},
-
   methods: {
-    async startProcess() {
-      Promise.all([
-        CSVToJSON(this.resultFile, true),
-        CSVToJSON(this.keyFile, true, true),
-      ]).then(([result, key]) => {
-        compileResult(key, result, this.correctMarks, this.incorrectMarks)
+    compile() {
+      console.log('compile result')
+    },
+
+    chooseResultFile() {
+      const dir = dialog.showOpenDialog(getCurrentWindow(), {
+        title: 'Choose result file',
+        defaultPath: this.resultFilePath,
+        properties: ['openFile'],
+        filters: [
+          {
+            name: 'Excel File',
+            extensions: NATIVE_KEYS,
+          },
+        ],
       })
+
+      this.resultFilePath = dir ? dir[0] : null
     },
 
-    chooseFileResult() {
-      ;[this.resultFile] = dialog.showOpenDialog(getCurrentWindow(), {
+    chooseKeyFile() {
+      const dir = dialog.showOpenDialog(getCurrentWindow(), {
+        title: 'Choose key file',
+        defaultPath: this.keyFilePath,
         properties: ['openFile'],
-      }) || [false]
-    },
+        filters: [
+          {
+            name: 'Excel or Image File',
+            extensions: KEY,
+          },
+        ],
+      })
 
-    chooseFileKey() {
-      ;[this.keyFile] = dialog.showOpenDialog(getCurrentWindow(), {
-        properties: ['openFile'],
-      }) || [false]
+      this.keyFilePath = dir ? dir[0] : null
     },
   },
 }

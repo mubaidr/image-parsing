@@ -3,7 +3,7 @@
     <h1 class="title is-5">Process</h1>
     <h2 class="subtitle is-6">Process scanned images to generate result.</h2>
     <div class="field">
-      <div class="file is-small has-name is-fullwidth">
+      <div class="file has-name is-fullwidth">
         <label class="file-label">
           <button
             :disabled="running"
@@ -21,32 +21,13 @@
       <p class="help">Choose the directory which contains scanned answer sheets.</p>
     </div>
 
-    <div class="field">
-      <div class="file is-small has-name is-fullwidth">
-        <label class="file-label">
-          <button
-            :disabled="running"
-            @click="choosekeyFilePath"
-            class="file-input"
-            name="resume"
-          />
-          <span class="file-cta">
-            <i class="material-icons">insert_drive_file</i>
-            <span class="file-label">Choose Key File</span>
-          </span>
-          <span class="file-name">{{ keyFilePath }}</span>
-        </label>
-      </div>
-      <p class="help">Choose the key file</p>
-    </div>
-
     <br>
 
     <div class="buttons">
       <button
         :disabled="running || !inputIsValid"
         @click="toggleProcess"
-        class="button is-small is-primary"
+        class="button is-primary"
       >
         <i class="material-icons">flash_on</i>
         <span>Process</span>
@@ -55,30 +36,42 @@
       <button
         :disabled="!running"
         @click="toggleProcess"
-        class="button is-small is-danger"
+        class="button is-danger"
       >
         <i class="material-icons">stop</i>
         <span>Stop</span>
       </button>
     </div>
 
-    <div
-      v-show="running"
-      class="fixed"
+    <br>
+    <br>
+
+    <Transition
+      mode="out-in"
+      name="slide-down"
     >
-      <Transition
-        mode="out-in"
-        name="slide-down"
+      <table
+        v-if="running"
+        class="table is-fullwidth"
       >
-        <div class="notification is-info">
-          <i class="material-icons is-pulled-left rotating">fiber_smart_record</i>
-          Processed
-          <strong>{{processedImages}}</strong> of
-          <strong>{{totalImages}}</strong>. Remaining Time:
-          <strong>{{remainingTime}}</strong>
-        </div>
-      </Transition>
-    </div>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Total</th>
+            <th>Processed</th>
+            <th>Remaining Time</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>
+            <i class="material-icons rotating">fiber_smart_record</i>
+          </td>
+          <td>{{totalImages}}</td>
+          <td>{{processedImages}}</td>
+          <td>{{remainingTime}}</td>
+        </tr>
+      </table>
+    </Transition>
   </div>
 </template>
 
@@ -86,18 +79,15 @@
 // eslint-disable-next-line
 const { dialog, getCurrentWindow } = require('electron').remote
 
-const { KEY } = require('../../../utilities/valid-types.js')
-
 const processingModule = require('../../../utilities/process.js')
-const dataPaths = require('../../../utilities/data-paths.js')
 
 export default {
   name: 'ExtractResult',
 
   data() {
     return {
-      imageDirectory: dataPaths.DEFAULTS.images,
-      keyFilePath: dataPaths.DEFAULTS.key,
+      imageDirectory:
+        'D:\\current\\image-parsing\\__tests__\\test-data\\images',
       running: false,
       processedImages: 0,
       totalImages: 0,
@@ -110,7 +100,7 @@ export default {
 
   computed: {
     inputIsValid() {
-      return this.imageDirectory && this.keyFilePath
+      return this.imageDirectory
     },
 
     remainingTime() {
@@ -118,6 +108,10 @@ export default {
         (this.totalImages - this.processedImages) * (this.perImageTime || 500)
       return this.toHHMMSS(ms)
     },
+  },
+
+  created() {
+    processingModule.stop()
   },
 
   methods: {
@@ -167,22 +161,6 @@ export default {
       })
 
       this.imageDirectory = dir ? dir[0] : null
-    },
-
-    choosekeyFilePath() {
-      const dir = dialog.showOpenDialog(getCurrentWindow(), {
-        title: 'Choose result-key file',
-        defaultPath: this.keyFilePath,
-        properties: ['openFile'],
-        filters: [
-          {
-            name: 'Key File',
-            extensions: KEY,
-          },
-        ],
-      })
-
-      this.keyFilePath = dir ? dir[0] : null
     },
 
     toHHMMSS(s) {

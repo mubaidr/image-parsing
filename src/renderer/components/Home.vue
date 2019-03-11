@@ -33,7 +33,7 @@
           </RouterLink>
           <br>
           <RouterLink
-            class="button is-white is-small is-fullwidth"
+            class="button is-white is-fullwidth"
             to="train"
           >
             <span>Train</span>

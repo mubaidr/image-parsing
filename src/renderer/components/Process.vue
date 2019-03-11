@@ -22,8 +22,6 @@
 import extractResult from './Process/Extract.vue'
 import reviewResult from './Process/Review.vue'
 
-import { stop } from '../../utilities/process.js'
-
 export default {
   name: 'Process',
 
@@ -37,11 +35,6 @@ export default {
       extractedResult: null,
       extractedKey: null,
     }
-  },
-
-  mounted() {
-    // stop old workers
-    stop()
   },
 
   methods: {
