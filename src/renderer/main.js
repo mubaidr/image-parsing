@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import 'bulma-pro/bulma.sass'
 
-import Notifications from 'vue-notification'
+import Toasted from 'vue-toasted'
 
 // import the styles
 import 'material-design-icons/iconfont/material-icons.css'
@@ -17,7 +17,13 @@ import { ipcRenderer } from 'electron'
 
 const isDev = process.env.NODE_ENV === 'development'
 
-Vue.use(Notifications)
+Vue.use(Toasted, {
+  duration: 3000,
+  Icon: 'info',
+  iconPack: 'material',
+  position: 'bottom-center',
+  type: 'info',
+})
 
 Vue.config.devtools = isDev
 Vue.config.performance = isDev

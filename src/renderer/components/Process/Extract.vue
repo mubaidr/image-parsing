@@ -45,6 +45,7 @@
 
     <br>
     <br>
+    <br>
 
     <Transition
       mode="out-in"
@@ -189,4 +190,7 @@ export default {
 </script>
 
 <style scoped lang="sass">
+table
+  th, td
+    text-align: center
 </style>

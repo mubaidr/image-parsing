@@ -335,7 +335,10 @@ export default {
           ],
         },
         dir => {
-          if (dir) exportHTMLtoExcel(this.$refs.tbl_data, dir)
+          if (dir)
+            exportHTMLtoExcel(this.$refs.tbl_data, dir).then(() => {
+              this.$toasted.show('File saved succesfully. ')
+            })
         }
       )
     },
@@ -343,26 +346,21 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .scroll-container
   width: 100%
   min-height: 296px
   overflow-x: auto
 
 table.has-text-centered
-  thead
-    border: 1px solid #dbdbdb
   font-size: small
   .has-background-danger
     color: #fff
   th, td
     text-align: left
-    font-weight: normal
     vertical-align: middle
-  th
-    border-width: 0
   th:nth-child(1)
-    min-width: 40px
+    min-width: 50px
   th:nth-child(2)
-    min-width: 65px
+    min-width: 75px
 </style>
