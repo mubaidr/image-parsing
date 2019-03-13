@@ -89,6 +89,9 @@
 </template>
 
 <script>
+const { home } = require('../../utilities/data-paths.js')
+const { compileResult } = require('../../utilities/compile')
+const { exportJSONtoExcel } = require('../../utilities/excel')
 const { NATIVE_KEYS, KEY } = require('../../utilities/valid-types.js')
 
 // eslint-disable-next-line
@@ -98,8 +101,8 @@ export default {
   data() {
     return {
       resultFilePath:
-        'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.csv',
-      keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.csv',
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.xlsx',
+      keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.xlsx',
       correctMarks: 3,
       incorrectMarks: 1,
       running: false,
@@ -119,7 +122,50 @@ export default {
 
   methods: {
     compile() {
-      console.log('compile result')
+      this.running = true
+
+      compileResult(this.resultFilePath, this.keyFilePath, {
+        correctMarks: this.correctMarks,
+        incorrectMarks: this.incorrectMarks,
+      })
+        .then(res => {
+          if (res.length > 0) {
+            this.exportCompiledResults(res)
+          } else {
+            this.$toasted.show('Compiled result does not contian any data. ', {
+              type: 'error',
+            })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        .finally(() => {
+          this.running = false
+        })
+    },
+
+    exportCompiledResults(json) {
+      dialog.showSaveDialog(
+        getCurrentWindow(),
+        {
+          title: 'Choose destination for compiled result file',
+          defaultPath: home,
+          properties: ['saveFile'],
+          filters: [
+            {
+              name: 'Excel File',
+              extensions: NATIVE_KEYS,
+            },
+          ],
+        },
+        dir => {
+          if (dir)
+            exportJSONtoExcel(json, dir).then(() => {
+              this.$toasted.show('File saved succesfully. ')
+            })
+        }
+      )
     },
 
     chooseResultFile() {

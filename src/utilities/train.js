@@ -40,7 +40,7 @@ async function start(
   const [designData, imagePaths, resultsData] = await Promise.all([
     getDesignData(designFilePath),
     getImagePaths(imagesDirectory),
-    CSVToJSON(resultsFilePath, true, false),
+    CSVToJSON(resultsFilePath, true),
   ])
 
   const trainingData = []

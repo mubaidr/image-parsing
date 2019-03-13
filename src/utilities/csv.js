@@ -9,11 +9,10 @@ const fs = require('fs')
  * @param {Boolean} isKey True if the CSV file is answer key file
  * @returns {Object} CSV String
  */
-async function CSVToJSON(str, isPath, isKey) {
+async function CSVToJSON(str, isPath) {
   const csv = csvtojson({
     flatKeys: true,
   })
-  let obj
   let arr
 
   if (isPath) {
@@ -22,17 +21,7 @@ async function CSVToJSON(str, isPath, isKey) {
     arr = await csv.fromString(str)
   }
 
-  if (isKey) {
-    obj = arr[0]
-  } else {
-    obj = {}
-
-    arr.forEach(item => {
-      obj[item.RollNo] = item
-    })
-  }
-
-  return obj
+  return arr
 }
 
 /**
