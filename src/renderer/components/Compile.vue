@@ -102,7 +102,7 @@ export default {
     return {
       resultFilePath:
         'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.xlsx',
-      keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.xlsx',
+      keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.jpg',
       correctMarks: 3,
       incorrectMarks: 1,
       running: false,
@@ -121,28 +121,22 @@ export default {
   },
 
   methods: {
-    compile() {
+    async compile() {
       this.running = true
 
-      compileResult(this.resultFilePath, this.keyFilePath, {
+      const res = await compileResult(this.resultFilePath, this.keyFilePath, {
         correctMarks: this.correctMarks,
         incorrectMarks: this.incorrectMarks,
       })
-        .then(res => {
-          if (res.length > 0) {
-            this.exportCompiledResults(res)
-          } else {
-            this.$toasted.show('Compiled result does not contian any data. ', {
-              type: 'error',
-            })
-          }
+
+      if (res.length === 0) {
+        this.$toasted.show('Compiled result does not contian any data. ', {
+          type: 'error',
         })
-        .catch(err => {
-          console.log(err)
-        })
-        .finally(() => {
-          this.running = false
-        })
+      } else {
+        this.exportCompiledResults(res)
+        this.running = false
+      }
     },
 
     exportCompiledResults(json) {

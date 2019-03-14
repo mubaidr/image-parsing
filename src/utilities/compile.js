@@ -1,5 +1,8 @@
 const { NATIVE_KEYS } = require('../utilities/valid-types')
 const { importExcelToJSON } = require('../utilities/excel')
+const { getDesignData } = require('./design')
+const { processTask } = require('./processTaskWorker')
+const dataPaths = require('./data-paths')
 
 async function readResult(src) {
   return importExcelToJSON(src)
@@ -11,7 +14,11 @@ async function readKey(src) {
   if (isNativeKey) {
     return importExcelToJSON(src)
   }
-  // TODO read key image
+
+  const designData = await getDesignData(dataPaths.DEFAULTS.design)
+  const keyData = await processTask(designData, [src])
+
+  return keyData
 }
 
 async function compileResult(resultPath, keyPath, options) {

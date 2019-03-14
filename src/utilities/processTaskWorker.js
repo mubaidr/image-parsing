@@ -4,9 +4,14 @@ const { getQuestionsNeuralNet } = require('./index')
 
 // sends progress to parent
 async function sendProgress(p) {
-  process.send(p, () => {
-    if (p.completed) process.exit(0)
-  })
+  if (process && process.send) {
+    return process.send(p, () => {
+      if (p.completed) process.exit(0)
+    })
+  }
+
+  // return only key for non-wroker
+  return p.results
 }
 
 /**
@@ -42,7 +47,7 @@ async function processTask(designData, imagePaths) {
 
         // TODO: test results
         // 25% more sure than any other option
-        if (first[1] - second[1] >= 0.25) {
+        if (first[1] - second[1] >= 0.2) {
           result[title] = first[0]
         } else {
           result[title] = '*'
@@ -64,7 +69,8 @@ async function processTask(designData, imagePaths) {
   }
 
   // report completed status & exit process
-  sendProgress({
+
+  return sendProgress({
     completed: true,
     results,
   })

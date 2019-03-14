@@ -77,16 +77,14 @@ async function addWorkerHandlers(worker, callback) {
  */
 async function start(
   callback,
-  imagesDirectory = dataPaths.DEFAULTS.images
-  // keyFilePath = dataPaths.DEFAULTS.key
+  imagesDirectory = dataPaths.DEFAULTS.images,
+  imageFile
 ) {
   // reset result collection
-  const [imagePaths, designData] = await Promise.all([
-    getImagePaths(imagesDirectory),
-    getDesignData(dataPaths.DEFAULTS.design),
-  ])
-
-  // TODO: parse key file is csv otherwise send it to worker
+  const designData = await getDesignData(dataPaths.DEFAULTS.design)
+  const imagePaths = imagesDirectory
+    ? await getImagePaths(imagesDirectory)
+    : [imageFile]
 
   TOTAL_IMAGES = imagePaths.length
   WORKER_PROCESSES = await createWorkerProcesses(TOTAL_IMAGES)
