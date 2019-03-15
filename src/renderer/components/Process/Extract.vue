@@ -77,9 +77,7 @@
 </template>
 
 <script>
-// eslint-disable-next-line
-const { dialog, getCurrentWindow } = require('electron').remote
-
+const { openDirectory } = require('../../../utilities/electron-dialog.js')
 const processingModule = require('../../../utilities/process.js')
 
 export default {
@@ -131,9 +129,7 @@ export default {
             this.totalImages = totalImages
             this.totalWorkers = totalWorkers
           })
-          .catch(err => {
-            dialog.showErrorBox('Error', err)
-          })
+          .catch(this.$toasted.show)
       }
       this.running = !this.running
     },
@@ -150,18 +146,12 @@ export default {
       } else if (m.log) {
         console.log('log: ', m.log)
       } else if (m.error) {
-        dialog.showErrorBox('Error', m.error)
+        this.$toasted.show(m.error)
       }
     },
 
-    chooseImageDirectory() {
-      const dir = dialog.showOpenDialog(getCurrentWindow(), {
-        title: 'Choose directory containing scanned answer sheets',
-        defaultPath: this.imageDirectory,
-        properties: ['openDirectory'],
-      })
-
-      this.imageDirectory = dir ? dir[0] : null
+    async chooseImageDirectory() {
+      this.imageDirectory = await openDirectory()
     },
 
     toHHMMSS(s) {

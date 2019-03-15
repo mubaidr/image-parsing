@@ -45,7 +45,6 @@ async function processTask(designData, imagePaths) {
       } else {
         const [first, second] = Object.entries(pre).sort((a, b) => b[1] - a[1])
 
-        // TODO: test results
         // 25% more sure than any other option
         if (first[1] - second[1] >= 0.2) {
           result[title] = first[0]

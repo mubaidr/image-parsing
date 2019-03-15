@@ -142,7 +142,6 @@
         </article>
       </div>
     </transition>
-    <!-- TODO: add pagination -->
     <!-- Preview component -->
     <Transition
       mode="out-in"
@@ -165,10 +164,7 @@
 <script>
 import modalPreview from './_modal-preview.vue'
 
-// eslint-disable-next-line
-const { dialog, getCurrentWindow } = require('electron').remote
-
-const { home } = require('../../../utilities/data-paths.js')
+const { saveFile } = require('../../../utilities/electron-dialog.js')
 const { NATIVE_KEYS } = require('../../../utilities/valid-types.js')
 
 const { exportHTMLtoExcel } = require('../../../utilities/excel.js')
@@ -249,13 +245,7 @@ export default {
 
   watch: {
     async selectedRow(row) {
-      if (row) {
-        await convertImage(row.img).then(src => {
-          this.imageSource = src
-        })
-      } else {
-        this.imageSource = ''
-      }
+      this.imageSource = row ? await convertImage(row.img) : null
     },
   },
 
@@ -320,27 +310,16 @@ export default {
       }
     },
 
-    exportResult() {
-      dialog.showSaveDialog(
-        getCurrentWindow(),
+    async exportResult() {
+      const destination = await saveFile([
         {
-          title: 'Choose destination for result file',
-          defaultPath: home,
-          properties: ['saveFile'],
-          filters: [
-            {
-              name: 'Excel File',
-              extensions: NATIVE_KEYS,
-            },
-          ],
+          name: 'Excel File',
+          extensions: NATIVE_KEYS,
         },
-        dir => {
-          if (dir)
-            exportHTMLtoExcel(this.$refs.tbl_data, dir).then(() => {
-              this.$toasted.show('File saved succesfully. ')
-            })
-        }
-      )
+      ])
+
+      await exportHTMLtoExcel(this.$refs.tbl_data, destination)
+      this.$toasted.show('File saved succesfully. ')
     },
   },
 }

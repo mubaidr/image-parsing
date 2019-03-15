@@ -89,13 +89,10 @@
 </template>
 
 <script>
-const { home } = require('../../utilities/data-paths.js')
+const { openFile, saveFile } = require('../../utilities/electron-dialog.js')
 const { compileResult } = require('../../utilities/compile')
 const { exportJSONtoExcel } = require('../../utilities/excel')
 const { NATIVE_KEYS, KEY } = require('../../utilities/valid-types.js')
-
-// eslint-disable-next-line
-const { dialog, getCurrentWindow } = require('electron').remote
 
 export default {
   data() {
@@ -124,74 +121,47 @@ export default {
     async compile() {
       this.running = true
 
-      const res = await compileResult(this.resultFilePath, this.keyFilePath, {
-        correctMarks: this.correctMarks,
-        incorrectMarks: this.incorrectMarks,
-      })
-
-      if (res.length === 0) {
-        this.$toasted.show('Compiled result does not contian any data. ', {
-          type: 'error',
-        })
-      } else {
-        this.exportCompiledResults(res)
-        this.running = false
-      }
-    },
-
-    exportCompiledResults(json) {
-      dialog.showSaveDialog(
-        getCurrentWindow(),
+      const results = await compileResult(
+        this.resultFilePath,
+        this.keyFilePath,
         {
-          title: 'Choose destination for compiled result file',
-          defaultPath: home,
-          properties: ['saveFile'],
-          filters: [
-            {
-              name: 'Excel File',
-              extensions: NATIVE_KEYS,
-            },
-          ],
-        },
-        dir => {
-          if (dir)
-            exportJSONtoExcel(json, dir).then(() => {
-              this.$toasted.show('File saved succesfully. ')
-            })
+          correctMarks: this.correctMarks,
+          incorrectMarks: this.incorrectMarks,
         }
       )
+
+      await this.exportCompiledResults(results)
+      this.running = false
     },
 
-    chooseResultFile() {
-      const dir = dialog.showOpenDialog(getCurrentWindow(), {
-        title: 'Choose result file',
-        defaultPath: this.resultFilePath,
-        properties: ['openFile'],
-        filters: [
-          {
-            name: 'Excel File',
-            extensions: NATIVE_KEYS,
-          },
-        ],
-      })
+    async exportCompiledResults(json) {
+      const destination = await saveFile([
+        {
+          name: 'Excel File',
+          extensions: NATIVE_KEYS,
+        },
+      ])
 
-      this.resultFilePath = dir ? dir[0] : null
+      await exportJSONtoExcel(json, destination)
+      this.$toasted.show('File saved succesfully. ')
     },
 
-    chooseKeyFile() {
-      const dir = dialog.showOpenDialog(getCurrentWindow(), {
-        title: 'Choose key file',
-        defaultPath: this.keyFilePath,
-        properties: ['openFile'],
-        filters: [
-          {
-            name: 'Excel or Image File',
-            extensions: KEY,
-          },
-        ],
-      })
+    async chooseResultFile() {
+      this.resultFilePath = await openFile([
+        {
+          name: 'Excel File',
+          extensions: NATIVE_KEYS,
+        },
+      ])
+    },
 
-      this.keyFilePath = dir ? dir[0] : null
+    async chooseKeyFile() {
+      this.keyFilePath = await openFile([
+        {
+          name: 'Excel or Image File',
+          extensions: KEY,
+        },
+      ])
     },
   },
 }

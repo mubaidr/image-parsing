@@ -37,12 +37,9 @@
 <script>
 import { CSVToJSON } from '../../utilities'
 
-// const pdfmake = require('pdfmake')
 const path = require('path')
 const fs = require('fs')
 const cheerio = require('cheerio')
-// eslint-disable-next-line
-const { dialog, getCurrentWindow } = require('electron').remote
 
 const dataPaths = require('../../utilities/data-paths.js')
 
@@ -62,9 +59,7 @@ export default {
 
   methods: {
     chooseAnswerSheetPrepFile() {
-      ;[this.answerSheetPrepFile] = dialog.showOpenDialog(getCurrentWindow(), {
-        properties: ['openFile'],
-      }) || [false]
+      // TODO implement this
     },
 
     async generate() {
@@ -100,7 +95,7 @@ export default {
             const text = cand[title]
 
             console.log(title)
-            // TODO: update answer sheet design file to use variables form the asnwer sheet data
+            // TODO: update answer sheet design file to use variables from the asnwer sheet data
             if (text) {
               $(group).append(
                 `<text x="4" y="839.47" class="st14" v:langID="1033">${text}</text>`

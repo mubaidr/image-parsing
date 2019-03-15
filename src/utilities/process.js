@@ -64,8 +64,6 @@ async function addWorkerHandlers(worker, callback) {
   })
 }
 
-// TODO implement key file read
-
 /**
  * Start processing scanned image files to get result
  *
