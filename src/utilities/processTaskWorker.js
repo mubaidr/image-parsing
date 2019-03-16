@@ -40,7 +40,7 @@ async function processTask(designData, imagePaths) {
       const { title, data } = questionsData[j]
       const pre = neuralNet.run(data)
 
-      if (parseFloat(pre['?']) >= 0.95) {
+      if (pre['?'] >= 0.95) {
         result[title] = '?'
       } else {
         const [first, second] = Object.entries(pre).sort((a, b) => b[1] - a[1])

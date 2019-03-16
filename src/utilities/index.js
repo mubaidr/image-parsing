@@ -18,7 +18,7 @@ function getQuestionsNeuralNet(src) {
 
 /**
  * Converts provided Raw image data to Bit array
- * @param {RawImage} data Raw image pixel data array
+ * @param {Array<Number>} data Raw image pixel data array
  * @param {Number} channels Number of channels in the data
  */
 function convertToBitArray(data, channels) {

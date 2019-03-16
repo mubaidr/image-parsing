@@ -4,17 +4,21 @@
 
     <div class="block has-text-centered">
       <button
-        :disabled="running"
-        @click="startProcess"
+        @click="start"
         class="button is-primary"
       >Start</button>
 
-      <div v-show="running">
-        <span class="icon">
-          <i class="fa fa-spinner"/>
-        </span>
-        <span>Training network...</span>
-      </div>
+      <button
+        :disabled="running"
+        @click="startProcess"
+        class="button is-primary"
+      >Start Process</button>
+
+      <button
+        :disabled="!running"
+        @click="stopProcess"
+        class="button is-danger"
+      >Stop Process</button>
 
       <div class="block log">
         <ul>
@@ -30,12 +34,14 @@
 
 <script>
 const { fork } = require('child_process')
+const trainingProcess = require('../../utilities/train.js')
 
 export default {
   data() {
     return {
       logs: [],
       running: false,
+      worker: null,
     }
   },
 
@@ -48,31 +54,46 @@ export default {
   },
 
   methods: {
+    start() {
+      trainingProcess.start()
+    },
+
     startProcess() {
-      const worker = fork(`${__dirname}/../../utilities/train.js`, [], {
+      this.worker = fork(`${__dirname}/../../utilities/train.js`, [], {
         silent: true,
       })
 
-      worker.send({}, () => {
+      this.worker.send({}, () => {
         this.running = true
       })
 
-      worker.on('message', msg => {
+      this.worker.on('message', msg => {
         if (msg.completed) {
           this.running = false
         }
       })
 
       // logging
-      worker.stdout.on('data', data => {
+      this.worker.stdout.on('data', data => {
         this.logs.unshift(data.toString())
       })
 
       // error
-      worker.stderr.on('data', data => {
+      this.worker.stderr.on('data', data => {
         this.logs.unshift(data.toString())
         this.running = false
       })
+    },
+
+    stopProcess() {
+      this.worker.send(
+        {
+          stop: true,
+        },
+        () => {
+          this.running = false
+        }
+      )
     },
   },
 }

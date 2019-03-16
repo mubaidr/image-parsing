@@ -336,6 +336,7 @@ table.has-text-centered
   .has-background-danger
     color: #fff
   th, td
+    font-weight: normal
     text-align: left
     vertical-align: middle
   th:nth-child(1)

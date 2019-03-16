@@ -1,11 +1,7 @@
 const brain = require('brain.js')
 const fs = require('fs')
 
-const {
-  getImagePaths,
-  getRollNoFromImage,
-  getSharpObjectFromSource,
-} = require('./images')
+const { getSharpObjectFromSource } = require('./images')
 const { getQuestionsData } = require('./questions')
 const { getDesignData } = require('./design')
 const { CSVToJSON } = require('./csv')
@@ -18,53 +14,32 @@ function completed(success) {
     console.log('Failed')
   }
 
-  process.send({ completed: true }, () => {
-    process.exit(0)
-  })
+  if (process && process.send) {
+    process.send({ completed: true }, () => {
+      process.exit(0)
+    })
+  }
 }
 
 /**
  *  Trains the network using provided data and saves the trained network configuration in the provided path (neuralNetFilePath).
  *
- * @param {String=} designFilePath Path to design file.
- * @param {String=} imagesDirectory Path to Images directory.
- * @param {String=} resultsFilePath Path to result data CSV.
- * @param {String=} neuralNetFilePath Path where trained network configuration will be saved.
+ *
  */
-async function start(
-  designFilePath = DATAPATHS.DEFAULTS.design,
-  imagesDirectory = DATAPATHS.DEFAULTS.images,
-  resultsFilePath = DATAPATHS.DEFAULTS.result,
-  neuralNetFilePath = DATAPATHS.DEFAULTS.questionsModel
-) {
-  const [designData, imagePaths, resultsData] = await Promise.all([
-    getDesignData(designFilePath),
-    getImagePaths(imagesDirectory),
-    CSVToJSON(resultsFilePath, true),
+async function start() {
+  const [designData, resultsData] = await Promise.all([
+    getDesignData(DATAPATHS.DEFAULTS.design),
+    CSVToJSON(DATAPATHS.DEFAULTS.key, true),
   ])
 
-  const trainingData = []
-
   // extract roll no & question image data from images
-  for (let i = 0; i < imagePaths.length; i += 1) {
-    const sharpImage = getSharpObjectFromSource(imagePaths[i])
-    const sharpImageClone = sharpImage.clone()
+  const sharpImage = getSharpObjectFromSource(DATAPATHS.DEFAULTS.keyImage)
 
-    const rollNo = await getRollNoFromImage(designData, sharpImage)
-    if (!rollNo) continue
-
-    const d = await getQuestionsData(
-      designData,
-      sharpImageClone,
-      resultsData,
-      rollNo
-    )
-
-    trainingData.push(...d)
-  }
-
-  // if data is collected, train network
-  if (trainingData.length === 0) completed(false)
+  const trainingData = await getQuestionsData(
+    designData,
+    sharpImage,
+    resultsData[0]
+  )
 
   const net = new brain.NeuralNetwork()
   net.train(trainingData, {
@@ -74,15 +49,23 @@ async function start(
   })
 
   // write trained network configuration to disk
-  fs.writeFileSync(neuralNetFilePath, JSON.stringify(net.toJSON()))
+  fs.writeFileSync(
+    DATAPATHS.DEFAULTS.questionsModel,
+    JSON.stringify(net.toJSON())
+  )
 
   completed(true)
 }
 
-process.on('message', () => {
-  start()
+process.on('message', e => {
+  if (e.stop) {
+    console.log('Stoping...')
+    process.exit(0)
+  } else {
+    start()
+  }
 })
 
-// module.exports = {
-//   start,
-// }
+module.exports = {
+  start,
+}

@@ -1,7 +1,10 @@
 import { build } from '../../package.json'
 
+const settings = require('electron-settings')
+
 /* eslint-disable import/no-extraneous-dependencies */
 const { app, BrowserWindow, Menu } = require('electron')
+const DATAPATHS = require('../utilities/data-paths')
 /* eslint-enable */
 
 // disable electron warning
@@ -101,6 +104,11 @@ app.on('ready', () => {
 
   if (isDev) {
     installDevTools()
+
+    // reset settings
+    settings.set('open-directory', DATAPATHS.home)
+    settings.set('open-file', DATAPATHS.home)
+    settings.set('save-file', DATAPATHS.home)
   }
 })
 

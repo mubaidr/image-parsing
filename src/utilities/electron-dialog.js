@@ -10,7 +10,7 @@ async function openDirectory(filters) {
     properties: ['openDirectory'],
   })
 
-  settings.set('open-directory', dir)
+  if (dir) settings.set('open-directory', dir)
 
   return dir ? dir[0] : null
 }
@@ -22,7 +22,7 @@ async function openFile(filters) {
     properties: ['openFile'],
   })
 
-  settings.set('open-file', file)
+  if (file) settings.set('open-file', file)
 
   return file ? file[0] : null
 }
@@ -34,7 +34,7 @@ async function saveFile(filters) {
     properties: ['saveFile'],
   })
 
-  settings.set('save-file', file)
+  if (file) settings.set('save-file', file)
 
   return file
 }

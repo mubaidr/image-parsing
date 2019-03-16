@@ -8,15 +8,13 @@ const { convertToBitArray } = require('./index')
  *
  * @param {Object} design A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
  * @param {sharp} img Path of scanned image file
- * @param {Object=} results Path to csv file for training data
- * @param {Number=} rollNumber Roll no of the current scanned image
+ * @param {Object=} results for training data preparation
  * @returns {Object} {title: {String}, data: {buffer}}
  */
-async function getQuestionsData(design, img, results, rollNumber) {
+async function getQuestionsData(design, img, results) {
   const SCALE = 0.5
   const META = await img.metadata()
   const TARGET_SIZE = design.width * SCALE
-  const IS_TRAINING_DATA = results && rollNumber
 
   // resize if image is larger than design
   img.resize({
@@ -39,27 +37,20 @@ async function getQuestionsData(design, img, results, rollNumber) {
     }
     img.extract(opt)
 
-    // debug
-    // logImageData(img, `${title}`)
+    const binaryData = convertToBitArray(await img.toBuffer(), META.channels)
 
-    // debug
-    // logImageData(img, `${rollNumber}-${title}`)
-
-    const buffer = await img.toBuffer()
-    const binaryData = convertToBitArray(buffer, META.channels)
-
-    if (IS_TRAINING_DATA) {
+    if (results && results[title] !== '*') {
       // for training data
-      if (results[rollNumber] && results[rollNumber][title] !== '*') {
-        data.push({
-          input: binaryData,
-          output: { [results[rollNumber][title]]: 1 },
-        })
-      }
+      data.push({
+        input: binaryData,
+        output: { [results[title]]: 1 },
+      })
     } else {
-      // for processing data
       data.push({ title, data: binaryData })
     }
+
+    // debug
+    // logImageData(img, `${title}`)
   }
 
   return data

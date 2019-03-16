@@ -87,8 +87,8 @@ async function getRollNoFromImage(designData, img) {
 
 /**
  * Logs provided image data to .tmp folder
- * @param {sharp | string} img Sharp instance or image source
- * @param {string} name Name of file
+ * @param {sharp || String} img Sharp instance or image source
+ * @param {String} name Name of file
  */
 async function logImageData(src, name) {
   let img
@@ -99,7 +99,9 @@ async function logImageData(src, name) {
     img = src.clone()
   }
 
-  return img.jpeg().toFile(path.join(dataPaths.tmp, `${name || uuid()}.jpg`))
+  const dest = process.env.NODE_ENV === 'development' ? '.tmp' : dataPaths.tmp
+
+  return img.jpeg().toFile(path.join(dest, `${name || uuid()}.jpg`))
 }
 
 module.exports = {
