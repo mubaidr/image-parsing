@@ -5,7 +5,7 @@ const uuid = require('uuid')
 const sharp = require('sharp')
 
 const { IMAGES, NATIVE_IMAGES } = require('./valid-types')
-const dataPaths = require('./data-paths')
+const DATAPATHS = require('./data-paths')
 
 const CACHE = {}
 
@@ -24,7 +24,7 @@ async function convertImage(src) {
   if (cached) return cached
 
   // generate random tmp url
-  const url = path.join(dataPaths.tmp, `${uuid()}.jpg`)
+  const url = path.join(DATAPATHS.tmp, `${uuid()}.jpg`)
   CACHE[src] = url
 
   // save file for preview
@@ -99,9 +99,7 @@ async function logImageData(src, name) {
     img = src.clone()
   }
 
-  const dest = process.env.NODE_ENV === 'development' ? '.tmp' : dataPaths.tmp
-
-  return img.jpeg().toFile(path.join(dest, `${name || uuid()}.jpg`))
+  return img.jpeg().toFile(path.join(DATAPATHS.tmp, `${name || uuid()}.jpg`))
 }
 
 module.exports = {

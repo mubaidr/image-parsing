@@ -28,12 +28,12 @@ function completed(success) {
  */
 async function start() {
   const [designData, resultsData] = await Promise.all([
-    getDesignData(DATAPATHS.DEFAULTS.design),
-    CSVToJSON(DATAPATHS.DEFAULTS.key, true),
+    getDesignData(DATAPATHS.test.design),
+    CSVToJSON(DATAPATHS.test.key, true),
   ])
 
   // extract roll no & question image data from images
-  const sharpImage = getSharpObjectFromSource(DATAPATHS.DEFAULTS.keyImage)
+  const sharpImage = getSharpObjectFromSource(DATAPATHS.test.keyImage)
 
   const trainingData = await getQuestionsData(
     designData,
@@ -49,10 +49,7 @@ async function start() {
   })
 
   // write trained network configuration to disk
-  fs.writeFileSync(
-    DATAPATHS.DEFAULTS.questionsModel,
-    JSON.stringify(net.toJSON())
-  )
+  fs.writeFileSync(DATAPATHS.questionsModel, JSON.stringify(net.toJSON()))
 
   completed(true)
 }

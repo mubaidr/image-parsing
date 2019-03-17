@@ -2,6 +2,9 @@ const childProcess = require('child_process')
 const NO_OF_CORES = require('physical-cpu-count')
 const os = require('os')
 
+// TODO create worker process on app start
+// TODO cleanup or restart worker on stop
+
 /**
  * Create worker processes equal to cpu cores count
  * @param {Number} imagesCount Minimum number of images in the current set

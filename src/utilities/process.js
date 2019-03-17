@@ -1,4 +1,4 @@
-const dataPaths = require('./data-paths')
+const DATAPATHS = require('./data-paths')
 const { createWorkerProcesses } = require('./workers')
 const { getDesignData } = require('./design')
 const { getImagePaths } = require('./images')
@@ -75,11 +75,11 @@ async function addWorkerHandlers(worker, callback) {
  */
 async function start(
   callback,
-  imagesDirectory = dataPaths.DEFAULTS.images,
+  imagesDirectory = DATAPATHS.test.images,
   imageFile
 ) {
   // reset result collection
-  const designData = await getDesignData(dataPaths.DEFAULTS.design)
+  const designData = await getDesignData(DATAPATHS.test.design)
   const imagePaths = imagesDirectory
     ? await getImagePaths(imagesDirectory)
     : [imageFile]

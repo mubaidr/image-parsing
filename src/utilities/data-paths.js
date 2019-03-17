@@ -1,25 +1,22 @@
 const path = require('path')
 const os = require('os')
 
+const isDev = process.env.NODE_ENV === 'development'
+
+const tmp = isDev ? path.resolve('.tmp') : os.tmpdir()
+const home = isDev ? path.resolve('.') : path.join(os.homedir(), 'desktop')
+
 module.exports = {
-  main: path.resolve('src/main'),
-  renderer: path.resolve('src/renderer'),
   root: path.resolve('.'),
-  src: path.resolve('src'),
-  testData: path.resolve('__tests__/test-data'),
-  tmp: os.tmpdir(),
-  home: path.join(os.homedir(), 'desktop'),
-  trainingData: path.resolve('src/data/training-data.json'),
-  utiltities: path.resolve('src/utilities'),
-  DEFAULTS: {
-    centreModel: path.resolve('src/data/questions-model.json'),
+  tmp,
+  temp: tmp,
+  home,
+  questionsModel: path.resolve('src/data/questions-model.json'),
+  test: {
     design: path.resolve('__tests__/test-data', 'design.svg'),
     images: path.resolve('__tests__/test-data', 'images'),
     keyImage: path.resolve('__tests__/test-data', 'key.jpg'),
     key: path.resolve('__tests__/test-data', 'key.csv'),
-    postModel: path.resolve('src/data/questions-model.json'),
-    questionsModel: path.resolve('src/data/questions-model.json'),
     result: path.resolve('__tests__/test-data', 'result.csv'),
-    rollNoModel: path.resolve('src/data/questions-model.json'),
   },
 }

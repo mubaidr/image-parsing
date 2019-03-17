@@ -1,7 +1,7 @@
 const brain = require('brain.js')
 const fs = require('fs')
 
-const dataPaths = require('./data-paths')
+const DATAPATHS = require('./data-paths')
 
 /**
  * Returns a trained neural network function
@@ -12,7 +12,7 @@ function getQuestionsNeuralNet(src) {
   const net = new brain.NeuralNetwork()
 
   return net.fromJSON(
-    JSON.parse(fs.readFileSync(src || dataPaths.DEFAULTS.questionsModel))
+    JSON.parse(fs.readFileSync(src || DATAPATHS.questionsModel))
   )
 }
 
