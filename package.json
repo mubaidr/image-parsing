@@ -29,9 +29,12 @@
       }
     },
     "files": [
-      "dist/**/*",
       "_icons/icon.*",
-      "!**/vue/**"
+      "!**/node_modules/**/*",
+      "**/node_modules/sharp/lib/*",
+      "**/node_modules/sharp/build/release/sharp.node",
+      "dist/**/*",
+      "data/**/*"
     ],
     "linux": {
       "icon": "_icons/icon.png",
@@ -50,7 +53,7 @@
       ],
       "type": "distribution"
     },
-    "npmRebuild": false,
+    "npmRebuild": true,
     "nsis": {
       "allowToChangeInstallationDirectory": true,
       "oneClick": false
