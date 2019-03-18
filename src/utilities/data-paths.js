@@ -14,6 +14,7 @@ module.exports = {
   questionsModel: path.resolve('src/data/questions-model.json'),
   test: {
     design: path.resolve('__tests__/test-data', 'design.svg'),
+    designQR: path.resolve('__tests__/test-data', 'design.qr.svg'),
     images: path.resolve('__tests__/test-data', 'images'),
     keyImage: path.resolve('__tests__/test-data', 'key.jpg'),
     key: path.resolve('__tests__/test-data', 'key.csv'),
