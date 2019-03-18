@@ -4,27 +4,29 @@ const { dialog, getCurrentWindow } = require('electron').remote
 const settings = require('electron-settings')
 
 async function openDirectory(filters) {
-  const dir = dialog.showOpenDialog(getCurrentWindow(), {
+  const dirList = dialog.showOpenDialog(getCurrentWindow(), {
     defaultPath: settings.get('open-directory'),
     filters,
     properties: ['openDirectory'],
   })
 
+  const dir = dirList ? dirList[0] : ''
   if (dir) settings.set('open-directory', dir)
 
-  return dir ? dir[0] : null
+  return dir
 }
 
 async function openFile(filters) {
-  const file = dialog.showOpenDialog(getCurrentWindow(), {
+  const fileList = dialog.showOpenDialog(getCurrentWindow(), {
     defaultPath: settings.get('open-file'),
     filters,
     properties: ['openFile'],
   })
 
+  const file = fileList ? fileList[0] : ''
   if (file) settings.set('open-file', file)
 
-  return file ? file[0] : null
+  return file
 }
 
 async function saveFile(filters) {

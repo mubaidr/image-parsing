@@ -86,7 +86,7 @@ export default {
   data() {
     return {
       imageDirectory:
-        'D:\\current\\image-parsing\\__tests__\\test-data\\images',
+        'D:\\current\\image-parsing\\__tests__\\test-data\\images-qrcode',
       running: false,
       processedImages: 0,
       totalImages: 0,
@@ -137,16 +137,18 @@ export default {
     listner(m) {
       if (m.progress) {
         this.processedImages += 1
-
-        if (!this.perImageTime) this.perImageTime = m.time
-      } else if (m.results) {
+        this.perImageTime = m.time
+      } else if (m.completed) {
         this.running = false
 
         this.$emit('results', m) // m contains both key and results
-      } else if (m.log) {
-        console.log('log: ', m.log)
       } else if (m.error) {
-        this.$toasted.show(m.error)
+        this.$toasted.show(
+          'A critical error has occured, please contact developer. ',
+          {
+            type: 'error',
+          }
+        )
       }
     },
 

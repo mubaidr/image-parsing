@@ -3,6 +3,32 @@ const fs = require('fs')
 
 const OPTIONS = require('./question-options')
 
+const PATTERNS = {
+  BARCODE: 'BARCODE',
+  NONE: 'NONE',
+  QRCODE: 'QRCODE',
+  QUESTION: 'QUESTION',
+}
+
+/**
+ *
+ *
+ * @date 2019-03-18
+ * @param {String} str
+ * @returns {String} Pattern Type
+ */
+function getPatternGroup(str) {
+  const QUESTION_PATTERN = new RegExp(/(q[1-9][0-9]?[ad])\b/gi)
+  const PATTERN_BARCODE = new RegExp(/barcode/gi)
+  const PATTERN_QR = new RegExp(/qrcode/gi)
+
+  if (QUESTION_PATTERN.test(str)) return PATTERNS.QUESTION
+  if (PATTERN_BARCODE.test(str)) return PATTERNS.BARCODE
+  if (PATTERN_QR.test(str)) return PATTERNS.QRCODE
+
+  return PATTERNS.NONE
+}
+
 /**
  * Extracts position & dimensions of objects from SVG design File
  *
@@ -10,19 +36,14 @@ const OPTIONS = require('./question-options')
  * @returns {Object} JSON object
  */
 async function getDesignData(dir) {
-  const designData = {
-    questions: {},
-  }
-  const ROLL_NO_PATTERN = new RegExp(/rollnobarcode/gi)
-  const QUESTION_PATTERN = new RegExp(/(q[1-9][0-9]?[ad])\b/gi)
-
   const $ = cheerio.load(fs.readFileSync(dir, 'utf8'))
   const svgViewBox = $('svg')[0].attribs.viewBox.split(' ')
+  const designData = {
+    questions: {},
+    width: Math.ceil(svgViewBox[2] - svgViewBox[0]),
+    height: Math.ceil(svgViewBox[3] - svgViewBox[1]),
+  }
 
-  designData.width = Math.ceil(svgViewBox[2] - svgViewBox[0])
-  designData.height = Math.ceil(svgViewBox[3] - svgViewBox[1])
-
-  let gotRollNo = false
   let x
   let y
   let rx
@@ -36,21 +57,14 @@ async function getDesignData(dir) {
   for (let i = 0; i < groups.length; i += 1) {
     const group = groups[i]
 
-    const title =
-      $(group)
-        .find('title')
-        .first()
-        .html()
-        .trim()
-        .toUpperCase() || ''
+    const title = $(group)
+      .find('title')
+      .first()
+      .html()
+      .trim()
+      .toUpperCase()
 
     if (!title) continue
-
-    const isQuestionGroup = QUESTION_PATTERN.test(title)
-    const isRollNoGroup =
-      isQuestionGroup || gotRollNo ? false : ROLL_NO_PATTERN.test(title)
-
-    if (!(isQuestionGroup || isRollNoGroup)) continue
 
     const transform = $(group)
       .attr('transform')
@@ -74,25 +88,34 @@ async function getDesignData(dir) {
     width = parseInt(rect.attr('width'), 10) || 0 + rx
     height = parseInt(rect.attr('height'), 10) || 0 + ry
 
-    if (isQuestionGroup) {
-      const optionTitle = title.slice(-1)
-      const questionNumber = title.slice(0, -1)
+    let questionNumber
+    let optionTitle
+    const PATTERN = getPatternGroup(title)
 
-      if (!designData.questions[questionNumber]) {
-        designData.questions[questionNumber] = {}
-      }
+    switch (PATTERN) {
+      case PATTERNS.QUESTION:
+        optionTitle = title.slice(-1)
+        questionNumber = title.slice(0, -1)
 
-      if (optionTitle === OPTIONS.A) {
-        designData.questions[questionNumber].x1 = x - 1
-        designData.questions[questionNumber].y1 = y - 1
-      } else {
-        // donot check last option to suport any number of options
-        designData.questions[questionNumber].x2 = x + width + 1
-        designData.questions[questionNumber].y2 = y + height + 1
-      }
-    } else if (isRollNoGroup) {
-      designData.rollNo = { x1: x, y1: y, x2: x + width, y2: y + height }
-      gotRollNo = true
+        if (!designData.questions[questionNumber]) {
+          designData.questions[questionNumber] = {}
+        }
+
+        if (optionTitle === OPTIONS.A) {
+          designData.questions[questionNumber].x1 = x - 1
+          designData.questions[questionNumber].y1 = y - 1
+        } else {
+          // donot check last option to suport any number of options
+          designData.questions[questionNumber].x2 = x + width + 1
+          designData.questions[questionNumber].y2 = y + height + 1
+        }
+        break
+      case PATTERNS.BARCODE:
+      case PATTERNS.QRCODE:
+        designData.rollNo = { x1: x, y1: y, x2: x + width, y2: y + height }
+        break
+      default:
+        break
     }
   }
 

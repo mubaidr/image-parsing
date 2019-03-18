@@ -38,6 +38,7 @@ async function addWorkerHandlers(worker, callback) {
       if (RESULTS.length === TOTAL_IMAGES) {
         // report view of completion
         callback({
+          completed: true,
           results: [...RESULTS],
         })
 
@@ -51,13 +52,13 @@ async function addWorkerHandlers(worker, callback) {
 
   // logging
   worker.stdout.on('data', data => {
-    callback({
-      log: data.toString(),
-    })
+    console.info('Info: ', data.toString())
   })
 
   // error
   worker.stderr.on('data', data => {
+    console.error('Error: ', data.toString())
+
     callback({
       error: data.toString(),
     })

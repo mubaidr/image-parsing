@@ -36,6 +36,23 @@ async function convertImage(src) {
 }
 
 /**
+ * Logs provided image data to .tmp folder
+ * @param {sharp || String} img Sharp instance or image source
+ * @param {String} name Name of file
+ */
+async function logImageData(src, name) {
+  let img
+
+  if (typeof src === 'string') {
+    img = getSharpObjectFromSource(src)
+  } else {
+    img = src.clone()
+  }
+
+  return img.jpeg().toFile(path.join(DATAPATHS.tmp, `${name || uuid()}.jpg`))
+}
+
+/**
  * Return a list of valid image format files from the provided path
  *
  * @param {String} path Path to sarch for images
@@ -54,26 +71,34 @@ function getImagePaths(dir) {
  * @returns {Object} Roll Number
  */
 async function getRollNoFromImage(designData, img, isBarcode) {
-  const obj = {
-    id: uuid(),
-  }
   const metadata = await img.metadata()
   const rollNoPos = designData.rollNo
   const ratio = metadata.width / designData.width
   const width = Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio)
   const height = Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio)
+  const obj = {
+    id: uuid(),
+  }
 
-  const data = await img
+  img
     .extract({
       left: Math.floor(rollNoPos.x1 * ratio),
       top: Math.floor(rollNoPos.y1 * ratio),
       width,
       height,
     })
-    .toBuffer()
+    .ensureAlpha()
+
+  // debug image
+  // logImageData(img)
+
+  const data = await img.toBuffer()
+
+  // DEBUG: malformed data to jsqr
+  console.log(width, height)
 
   try {
-    let rollNo = null
+    let rollNo
 
     if (isBarcode) {
       rollNo = await javascriptBarcodeReader(
@@ -94,28 +119,13 @@ async function getRollNoFromImage(designData, img, isBarcode) {
     obj.rollNo = rollNo
     obj.hasValidRollNo = true
   } catch (err) {
+    console.error(err)
+
     obj.rollNo = null
     obj.hasValidRollNo = false
   }
 
   return obj
-}
-
-/**
- * Logs provided image data to .tmp folder
- * @param {sharp || String} img Sharp instance or image source
- * @param {String} name Name of file
- */
-async function logImageData(src, name) {
-  let img
-
-  if (typeof src === 'string') {
-    img = getSharpObjectFromSource(src)
-  } else {
-    img = src.clone()
-  }
-
-  return img.jpeg().toFile(path.join(DATAPATHS.tmp, `${name || uuid()}.jpg`))
 }
 
 module.exports = {
