@@ -1,4 +1,5 @@
 const javascriptBarcodeReader = require('javascript-barcode-reader')
+const javascriptQRReader = require('jsqr').default
 const fastGlob = require('fast-glob')
 const path = require('path')
 const uuid = require('uuid')
@@ -52,7 +53,7 @@ function getImagePaths(dir) {
  * @param {String} path Path of scanned image file
  * @returns {Object} Roll Number
  */
-async function getRollNoFromImage(designData, img) {
+async function getRollNoFromImage(designData, img, isBarcode) {
   const obj = {
     id: uuid(),
   }
@@ -72,10 +73,25 @@ async function getRollNoFromImage(designData, img) {
     .toBuffer()
 
   try {
-    obj.rollNo = await javascriptBarcodeReader(
-      { data, width, height },
-      { barcode: 'code-39' }
-    )
+    let rollNo = null
+
+    if (isBarcode) {
+      rollNo = await javascriptBarcodeReader(
+        { data, width, height },
+        { barcode: 'code-39' }
+      )
+    } else {
+      rollNo = javascriptQRReader({
+        data,
+        width,
+        height,
+        options: {
+          inversionAttempts: 'dontInvert',
+        },
+      }).data
+    }
+
+    obj.rollNo = rollNo
     obj.hasValidRollNo = true
   } catch (err) {
     obj.rollNo = null
