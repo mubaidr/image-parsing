@@ -9,7 +9,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const PurgecssPlugin = require('purgecss-webpack-plugin')
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const { dependencies, devDependencies, build } = require('../package.json')
+const {
+  dependencies,
+  devDependencies,
+  productName,
+} = require('../package.json')
 /* eslint-enable */
 
 const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
@@ -105,7 +109,7 @@ const config = {
     }),
     new VueLoaderPlugin(),
     new webpack.DefinePlugin({
-      'process.env.PRODUCT_NAME': JSON.stringify(build.productName),
+      'process.env.PRODUCT_NAME': JSON.stringify(productName),
     }),
   ],
   resolve: {

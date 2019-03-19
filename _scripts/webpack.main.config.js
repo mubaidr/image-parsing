@@ -2,7 +2,11 @@ const path = require('path')
 // eslint-disable-next-line
 const webpack = require('webpack')
 
-const { dependencies, devDependencies, build } = require('../package.json')
+const {
+  dependencies,
+  devDependencies,
+  productName,
+} = require('../package.json')
 
 const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
@@ -34,7 +38,7 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.PRODUCT_NAME': JSON.stringify(build.productName),
+      'process.env.PRODUCT_NAME': JSON.stringify(productName),
     }),
   ],
   output: {

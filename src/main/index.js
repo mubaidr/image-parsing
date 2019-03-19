@@ -1,4 +1,4 @@
-import { build } from '../../package.json'
+import { productName } from '../../package.json'
 
 const settings = require('electron-settings')
 
@@ -13,7 +13,6 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 const gotTheLock = app.requestSingleInstanceLock()
 const isDev = process.env.NODE_ENV === 'development'
 let mainWindow
-const { productName } = build
 
 // only allow single instance of application
 if (!isDev) {
