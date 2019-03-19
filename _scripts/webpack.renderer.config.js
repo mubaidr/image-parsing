@@ -3,12 +3,10 @@ const path = require('path')
 /* eslint-disable*/
 const fg = require('fast-glob')
 const webpack = require('webpack')
-// const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const PurgecssPlugin = require('purgecss-webpack-plugin')
-// const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const { dependencies, devDependencies, build } = require('../package.json')
@@ -47,10 +45,6 @@ const config = {
           isDevMode ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
         ],
-      },
-      {
-        test: /\.html$/,
-        use: 'vue-html-loader',
       },
       {
         test: /\.js$/,

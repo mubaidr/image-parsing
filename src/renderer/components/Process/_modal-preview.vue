@@ -24,12 +24,12 @@
             <div class="field">
               <p class="control">
                 <input
+                  ref="txt_roll_no"
                   :class="{'is-danger' : !row.hasValidRollNo}"
                   :readonly="row.hasValidRollNo"
-                  class="input has-text-centered is-uppercase has-text-weight-bold is-family-code"
-                  ref="txt_roll_no"
-                  placeholder="Roll No"
                   v-model="row.rollNo"
+                  class="input has-text-centered is-uppercase has-text-weight-bold is-family-code"
+                  placeholder="Roll No"
                   type="text"
                 >
               </p>

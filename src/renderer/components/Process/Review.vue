@@ -24,9 +24,9 @@
             </p>
             <p class="control has-icons-right">
               <input
+                v-model="filterQuery"
                 class="input"
                 placeholder="Filter"
-                v-model="filterQuery"
                 type="text"
               >
               <span class="icon is-right">
@@ -89,8 +89,8 @@
                 <tr
                   :key="result.id"
                   v-for="(result, index) in filteredResults"
-                  class="list-complete-item"
                   v-on:dblclick="selectRow(index)"
+                  class="list-complete-item"
                 >
                   <td>{{index + 1}}</td>
                   <template v-for="([column, value]) in Object.entries(result)">
