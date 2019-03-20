@@ -94,9 +94,6 @@ async function getRollNoFromImage(designData, img, isBarcode) {
 
   const data = await img.toBuffer()
 
-  // DEBUG: malformed data to jsqr
-  console.log(width, height)
-
   try {
     let rollNo
 
@@ -106,20 +103,15 @@ async function getRollNoFromImage(designData, img, isBarcode) {
         { barcode: 'code-39' }
       )
     } else {
-      rollNo = javascriptQRReader({
-        data,
-        width,
-        height,
-        options: {
-          inversionAttempts: 'dontInvert',
-        },
+      rollNo = javascriptQRReader(data, width, height, {
+        inversionAttempts: 'dontInvert',
       }).data
     }
 
     obj.rollNo = rollNo
-    obj.hasValidRollNo = true
+    obj.hasValidRollNo = !!obj.rollNo
   } catch (err) {
-    console.error(err)
+    // console.error(err)
 
     obj.rollNo = null
     obj.hasValidRollNo = false
