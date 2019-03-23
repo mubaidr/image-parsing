@@ -4,17 +4,18 @@ const { getDesignData } = require('./design')
 const { getImagePaths } = require('./images')
 
 // store reference to all workers
+let DESIGNDATA
 let WORKER_PROCESSES
 let TOTAL_IMAGES
 
 // result collection
-let RESULTS = []
+const RESULTS = []
 
 /**
  * Stops all worker processes
  */
 async function stop() {
-  if (!WORKER_PROCESSES) return
+  if (!WORKER_PROCESSES || WORKER_PROCESSES.length === 0) return
 
   for (let i = 0; i < WORKER_PROCESSES.length; i += 1) {
     // exit workers
@@ -24,28 +25,28 @@ async function stop() {
   }
 
   WORKER_PROCESSES.length = 0
-  TOTAL_IMAGES.length = 0
   RESULTS.length = 0
+  TOTAL_IMAGES = 0
 }
 
 async function addWorkerHandlers(worker, callback) {
   // results collection and progress
   worker.on('message', data => {
     if (data.completed) {
-      RESULTS = RESULTS.concat(data.results)
+      RESULTS.push(...data.results)
 
       // check if all process have returned result
       if (RESULTS.length === TOTAL_IMAGES) {
         // report view of completion
         callback({
           completed: true,
-          results: [...RESULTS],
+          results: RESULTS,
         })
 
         // exit all workers & reset data
         stop()
       }
-    } else if (data.progress) {
+    } else {
       callback(data)
     }
   })
@@ -58,10 +59,6 @@ async function addWorkerHandlers(worker, callback) {
   // error
   worker.stderr.on('data', data => {
     console.error('Error: ', data.toString())
-
-    callback({
-      error: data.toString(),
-    })
   })
 }
 
@@ -74,19 +71,19 @@ async function addWorkerHandlers(worker, callback) {
  *
  * @returns {Object} {totalImages, totalWorkers}
  */
-async function start(
-  callback,
-  imagesDirectory = DATAPATHS.test.images,
-  imageFile
-) {
+async function start(callback, imagesDirectory, imageFile) {
   // reset result collection
-  const designData = await getDesignData(DATAPATHS.test.design)
   const imagePaths = imagesDirectory
     ? await getImagePaths(imagesDirectory)
     : [imageFile]
 
   TOTAL_IMAGES = imagePaths.length
-  WORKER_PROCESSES = await createWorkerProcesses(TOTAL_IMAGES)
+
+  ;[DESIGNDATA, WORKER_PROCESSES] = await Promise.all([
+    getDesignData(DATAPATHS.test.design),
+    createWorkerProcesses(TOTAL_IMAGES),
+  ])
+
   const TOTAL_PROCESS = WORKER_PROCESSES.length
   const STEP = Math.floor(TOTAL_IMAGES / TOTAL_PROCESS)
 
@@ -97,7 +94,7 @@ async function start(
 
     // initiate processing
     worker.send({
-      designData,
+      DESIGNDATA,
       imagePaths: imagePaths.slice(startIndex, endIndex),
     })
 

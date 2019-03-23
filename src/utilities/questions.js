@@ -13,7 +13,6 @@ const { convertToBitArray } = require('./index')
  */
 async function getQuestionsData(design, img, results) {
   const SCALE = 0.5
-  const META = await img.metadata()
   const TARGET_SIZE = design.width * SCALE
 
   // resize if image is larger than design
@@ -23,37 +22,39 @@ async function getQuestionsData(design, img, results) {
     width: TARGET_SIZE,
   })
 
-  const data = []
+  const extractedData = []
   const questions = Object.entries(design.questions)
 
   for (let i = 0; i < questions.length; i += 1) {
     const [title, q] = questions[i]
 
-    const opt = {
+    img.extract({
       left: Math.floor(q.x1 * SCALE),
       top: Math.floor(q.y1 * SCALE),
       width: Math.ceil((q.x2 - q.x1) * SCALE),
-      height: Math.ceil((q.y2 - q.y1) * SCALE * 1.5),
-    }
-    img.extract(opt)
+      height: Math.ceil((q.y2 - q.y1) * SCALE),
+    })
 
-    const binaryData = convertToBitArray(await img.toBuffer(), META.channels)
+    const { data, info } = await img.toBuffer({ resolveWithObject: true })
+    const binaryData = convertToBitArray(data, info.channels)
 
     if (results && results[title] !== '*') {
       // for training data
-      data.push({
+      extractedData.push({
         input: binaryData,
         output: { [results[title]]: 1 },
       })
-    } else {
-      data.push({ title, data: binaryData })
+
+      continue
     }
+
+    extractedData.push({ title, data: binaryData })
 
     // debug
     // logImageData(img, `${title}`)
   }
 
-  return data
+  return extractedData
 }
 
 module.exports = {

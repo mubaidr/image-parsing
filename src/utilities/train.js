@@ -27,13 +27,11 @@ function completed(success) {
  *
  */
 async function start() {
-  const [designData, resultsData] = await Promise.all([
+  const [designData, resultsData, sharpImage] = await Promise.all([
     getDesignData(DATAPATHS.test.design),
     CSVToJSON(DATAPATHS.test.key, true),
+    getSharpObjectFromSource(DATAPATHS.test.keyImage),
   ])
-
-  // extract roll no & question image data from images
-  const sharpImage = getSharpObjectFromSource(DATAPATHS.test.keyImage)
 
   const trainingData = await getQuestionsData(
     designData,

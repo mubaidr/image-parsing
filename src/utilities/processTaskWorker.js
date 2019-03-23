@@ -29,7 +29,7 @@ async function processTask(designData, imagePaths) {
   for (let i = 0; i < imagePaths.length; i += 1) {
     const startTime = Date.now()
     const img = imagePaths[i]
-    const sharpImage = getSharpObjectFromSource(img).raw()
+    const sharpImage = getSharpObjectFromSource(img)
 
     const [result, questionsData] = await Promise.all([
       getRollNoFromImage(designData, sharpImage),

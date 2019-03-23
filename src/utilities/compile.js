@@ -4,14 +4,10 @@ const { getDesignData } = require('./design')
 const { processTask } = require('./processTaskWorker')
 const DATAPATHS = require('./data-paths')
 
-async function readResult(src) {
-  return importExcelToJSON(src)
-}
-
 async function readKey(src) {
-  const isNativeKey = NATIVE_KEYS.indexOf(src.split('.').pop()) !== -1
+  const ext = src.split('.').pop()
 
-  if (isNativeKey) {
+  if (NATIVE_KEYS.indexOf(ext) !== -1) {
     return importExcelToJSON(src)
   }
 
@@ -21,12 +17,14 @@ async function readKey(src) {
   return keyData
 }
 
+// eslint-disable-next-line
 async function compileResult(resultPath, keyPath, options) {
-  const compiledResult = []
   const [results, keys] = await Promise.all([
-    readResult(resultPath),
+    importExcelToJSON(resultPath),
     readKey(keyPath),
   ])
+
+  const compiledResults = []
 
   // TODO support multiple keys in one file
   const key = keys[0]
@@ -34,21 +32,19 @@ async function compileResult(resultPath, keyPath, options) {
   for (let i = 0; i < results.length; i += 1) {
     const result = results[i]
 
+    const compiledResult = {
+      totalQuestions: 0,
+      skippedQuestions: 0,
+      skippedAnswers: 0,
+      attemptedAnswers: 0,
+      correctAnswers: 0,
+      incorrectAnswers: 0,
+    }
+
     // skip processed result
     if (result.isProcessed) continue
 
-    // compare with key
-    let totalQuestions = 0
-    let skippedQuestions = 0
-    let skippedAnswers = 0
-    let attemptedAnswers = 0
-    let correctAnswers = 0
-    let incorrectAnswers = 0
-
     const columns = Object.keys(key).filter(col => col[0].toLowerCase() === 'q')
-
-    // total questions
-    totalQuestions = columns.length
 
     for (let j = 0; j < columns.length; j += 1) {
       const column = columns[j]
@@ -58,46 +54,38 @@ async function compileResult(resultPath, keyPath, options) {
         !key[column] ||
         ['?', '*', '', ' ', undefined, null, false, 0].indexOf(key[column]) >= 0
       ) {
-        skippedQuestions += 1
+        compiledResult.skippedQuestions += 1
         continue
       }
 
       // question is skipped by candidate
       if (result[column] === '?') {
-        skippedAnswers += 1
+        compiledResult.skippedAnswers += 1
         continue
       }
 
-      // other questions are attempted
-      attemptedAnswers += 1
-
       // check correct/incorrect options
       if (result[column] === key[column]) {
-        correctAnswers += 1
+        compiledResult.correctAnswers += 1
       } else {
-        incorrectAnswers += 1
+        compiledResult.incorrectAnswers += 1
       }
+
+      // other questions are attempted
+      compiledResult.attemptedAnswers += 1
     }
 
-    compiledResult.push({
-      ...result,
-      totalQuestions,
-      skippedQuestions,
-      skippedAnswers,
-      attemptedAnswers,
-      correctAnswers,
-      incorrectAnswers,
-      totalMarks: totalQuestions * options.correctMarks,
-      obtainedMarks:
-        correctAnswers * options.correctMarks -
-        incorrectAnswers * options.incorrectMarks,
-    })
+    // total questions
+    compiledResult.totalQuestions = columns.length
+
+    // collect result
+    compiledResults.push({ ...result, ...compiledResult })
 
     // update status of result to skip it for next iterations
     result.isProcessed = true
   }
 
-  return compiledResult
+  return compiledResults
 }
 
 module.exports = {

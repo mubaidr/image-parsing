@@ -1,6 +1,5 @@
 // eslint-disable-next-line
 const { dialog, getCurrentWindow } = require('electron').remote
-
 const settings = require('electron-settings')
 
 async function openDirectory(filters) {

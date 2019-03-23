@@ -12,6 +12,8 @@ const CACHE = {}
 
 function getSharpObjectFromSource(src) {
   return sharp(src)
+    .raw()
+    .ensureAlpha()
   // .jpeg()
   // .flatten()
 }
@@ -80,14 +82,12 @@ async function getRollNoFromImage(designData, img, isBarcode) {
     id: uuid(),
   }
 
-  img
-    .extract({
-      left: Math.floor(rollNoPos.x1 * ratio),
-      top: Math.floor(rollNoPos.y1 * ratio),
-      width,
-      height,
-    })
-    .ensureAlpha()
+  img.extract({
+    left: Math.floor(rollNoPos.x1 * ratio),
+    top: Math.floor(rollNoPos.y1 * ratio),
+    width,
+    height,
+  })
 
   // debug image
   // logImageData(img)
