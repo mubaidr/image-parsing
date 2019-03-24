@@ -29,6 +29,9 @@ async function processTask(designData, imagePaths) {
   for (let i = 0; i < imagePaths.length; i += 1) {
     const startTime = Date.now()
     const img = imagePaths[i]
+
+    console.time(`image: ${img}`)
+
     const sharpImage = getSharpObjectFromSource(img)
 
     const [result, questionsData] = await Promise.all([
@@ -59,6 +62,8 @@ async function processTask(designData, imagePaths) {
 
     // collect option selection
     results.push(result)
+
+    console.timeEnd(`image: ${img}`)
 
     // report progress status
     sendProgress({

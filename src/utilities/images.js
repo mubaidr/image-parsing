@@ -73,6 +73,8 @@ function getImagePaths(dir) {
  * @returns {Object} Roll Number
  */
 async function getRollNoFromImage(designData, img, isBarcode) {
+  console.time('Roll No')
+
   const metadata = await img.metadata()
   const rollNoPos = designData.rollNo
   const ratio = metadata.width / designData.width
@@ -116,6 +118,8 @@ async function getRollNoFromImage(designData, img, isBarcode) {
     obj.rollNo = null
     obj.hasValidRollNo = false
   }
+
+  console.timeEnd('Roll No')
 
   return obj
 }
