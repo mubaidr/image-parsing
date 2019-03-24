@@ -40,7 +40,7 @@ async function addWorkerHandlers(worker, callback) {
         // report view of completion
         callback({
           completed: true,
-          results: RESULTS,
+          results: [...RESULTS],
         })
 
         // exit all workers & reset data
@@ -78,7 +78,6 @@ async function start(callback, imagesDirectory, imageFile) {
     : [imageFile]
 
   TOTAL_IMAGES = imagePaths.length
-
   ;[DESIGNDATA, WORKER_PROCESSES] = await Promise.all([
     getDesignData(DATAPATHS.test.design),
     createWorkerProcesses(TOTAL_IMAGES),
@@ -94,7 +93,7 @@ async function start(callback, imagesDirectory, imageFile) {
 
     // initiate processing
     worker.send({
-      DESIGNDATA,
+      designData: DESIGNDATA,
       imagePaths: imagePaths.slice(startIndex, endIndex),
     })
 

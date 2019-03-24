@@ -9,6 +9,7 @@
             <p class="control">
               <button
                 @click="toggleSortOrder"
+                :disabled="!hasResults"
                 class="button"
               >
                 <span>Sort</span>
@@ -25,6 +26,7 @@
             <p class="control has-icons-right">
               <input
                 v-model="filterQuery"
+                :disabled="!hasResults"
                 class="input"
                 placeholder="Filter"
                 type="text"
@@ -42,13 +44,14 @@
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <a
+              <button
                 @click="exportResult"
+                :disabled="!hasResults"
                 class="button is-success"
               >
                 <i class="material-icons">save</i>
                 <span>Export Results</span>
-              </a>
+              </button>
             </p>
           </div>
         </div>
@@ -63,7 +66,7 @@
       <!-- Show table when data is loaded -->
       <div
         key="table"
-        v-if="results.length > 0"
+        v-if="hasResults"
       >
         <div class="scroll-container">
           <table
@@ -126,18 +129,8 @@
         v-else
       >
         <article class="message is-info">
-          <div class="message-header">
-            <p>Info</p>
-            <button
-              aria-label="delete"
-              class="delete"
-            ></button>
-          </div>
           <div class="message-body">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum
-            <a>felis venenatis</a> efficitur. Aenean ac
-            <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.
+            No data found.
           </div>
         </article>
       </div>
@@ -196,6 +189,10 @@ export default {
   },
 
   computed: {
+    hasResults(){
+      return this.results.length > 0
+    },
+
     selectedRow() {
       if (this.selectedIndex !== null && this.filteredResults.length > 0)
         return this.filteredResults[this.selectedIndex]
@@ -204,22 +201,24 @@ export default {
     },
 
     filteredResults() {
-      return this.results
+      const frs = this.results
         .filter(r => {
           if (!this.filterQuery) return true
-
           return r.rollNo ? r.rollNo.indexOf(this.filterQuery) > -1 : false
-        })
-        .sort((a, b) => {
-          return this.sortOrder === 'asc'
-            ? a.rollNo - b.rollNo
-            : b.rollNo - a.rollNo
         })
         .map((r, index) => {
           const cr = r
           cr.id = r.id || index
           return r
         })
+
+      if(this.sortOrder === 'asc'){
+        frs.sort()
+      }else{
+        frs.reverse()
+      }
+
+      return frs
     },
 
     columns() {
