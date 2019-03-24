@@ -31,6 +31,15 @@
             <i class="material-icons">flash_on</i>
             <span>Process</span>
           </RouterLink>
+
+          <button
+            @click="test()"
+            class="button is-info"
+          >
+            <i class="material-icons">flash_on</i>
+            <span>CPU-GPU</span>
+          </button>
+
           <br>
           <RouterLink
             class="button is-white is-fullwidth"
@@ -45,8 +54,16 @@
 </template>
 
 <script>
+const {test} = require('../../utilities/cpu-gpu-test.js')
+
 export default {
   name: 'Home',
+
+  methods: {
+    test(){
+      test()
+    }
+  }
 }
 </script>
 

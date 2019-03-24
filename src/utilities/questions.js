@@ -39,6 +39,8 @@ async function getQuestionsData(design, img, results) {
       height: Math.ceil((q.y2 - q.y1) * SCALE),
     })
 
+    // TODO: check GPU version is faster if no resize is performed
+
     const { data, info } = await img.toBuffer({ resolveWithObject: true })
     const binaryData = convertToBitArray(data, info.channels)
 
