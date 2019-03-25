@@ -51,7 +51,7 @@ const config = {
         ],
       },
       {
-        test: /\.js$/,
+        test: /\.(js|tsx?)$/,
         use: 'babel-loader',
         exclude: /node_modules/,
       },
@@ -117,6 +117,7 @@ const config = {
       '@': path.join(__dirname, '../src/'),
       vue$: 'vue/dist/vue.common.js',
     },
+    extensions: [".ts", ".tsx", ".js"]
   },
   target: 'electron-renderer',
 }

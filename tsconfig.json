@@ -1,0 +1,17 @@
+{
+  "allowSyntheticDefaultImports": true,
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+  ],
+  "include": [
+    "src/**/*"
+  ],
+  "module": "commonjs",
+  "moduleResolution": "node",
+  "resolveJsonModule": true,
+  "sourceMap": true,
+  "target": "es6",
+  "lib": ["ESNext"],
+}

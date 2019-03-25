@@ -22,7 +22,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|tsx?)$/,
         use: 'babel-loader',
         exclude: /node_modules/,
       },
@@ -46,7 +46,9 @@ const config = {
     libraryTarget: 'commonjs2',
     path: path.join(__dirname, '../dist'),
   },
-  resolve: {},
+  resolve: {
+    extensions: [".ts", ".tsx", ".js"]
+  },
   target: 'electron-main',
 }
 
