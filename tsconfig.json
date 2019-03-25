@@ -1,17 +1,23 @@
 {
-  "allowSyntheticDefaultImports": true,
-  "exclude": [
-    "node_modules",
-    "build",
-    "dist",
-  ],
-  "include": [
-    "src/**/*"
-  ],
-  "module": "commonjs",
-  "moduleResolution": "node",
-  "resolveJsonModule": true,
-  "sourceMap": true,
-  "target": "es6",
-  "lib": ["ESNext"],
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "outDir": "dist",
+    "paths": {
+      "*": ["node_modules/*", "src/types/*"]
+    },
+    "resolveJsonModule": true,
+    "rootDir": "src",
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "ESNext"
+  },
+  "exclude": ["node_modules", "build", "dist"],
+  "include": ["src/**/*"]
 }

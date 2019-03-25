@@ -1,18 +1,18 @@
-const brain = require('brain.js')
-const fs = require('fs')
+import brain = require('brain.js')
+import fs = require('fs')
 
-const DATAPATHS = require('./data-paths')
+import DATAPATHS from './data-paths'
 
 /**
  * Returns a trained neural network function
  *
  * @returns {Function} Neural network function
  */
-function getQuestionsNeuralNet(src) {
+function getQuestionsNeuralNet(src: string) {
   const net = new brain.NeuralNetwork()
 
   return net.fromJSON(
-    JSON.parse(fs.readFileSync(src || DATAPATHS.questionsModel))
+    JSON.parse(fs.readFileSync(src || DATAPATHS.questionsModel).toString())
   )
 }
 
@@ -21,7 +21,7 @@ function getQuestionsNeuralNet(src) {
  * @param {Array<Number>} data Raw image pixel data array
  * @param {Number} channels Number of channels in the data
  */
-function convertToBitArray(data, channels) {
+function convertToBitArray(data: number[], channels: number) {
   // convert image data to binary
   const binaryData = []
 
@@ -55,6 +55,6 @@ function convertToBitArray(data, channels) {
 }
 
 module.exports = {
-  getQuestionsNeuralNet,
   convertToBitArray,
+  getQuestionsNeuralNet,
 }
