@@ -1,7 +1,7 @@
 import brain = require('brain.js')
 import fs = require('fs')
 
-import DATAPATHS from './data-paths'
+import DATAPATHS from './dataPaths'
 
 /**
  * Returns a trained neural network function
@@ -22,7 +22,7 @@ function getQuestionsNeuralNet(src: string) {
  * @param {Number} channels Number of channels in the data
  */
 function convertToBitArray(data: number[], channels: number) {
-  // convert image data to binary
+  // Convert image data to binary
   const binaryData = []
 
   for (let i = 0; i < data.length; i += channels) {
@@ -35,7 +35,7 @@ function convertToBitArray(data: number[], channels: number) {
     const lowerLimit = avg - threshold
 
     if (avg <= 80) {
-      // black pixel
+      // Black pixel
       binaryData.push(0)
     } else if (
       r <= upperLimit &&
@@ -43,10 +43,10 @@ function convertToBitArray(data: number[], channels: number) {
       (g <= upperLimit && g >= lowerLimit) &&
       (b <= upperLimit && b >= lowerLimit)
     ) {
-      // grey pixel
+      // Grey pixel
       binaryData.push(1)
     } else {
-      // color pixel
+      // Color pixel
       binaryData.push(0)
     }
   }
