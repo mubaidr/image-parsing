@@ -1,38 +1,38 @@
-import brain = require('brain.js')
-import fs = require('fs')
+import brain from 'brain.js'
+import fs from 'fs'
 
-import DATAPATHS from './dataPaths'
+import { DATAPATHS } from './dataPaths'
+
+type QuestionsNeuralNetGetter = (param: string) => brain.NeuralNetwork
 
 /**
- * Returns a trained neural network function
  *
- * @returns {Function} Neural network function
+ *
+ * {string} src
+ * {brain.NeuralNetwork}
  */
-function getQuestionsNeuralNet(src: string) {
-  const net = new brain.NeuralNetwork()
+const getQuestionsNeuralNet: QuestionsNeuralNetGetter = (
+  src: string
+): brain.NeuralNetwork => {
+  const net: brain.NeuralNetwork = new brain.NeuralNetwork()
 
   return net.fromJSON(
     JSON.parse(fs.readFileSync(src || DATAPATHS.questionsModel).toString())
   )
 }
 
-/**
- * Converts provided Raw image data to Bit array
- * @param {Array<Number>} data Raw image pixel data array
- * @param {Number} channels Number of channels in the data
- */
 function convertToBitArray(data: number[], channels: number) {
   // Convert image data to binary
   const binaryData = []
 
   for (let i = 0; i < data.length; i += channels) {
-    const r = data[i]
-    const g = data[i + 1]
-    const b = data[i + 2]
-    const avg = Math.ceil((r + g + b) / 3)
-    const threshold = 15
-    const upperLimit = avg + threshold
-    const lowerLimit = avg - threshold
+    const r: number = data[i]
+    const g: number = data[i + 1]
+    const b: number = data[i + 2]
+    const avg: number = Math.ceil((r + g + b) / 3)
+    const threshold: number = 15
+    const upperLimit: number = avg + threshold
+    const lowerLimit: number = avg - threshold
 
     if (avg <= 80) {
       // Black pixel
