@@ -42,7 +42,9 @@ async function compileResult(resultPath, keyPath, options) {
     }
 
     // skip processed result
-    if (result.isProcessed) continue
+    if (result.isProcessed) {
+      continue
+    }
 
     const columns = Object.keys(key).filter(col => col[0].toLowerCase() === 'q')
 

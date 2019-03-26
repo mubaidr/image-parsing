@@ -1,22 +1,17 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./",
     "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "commonjs",
+    "lib": ["dom", "esnext"],
+    "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "noImplicitThis": true,
-    "outDir": "dist",
-    "paths": {
-      "*": ["node_modules/*", "src/types/*"]
-    },
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "resolveJsonModule": true,
-    "rootDir": "src",
     "strict": true,
     "strictNullChecks": true,
-    "target": "ESNext"
+    "target": "esnext"
   },
   "exclude": ["node_modules", "build", "dist"],
   "include": ["src/**/*"]

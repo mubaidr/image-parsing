@@ -1,40 +1,33 @@
-import brain from 'brain.js'
+import brain, { INeuralNetworkJSON } from 'brain.js'
 import fs from 'fs'
 
 import { DATAPATHS } from './dataPaths'
 
-type QuestionsNeuralNetGetter = (param: string) => brain.NeuralNetwork
+type QuestionsNeuralNetGetter = () => brain.NeuralNetwork
 
-/**
- *
- *
- * {string} src
- * {brain.NeuralNetwork}
- */
-const getQuestionsNeuralNet: QuestionsNeuralNetGetter = (
-  src: string
-): brain.NeuralNetwork => {
-  const net: brain.NeuralNetwork = new brain.NeuralNetwork()
-
-  return net.fromJSON(
-    JSON.parse(fs.readFileSync(src || DATAPATHS.questionsModel).toString())
+const getQuestionsNeuralNet: QuestionsNeuralNetGetter = () => {
+  const json: INeuralNetworkJSON = JSON.parse(
+    fs.readFileSync(DATAPATHS.questionsModel).toString()
   )
+
+  return new brain.NeuralNetwork().fromJSON(json)
 }
 
-function convertToBitArray(data: number[], channels: number) {
+type ConvertToBitArrayGetter = (a: number[], b: number) => number[]
+
+const convertToBitArray: ConvertToBitArrayGetter = (data, channels) => {
   // Convert image data to binary
-  const binaryData = []
+  const binaryData: number[] = []
 
   for (let i = 0; i < data.length; i += channels) {
-    const r: number = data[i]
-    const g: number = data[i + 1]
-    const b: number = data[i + 2]
-    const avg: number = Math.ceil((r + g + b) / 3)
-    const threshold: number = 15
-    const upperLimit: number = avg + threshold
-    const lowerLimit: number = avg - threshold
+    const threshold = 15
+    const thresholdBlack = 80
+    const [r, g, b, a] = data.slice(i, i + channels)
+    const avg = Math.ceil(((r + g + b) * a) / (channels - 1))
+    const upperLimit = avg + threshold
+    const lowerLimit = avg - threshold
 
-    if (avg <= 80) {
+    if (avg <= thresholdBlack) {
       // Black pixel
       binaryData.push(0)
     } else if (
