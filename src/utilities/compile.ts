@@ -1,24 +1,38 @@
-const { NATIVE_KEYS } = require('../utilities/valid-types')
+import { VALIDTYPES } from '../utilities/validTypes'
+import { DATAPATHS } from './dataPaths'
+
 const { importExcelToJSON } = require('../utilities/excel')
 const { getDesignData } = require('./design')
 const { processTask } = require('./processTaskWorker')
-const DATAPATHS = require('./data-paths')
 
-async function readKey(src) {
+interface IKEY {
+  'Roll No': string
+  'Roll#': string
+  'Roll #': string
+  'Roll Number': string
+}
+
+type ReadKeyGetter = (a: string) => Promise<IKEY[]>
+
+const readKey: ReadKeyGetter = async src => {
   const ext = src.split('.').pop()
 
-  if (NATIVE_KEYS.indexOf(ext) !== -1) {
+  if (ext === undefined) {
+    return false
+  }
+
+  if (VALIDTYPES.NATIVE_KEYS.indexOf(ext) !== -1) {
     return importExcelToJSON(src)
   }
 
-  const designData = await getDesignData(DATAPATHS.test.design)
-  const keyData = await processTask(designData, [src])
-
-  return keyData
+  const designData = await getDesignData(DATAPATHS.design)
+  return processTask(designData, [src])
 }
 
+type CompileResultGetter = (a: string, b: string) => Promise<object>
+
 // eslint-disable-next-line
-async function compileResult(resultPath, keyPath, options) {
+const compileResult: CompileResultGetter = async (resultPath, keyPath) => {
   const [results, keys] = await Promise.all([
     importExcelToJSON(resultPath),
     readKey(keyPath),

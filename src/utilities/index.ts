@@ -6,9 +6,8 @@ import { DATAPATHS } from './dataPaths'
 type QuestionsNeuralNetGetter = () => brain.NeuralNetwork
 
 const getQuestionsNeuralNet: QuestionsNeuralNetGetter = () => {
-  const json: INeuralNetworkJSON = JSON.parse(
-    fs.readFileSync(DATAPATHS.questionsModel).toString()
-  )
+  const text = fs.readFileSync(DATAPATHS.questionsModel).toString()
+  const json: INeuralNetworkJSON = JSON.parse(text)
 
   return new brain.NeuralNetwork().fromJSON(json)
 }

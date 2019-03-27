@@ -1,7 +1,12 @@
 {
-  "extends": ["tslint:all", "tslint-config-prettier"],
+  "extends": [
+    "tslint:recommended",
+    "tslint-microsoft-contrib/recommended",
+    "tslint-config-prettier"
+  ],
   "rules": {
     "completed-docs": false,
-    "no-inferrable-types": false
+    "no-relative-imports": false,
+    "non-literal-fs-path": false
   }
 }

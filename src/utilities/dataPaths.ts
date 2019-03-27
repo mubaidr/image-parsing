@@ -8,22 +8,7 @@ const home: string = isDev
   ? path.resolve('.')
   : path.join(os.homedir(), 'desktop')
 
-interface IDATAPATHS {
-  design: string
-  designBarcode: string
-  home: string
-  images: string
-  imagesBarcode: string
-  key: string
-  keyImage: string
-  questionsModel: string
-  result: string
-  root: string
-  temp: string
-  tmp: string
-}
-
-export const DATAPATHS: IDATAPATHS = {
+export const DATAPATHS = {
   design: path.resolve('__tests__/test-data', 'design.qr.svg'),
   designBarcode: path.resolve('__tests__/test-data', 'design.svg'),
   home,

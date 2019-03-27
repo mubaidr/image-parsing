@@ -13,9 +13,9 @@ const IMAGES = ['tif', 'tiff', 'dib', ...NATIVE_IMAGES]
 const NATIVE_KEYS = ['xlsx', 'xlsm', 'xls', 'csv']
 const KEY = [...NATIVE_KEYS, ...IMAGES]
 
-module.exports = {
+export const VALIDTYPES = {
   IMAGES,
   KEY,
-  NATIVE_KEYS,
   NATIVE_IMAGES,
+  NATIVE_KEYS,
 }
