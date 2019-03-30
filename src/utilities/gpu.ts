@@ -1,5 +1,3 @@
-/* eslint-disable func-names */
-
 const Gpujs = require('gpu.js/src/browser.js')
 
 const GPU = new Gpujs()

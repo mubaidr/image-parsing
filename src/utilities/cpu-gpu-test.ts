@@ -1,5 +1,5 @@
-const { convertToBitArray } = require('./index')
-const { imageDataToBinary } = require('./gpu')
+import { imageDataToBinary } from './gpu'
+import { convertToBitArray } from './index'
 
 function test() {
   // random array 60 * 4 * 256 * 128

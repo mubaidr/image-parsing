@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 const { dialog, getCurrentWindow } = require('electron').remote
 const settings = require('electron-settings')
 
@@ -10,7 +9,9 @@ async function openDirectory(filters) {
   })
 
   const dir = dirList ? dirList[0] : ''
-  if (dir) settings.set('open-directory', dir)
+  if (dir) {
+    settings.set('open-directory', dir)
+  }
 
   return dir
 }
@@ -23,7 +24,9 @@ async function openFile(filters) {
   })
 
   const file = fileList ? fileList[0] : ''
-  if (file) settings.set('open-file', file)
+  if (file) {
+    settings.set('open-file', file)
+  }
 
   return file
 }
@@ -35,7 +38,9 @@ async function saveFile(filters) {
     properties: ['saveFile'],
   })
 
-  if (file) settings.set('save-file', file)
+  if (file) {
+    settings.set('save-file', file)
+  }
 
   return file
 }

@@ -10,6 +10,7 @@
     "noUnusedParameters": true,
     "resolveJsonModule": true,
     "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "target": "esnext"
   },
   "exclude": ["node_modules", "build", "dist"],

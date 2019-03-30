@@ -1,11 +1,8 @@
+import settings from 'electron-settings'
 import { productName } from '../../package.json'
 
-const settings = require('electron-settings')
-
-/* eslint-disable import/no-extraneous-dependencies */
 const { app, BrowserWindow, Menu } = require('electron')
 const DATAPATHS = require('../utilities/data-paths')
-/* eslint-enable */
 
 // disable electron warning
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
@@ -17,7 +14,6 @@ let mainWindow
 // only allow single instance of application
 if (!isDev) {
   if (gotTheLock) {
-    // eslint-disable-next-line
     app.on('second-instance', (commandLine, workingDirectory) => {
       // Someone tried to run a second instance, we should focus our window.
       if (mainWindow && mainWindow.isMinimized()) {
@@ -30,16 +26,13 @@ if (!isDev) {
     process.exit(0)
   }
 } else {
-  // eslint-disable-next-line
   require('electron-debug')()
 }
 
 async function installDevTools() {
   try {
-    /* eslint-disable */
     require('devtron').install()
     require('vue-devtools').install()
-    /* eslint-enable */
   } catch (err) {
     console.log(err)
   }
@@ -64,7 +57,6 @@ function createWindow() {
     show: false,
   })
 
-  // eslint-disable-next-line
   setMenu()
 
   // load root file/url
@@ -73,7 +65,6 @@ function createWindow() {
   } else {
     mainWindow.loadFile(`${__dirname}/index.html`)
 
-    // eslint-disable-next-line
     global.__static = require('path')
       .join(__dirname, '/static')
       .replace(/\\/g, '\\\\')

@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 const builder = require('electron-builder')
 
 const Platform = builder.Platform
