@@ -1,13 +1,12 @@
-const childProcess = require('child_process')
-const NO_OF_CORES = require('physical-cpu-count')
-const os = require('os')
+import childProcess from 'child_process'
+import os from 'os'
+import NO_OF_CORES from 'physical-cpu-count'
 
-/**
- * Create worker processes equal to cpu cores count
- * @param {Number} imagesCount Minimum number of images in the current set
- * @returns {Array} array of child process forks
- */
-async function createWorkerProcesses(imagesCount) {
+type createWorkerProcessesGetter = (
+  imagesCount: number
+) => Promise<childProcess.ChildProcess[]>
+
+const createWorkerProcesses: createWorkerProcessesGetter = async imagesCount => {
   const WORKERS = []
 
   const availMemory = os.freemem() / (1024 * 1024 * 1024)
@@ -28,6 +27,4 @@ async function createWorkerProcesses(imagesCount) {
   return WORKERS
 }
 
-module.exports = {
-  createWorkerProcesses,
-}
+export { createWorkerProcesses }

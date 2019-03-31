@@ -14,8 +14,6 @@ const { convertToBitArray } = require('./index')
  * @returns {Object} {title: {String}, data: {buffer}}
  */
 async function getQuestionsData(design, img, results) {
-  console.time('Questions')
-
   const SCALE = 0.5
   const TARGET_SIZE = design.width * SCALE
 
@@ -59,8 +57,6 @@ async function getQuestionsData(design, img, results) {
     // debug
     // logImageData(img, `${title}`)
   }
-
-  console.timeEnd('Questions')
 
   return extractedData
 }

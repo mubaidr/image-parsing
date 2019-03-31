@@ -1,3 +1,0 @@
-interface ICode {
-  x1
-}

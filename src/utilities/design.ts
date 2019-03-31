@@ -186,6 +186,4 @@ const getDesignData: getDesignDataGetter = file => {
   }
 }
 
-module.exports = {
-  getDesignData,
-}
+export { getDesignData }

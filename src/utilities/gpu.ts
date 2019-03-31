@@ -1,11 +1,14 @@
-const Gpujs = require('gpu.js/src/browser.js')
+import * as Gpujs from 'gpu.js/src/browser.js'
 
 const GPU = new Gpujs()
 
 // sample script to convert image data array to binary
 // this script takes 10x more times than CPU version DOH!
 
-const innerFN = GPU.createKernel(function(data, ch) {
+type iToBGetter = (data: number[], ch: number) => number[]
+
+// tslint:disable-next-line:no-function-expression only-arrow-functions
+const iToB: iToBGetter = function(data, ch) {
   // convert image data to binary
   const binaryData = []
 
@@ -36,9 +39,13 @@ const innerFN = GPU.createKernel(function(data, ch) {
   }
 
   return binaryData
-})
+}
 
-function imageDataToBinary(arr, channels) {
+const innerFN = GPU.createKernel(iToB)
+
+type imageDataToBinaryGetter = (arr: number[], channels: number) => number[]
+
+const imageDataToBinary: imageDataToBinaryGetter = (arr, channels) => {
   innerFN.setOutput([arr.length / channels])
 
   return innerFN(arr, channels)

@@ -1,30 +1,49 @@
-const javascriptBarcodeReader = require('javascript-barcode-reader')
-const javascriptQRReader = require('jsqr').default
-const fastGlob = require('fast-glob')
-const path = require('path')
-const uuid = require('uuid')
-const sharp = require('sharp')
+import fastGlob from 'fast-glob'
+import { javascriptBarcodeReader } from 'javascript-barcode-reader'
+import javascriptQRReader from 'jsqr'
+import path from 'path'
+import sharp, { Sharp } from 'sharp'
+import uuid from 'uuid'
 
-const { IMAGES, NATIVE_IMAGES } = require('./valid-types')
-const DATAPATHS = require('./data-paths')
+import ICache from '../@interfaces/ICache'
+import ICodeScan from '../@interfaces/ICodeScan'
+import IDesignData from '../@interfaces/IDesignData'
+import { DATAPATHS } from './dataPaths'
+import { IMAGES, NATIVE_IMAGES } from './validTypes'
 
-const CACHE = {}
+const CACHE: ICache = {}
 
-function getSharpObjectFromSource(src) {
+type getSharpObjectFromSourceGetter = (src: string) => Sharp
+
+const getSharpObjectFromSource: getSharpObjectFromSourceGetter = src => {
   return sharp(src)
     .raw()
     .ensureAlpha()
-  // .jpeg()
-  // .flatten()
 }
 
-async function convertImage(src) {
+type convertImageGetter = (src: string) => Promise<string>
+
+const convertImage: convertImageGetter = async src => {
+  if (!src) {
+    throw new Error('Invalid source provided')
+  }
+
+  const ext = src.split('.').pop()
+
+  if (!ext) {
+    throw new Error('Invalid source provided')
+  }
+
   // native supported images
-  if (NATIVE_IMAGES.includes(src.split('.').pop())) return src
+  if (NATIVE_IMAGES.includes(ext)) {
+    return src
+  }
 
   // check cache
   const cached = CACHE[src]
-  if (cached) return cached
+  if (cached) {
+    return cached
+  }
 
   // generate random tmp url
   const url = path.join(DATAPATHS.tmp, `${uuid()}.jpg`)
@@ -37,12 +56,9 @@ async function convertImage(src) {
   return url
 }
 
-/**
- * Logs provided image data to .tmp folder
- * @param {sharp || String} img Sharp instance or image source
- * @param {String} name Name of file
- */
-async function logImageData(src, name) {
+type logImageDataGetter = (src: string | Sharp, name?: string) => Promise<void>
+
+const logImageData: logImageDataGetter = async (src, name) => {
   let img
 
   if (typeof src === 'string') {
@@ -51,37 +67,39 @@ async function logImageData(src, name) {
     img = src.clone()
   }
 
-  return img.jpeg().toFile(path.join(DATAPATHS.tmp, `${name || uuid()}.jpg`))
+  img.jpeg().toFile(path.join(DATAPATHS.tmp, `${name || uuid()}.jpg`))
 }
 
-/**
- * Return a list of valid image format files from the provided path
- *
- * @param {String} path Path to sarch for images
- * @param {Array.<String>} format Array of extensions of valid image formats
- * @returns {Array.<String>} List of file paths
- */
-function getImagePaths(dir) {
+type getImagePathsGetter = (dir: string) => Promise<string[]>
+
+const getImagePaths: getImagePathsGetter = async dir => {
   return fastGlob(`${dir}/*.{${IMAGES.join(',')}}`, { onlyFiles: true })
 }
 
-/**
- *
- *
- * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
- * @param {String} path Path of scanned image file
- * @returns {Object} Roll Number
- */
-async function getRollNoFromImage(designData, img, isBarcode) {
-  console.time('Roll No')
+type getRollNoFromImageGetter = (
+  designData: IDesignData,
+  img: Sharp,
+  isBarcode: boolean
+) => Promise<ICodeScan>
 
+const getRollNoFromImage: getRollNoFromImageGetter = async (
+  designData,
+  img,
+  isBarcode
+) => {
+  const rollNoPos = designData.code
   const metadata = await img.metadata()
-  const rollNoPos = designData.rollNo
-  const ratio = metadata.width / designData.width
+  const ratio = metadata.width ? metadata.width / designData.width : 1
   const width = Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio)
   const height = Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio)
-  const obj = {
+  const obj: ICodeScan = {
     id: uuid(),
+    center: '',
+    time: '',
+    post: '',
+    type: '',
+    rollNo: '',
+    hasValidRollNo: false,
   }
 
   img.extract({
@@ -97,7 +115,7 @@ async function getRollNoFromImage(designData, img, isBarcode) {
   const data = await img.toBuffer()
 
   try {
-    let rollNo
+    let rollNo: string
 
     if (isBarcode) {
       rollNo = await javascriptBarcodeReader(
@@ -113,13 +131,9 @@ async function getRollNoFromImage(designData, img, isBarcode) {
     obj.rollNo = rollNo
     obj.hasValidRollNo = !!obj.rollNo
   } catch (err) {
-    // console.error(err)
-
     obj.rollNo = null
     obj.hasValidRollNo = false
   }
-
-  console.timeEnd('Roll No')
 
   return obj
 }

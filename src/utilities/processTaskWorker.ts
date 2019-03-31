@@ -6,7 +6,9 @@ const { getQuestionsNeuralNet } = require('./index')
 async function sendProgress(p) {
   if (process && process.send) {
     return process.send(p, () => {
-      if (p.completed) process.exit(0)
+      if (p.completed) {
+        process.exit(0)
+      }
     })
   }
 
@@ -29,8 +31,6 @@ async function processTask(designData, imagePaths) {
   for (let i = 0; i < imagePaths.length; i += 1) {
     const startTime = Date.now()
     const img = imagePaths[i]
-
-    console.time(`image: ${img}`)
 
     const sharpImage = getSharpObjectFromSource(img)
 
@@ -62,8 +62,6 @@ async function processTask(designData, imagePaths) {
 
     // collect option selection
     results.push(result)
-
-    console.timeEnd(`image: ${img}`)
 
     // report progress status
     sendProgress({

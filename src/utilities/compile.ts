@@ -1,4 +1,4 @@
-import { VALIDTYPES } from '../utilities/validTypes'
+import * as VALIDTYPES from '../utilities/validTypes'
 import { DATAPATHS } from './dataPaths'
 
 import IKey from '../@interfaces/IKey'

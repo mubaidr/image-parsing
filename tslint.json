@@ -6,6 +6,9 @@
   ],
   "rules": {
     "completed-docs": false,
+    "export-name": false,
+    "no-backbone-get-set-outside-model": false,
+    "no-console": false,
     "no-relative-imports": false,
     "non-literal-fs-path": false,
     "object-literal-sort-keys": false

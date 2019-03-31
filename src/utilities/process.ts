@@ -1,26 +1,31 @@
-const DATAPATHS = require('./data-paths')
-const { createWorkerProcesses } = require('./workers')
-const { getDesignData } = require('./design')
-const { getImagePaths } = require('./images')
+import childProcess from 'child_process'
+import IDesignData from '../@interfaces/IDesignData'
+import IKey from '../@interfaces/IKey'
+import { DATAPATHS } from './dataPaths'
+import { getDesignData } from './design'
+import { getImagePaths } from './images'
+import { createWorkerProcesses } from './workers'
 
 // store reference to all workers
-let DESIGNDATA
-let WORKER_PROCESSES
-let TOTAL_IMAGES
+let DESIGNDATA: IDesignData
+let WORKER_PROCESSES: childProcess.ChildProcess[]
+let TOTAL_IMAGES: number
 
 // result collection
-const RESULTS = []
+const RESULTS: IKey[] = []
 
 /**
  * Stops all worker processes
  */
 async function stop() {
-  if (!WORKER_PROCESSES || WORKER_PROCESSES.length === 0) return
+  if (!WORKER_PROCESSES || WORKER_PROCESSES.length === 0) {
+    return
+  }
 
-  for (let i = 0; i < WORKER_PROCESSES.length; i += 1) {
+  for (const worker of WORKER_PROCESSES) {
     // exit workers
-    if (WORKER_PROCESSES[i].connected) {
-      WORKER_PROCESSES[i].kill()
+    if (worker.connected) {
+      worker.kill()
     }
   }
 
