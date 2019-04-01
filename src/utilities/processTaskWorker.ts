@@ -1,9 +1,17 @@
-const { getRollNoFromImage, getSharpObjectFromSource } = require('./images')
-const { getQuestionsData } = require('./questions')
-const { getQuestionsNeuralNet } = require('./index')
+import ICodeScan from '../@interfaces/ICodeScan'
+import IDesignData from '../@interfaces/IDesignData'
+import INNQuestionOutput from '../@interfaces/INNQuestionOutput'
+import { getRollNoFromImage, getSharpObjectFromSource } from './images'
+import { getQuestionsNeuralNet } from './index'
+import { getQuestionsData } from './questions'
 
 // sends progress to parent
-async function sendProgress(p) {
+async function sendProgress(p: {
+  progress?: boolean
+  completed?: boolean
+  time?: number
+  results?: ICodeScan[]
+}) {
   if (process && process.send) {
     return process.send(p, () => {
       if (p.completed) {
@@ -16,32 +24,32 @@ async function sendProgress(p) {
   return p.results
 }
 
-/**
- *
- * @param {Object} designData A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
- * @param {Array.<String>} imagePaths List of scanned images paths
- *
- * @returns {Object} Extracted result JSON
- */
-async function processTask(designData, imagePaths) {
+type processTaskGetter = (
+  designData: IDesignData,
+  imagePaths: string[]
+) => Promise<void>
+
+const processTask: processTaskGetter = async (designData, imagePaths) => {
   const neuralNet = getQuestionsNeuralNet()
   const results = []
 
   // loop through all images
-  for (let i = 0; i < imagePaths.length; i += 1) {
+  for (const img of imagePaths) {
     const startTime = Date.now()
-    const img = imagePaths[i]
-
     const sharpImage = getSharpObjectFromSource(img)
 
     const [result, questionsData] = await Promise.all([
-      getRollNoFromImage(designData, sharpImage),
+      getRollNoFromImage(designData, sharpImage, false),
       getQuestionsData(designData, sharpImage.clone()),
     ])
 
-    for (let j = 0; j < questionsData.length; j += 1) {
-      const { title, data } = questionsData[j]
-      const pre = neuralNet.run(data)
+    for (const questionData of questionsData) {
+      const { title, input } = questionData
+      const pre = neuralNet.run<number[], INNQuestionOutput>(input)
+
+      if (!title) {
+        continue
+      }
 
       if (pre['?'] >= 0.95) {
         result[title] = '?'
@@ -71,8 +79,7 @@ async function processTask(designData, imagePaths) {
   }
 
   // report completed status & exit process
-
-  return sendProgress({
+  sendProgress({
     completed: true,
     results,
   })

@@ -4,7 +4,7 @@ import { convertToBitArray } from './index'
 function test() {
   // random array 60 * 4 * 256 * 128
   const channels = 4
-  const data = new Array(channels * 256 * 128 * 60)
+  const data = []
 
   for (let i = 0; i < data.length; i += 1) {
     data[i] = Math.ceil(Math.random() * 254)

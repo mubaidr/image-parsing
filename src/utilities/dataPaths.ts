@@ -8,7 +8,7 @@ const home: string = isDev
   ? path.resolve('.')
   : path.join(os.homedir(), 'desktop')
 
-export const DATAPATHS = {
+const dataPaths = {
   design: path.resolve('__tests__/test-data', 'design.qr.svg'),
   designBarcode: path.resolve('__tests__/test-data', 'design.svg'),
   home,
@@ -22,3 +22,5 @@ export const DATAPATHS = {
   temp: tmp,
   tmp,
 }
+
+export { dataPaths }

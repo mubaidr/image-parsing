@@ -1,4 +1,4 @@
-import childProcess from 'child_process'
+import childProcess, { ChildProcess } from 'child_process'
 import IDesignData from '../@interfaces/IDesignData'
 import IKey from '../@interfaces/IKey'
 import { DATAPATHS } from './dataPaths'
@@ -34,7 +34,12 @@ async function stop() {
   TOTAL_IMAGES = 0
 }
 
-async function addWorkerHandlers(worker, callback) {
+type addWorkerHandlersGetter = (
+  worker: childProcess.ChildProcess,
+  callback: (data: object) => void
+) => Promise<void>
+
+const addWorkerHandlers: addWorkerHandlersGetter = async (worker, callback) => {
   // results collection and progress
   worker.on('message', data => {
     if (data.completed) {
@@ -56,6 +61,10 @@ async function addWorkerHandlers(worker, callback) {
     }
   })
 
+  if (!worker.stdout || !worker.stderr) {
+    return
+  }
+
   // logging
   worker.stdout.on('data', data => {
     console.info('Info: ', data.toString())
@@ -67,16 +76,13 @@ async function addWorkerHandlers(worker, callback) {
   })
 }
 
-/**
- * Start processing scanned image files to get result
- *
- * @param {Function} callback Callback function for updates
- * @param {String} imagesDirectory scanned images directory
- * @param {String} keyFilePath design file path
- *
- * @returns {Object} {totalImages, totalWorkers}
- */
-async function start(callback, imagesDirectory, imageFile) {
+type startGetter = (
+  callback: (data: object) => void,
+  imagesDirectory: string,
+  imageFile: string
+) => Promise<object>
+
+const start: startGetter = async (callback, imagesDirectory, imageFile) => {
   // reset result collection
   const imagePaths = imagesDirectory
     ? await getImagePaths(imagesDirectory)
@@ -84,7 +90,7 @@ async function start(callback, imagesDirectory, imageFile) {
 
   TOTAL_IMAGES = imagePaths.length
   ;[DESIGNDATA, WORKER_PROCESSES] = await Promise.all([
-    getDesignData(DATAPATHS.test.design),
+    getDesignData(DATAPATHS.design),
     createWorkerProcesses(TOTAL_IMAGES),
   ])
 

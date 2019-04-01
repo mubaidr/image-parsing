@@ -46,7 +46,4 @@ const convertToBitArray: ConvertToBitArrayGetter = (data, channels) => {
   return binaryData
 }
 
-module.exports = {
-  convertToBitArray,
-  getQuestionsNeuralNet,
-}
+export { convertToBitArray, getQuestionsNeuralNet }

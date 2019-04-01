@@ -1,13 +1,15 @@
-const brain = require('brain.js')
-const fs = require('fs')
+import brain from 'brain.js'
+import fs from 'fs'
 
-const { getSharpObjectFromSource } = require('./images')
-const { getQuestionsData } = require('./questions')
-const { getDesignData } = require('./design')
-const { CSVToJSON } = require('./csv')
-const DATAPATHS = require('./data-paths')
+import { csvToJson } from './csvToJson'
+import { dataPaths } from './dataPaths'
+import { getDesignData } from './design'
+import { getSharpObjectFromSource } from './images'
+import { getQuestionsData } from './questions'
 
-function completed(success) {
+type completedGetter = (success: boolean) => void
+
+const completed: completedGetter = success => {
   if (success) {
     console.log('Completed')
   } else {
@@ -21,16 +23,11 @@ function completed(success) {
   }
 }
 
-/**
- *  Trains the network using provided data and saves the trained network configuration in the provided path (neuralNetFilePath).
- *
- *
- */
 async function start() {
   const [designData, resultsData, sharpImage] = await Promise.all([
-    getDesignData(DATAPATHS.test.design),
-    CSVToJSON(DATAPATHS.test.key, true),
-    getSharpObjectFromSource(DATAPATHS.test.keyImage),
+    getDesignData(dataPaths.design),
+    csvToJson(dataPaths.key, true),
+    getSharpObjectFromSource(dataPaths.keyImage),
   ])
 
   const trainingData = await getQuestionsData(
@@ -47,7 +44,7 @@ async function start() {
   })
 
   // write trained network configuration to disk
-  fs.writeFileSync(DATAPATHS.questionsModel, JSON.stringify(net.toJSON()))
+  fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
 
   completed(true)
 }

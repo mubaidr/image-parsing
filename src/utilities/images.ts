@@ -123,6 +123,7 @@ const getRollNoFromImage: getRollNoFromImageGetter = async (
         { barcode: 'code-39' }
       )
     } else {
+      // @ts-ignore
       rollNo = javascriptQRReader(data, width, height, {
         inversionAttempts: 'dontInvert',
       }).data
@@ -138,7 +139,7 @@ const getRollNoFromImage: getRollNoFromImageGetter = async (
   return obj
 }
 
-module.exports = {
+export {
   convertImage,
   getImagePaths,
   logImageData,

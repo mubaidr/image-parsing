@@ -1,34 +1,38 @@
-const sharp = require('sharp')
+import sharp, { Sharp } from 'sharp'
 
-const { convertToBitArray } = require('./index')
-// const { imageDataToBinary} = require('./gpu')
+// import { imageDataToBinary } from './gpu'
+import IDesignData from '../@interfaces/IDesignData'
+import IKey from '../@interfaces/IKey'
+import IQuestionData from '../@interfaces/IQuestionData'
+import { convertToBitArray } from './index'
 
-// const { logImageData } = require('./images')
+// import { logImageData } from './images'
 
-/**
- *  Extracts questions data from provided Sharp Image and design data
- *
- * @param {Object} design A JSON Object containing information about the position, width, height of elements in svg design file (available from utiltities/getDesignData)
- * @param {sharp} img Path of scanned image file
- * @param {Object=} results for training data preparation
- * @returns {Object} {title: {String}, data: {buffer}}
- */
-async function getQuestionsData(design, img, results) {
+type getQuestionsDataGetter = (
+  design: IDesignData,
+  img: Sharp,
+  results?: IKey
+) => Promise<IQuestionData[]>
+
+const getQuestionsData: getQuestionsDataGetter = async (
+  design,
+  img,
+  results
+) => {
   const SCALE = 0.5
-  const TARGET_SIZE = design.width * SCALE
+  const TARGET_WIDTH = design.width * SCALE
+  const TARGET_HEIGHT = design.height * SCALE
 
   // resize if image is larger than design
-  img.resize({
+  img.resize(TARGET_WIDTH, TARGET_HEIGHT, {
     fit: sharp.fit.inside,
     kernel: sharp.kernel.nearest,
-    width: TARGET_SIZE,
   })
 
-  const extractedData = []
-  const questions = Object.entries(design.questions)
+  const extractedQuestionData: IQuestionData[] = []
 
-  for (let i = 0; i < questions.length; i += 1) {
-    const [title, q] = questions[i]
+  for (const question of Object.entries(design.questions)) {
+    const [title, q] = question
 
     img.extract({
       left: Math.floor(q.x1 * SCALE),
@@ -37,30 +41,27 @@ async function getQuestionsData(design, img, results) {
       height: Math.ceil((q.y2 - q.y1) * SCALE),
     })
 
-    // TODO: check GPU version is faster if no resize is performed
-
     const { data, info } = await img.toBuffer({ resolveWithObject: true })
-    const binaryData = convertToBitArray(data, info.channels)
+    const binaryData = convertToBitArray([...data], info.channels)
 
-    if (results && results[title] !== '*') {
-      // for training data
-      extractedData.push({
-        input: binaryData,
-        output: { [results[title]]: 1 },
-      })
-
+    if (results) {
+      if (results[title] !== '*') {
+        // for training data
+        extractedQuestionData.push({
+          input: binaryData,
+          output: { [results[title]]: 1 },
+        })
+      }
       continue
     }
 
-    extractedData.push({ title, data: binaryData })
+    extractedQuestionData.push({ title, input: binaryData })
 
     // debug
     // logImageData(img, `${title}`)
   }
 
-  return extractedData
+  return extractedQuestionData
 }
 
-module.exports = {
-  getQuestionsData,
-}
+export { getQuestionsData }

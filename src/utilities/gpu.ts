@@ -51,6 +51,4 @@ const imageDataToBinary: imageDataToBinaryGetter = (arr, channels) => {
   return innerFN(arr, channels)
 }
 
-module.exports = {
-  imageDataToBinary,
-}
+export { imageDataToBinary }

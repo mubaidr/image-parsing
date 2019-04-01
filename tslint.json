@@ -7,6 +7,7 @@
   "rules": {
     "completed-docs": false,
     "export-name": false,
+    "insecure-random": false,
     "no-backbone-get-set-outside-model": false,
     "no-console": false,
     "no-relative-imports": false,

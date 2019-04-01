@@ -1,4 +1,4 @@
-import { remote } from 'electron'
+import { BrowserWindow, OpenDialogOptions, remote } from 'electron'
 import * as settings from 'electron-settings'
 
 const { dialog, getCurrentWindow } = remote
@@ -6,11 +6,14 @@ const { dialog, getCurrentWindow } = remote
 type openDirectoryGetter = (filters: string[]) => Promise<string | void>
 
 const openDirectory: openDirectoryGetter = async filters => {
-  const dirList = dialog.showOpenDialog(getCurrentWindow(), {
-    defaultPath: settings.get('open-directory'),
-    filters,
-    properties: ['openDirectory'],
-  })
+  const dirList = dialog.showOpenDialog<BrowserWindow, OpenDialogOptions>(
+    getCurrentWindow(),
+    {
+      defaultPath: settings.get('open-directory'),
+      filters,
+      properties: ['openDirectory'],
+    }
+  )
 
   const dir = dirList ? dirList[0] : null
   if (dir) {
@@ -23,6 +26,7 @@ const openDirectory: openDirectoryGetter = async filters => {
 type openFileGetter = (filters: string[]) => Promise<string | void>
 
 const openFile: openFileGetter = async filters => {
+  // @ts-ignore
   const fileList = dialog.showOpenDialog(getCurrentWindow(), {
     defaultPath: settings.get('open-file'),
     filters,
@@ -40,6 +44,7 @@ const openFile: openFileGetter = async filters => {
 type saveFileGetter = (filters: string[]) => Promise<string | void>
 
 const saveFile: saveFileGetter = async filters => {
+  // @ts-ignore
   const file = dialog.showSaveDialog(getCurrentWindow(), {
     defaultPath: settings.get('save-file'),
     filters,

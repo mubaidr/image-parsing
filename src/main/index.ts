@@ -1,20 +1,21 @@
+// tslint:disable:
 import settings from 'electron-settings'
 import { productName } from '../../package.json'
 
-const { app, BrowserWindow, Menu } = require('electron')
-const DATAPATHS = require('../utilities/data-paths')
+import { app, BrowserWindow, Menu } from 'electron'
+import { dataPaths } from '../utilities/dataPaths'
 
 // disable electron warning
-process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 
 const gotTheLock = app.requestSingleInstanceLock()
 const isDev = process.env.NODE_ENV === 'development'
-let mainWindow
+let mainWindow: BrowserWindow
 
 // only allow single instance of application
 if (!isDev) {
   if (gotTheLock) {
-    app.on('second-instance', (commandLine, workingDirectory) => {
+    app.on('second-instance', () => {
       // Someone tried to run a second instance, we should focus our window.
       if (mainWindow && mainWindow.isMinimized()) {
         mainWindow.restore()
@@ -26,7 +27,8 @@ if (!isDev) {
     process.exit(0)
   }
 } else {
-  require('electron-debug')()
+  // @ts-ignore
+  import 'electron-debug'
 }
 
 async function installDevTools() {
@@ -65,6 +67,7 @@ function createWindow() {
   } else {
     mainWindow.loadFile(`${__dirname}/index.html`)
 
+    // @ts-ignore
     global.__static = require('path')
       .join(__dirname, '/static')
       .replace(/\\/g, '\\\\')
@@ -84,7 +87,6 @@ function createWindow() {
 
   mainWindow.on('closed', () => {
     console.log('closed')
-    mainWindow = null
   })
 }
 
@@ -96,9 +98,9 @@ app.on('ready', () => {
     installDevTools()
 
     // reset settings
-    settings.set('open-directory', DATAPATHS.home)
-    settings.set('open-file', DATAPATHS.home)
-    settings.set('save-file', DATAPATHS.home)
+    settings.set('open-directory', dataPaths.home)
+    settings.set('open-file', dataPaths.home)
+    settings.set('save-file', dataPaths.home)
   }
 })
 
@@ -134,88 +136,90 @@ app.on('ready', () => {
 })
  */
 
-function sendMenuEvent(e) {
+type sendMenuEventGetter = (e: { route: string }) => Promise<void>
+
+const sendMenuEvent: sendMenuEventGetter = async e => {
   mainWindow.webContents.send('event', e)
 }
 
-function setMenu() {
-  const template = [
-    {
-      label: app.getName(),
-      submenu: [
-        {
-          label: 'Home',
-          accelerator: 'CommandOrControl+H',
-          click() {
-            sendMenuEvent({ route: '/' })
-          },
+const template = [
+  {
+    label: app.getName(),
+    submenu: [
+      {
+        label: 'Home',
+        accelerator: 'CommandOrControl+H',
+        click() {
+          sendMenuEvent({ route: '/' })
         },
-        { type: 'separator' },
-        { role: 'minimize' },
-        { role: 'togglefullscreen' },
-        { type: 'separator' },
-        { role: 'quit', accelerator: 'Alt+F4' },
-      ],
-    },
-    {
-      label: 'Generate',
-      submenu: [
-        {
-          label: 'Answer Sheets',
-          accelerator: 'CommandOrControl+G',
-          click() {
-            sendMenuEvent({ route: '/generate' })
-          },
+      },
+      { type: 'separator' },
+      { role: 'minimize' },
+      { role: 'togglefullscreen' },
+      { type: 'separator' },
+      { role: 'quit', accelerator: 'Alt+F4' },
+    ],
+  },
+  {
+    label: 'Generate',
+    submenu: [
+      {
+        label: 'Answer Sheets',
+        accelerator: 'CommandOrControl+G',
+        click() {
+          sendMenuEvent({ route: '/generate' })
         },
-      ],
-    },
-    {
-      label: 'Process',
-      submenu: [
-        {
-          label: 'Extract Result',
-          accelerator: 'CommandOrControl+P',
-          click() {
-            sendMenuEvent({ route: '/process' })
-          },
+      },
+    ],
+  },
+  {
+    label: 'Process',
+    submenu: [
+      {
+        label: 'Extract Result',
+        accelerator: 'CommandOrControl+P',
+        click() {
+          sendMenuEvent({ route: '/process' })
         },
-      ],
-    },
-    {
-      label: 'Compile',
-      submenu: [
-        {
-          label: 'Compile Result',
-          accelerator: 'CommandOrControl+C',
-          click() {
-            sendMenuEvent({ route: '/compile' })
-          },
+      },
+    ],
+  },
+  {
+    label: 'Compile',
+    submenu: [
+      {
+        label: 'Compile Result',
+        accelerator: 'CommandOrControl+C',
+        click() {
+          sendMenuEvent({ route: '/compile' })
         },
-      ],
-    },
-    {
-      role: 'help',
-      submenu: [
-        {
-          label: 'Get Help',
-          role: 'help',
-          accelerator: 'F1',
-          click() {
-            sendMenuEvent({ route: '/help' })
-          },
+      },
+    ],
+  },
+  {
+    role: 'help',
+    submenu: [
+      {
+        label: 'Get Help',
+        role: 'help',
+        accelerator: 'F1',
+        click() {
+          sendMenuEvent({ route: '/help' })
         },
-        {
-          label: 'About',
-          role: 'about',
-          accelerator: 'CommandOrControl+A',
-          click() {
-            sendMenuEvent({ route: '/about' })
-          },
+      },
+      {
+        label: 'About',
+        role: 'about',
+        accelerator: 'CommandOrControl+A',
+        click() {
+          sendMenuEvent({ route: '/about' })
         },
-      ],
-    },
-  ]
+      },
+    ],
+  },
+]
 
+function setMenu() {
   if (process.platform === 'darwin') {
     template.unshift({
       label: app.getName(),
@@ -234,6 +238,7 @@ function setMenu() {
 
     // Edit menu
     template[1].submenu.push(
+      // @ts-ignore
       { type: 'separator' },
       {
         label: 'Speech',
@@ -251,6 +256,7 @@ function setMenu() {
     ]
   }
 
+  // @ts-ignore
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
 }
