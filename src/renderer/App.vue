@@ -1,7 +1,7 @@
 <template>
   <div
-    id="app"
     class="container-fluid"
+    id="app"
   >
     <Transition
       mode="out-in"
@@ -14,10 +14,12 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
   name: 'ImageParsing',
-}
+})
 </script>
 
 <style lang="sass"></style>

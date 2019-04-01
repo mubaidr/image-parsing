@@ -53,18 +53,19 @@
   </div>
 </template>
 
-<script>
-const {test} = require('../../utilities/cpu-gpu-test.js')
+<script lang="ts">
+import { test } from '../../utilities/cpu-gpu-test'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   name: 'Home',
 
   methods: {
-    test(){
+    test() {
       test()
-    }
-  }
-}
+    },
+  },
+})
 </script>
 
 <style>

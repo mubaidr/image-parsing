@@ -18,11 +18,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import extractResult from './Process/Extract.vue'
 import reviewResult from './Process/Review.vue'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   name: 'Process',
 
   components: {
@@ -42,7 +43,7 @@ export default {
       this.$set(this, 'extractedResult', m.results)
     },
   },
-}
+})
 </script>
 
 <style>

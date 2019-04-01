@@ -52,8 +52,8 @@
       name="slide-down"
     >
       <table
-        v-if="running"
         class="table is-fullwidth"
+        v-if="running"
       >
         <thead>
           <tr>
@@ -76,11 +76,12 @@
   </div>
 </template>
 
-<script>
-const { openDirectory } = require('../../../utilities/electron-dialog.js')
-const processingModule = require('../../../utilities/process.js')
+<script lang="ts">
+const { openDirectory } = require('src/utilities/electron-dialog.js')
+const processingModule = require('src/utilities/process.js')
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   name: 'ExtractResult',
 
   data() {
@@ -178,7 +179,7 @@ export default {
       return str
     },
   },
-}
+})
 </script>
 
 <style scoped lang="sass">

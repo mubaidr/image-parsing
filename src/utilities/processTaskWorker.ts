@@ -90,6 +90,4 @@ process.on('message', m => {
   processTask(m.designData, m.imagePaths)
 })
 
-module.exports = {
-  processTask,
-}
+export { processTask }

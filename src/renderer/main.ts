@@ -1,18 +1,15 @@
 import Vue from 'vue'
-import 'bulma-pro/bulma.sass'
-
 import Toasted from 'vue-toasted'
 
 // import the styles
+import 'bulma-pro/bulma.sass'
 import 'material-design-icons/iconfont/material-icons.css'
-
-import './assets/style/main.sass'
 import './assets/style/animations.sass'
+import './assets/style/main.sass'
 
 import App from './App.vue'
-import router from './router'
+import router from './router/index'
 
-// eslint-disable-next-line
 import { ipcRenderer } from 'electron'
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -29,17 +26,18 @@ Vue.config.devtools = isDev
 Vue.config.performance = isDev
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
+// tslint:disable-next-line: no-unused-expression
 new Vue({
+  el: '#app',
   components: {
     App,
   },
   router,
   template: '<App/>',
-}).$mount('#app')
+})
 
 // menu routes handler
-ipcRenderer.addListener('event', (e, data) => {
+ipcRenderer.addListener('event', (data: { route: string }) => {
   if (data.route) {
     router.push(data.route)
   }

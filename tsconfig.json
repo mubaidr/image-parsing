@@ -2,8 +2,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "lib": ["dom", "esnext"],
-    "module": "esnext",
+    "module": "es2015",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noUnusedLocals": true,
@@ -15,9 +14,11 @@
       }
     ],
     "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
-    "target": "esnext"
+    "target": "es6"
   },
   "exclude": ["node_modules", "build", "dist"],
   "include": ["src/**/*"]

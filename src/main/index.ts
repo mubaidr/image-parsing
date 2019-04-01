@@ -1,6 +1,9 @@
-// tslint:disable:
-import settings from 'electron-settings'
+import electronSettings from 'electron-settings'
 import { productName } from '../../package.json'
+
+// import * as devtron from 'devtron'
+// import electronDebug from 'electron-debug'
+// import * as vueDevtools from 'vue-devtools'
 
 import { app, BrowserWindow, Menu } from 'electron'
 import { dataPaths } from '../utilities/dataPaths'
@@ -27,14 +30,13 @@ if (!isDev) {
     process.exit(0)
   }
 } else {
-  // @ts-ignore
-  import 'electron-debug'
+  // electronDebug()
 }
 
 async function installDevTools() {
   try {
-    require('devtron').install()
-    require('vue-devtools').install()
+    // devtron.install()
+    // vueDevtools.install()
   } catch (err) {
     console.log(err)
   }
@@ -98,9 +100,9 @@ app.on('ready', () => {
     installDevTools()
 
     // reset settings
-    settings.set('open-directory', dataPaths.home)
-    settings.set('open-file', dataPaths.home)
-    settings.set('save-file', dataPaths.home)
+    electronSettings.set('open-directory', dataPaths.home)
+    electronSettings.set('open-file', dataPaths.home)
+    electronSettings.set('save-file', dataPaths.home)
   }
 })
 
@@ -136,10 +138,10 @@ app.on('ready', () => {
 })
  */
 
-type sendMenuEventGetter = (e: { route: string }) => Promise<void>
+type sendMenuEventGetter = (data: { route: string }) => Promise<void>
 
-const sendMenuEvent: sendMenuEventGetter = async e => {
-  mainWindow.webContents.send('event', e)
+const sendMenuEvent: sendMenuEventGetter = async data => {
+  mainWindow.webContents.send('event', data)
 }
 
 const template = [

@@ -1,5 +1,5 @@
 import * as VALIDTYPES from '../utilities/validTypes'
-import { DATAPATHS } from './dataPaths'
+import { dataPaths } from './dataPaths'
 
 import { importExcelToJson } from '../utilities/excel'
 import { getDesignData } from './design'
@@ -7,24 +7,31 @@ import { processTask } from './processTaskWorker'
 
 import IKey from '../@interfaces/IKey'
 
-type ReadKeyGetter = (a: string) => Promise<IKey[]>
+type ReadKeyGetter = (a: string) => Promise<void | IKey[]>
 
 const readKey: ReadKeyGetter = async src => {
   const ext = src.split('.').pop()
 
   if (ext === undefined) {
-    return false
+    return
   }
 
-  if (VALIDTYPES.NATIVE_KEYS.indexOf(ext) !== -1) {
+  if (VALIDTYPES.NativeKeys.indexOf(ext) !== -1) {
     return importExcelToJson(src)
   }
 
-  const designData = await getDesignData(DATAPATHS.design)
+  const designData = await getDesignData(dataPaths.design)
   return processTask(designData, [src])
 }
 
-type CompileResultGetter = (a: string, b: string) => Promise<object>
+type CompileResultGetter = (
+  resultPath: string,
+  keyPath: string,
+  options: {
+    correctMarks: number
+    incorrectMarks: number
+  }
+) => Promise<object[]>
 
 const compileResult: CompileResultGetter = async (resultPath, keyPath) => {
   const [results, keys] = await Promise.all([
@@ -32,8 +39,12 @@ const compileResult: CompileResultGetter = async (resultPath, keyPath) => {
     readKey(keyPath),
   ])
 
-  const key = keys[0]
-  const compiledResults = []
+  const key = keys && keys.length > 0 ? keys[0] : null
+  if (!key) {
+    throw new Error('Invalid key file.')
+  }
+
+  const compiledResults: object[] = []
   const IS_PROCESSED: string[] = []
 
   for (const result of results) {
@@ -92,6 +103,4 @@ const compileResult: CompileResultGetter = async (resultPath, keyPath) => {
   return compiledResults
 }
 
-module.exports = {
-  compileResult,
-}
+export { compileResult }

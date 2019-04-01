@@ -58,6 +58,4 @@ process.on('message', e => {
   }
 })
 
-module.exports = {
-  start,
-}
+export { start }

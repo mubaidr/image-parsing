@@ -1,14 +1,10 @@
-/* eslint no-console:0 */
-
 process.env.NODE_ENV = 'development'
 
-/* eslint-disable*/
 const electron = require('electron')
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const kill = require('tree-kill')
-/* eslint-enable */
 
 const path = require('path')
 const { spawn } = require('child_process')
@@ -24,7 +20,6 @@ async function startRenderer() {
     rendererConfig.entry.renderer
   )
 
-  // eslint-disable-next-line
   return new Promise(resolve => {
     const compiler = webpack(rendererConfig)
     const hotMiddleware = webpackHotMiddleware(compiler, {
@@ -78,7 +73,6 @@ async function restartElectron() {
 
   electronProcess = spawn(electron, [path.join(__dirname, '../dist/main.js')])
 
-  // eslint-disable-next-line
   electronProcess.on('exit', (code, signal) => {
     if (!manualRestart) process.exit(0)
   })

@@ -48,10 +48,10 @@
             <label class="label">Correct Marks</label>
             <div class="control">
               <input
-                v-model="correctMarks"
                 class="input"
                 placeholder="Marks earned for each correct answer"
                 type="number"
+                v-model="correctMarks"
               >
             </div>
           </div>
@@ -61,11 +61,11 @@
             <label class="label">Negative Marks</label>
             <div class="control">
               <input
-                v-model="incorrectMarks"
                 class="input"
                 placeholder="Marks deducted for each incorrect answer"
                 step="0.01"
                 type="number"
+                v-model="incorrectMarks"
               >
             </div>
           </div>
@@ -88,13 +88,15 @@
   </div>
 </template>
 
-<script>
-const { openFile, saveFile } = require('../../utilities/electron-dialog.js')
-const { compileResult } = require('../../utilities/compile')
-const { exportJSONtoExcel } = require('../../utilities/excel')
-const { NATIVE_KEYS, KEY } = require('../../utilities/valid-types.js')
+<script lang="ts">
+import { openFile, saveFile } from '../../utilities/electron-dialog'
+import { compileResult } from '../../utilities/compile'
+import { exportJsonToExcel } from '../../utilities/excel'
+import * as VALIDTYPES from '../../utilities/validTypes'
+import IKey from '../../@interfaces/IKey'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   data() {
     return {
       resultFilePath:
@@ -107,7 +109,7 @@ export default {
   },
 
   computed: {
-    inputIsValid() {
+    inputIsValid(): boolean {
       return (
         this.resultFilePath &&
         this.keyFilePath &&
@@ -118,7 +120,7 @@ export default {
   },
 
   methods: {
-    async compile() {
+    async compile(): Promise<void> {
       this.running = true
 
       const results = await compileResult(
@@ -134,23 +136,27 @@ export default {
       this.running = false
     },
 
-    async exportCompiledResults(json) {
+    async exportCompiledResults(json: IKey[]) {
       const destination = await saveFile([
         {
           name: 'Excel File',
-          extensions: NATIVE_KEYS,
+          extensions: VALIDTYPES.NativeKeys,
         },
       ])
 
-      await exportJSONtoExcel(json, destination)
-      this.$toasted.show('File saved succesfully. ')
+      if (destination) {
+        await exportJsonToExcel(json, destination)
+        this.$toasted.show('File saved succesfully. ')
+      } else {
+        this.$toasted.show({ text: 'File saved succesfully. ', type: 'warn' })
+      }
     },
 
     async chooseResultFile() {
       this.resultFilePath = await openFile([
         {
           name: 'Excel File',
-          extensions: NATIVE_KEYS,
+          extensions: VALIDTYPES.NativeKeys,
         },
       ])
     },
@@ -159,12 +165,12 @@ export default {
       this.keyFilePath = await openFile([
         {
           name: 'Excel or Image File',
-          extensions: KEY,
+          extensions: VALIDTYPES.Key,
         },
       ])
     },
   },
-}
+})
 </script>
 
 <style></style>

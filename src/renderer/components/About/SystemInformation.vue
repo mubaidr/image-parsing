@@ -24,10 +24,10 @@
   </div>
 </template>
 
-<script>
-/* eslint-disable global-require */
+<script lang="ts">
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   data() {
     return {
       versions: process.versions,
@@ -36,7 +36,7 @@ export default {
   },
 
   created() {},
-}
+})
 </script>
 
 <style></style>

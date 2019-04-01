@@ -1,9 +1,9 @@
-import { BrowserWindow, OpenDialogOptions, remote } from 'electron'
+import { BrowserWindow, FileFilter, OpenDialogOptions, remote } from 'electron'
 import * as settings from 'electron-settings'
 
 const { dialog, getCurrentWindow } = remote
 
-type openDirectoryGetter = (filters: string[]) => Promise<string | void>
+type openDirectoryGetter = (filters: FileFilter[]) => Promise<string | void>
 
 const openDirectory: openDirectoryGetter = async filters => {
   const dirList = dialog.showOpenDialog<BrowserWindow, OpenDialogOptions>(
@@ -23,7 +23,7 @@ const openDirectory: openDirectoryGetter = async filters => {
   return dir
 }
 
-type openFileGetter = (filters: string[]) => Promise<string | void>
+type openFileGetter = (filters: FileFilter[]) => Promise<string | void>
 
 const openFile: openFileGetter = async filters => {
   // @ts-ignore
@@ -41,7 +41,7 @@ const openFile: openFileGetter = async filters => {
   return file
 }
 
-type saveFileGetter = (filters: string[]) => Promise<string | void>
+type saveFileGetter = (filters: FileFilter[]) => Promise<string | void>
 
 const saveFile: saveFileGetter = async filters => {
   // @ts-ignore
@@ -58,8 +58,4 @@ const saveFile: saveFileGetter = async filters => {
   return file
 }
 
-module.exports = {
-  openDirectory,
-  openFile,
-  saveFile,
-}
+export { openDirectory, openFile, saveFile }

@@ -32,11 +32,12 @@
   </div>
 </template>
 
-<script>
-const { fork } = require('child_process')
-const trainingProcess = require('../../utilities/train.js')
+<script lang="ts">
+import { fork } from 'child_process'
+import * as trainingProcess from '../../utilities/train.js'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   data() {
     return {
       logs: [],
@@ -59,7 +60,7 @@ export default {
     },
 
     startProcess() {
-      this.worker = fork(`${__dirname}/../../utilities/train.js`, [], {
+      this.worker = fork(`${__dirname}/src/utilities/train.js`, [], {
         silent: true,
       })
 
@@ -96,7 +97,7 @@ export default {
       )
     },
   },
-}
+})
 </script>
 
 <style lang="sass">

@@ -1,5 +1,3 @@
-/* eslint-disable global-require */
-
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -75,10 +73,14 @@ const router = new Router({
 })
 
 router.afterEach(to => {
-  const title =
+  let title =
     to.path === '/home'
       ? process.env.PRODUCT_NAME
       : `${to.meta.title} - ${process.env.PRODUCT_NAME}`
+
+  if (!title) {
+    title = 'Home'
+  }
 
   document.title = title
 })

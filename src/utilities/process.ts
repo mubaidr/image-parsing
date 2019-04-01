@@ -118,7 +118,4 @@ const start: startGetter = async (callback, imagesDirectory, imageFile) => {
   }
 }
 
-module.exports = {
-  start,
-  stop,
-}
+export { start, stop }

@@ -1,5 +1,4 @@
 const path = require('path')
-// eslint-disable-next-line
 const webpack = require('webpack')
 
 const {
@@ -16,14 +15,14 @@ const config = {
   mode: process.env.NODE_ENV,
   devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
-    main: path.join(__dirname, '../src/main/index.js'),
+    main: path.join(__dirname, '../src/main/index.ts'),
   },
   externals: externals.filter(d => !whiteListedModules.includes(d)),
   module: {
     rules: [
       {
-        test: /\.(js|tsx?)$/,
-        use: 'babel-loader',
+        test: /\.ts$/,
+        loader: ['ts-loader'],
         exclude: /node_modules/,
       },
       {
@@ -47,7 +46,11 @@ const config = {
     path: path.join(__dirname, '../dist'),
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js"]
+    extensions: ['.ts', '.js', '.json'],
+    alias: {
+      '@': path.join(__dirname, '../src/'),
+      src: path.join(__dirname, '../src/'),
+    },
   },
   target: 'electron-main',
 }

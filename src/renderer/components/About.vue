@@ -24,13 +24,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import SystemInformation from './About/SystemInformation.vue'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   name: 'About',
   components: { SystemInformation },
-}
+})
 </script>
 
 <style>

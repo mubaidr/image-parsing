@@ -1,6 +1,4 @@
 const path = require('path')
-
-/* eslint-disable*/
 const fg = require('fast-glob')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -14,7 +12,6 @@ const {
   devDependencies,
   productName,
 } = require('../package.json')
-/* eslint-enable */
 
 const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
@@ -24,7 +21,7 @@ const config = {
   mode: process.env.NODE_ENV,
   devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
-    renderer: path.join(__dirname, '../src/renderer/main.js'),
+    renderer: path.join(__dirname, '../src/renderer/main.ts'),
   },
   output: {
     libraryTarget: 'commonjs2',
@@ -35,6 +32,34 @@ const config = {
   externals: externals.filter(d => !whiteListedModules.includes(d)),
   module: {
     rules: [
+      {
+        test: /\.ts$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              appendTsSuffixTo: ['\\.vue$'],
+            },
+          },
+        ],
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.node$/,
+        use: 'node-loader',
+      },
+      {
+        test: /\.vue$/,
+        use: {
+          loader: 'vue-loader',
+          options: {
+            extractCSS: !isDevMode,
+            loaders: {
+              sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax',
+            },
+          },
+        },
+      },
       {
         test: /\.sass$/,
         use: [
@@ -49,29 +74,6 @@ const config = {
           isDevMode ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
         ],
-      },
-      {
-        test: /\.(js|tsx?)$/,
-        use: 'babel-loader',
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.node$/,
-        use: 'node-loader',
-      },
-      {
-        test: /\.vue$/,
-        use: {
-          loader: 'vue-loader',
-          options: {
-            extractCSS: !isDevMode,
-            loaders: {
-              sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1',
-              scss: 'vue-style-loader!css-loader!sass-loader',
-              less: 'vue-style-loader!css-loader!less-loader',
-            },
-          },
-        },
       },
       {
         test: /\.(png|jpe?g|gif|tif?f|bmp|webp|svg)(\?.*)?$/,
@@ -114,10 +116,11 @@ const config = {
   ],
   resolve: {
     alias: {
-      '@': path.join(__dirname, '../src/'),
       vue$: 'vue/dist/vue.common.js',
+      '@': path.join(__dirname, '../src/'),
+      src: path.join(__dirname, '../src/'),
     },
-    extensions: [".ts", ".tsx", ".js"]
+    extensions: ['.ts', '.js', '.vue', '.json'],
   },
   target: 'electron-renderer',
 }

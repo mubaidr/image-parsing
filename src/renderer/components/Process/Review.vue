@@ -8,28 +8,28 @@
           <div class="field has-addons">
             <p class="control">
               <button
-                @click="toggleSortOrder"
                 :disabled="!hasResults"
+                @click="toggleSortOrder"
                 class="button"
               >
                 <span>Sort</span>
                 <i
-                  v-if="sortOrder === 'asc'"
                   class="material-icons has-pointer"
+                  v-if="sortOrder === 'asc'"
                 >arrow_drop_up</i>
                 <i
-                  v-else
                   class="material-icons has-pointer"
+                  v-else
                 >arrow_drop_down</i>
               </button>
             </p>
             <p class="control has-icons-right">
               <input
-                v-model="filterQuery"
                 :disabled="!hasResults"
                 class="input"
                 placeholder="Filter"
                 type="text"
+                v-model="filterQuery"
               >
               <span class="icon is-right">
                 <i class="material-icons">search</i>
@@ -45,8 +45,8 @@
           <div class="field has-addons">
             <p class="control">
               <button
-                @click="exportResult"
                 :disabled="!hasResults"
+                @click="exportResult"
                 class="button is-success"
               >
                 <i class="material-icons">save</i>
@@ -70,8 +70,8 @@
       >
         <div class="scroll-container">
           <table
-            ref="tbl_data"
             class="table is-hoverable is-narrow has-text-centered"
+            ref="tbl_data"
           >
             <thead>
               <tr>
@@ -91,9 +91,9 @@
               <template v-if="filteredResults.length > 0">
                 <tr
                   :key="result.id"
+                  class="list-complete-item"
                   v-for="(result, index) in filteredResults"
                   v-on:dblclick="selectRow(index)"
-                  class="list-complete-item"
                 >
                   <td>{{index + 1}}</td>
                   <template v-for="([column, value]) in Object.entries(result)">
@@ -108,8 +108,8 @@
               <!-- Show message if now data rows are available -->
               <template v-else>
                 <tr
-                  key="message-row"
                   class="list-complete-item"
+                  key="message-row"
                 >
                   <td
                     :colspan="Object.keys(columns).length + 1"
@@ -129,9 +129,7 @@
         v-else
       >
         <article class="message is-info">
-          <div class="message-body">
-            No data found.
-          </div>
+          <div class="message-body">No data found.</div>
         </article>
       </div>
     </transition>
@@ -154,16 +152,17 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import modalPreview from './_modal-preview.vue'
 
-const { saveFile } = require('../../../utilities/electron-dialog.js')
-const { NATIVE_KEYS } = require('../../../utilities/valid-types.js')
+const { saveFile } = require('src/utilities/electron-dialog.js')
+const { NATIVE_KEYS } = require('src/utilities/valid-types.js')
 
-const { exportHTMLtoExcel } = require('../../../utilities/excel.js')
-const { convertImage } = require('../../../utilities/images.js')
+const { exportHTMLtoExcel } = require('src/utilities/excel.js')
+const { convertImage } = require('src/utilities/images.js')
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   name: 'ReviewResult',
 
   components: {
@@ -189,7 +188,7 @@ export default {
   },
 
   computed: {
-    hasResults(){
+    hasResults() {
       return this.results.length > 0
     },
 
@@ -212,9 +211,9 @@ export default {
           return r
         })
 
-      if(this.sortOrder === 'asc'){
+      if (this.sortOrder === 'asc') {
         frs.sort()
-      }else{
+      } else {
         frs.reverse()
       }
 
@@ -321,7 +320,7 @@ export default {
       this.$toasted.show('File saved succesfully. ')
     },
   },
-}
+})
 </script>
 
 <style lang="sass" scoped>

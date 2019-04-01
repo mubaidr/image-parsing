@@ -24,13 +24,13 @@
             <div class="field">
               <p class="control">
                 <input
-                  ref="txt_roll_no"
                   :class="{'is-danger' : !row.hasValidRollNo}"
                   :readonly="row.hasValidRollNo"
-                  v-model="row.rollNo"
                   class="input has-text-centered is-uppercase has-text-weight-bold is-family-code"
                   placeholder="Roll No"
+                  ref="txt_roll_no"
                   type="text"
+                  v-model="row.rollNo"
                 >
               </p>
             </div>
@@ -57,8 +57,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
   name: 'ModalPreview',
 
   props: {
@@ -113,7 +115,7 @@ export default {
       this.$emit('previous')
     },
   },
-}
+})
 </script>
 
 <style lang="sass">

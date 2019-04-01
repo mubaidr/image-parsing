@@ -21,6 +21,4 @@ function test() {
   console.log(cpuData, gpuData)
 }
 
-module.exports = {
-  test,
-}
+export { test }
