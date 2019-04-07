@@ -1,7 +1,7 @@
-import childProcess, { ChildProcess } from 'child_process'
+import childProcess from 'child_process'
 import IDesignData from '../@interfaces/IDesignData'
 import IKey from '../@interfaces/IKey'
-import { DATAPATHS } from './dataPaths'
+import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { getImagePaths } from './images'
 import { createWorkerProcesses } from './workers'
@@ -76,13 +76,18 @@ const addWorkerHandlers: addWorkerHandlersGetter = async (worker, callback) => {
   })
 }
 
+interface IFileInfo {
+  totalImages: number
+  totalWorkers: number
+}
+
 type startGetter = (
   callback: (data: object) => void,
   imagesDirectory: string,
-  imageFile: string
-) => Promise<object>
+  imageFile?: string
+) => Promise<IFileInfo>
 
-const start: startGetter = async (callback, imagesDirectory, imageFile) => {
+const start: startGetter = async (callback, imagesDirectory, imageFile?) => {
   // reset result collection
   const imagePaths = imagesDirectory
     ? await getImagePaths(imagesDirectory)
@@ -90,7 +95,7 @@ const start: startGetter = async (callback, imagesDirectory, imageFile) => {
 
   TOTAL_IMAGES = imagePaths.length
   ;[DESIGNDATA, WORKER_PROCESSES] = await Promise.all([
-    getDesignData(DATAPATHS.design),
+    getDesignData(dataPaths.design),
     createWorkerProcesses(TOTAL_IMAGES),
   ])
 

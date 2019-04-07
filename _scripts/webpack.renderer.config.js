@@ -53,6 +53,7 @@ const config = {
         use: {
           loader: 'vue-loader',
           options: {
+            appendTsSuffixTo: ['\\.vue$'],
             extractCSS: !isDevMode,
             loaders: {
               sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax',

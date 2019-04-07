@@ -99,22 +99,25 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
-      resultFilePath:
-        'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.xlsx',
-      keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.jpg',
-      correctMarks: 3,
-      incorrectMarks: 1,
-      running: false,
+      resultFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.xlsx' as
+        | string
+        | void,
+      keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.jpg' as
+        | string
+        | void,
+      correctMarks: 3 as number,
+      incorrectMarks: 1 as number,
+      running: false as boolean,
     }
   },
 
   computed: {
     inputIsValid(): boolean {
       return (
-        this.resultFilePath &&
-        this.keyFilePath &&
-        this.correctMarks &&
-        this.incorrectMarks
+        this.resultFilePath !== null &&
+        this.keyFilePath !== null &&
+        this.correctMarks !== null &&
+        this.incorrectMarks !== null
       )
     },
   },
@@ -122,6 +125,8 @@ export default Vue.extend({
   methods: {
     async compile(): Promise<void> {
       this.running = true
+
+      if (!this.resultFilePath || !this.keyFilePath) return
 
       const results = await compileResult(
         this.resultFilePath,
@@ -148,7 +153,7 @@ export default Vue.extend({
         await exportJsonToExcel(json, destination)
         this.$toasted.show('File saved succesfully. ')
       } else {
-        this.$toasted.show({ text: 'File saved succesfully. ', type: 'warn' })
+        this.$toasted.show('File cannot be saved. ', { type: 'warn' })
       }
     },
 

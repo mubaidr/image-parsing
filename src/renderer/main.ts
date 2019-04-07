@@ -29,11 +29,8 @@ Vue.config.productionTip = false
 // tslint:disable-next-line: no-unused-expression
 new Vue({
   el: '#app',
-  components: {
-    App,
-  },
   router,
-  template: '<App/>',
+  render: h => h(App),
 })
 
 // menu routes handler

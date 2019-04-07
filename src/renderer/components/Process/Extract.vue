@@ -77,8 +77,9 @@
 </template>
 
 <script lang="ts">
-const { openDirectory } = require('src/utilities/electron-dialog.js')
-const processingModule = require('src/utilities/process.js')
+import { openDirectory } from '../../../utilities/electron-dialog'
+import * as processingModule from '../../../utilities/process'
+
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -99,11 +100,11 @@ export default Vue.extend({
   },
 
   computed: {
-    inputIsValid() {
+    inputIsValid(): string | null {
       return this.imageDirectory
     },
 
-    remainingTime() {
+    remainingTime(): string {
       const ms =
         (this.totalImages - this.processedImages) * (this.perImageTime || 500)
       return this.toHHMMSS(ms)
@@ -125,7 +126,7 @@ export default Vue.extend({
         this.perImageTime = 0
       } else {
         processingModule
-          .start(this.listner, this.imageDirectory, this.keyFilePath)
+          .start(this.listner, this.imageDirectory)
           .then(({ totalImages, totalWorkers }) => {
             this.totalImages = totalImages
             this.totalWorkers = totalWorkers
@@ -157,7 +158,7 @@ export default Vue.extend({
       this.imageDirectory = await openDirectory()
     },
 
-    toHHMMSS(s) {
+    toHHMMSS(s: number) {
       let str = ''
       const input = s / 1000
       const hours = Math.floor(input / 3600)

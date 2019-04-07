@@ -31,7 +31,7 @@ type CompileResultGetter = (
     correctMarks: number
     incorrectMarks: number
   }
-) => Promise<object[]>
+) => Promise<IKey[]>
 
 const compileResult: CompileResultGetter = async (resultPath, keyPath) => {
   const [results, keys] = await Promise.all([
@@ -44,7 +44,7 @@ const compileResult: CompileResultGetter = async (resultPath, keyPath) => {
     throw new Error('Invalid key file.')
   }
 
-  const compiledResults: object[] = []
+  const compiledResults: IKey[] = []
   const IS_PROCESSED: string[] = []
 
   for (const result of results) {

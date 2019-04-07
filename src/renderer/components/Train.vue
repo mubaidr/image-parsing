@@ -33,16 +33,16 @@
 </template>
 
 <script lang="ts">
-import { fork } from 'child_process'
+import { fork, ChildProcess } from 'child_process'
 import * as trainingProcess from '../../utilities/train.js'
 import Vue from 'vue'
 
 export default Vue.extend({
   data() {
     return {
-      logs: [],
-      running: false,
-      worker: null,
+      logs: [] as string[],
+      running: false as boolean,
+      worker: null as ChildProcess | null,
     }
   },
 
@@ -74,6 +74,8 @@ export default Vue.extend({
         }
       })
 
+      if (this.worker.stdout === null || this.worker.stderr === null) return
+
       // logging
       this.worker.stdout.on('data', data => {
         this.logs.unshift(data.toString())
@@ -87,6 +89,8 @@ export default Vue.extend({
     },
 
     stopProcess() {
+      if (!this.worker) return
+
       this.worker.send(
         {
           stop: true,
