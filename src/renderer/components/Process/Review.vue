@@ -161,6 +161,7 @@ const { NATIVE_KEYS } = require('src/utilities/valid-types.js')
 const { exportHTMLtoExcel } = require('src/utilities/excel.js')
 const { convertImage } = require('src/utilities/images.js')
 import Vue from 'vue'
+import IKey from '../../../@interfaces/IKey'
 
 export default Vue.extend({
   name: 'ReviewResult',

@@ -77,6 +77,8 @@
 </template>
 
 <script lang="ts">
+import ICodeScan from '../../../@interfaces/ICodeScan'
+
 import { openDirectory } from '../../../utilities/electron-dialog'
 import * as processingModule from '../../../utilities/process'
 
@@ -87,8 +89,9 @@ export default Vue.extend({
 
   data() {
     return {
-      imageDirectory:
-        'D:\\current\\image-parsing\\__tests__\\test-data\\images-qrcode',
+      imageDirectory: 'D:\\current\\image-parsing\\__tests__\\test-data\\images-qrcode' as
+        | string
+        | void,
       running: false,
       processedImages: 0,
       totalImages: 0,
@@ -100,7 +103,7 @@ export default Vue.extend({
   },
 
   computed: {
-    inputIsValid(): string | null {
+    inputIsValid(): string | void {
       return this.imageDirectory
     },
 
@@ -125,6 +128,8 @@ export default Vue.extend({
         this.totalWorkers = 0
         this.perImageTime = 0
       } else {
+        if (this.imageDirectory === undefined) return
+
         processingModule
           .start(this.listner, this.imageDirectory)
           .then(({ totalImages, totalWorkers }) => {
@@ -133,13 +138,22 @@ export default Vue.extend({
           })
           .catch(this.$toasted.show)
       }
+
       this.running = !this.running
     },
 
-    listner(m) {
+    listner(m: {
+      progress?: boolean
+      completed?: boolean
+      time?: number
+      results?: ICodeScan[]
+      error?: object
+    }) {
       if (m.progress) {
         this.processedImages += 1
-        this.perImageTime = m.time
+        if (m.time) {
+          this.perImageTime = m.time
+        }
       } else if (m.completed) {
         this.running = false
 
