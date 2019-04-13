@@ -14,22 +14,22 @@
               >
                 <span>Sort</span>
                 <i
-                  class="material-icons has-pointer"
                   v-if="sortOrder === 'asc'"
+                  class="material-icons has-pointer"
                 >arrow_drop_up</i>
                 <i
-                  class="material-icons has-pointer"
                   v-else
+                  class="material-icons has-pointer"
                 >arrow_drop_down</i>
               </button>
             </p>
             <p class="control has-icons-right">
               <input
                 :disabled="!hasResults"
+                v-model="filterQuery"
                 class="input"
                 placeholder="Filter"
                 type="text"
-                v-model="filterQuery"
               >
               <span class="icon is-right">
                 <i class="material-icons">search</i>
@@ -70,8 +70,8 @@
       >
         <div class="scroll-container">
           <table
-            class="table is-hoverable is-narrow has-text-centered"
             ref="tbl_data"
+            class="table is-hoverable is-narrow has-text-centered"
           >
             <thead>
               <tr>
@@ -79,7 +79,9 @@
                 <th
                   :key="column.label"
                   v-for="column in columns"
-                >{{column.title}}</th>
+                >
+                  {{ column.title }}
+                </th>
               </tr>
             </thead>
             <tbody
@@ -91,25 +93,27 @@
               <template v-if="filteredResults.length > 0">
                 <tr
                   :key="result.id"
-                  class="list-complete-item"
                   v-for="(result, index) in filteredResults"
                   v-on:dblclick="selectRow(index)"
+                  class="list-complete-item"
                 >
-                  <td>{{index + 1}}</td>
+                  <td>{{ index + 1 }}</td>
                   <template v-for="([column, value]) in Object.entries(result)">
                     <td
                       :class="{'has-background-danger': !result.hasValidRollNo && column ==='rollNo'}"
                       :key="result.id + '-' + column"
                       v-if="columns[column]"
-                    >{{value}}</td>
+                    >
+                      {{ value }}
+                    </td>
                   </template>
                 </tr>
               </template>
               <!-- Show message if now data rows are available -->
               <template v-else>
                 <tr
-                  class="list-complete-item"
                   key="message-row"
+                  class="list-complete-item"
                 >
                   <td
                     :colspan="Object.keys(columns).length + 1"
@@ -129,7 +133,9 @@
         v-else
       >
         <article class="message is-info">
-          <div class="message-body">No data found.</div>
+          <div class="message-body">
+            No data found.
+          </div>
         </article>
       </div>
     </transition>
@@ -154,14 +160,14 @@
 
 <script lang="ts">
 import modalPreview from './_modal-preview.vue'
+import Vue from 'vue'
+import IKey from '../../../@interfaces/IKey'
 
 const { saveFile } = require('src/utilities/electron-dialog.js')
 const { NATIVE_KEYS } = require('src/utilities/valid-types.js')
 
 const { exportHTMLtoExcel } = require('src/utilities/excel.js')
 const { convertImage } = require('src/utilities/images.js')
-import Vue from 'vue'
-import IKey from '../../../@interfaces/IKey'
 
 export default Vue.extend({
   name: 'ReviewResult',
@@ -171,6 +177,7 @@ export default Vue.extend({
   },
 
   props: {
+    /** @type {IKey[]} */
     results: {
       type: Array,
       default: () => {

@@ -1,7 +1,11 @@
 <template>
   <div class="section">
-    <h1 class="title is-4">Compile</h1>
-    <h2 class="subtitle is-6">Compile result using extracted results and answer key.</h2>
+    <h1 class="title is-4">
+      Compile
+    </h1>
+    <h2 class="subtitle is-6">
+      Compile result using extracted results and answer key.
+    </h2>
 
     <form class="control">
       <div class="field">
@@ -20,7 +24,9 @@
             <span class="file-name">{{ resultFilePath }}</span>
           </label>
         </div>
-        <p class="help">Choose the result file</p>
+        <p class="help">
+          Choose the result file
+        </p>
       </div>
 
       <div class="field">
@@ -39,7 +45,9 @@
             <span class="file-name">{{ keyFilePath }}</span>
           </label>
         </div>
-        <p class="help">Choose the key file</p>
+        <p class="help">
+          Choose the key file
+        </p>
       </div>
 
       <div class="columns is-multiline">
@@ -48,10 +56,10 @@
             <label class="label">Correct Marks</label>
             <div class="control">
               <input
+                v-model="correctMarks"
                 class="input"
                 placeholder="Marks earned for each correct answer"
                 type="number"
-                v-model="correctMarks"
               >
             </div>
           </div>
@@ -61,11 +69,11 @@
             <label class="label">Negative Marks</label>
             <div class="control">
               <input
+                v-model="incorrectMarks"
                 class="input"
                 placeholder="Marks deducted for each incorrect answer"
                 step="0.01"
                 type="number"
-                v-model="incorrectMarks"
               >
             </div>
           </div>

@@ -12,7 +12,9 @@
           </figure>
         </div>
         <div class="content has-text-centered">
-          <h1 class="title is-4">Image Parsing</h1>
+          <h1 class="title is-4">
+            Image Parsing
+          </h1>
           <p class="subtitle is-6">
             Generate answeer sheets and extract results from the scanned answer
             sheets.

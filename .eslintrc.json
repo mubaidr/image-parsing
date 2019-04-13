@@ -5,20 +5,30 @@
     "node": true
   },
   "extends": [
-    "eslint:recommended",
+    "eslint/recommended",
     "plugin:@typescript-eslint/recommended",
-    "standard",
-    "prettier"
+    "plugin:vue/recommended",
+    "prettier",
+    "prettier/@typescript-eslint"
   ],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
-  "parser": "@typescript-eslint/parser",
+  "parser": "vue-eslint-parser",
   "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    },
     "ecmaVersion": 2018,
+    "extraFileExtensions": [".ts", ".vue"],
+    "parser": "@typescript-eslint/parser",
+    "project": "./tsconfig.json",
     "sourceType": "module"
   },
-  "plugins": ["vue"],
-  "rules": {}
+  "plugins": ["vue", "@typescript-eslint"],
+  "rules": {
+    "@typescript-eslint/explicit-function-return-type": "off"
+  }
 }

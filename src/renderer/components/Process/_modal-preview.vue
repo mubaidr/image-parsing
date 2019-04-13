@@ -3,12 +3,12 @@
     <div
       @click="closeModal"
       class="modal-background"
-    ></div>
+    />
     <button
       @click="closeModal"
       aria-label="close"
       class="delete is-large is-top-right"
-    ></button>
+    />
     <div class="modal-card">
       <header class="modal-card-head">
         <div class="columns is-mobile">
@@ -24,13 +24,13 @@
             <div class="field">
               <p class="control">
                 <input
+                  ref="txt_roll_no"
                   :class="{'is-danger' : !row.hasValidRollNo}"
                   :readonly="row.hasValidRollNo"
+                  v-model="row.rollNo"
                   class="input has-text-centered is-uppercase has-text-weight-bold is-family-code"
                   placeholder="Roll No"
-                  ref="txt_roll_no"
                   type="text"
-                  v-model="row.rollNo"
                 >
               </p>
             </div>

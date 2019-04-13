@@ -1,7 +1,11 @@
 <template>
   <div>
-    <h1 class="title is-5">Process</h1>
-    <h2 class="subtitle is-6">Process scanned images to generate result.</h2>
+    <h1 class="title is-5">
+      Process
+    </h1>
+    <h2 class="subtitle is-6">
+      Process scanned images to generate result.
+    </h2>
     <div class="field">
       <div class="file has-name is-fullwidth">
         <label class="file-label">
@@ -18,7 +22,9 @@
           <span class="file-name">{{ imageDirectory }}</span>
         </label>
       </div>
-      <p class="help">Choose the directory which contains scanned answer sheets.</p>
+      <p class="help">
+        Choose the directory which contains scanned answer sheets.
+      </p>
     </div>
 
     <br>
@@ -52,12 +58,12 @@
       name="slide-down"
     >
       <table
-        class="table is-fullwidth"
         v-if="running"
+        class="table is-fullwidth"
       >
         <thead>
           <tr>
-            <th></th>
+            <th />
             <th>Total</th>
             <th>Processed</th>
             <th>Remaining Time</th>
@@ -67,9 +73,9 @@
           <td>
             <i class="material-icons rotating">fiber_smart_record</i>
           </td>
-          <td>{{totalImages}}</td>
-          <td>{{processedImages}}</td>
-          <td>{{remainingTime}}</td>
+          <td>{{ totalImages }}</td>
+          <td>{{ processedImages }}</td>
+          <td>{{ remainingTime }}</td>
         </tr>
       </table>
     </Transition>

@@ -1,31 +1,41 @@
 <template>
   <div class="section">
-    <h1 class="title is-4">Train Network</h1>
+    <h1 class="title is-4">
+      Train Network
+    </h1>
 
     <div class="block has-text-centered">
       <button
         @click="start"
         class="button is-primary"
-      >Start</button>
+      >
+        Start
+      </button>
 
       <button
         :disabled="running"
         @click="startProcess"
         class="button is-primary"
-      >Start Process</button>
+      >
+        Start Process
+      </button>
 
       <button
         :disabled="!running"
         @click="stopProcess"
         class="button is-danger"
-      >Stop Process</button>
+      >
+        Stop Process
+      </button>
 
       <div class="block log">
         <ul>
           <li
             :key="index"
             v-for="(log, index) in logs"
-          >{{ log }}</li>
+          >
+            {{ log }}
+          </li>
         </ul>
       </div>
     </div>
