@@ -14,13 +14,10 @@
               >
                 <span>Sort</span>
                 <i
-                  v-if="sortOrder === 'asc'"
-                  class="material-icons has-pointer"
-                >arrow_drop_up</i>
-                <i
-                  v-else
-                  class="material-icons has-pointer"
-                >arrow_drop_down</i>
+v-if="sortOrder === 'asc'"
+class="material-icons has-pointer">arrow_drop_up</i>
+                <i v-else
+class="material-icons has-pointer">arrow_drop_down</i>
               </button>
             </p>
             <p class="control has-icons-right">
@@ -59,15 +56,11 @@
     </nav>
 
     <!-- Data list -->
-    <transition
-      mode="out-in"
-      name="slide-up"
-    >
+    <transition mode="out-in"
+name="slide-up">
       <!-- Show table when data is loaded -->
-      <div
-        key="table"
-        v-if="hasResults"
-      >
+      <div key="table"
+v-if="hasResults">
         <div class="scroll-container">
           <table
             ref="tbl_data"
@@ -76,19 +69,14 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th
-                  :key="column.label"
-                  v-for="column in columns"
-                >
+                <th :key="column.label"
+v-for="column in columns">
                   {{ column.title }}
                 </th>
               </tr>
             </thead>
-            <tbody
-              is="transition-group"
-              mode="out-in"
-              name="list-complete"
-            >
+            <tbody is="transition-group"
+mode="out-in" name="list-complete">
               <!-- Show table rows if data rows are available -->
               <template v-if="filteredResults.length > 0">
                 <tr
@@ -98,9 +86,12 @@
                   class="list-complete-item"
                 >
                   <td>{{ index + 1 }}</td>
-                  <template v-for="([column, value]) in Object.entries(result)">
+                  <template v-for="[column, value] in Object.entries(result)">
                     <td
-                      :class="{'has-background-danger': !result.hasValidRollNo && column ==='rollNo'}"
+                      :class="{
+                        'has-background-danger':
+                          !result.hasValidRollNo && column === 'rollNo',
+                      }"
                       :key="result.id + '-' + column"
                       v-if="columns[column]"
                     >
@@ -111,10 +102,8 @@
               </template>
               <!-- Show message if now data rows are available -->
               <template v-else>
-                <tr
-                  key="message-row"
-                  class="list-complete-item"
-                >
+                <tr key="message-row"
+class="list-complete-item">
                   <td
                     :colspan="Object.keys(columns).length + 1"
                     class="has-text-left"
@@ -128,10 +117,8 @@
         </div>
       </div>
       <!-- Show message when no data is loaded -->
-      <div
-        key="message"
-        v-else
-      >
+      <div key="message"
+v-else>
         <article class="message is-info">
           <div class="message-body">
             No data found.
@@ -140,10 +127,8 @@
       </div>
     </transition>
     <!-- Preview component -->
-    <Transition
-      mode="out-in"
-      name="slide-up"
-    >
+    <Transition mode="out-in"
+name="slide-up">
       <modal-preview
         :image-source="imageSource"
         :selected-row="selectedRow"
@@ -163,7 +148,7 @@ import modalPreview from './_modal-preview.vue'
 import Vue from 'vue'
 import IKey from '../../../@interfaces/IKey'
 
-const { saveFile } = require('src/utilities/electron-dialog.js')
+import { saveFile } from '../../../utilities/electron-dialog'
 const { NATIVE_KEYS } = require('src/utilities/valid-types.js')
 
 const { exportHTMLtoExcel } = require('src/utilities/excel.js')

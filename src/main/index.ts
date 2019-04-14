@@ -61,6 +61,7 @@ function createWindow() {
     show: false,
   })
 
+  // eslint-disable-next-line
   setMenu()
 
   // load root file/url
