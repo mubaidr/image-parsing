@@ -1,7 +1,7 @@
 <template>
   <div
-    class="container-fluid"
     id="app"
+    class="container-fluid"
   >
     <Transition
       mode="out-in"

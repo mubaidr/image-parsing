@@ -27,7 +27,7 @@
       </p>
     </div>
 
-    <br>
+    <br />
 
     <div class="buttons">
       <button
@@ -49,18 +49,12 @@
       </button>
     </div>
 
-    <br>
-    <br>
-    <br>
+    <br />
+    <br />
+    <br />
 
-    <Transition
-      mode="out-in"
-      name="slide-down"
-    >
-      <table
-        v-if="running"
-        class="table is-fullwidth"
-      >
+    <Transition mode="out-in" name="slide-down">
+      <table v-if="running" class="table is-fullwidth">
         <thead>
           <tr>
             <th />

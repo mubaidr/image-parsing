@@ -60,7 +60,7 @@
                 class="input"
                 placeholder="Marks earned for each correct answer"
                 type="number"
-              >
+              />
             </div>
           </div>
         </div>
@@ -74,13 +74,13 @@
                 placeholder="Marks deducted for each incorrect answer"
                 step="0.01"
                 type="number"
-              >
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <br>
+      <br />
 
       <div class="buttons">
         <button

@@ -13,11 +13,10 @@
                 class="button"
               >
                 <span>Sort</span>
-                <i
-v-if="sortOrder === 'asc'"
-class="material-icons has-pointer">arrow_drop_up</i>
-                <i v-else
-class="material-icons has-pointer">arrow_drop_down</i>
+                <i v-if="sortOrder === 'asc'" class="material-icons has-pointer"
+                  >arrow_drop_up</i
+                >
+                <i v-else class="material-icons has-pointer">arrow_drop_down</i>
               </button>
             </p>
             <p class="control has-icons-right">
@@ -27,7 +26,7 @@ class="material-icons has-pointer">arrow_drop_down</i>
                 class="input"
                 placeholder="Filter"
                 type="text"
-              >
+              />
               <span class="icon is-right">
                 <i class="material-icons">search</i>
               </span>
@@ -56,11 +55,9 @@ class="material-icons has-pointer">arrow_drop_down</i>
     </nav>
 
     <!-- Data list -->
-    <transition mode="out-in"
-name="slide-up">
+    <transition mode="out-in" name="slide-up">
       <!-- Show table when data is loaded -->
-      <div key="table"
-v-if="hasResults">
+      <div key="table" v-if="hasResults">
         <div class="scroll-container">
           <table
             ref="tbl_data"
@@ -69,14 +66,12 @@ v-if="hasResults">
             <thead>
               <tr>
                 <th>#</th>
-                <th :key="column.label"
-v-for="column in columns">
+                <th :key="column.label" v-for="column in columns">
                   {{ column.title }}
                 </th>
               </tr>
             </thead>
-            <tbody is="transition-group"
-mode="out-in" name="list-complete">
+            <tbody is="transition-group" mode="out-in" name="list-complete">
               <!-- Show table rows if data rows are available -->
               <template v-if="filteredResults.length > 0">
                 <tr
@@ -102,8 +97,7 @@ mode="out-in" name="list-complete">
               </template>
               <!-- Show message if now data rows are available -->
               <template v-else>
-                <tr key="message-row"
-class="list-complete-item">
+                <tr key="message-row" class="list-complete-item">
                   <td
                     :colspan="Object.keys(columns).length + 1"
                     class="has-text-left"
@@ -117,18 +111,14 @@ class="list-complete-item">
         </div>
       </div>
       <!-- Show message when no data is loaded -->
-      <div key="message"
-v-else>
+      <div key="message" v-else>
         <article class="message is-info">
-          <div class="message-body">
-            No data found.
-          </div>
+          <div class="message-body">No data found.</div>
         </article>
       </div>
     </transition>
     <!-- Preview component -->
-    <Transition mode="out-in"
-name="slide-up">
+    <Transition mode="out-in" name="slide-up">
       <modal-preview
         :image-source="imageSource"
         :selected-row="selectedRow"

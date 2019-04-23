@@ -2,13 +2,13 @@
   <div>
     <section class="hero is-white">
       <div class="hero-body">
-        <br>
+        <br />
         <div class="block has-text-centered">
           <figure class="image is-128x128">
             <img
               alt="Placeholder image"
               src="../../../_icons/512icontype11.png"
-            >
+            />
           </figure>
         </div>
         <div class="content has-text-centered">
@@ -19,34 +19,22 @@
             Generate answeer sheets and extract results from the scanned answer
             sheets.
           </p>
-          <RouterLink
-            class="button is-dark"
-            to="generate"
-          >
+          <RouterLink class="button is-dark" to="generate">
             <i class="material-icons">view_carousel</i>
             <span>Generate</span>
           </RouterLink>
-          <RouterLink
-            class="button is-dark"
-            to="process"
-          >
+          <RouterLink class="button is-dark" to="process">
             <i class="material-icons">flash_on</i>
             <span>Process</span>
           </RouterLink>
 
-          <button
-            @click="test()"
-            class="button is-info"
-          >
+          <button @click="test()" class="button is-info">
             <i class="material-icons">flash_on</i>
             <span>CPU-GPU</span>
           </button>
 
-          <br>
-          <RouterLink
-            class="button is-white is-fullwidth"
-            to="train"
-          >
+          <br />
+          <RouterLink class="button is-white is-fullwidth" to="train">
             <span>Train</span>
           </RouterLink>
         </div>

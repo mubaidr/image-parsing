@@ -5,10 +5,7 @@
     </h1>
 
     <div class="block has-text-centered">
-      <button
-        @click="start"
-        class="button is-primary"
-      >
+      <button @click="start" class="button is-primary">
         Start
       </button>
 
@@ -30,10 +27,7 @@
 
       <div class="block log">
         <ul>
-          <li
-            :key="index"
-            v-for="(log, index) in logs"
-          >
+          <li :key="index" v-for="(log, index) in logs">
             {{ log }}
           </li>
         </ul>

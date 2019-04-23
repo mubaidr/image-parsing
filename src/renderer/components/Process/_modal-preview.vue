@@ -1,9 +1,6 @@
 <template>
   <div class="modal is-active">
-    <div
-      @click="closeModal"
-      class="modal-background"
-    />
+    <div @click="closeModal" class="modal-background" />
     <button
       @click="closeModal"
       aria-label="close"
@@ -13,10 +10,7 @@
       <header class="modal-card-head">
         <div class="columns is-mobile">
           <div class="column is-3">
-            <a
-              @click="previous"
-              class="button is-pulled-left is-info"
-            >
+            <a @click="previous" class="button is-pulled-left is-info">
               <i class="material-icons">skip_previous</i>
             </a>
           </div>
@@ -25,21 +19,18 @@
               <p class="control">
                 <input
                   ref="txt_roll_no"
-                  :class="{'is-danger' : !row.hasValidRollNo}"
+                  :class="{ 'is-danger': !row.hasValidRollNo }"
                   :readonly="row.hasValidRollNo"
                   v-model="row.rollNo"
                   class="input has-text-centered is-uppercase has-text-weight-bold is-family-code"
                   placeholder="Roll No"
                   type="text"
-                >
+                />
               </p>
             </div>
           </div>
           <div class="column is-3">
-            <a
-              @click="next"
-              class="button is-pulled-right is-info"
-            >
+            <a @click="next" class="button is-pulled-right is-info">
               <i class="material-icons">skip_next</i>
             </a>
           </div>
@@ -48,10 +39,7 @@
 
       <section class="modal-card-body">
         <!-- Preview -->
-        <img
-          :src="imageSource"
-          v-show="imageSource"
-        >
+        <img :src="imageSource" v-show="imageSource" />
       </section>
     </div>
   </div>

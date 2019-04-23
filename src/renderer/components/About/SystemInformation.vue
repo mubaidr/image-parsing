@@ -12,10 +12,7 @@
           <td>Platform</td>
           <td>{{ platform }}</td>
         </tr>
-        <tr
-          :key="lib"
-          v-for="lib in Object.keys(versions)"
-        >
+        <tr :key="lib" v-for="lib in Object.keys(versions)">
           <td>{{ lib }}</td>
           <td>{{ versions[lib] }}</td>
         </tr>

@@ -2,18 +2,9 @@
   <div class="section">
     <!-- <h1 class="title is-5">Process</h1>
     <h2 class="subtitle is-6">Process scanned images to generate result.</h2>-->
-    <Transition
-      mode="out-in"
-      name="slide-left"
-    >
-      <review-result
-        :results="extractedResult"
-        v-if="extractedResult"
-      />
-      <extract-result
-        @results="getExtractedResult"
-        v-else
-      />
+    <Transition mode="out-in" name="slide-left">
+      <review-result :results="extractedResult" v-if="extractedResult" />
+      <extract-result @results="getExtractedResult" v-else />
     </Transition>
   </div>
 </template>
@@ -46,5 +37,4 @@ export default Vue.extend({
 })
 </script>
 
-<style>
-</style>
+<style></style>
