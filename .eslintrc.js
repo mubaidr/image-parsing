@@ -36,6 +36,7 @@ module.exports = {
 
   rules: {
     'no-console': 0,
+    'no-undef': 0,
     '@typescript-eslint/interface-name-prefix': 0,
     // https://github.com/typescript-eslint/typescript-eslint/issues/103
     '@typescript-eslint/no-parameter-properties': 0,

@@ -8,8 +8,8 @@ import uuid from 'uuid'
 import ICache from '../@interfaces/ICache'
 import ICodeScan from '../@interfaces/ICodeScan'
 import IDesignData from '../@interfaces/IDesignData'
-import { DATAPATHS } from './dataPaths'
-import { IMAGES, NATIVE_IMAGES } from './validTypes'
+import { dataPaths } from './dataPaths'
+import { Images, NativeImages } from './validTypes'
 
 const CACHE: ICache = {}
 
@@ -35,7 +35,7 @@ const convertImage: convertImageGetter = async src => {
   }
 
   // native supported images
-  if (NATIVE_IMAGES.includes(ext)) {
+  if (NativeImages.includes(ext)) {
     return src
   }
 
@@ -46,7 +46,7 @@ const convertImage: convertImageGetter = async src => {
   }
 
   // generate random tmp url
-  const url = path.join(DATAPATHS.tmp, `${uuid()}.jpg`)
+  const url = path.join(dataPaths.tmp, `${uuid()}.jpg`)
   CACHE[src] = url
 
   // save file for preview
@@ -67,13 +67,13 @@ const logImageData: logImageDataGetter = async (src, name) => {
     img = src.clone()
   }
 
-  img.jpeg().toFile(path.join(DATAPATHS.tmp, `${name || uuid()}.jpg`))
+  img.jpeg().toFile(path.join(dataPaths.tmp, `${name || uuid()}.jpg`))
 }
 
 type getImagePathsGetter = (dir: string) => Promise<string[]>
 
 const getImagePaths: getImagePathsGetter = async dir => {
-  return fastGlob(`${dir}/*.{${IMAGES.join(',')}}`, { onlyFiles: true })
+  return fastGlob(`${dir}/*.{${Images.join(',')}}`, { onlyFiles: true })
 }
 
 type getRollNoFromImageGetter = (
