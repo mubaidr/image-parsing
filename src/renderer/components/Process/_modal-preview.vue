@@ -45,7 +45,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import IKey from '../../../@interfaces/IKey'
 import Vue from 'vue'
 

@@ -133,7 +133,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import modalPreview from './_modal-preview.vue'
 import Vue from 'vue'
 import IKey from '../../../@interfaces/IKey'

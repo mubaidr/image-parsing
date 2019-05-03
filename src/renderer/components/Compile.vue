@@ -96,7 +96,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import { openFile, saveFile } from '../../utilities/electron-dialog'
 import { compileResult } from '../../utilities/compile'
 import { exportJsonToExcel } from '../../utilities/excel'

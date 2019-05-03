@@ -36,7 +36,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import { fork, ChildProcess } from 'child_process'
 import * as trainingProcess from '../../utilities/train.js'
 import Vue from 'vue'

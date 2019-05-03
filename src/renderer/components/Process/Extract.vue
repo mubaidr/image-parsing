@@ -76,7 +76,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import ICodeScan from '../../../@interfaces/ICodeScan'
 
 import { openDirectory } from '../../../utilities/electron-dialog'
