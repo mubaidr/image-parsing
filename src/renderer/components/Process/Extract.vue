@@ -76,7 +76,7 @@
   </div>
 </template>
 
-<script lang="js">
+<script>
 import ICodeScan from '../../../@interfaces/ICodeScan'
 
 import { openDirectory } from '../../../utilities/electron-dialog'
@@ -89,9 +89,7 @@ export default Vue.extend({
 
   data() {
     return {
-      imageDirectory: 'D:\\current\\image-parsing\\__tests__\\test-data\\images-qrcode' as
-        | string
-        | void,
+      imageDirectory: 'D:\\current\\image-parsing\\__tests__\\test-data\\images-qrcode',
       running: false,
       processedImages: 0,
       totalImages: 0,
@@ -103,11 +101,11 @@ export default Vue.extend({
   },
 
   computed: {
-    inputIsValid(): string | void {
+    inputIsValid() {
       return this.imageDirectory
     },
 
-    remainingTime(): string {
+    remainingTime() {
       const ms =
         (this.totalImages - this.processedImages) * (this.perImageTime || 500)
       return this.toHHMMSS(ms)

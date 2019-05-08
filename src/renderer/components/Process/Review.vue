@@ -133,16 +133,14 @@
   </div>
 </template>
 
-<script lang="js">
+<script>
 import modalPreview from './_modal-preview.vue'
 import Vue from 'vue'
-import IKey from '../../../@interfaces/IKey'
 
 import { saveFile } from '../../../utilities/electron-dialog'
-const { NATIVE_KEYS } = require('src/utilities/valid-types.js')
-
-const { exportHTMLtoExcel } = require('src/utilities/excel.js')
-const { convertImage } = require('src/utilities/images.js')
+import { NativeKeys } from '../../../utilities/ValidTypes'
+import {exportHtmltoExcel} from '../../../utilities/excel'
+import {convertImage} from '../../../utilities/images'
 
 export default Vue.extend({
   name: 'ReviewResult',
@@ -152,7 +150,6 @@ export default Vue.extend({
   },
 
   props: {
-    /** @type {IKey[]} */
     results: {
       type: Array,
       default: () => {
@@ -295,11 +292,11 @@ export default Vue.extend({
       const destination = await saveFile([
         {
           name: 'Excel File',
-          extensions: NATIVE_KEYS,
+          extensions: NativeKeys,
         },
       ])
 
-      await exportHTMLtoExcel(this.$refs.tbl_data, destination)
+      await exportHtmltoExcel(this.$refs.tbl_data, destination)
       this.$toasted.show('File saved succesfully. ')
     },
   },

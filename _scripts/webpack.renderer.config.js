@@ -62,11 +62,23 @@ const config = {
         },
       },
       {
-        test: /\.sass$/,
+        test: /\.s(c|a)ss$/,
         use: [
-          isDevMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader?indentedSyntax',
+          {
+            loader: isDevMode
+              ? 'vue-style-loader'
+              : MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader',
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              // eslint-disable-next-line
+              implementation: require('sass'),
+            },
+          },
         ],
       },
       {

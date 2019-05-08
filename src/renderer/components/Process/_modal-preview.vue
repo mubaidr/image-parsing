@@ -45,8 +45,7 @@
   </div>
 </template>
 
-<script lang="js">
-import IKey from '../../../@interfaces/IKey'
+<script>
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -54,7 +53,7 @@ export default Vue.extend({
 
   props: {
     selectedRow: {
-      type: Object as () => IKey,
+      type: Object,
       default() {
         return null
       },
@@ -70,7 +69,7 @@ export default Vue.extend({
 
   data() {
     return {
-      row: null as IKey | null,
+      row: null,
     }
   },
 
@@ -78,18 +77,18 @@ export default Vue.extend({
     selectedRow(val) {
       this.row = val
 
-      const el = this.$refs.txt_roll_no as HTMLElement
+      const el = this.$refs.txt_roll_no
       el.focus()
     },
   },
 
   created() {
     // @ts-ignore
-    this.row = this.selectedRow as IKey
+    this.row = this.selectedRow
   },
 
   mounted() {
-    const el = this.$refs.txt_roll_no as HTMLElement
+    const el = this.$refs.txt_roll_no
     el.focus()
   },
 

@@ -43,7 +43,7 @@
   </div>
 </template>
 
-<script lang="js">
+<script>
 import { test } from '../../utilities/cpu-gpu-test'
 import Vue from 'vue'
 

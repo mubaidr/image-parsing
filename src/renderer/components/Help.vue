@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script lang="js">
+<script>
 import SystemInformation from './About/SystemInformation.vue'
 import Vue from 'vue'
 

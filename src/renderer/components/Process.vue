@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script lang="js">
+<script>
 import extractResult from './Process/Extract.vue'
 import reviewResult from './Process/Review.vue'
 import Vue from 'vue'

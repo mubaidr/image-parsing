@@ -96,31 +96,26 @@
   </div>
 </template>
 
-<script lang="js">
+<script>
 import { openFile, saveFile } from '../../utilities/electron-dialog'
 import { compileResult } from '../../utilities/compile'
 import { exportJsonToExcel } from '../../utilities/excel'
 import * as VALIDTYPES from '../../utilities/validTypes'
-import IKey from '../../@interfaces/IKey'
 import Vue from 'vue'
 
 export default Vue.extend({
   data() {
     return {
-      resultFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.xlsx' as
-        | string
-        | void,
-      keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.jpg' as
-        | string
-        | void,
-      correctMarks: 3 as number,
-      incorrectMarks: 1 as number,
-      running: false as boolean,
+      resultFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.xlsx',
+      keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.jpg',
+      correctMarks: 3,
+      incorrectMarks: 1,
+      running: false,
     }
   },
 
   computed: {
-    inputIsValid(): boolean {
+    inputIsValid() {
       return (
         this.resultFilePath !== null &&
         this.keyFilePath !== null &&
@@ -131,7 +126,7 @@ export default Vue.extend({
   },
 
   methods: {
-    async compile(): Promise<void> {
+    async compile() {
       this.running = true
 
       if (!this.resultFilePath || !this.keyFilePath) return
