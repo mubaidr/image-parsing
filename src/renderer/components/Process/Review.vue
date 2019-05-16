@@ -138,9 +138,9 @@ import modalPreview from './_modal-preview.vue'
 import Vue from 'vue'
 
 import { saveFile } from '../../../utilities/electron-dialog'
-import { NativeKeys } from '../../../utilities/ValidTypes'
-import {exportHtmltoExcel} from '../../../utilities/excel'
-import {convertImage} from '../../../utilities/images'
+import { NativeKeys } from '../../../utilities/validTypes'
+import { exportHtmltoExcel } from '../../../utilities/excel'
+import { convertImage } from '../../../utilities/images'
 
 export default Vue.extend({
   name: 'ReviewResult',
@@ -303,22 +303,29 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="sass" scoped>
-.scroll-container
-  width: 100%
-  min-height: 296px
-  overflow-x: auto
+<style lang="scss" scoped>
+.scroll-container {
+  width: 100%;
+  min-height: 296px;
+  overflow-x: auto;
+}
 
-table.has-text-centered
-  font-size: small
-  .has-background-danger
-    color: #fff
-  th, td
-    font-weight: normal
-    text-align: left
-    vertical-align: middle
-  th:nth-child(1)
-    min-width: 50px
-  th:nth-child(2)
-    min-width: 75px
+table.has-text-centered {
+  font-size: small;
+  .has-background-danger {
+    color: #fff;
+  }
+  th,
+  td {
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+  }
+  th:nth-child(1) {
+    min-width: 50px;
+  }
+  th:nth-child(2) {
+    min-width: 75px;
+  }
+}
 </style>

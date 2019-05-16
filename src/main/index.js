@@ -13,7 +13,7 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 
 const gotTheLock = app.requestSingleInstanceLock()
 const isDev = process.env.NODE_ENV === 'development'
-let mainWindow: BrowserWindow
+let mainWindow
 
 // only allow single instance of application
 if (!isDev) {
@@ -139,9 +139,7 @@ app.on('ready', () => {
 })
  */
 
-type sendMenuEventGetter = (data: { route: string }) => Promise<void>
-
-const sendMenuEvent: sendMenuEventGetter = async data => {
+const sendMenuEvent = async data => {
   mainWindow.webContents.send('event', data)
 }
 

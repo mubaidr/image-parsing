@@ -106,7 +106,8 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
-      resultFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.xlsx',
+      resultFilePath:
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.xlsx',
       keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.jpg',
       correctMarks: 3,
       incorrectMarks: 1,
@@ -144,7 +145,7 @@ export default Vue.extend({
       this.running = false
     },
 
-    async exportCompiledResults(json: IKey[]) {
+    async exportCompiledResults(json) {
       const destination = await saveFile([
         {
           name: 'Excel File',

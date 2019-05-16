@@ -5,9 +5,9 @@ import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import uuid from 'uuid'
 
-import ICache from '../@interfaces/ICache'
-import ICodeScan from '../@interfaces/ICodeScan'
-import IDesignData from '../@interfaces/IDesignData'
+import ICache from './@interfaces/ICache'
+import ICodeScan from './@interfaces/ICodeScan'
+import IDesignData from './@interfaces/IDesignData'
 import { dataPaths } from './dataPaths'
 import { Images, NativeImages } from './validTypes'
 

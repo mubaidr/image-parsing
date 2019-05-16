@@ -109,14 +109,17 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="sass">
-.modal-card-head
-  .columns
-    width: calc(100% + 1.5rem)
+<style lang="scss">
+.modal-card-head {
+  .columns {
+    width: calc(100% + 1.5rem);
+  }
+}
 
-.delete.is-top-right
-  position: absolute
-  top: 0
-  right: 0
-  z-index: 99999
+.delete.is-top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 99999;
+}
 </style>

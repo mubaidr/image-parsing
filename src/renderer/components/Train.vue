@@ -37,16 +37,16 @@
 </template>
 
 <script>
-import { fork, ChildProcess } from 'child_process'
-import * as trainingProcess from '../../utilities/train.js'
+import { fork } from 'child_process'
+import * as trainingProcess from '../../utilities/train.ts'
 import Vue from 'vue'
 
 export default Vue.extend({
   data() {
     return {
-      logs: [] as string[],
-      running: false as boolean,
-      worker: null as ChildProcess | null,
+      logs: [],
+      running: false,
+      worker: null,
     }
   },
 
@@ -64,7 +64,7 @@ export default Vue.extend({
     },
 
     startProcess() {
-      this.worker = fork(`${__dirname}/src/utilities/train.js`, [], {
+      this.worker = fork(`${__dirname}/src/utilities/train.ts`, [], {
         silent: true,
       })
 
@@ -108,7 +108,8 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="sass">
-.log
-  font-size: smaller
+<style lang="scss">
+.log {
+  font-size: smaller;
+}
 </style>

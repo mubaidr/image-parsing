@@ -15,14 +15,14 @@ const config = {
   mode: process.env.NODE_ENV,
   devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
-    main: path.join(__dirname, '../src/main/index.ts'),
+    main: path.join(__dirname, '../src/main/index.js'),
   },
   externals: externals.filter(d => !whiteListedModules.includes(d)),
   module: {
     rules: [
       {
-        test: /\.ts$/,
-        loader: ['ts-loader'],
+        test: /\.(j|t)s$/,
+        loader: ['babel-loader'],
         exclude: /node_modules/,
       },
       {

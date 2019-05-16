@@ -21,7 +21,7 @@ const config = {
   mode: process.env.NODE_ENV,
   devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
-    renderer: path.join(__dirname, '../src/renderer/main.ts'),
+    renderer: path.join(__dirname, '../src/renderer/main.js'),
   },
   output: {
     libraryTarget: 'commonjs2',
@@ -33,15 +33,8 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              appendTsSuffixTo: ['\\.vue$'],
-            },
-          },
-        ],
+        test: /\.(j|t)s$/,
+        use: 'babel-loader',
         exclude: /node_modules/,
       },
       {
@@ -53,7 +46,6 @@ const config = {
         use: {
           loader: 'vue-loader',
           options: {
-            appendTsSuffixTo: ['\\.vue$'],
             extractCSS: !isDevMode,
             loaders: {
               sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax',

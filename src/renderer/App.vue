@@ -1,14 +1,8 @@
 <template>
-  <div
-    id="app"
-    class="container-fluid"
-  >
-    <Transition
-      mode="out-in"
-      name="slide-up"
-    >
+  <div id="app" class="container-fluid">
+    <Transition mode="out-in" name="slide-up">
       <!-- <keep-alive> -->
-      <RouterView/>
+      <RouterView />
       <!-- </keep-alive> -->
     </Transition>
   </div>
@@ -22,4 +16,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="sass"></style>
+<style lang="scss"></style>

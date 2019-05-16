@@ -1,5 +1,5 @@
 import XLSX from 'xlsx'
-import IKey from '../@interfaces/IKey'
+import IKey from './@interfaces/IKey'
 import { csvToJson } from './csvToJson'
 
 type importExcelToJsonGetter = (src: string) => Promise<IKey[]>

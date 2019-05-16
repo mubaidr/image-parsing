@@ -1,6 +1,6 @@
 import childProcess from 'child_process'
-import IDesignData from '../@interfaces/IDesignData'
-import IKey from '../@interfaces/IKey'
+import IDesignData from './@interfaces/IDesignData'
+import IKey from './@interfaces/IKey'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { getImagePaths } from './images'

@@ -1,9 +1,9 @@
 import sharp, { Sharp } from 'sharp'
 
 // import { imageDataToBinary } from './gpu'
-import IDesignData from '../@interfaces/IDesignData'
-import IKey from '../@interfaces/IKey'
-import IQuestionData from '../@interfaces/IQuestionData'
+import IDesignData from './@interfaces/IDesignData'
+import IKey from './@interfaces/IKey'
+import IQuestionData from './@interfaces/IQuestionData'
 import { convertToBitArray } from './index'
 
 // import { logImageData } from './images'

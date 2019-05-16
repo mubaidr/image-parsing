@@ -77,8 +77,6 @@
 </template>
 
 <script>
-import ICodeScan from '../../../@interfaces/ICodeScan'
-
 import { openDirectory } from '../../../utilities/electron-dialog'
 import * as processingModule from '../../../utilities/process'
 
@@ -89,7 +87,8 @@ export default Vue.extend({
 
   data() {
     return {
-      imageDirectory: 'D:\\current\\image-parsing\\__tests__\\test-data\\images-qrcode',
+      imageDirectory:
+        'D:\\current\\image-parsing\\__tests__\\test-data\\images-qrcode',
       running: false,
       processedImages: 0,
       totalImages: 0,
@@ -140,13 +139,7 @@ export default Vue.extend({
       this.running = !this.running
     },
 
-    listner(m: {
-      progress?: boolean
-      completed?: boolean
-      time?: number
-      results?: ICodeScan[]
-      error?: object
-    }) {
+    listner(m) {
       if (m.progress) {
         this.processedImages += 1
         if (m.time) {
@@ -170,7 +163,7 @@ export default Vue.extend({
       this.imageDirectory = await openDirectory()
     },
 
-    toHHMMSS(s: number) {
+    toHHMMSS(s) {
       let str = ''
       const input = s / 1000
       const hours = Math.floor(input / 3600)
@@ -195,8 +188,11 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="sass">
-table
-  th, td
-    text-align: center
+<style scoped lang="scss">
+table {
+  th,
+  td {
+    text-align: center;
+  }
+}
 </style>

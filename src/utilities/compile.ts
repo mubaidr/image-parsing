@@ -1,11 +1,11 @@
-import * as VALIDTYPES from '../utilities/validTypes'
+import * as VALIDTYPES from './validTypes'
 import { dataPaths } from './dataPaths'
 
 import { importExcelToJson } from '../utilities/excel'
 import { getDesignData } from './design'
 import { processTask } from './processTaskWorker'
 
-import IKey from '../@interfaces/IKey'
+import IKey from './@interfaces/IKey'
 
 type ReadKeyGetter = (a: string) => Promise<void | IKey[]>
 

@@ -1,11 +1,11 @@
 import * as cheerio from 'cheerio'
 import fs from 'fs'
 
-import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
-import StringPatternEnum from '../@enums/StringPatternEnum'
-import IDesignData from '../@interfaces/IDesignData'
-import ILocation from '../@interfaces/ILocation'
-import IQuestionsLocations from '../@interfaces/IQuestionsLocations'
+import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
+import StringPatternEnum from './@enums/StringPatternEnum'
+import IDesignData from './@interfaces/IDesignData'
+import ILocation from './@interfaces/ILocation'
+import IQuestionsLocations from './@interfaces/IQuestionsLocations'
 
 type getPatternGroupGETTER = (str: string) => string
 
