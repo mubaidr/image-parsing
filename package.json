@@ -10,7 +10,7 @@
     "csvtojson": "^2.0.8",
     "electron-log": "^3.0.5",
     "electron-settings": "^3.2.0",
-    "fast-glob": "^2.2.6",
+    "fast-glob": "^2.2.7",
     "gpu.js": "^2.0.0-rc.13",
     "javascript-barcode-reader": "^0.4.12",
     "jsqr": "^1.2.0",
