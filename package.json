@@ -20,7 +20,7 @@
     "uuid": "^3.3.2",
     "vue": "^2.6.10",
     "vue-router": "^3.0.6",
-    "vue-toasted": "^1.1.26",
+    "vue-toasted": "^1.1.27",
     "xlsx": "^0.14.3"
   },
   "description": "An electron-vue project",
