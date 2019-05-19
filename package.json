@@ -41,7 +41,7 @@
     "@types/node-sass": "^4.11.0",
     "@types/prettier": "^1.16.3",
     "@types/script-ext-html-webpack-plugin": "^2.1.0",
-    "@types/sharp": "^0.22.1",
+    "@types/sharp": "^0.22.2",
     "@types/uuid": "^3.4.4",
     "@types/webpack": "^4.4.31",
     "@types/webpack-dev-server": "^3.1.5",
