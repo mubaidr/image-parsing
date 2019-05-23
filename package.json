@@ -6,7 +6,7 @@
   "dependencies": {
     "brain.js": "^1.6.1",
     "bulma-fluent": "^0.3.17",
-    "cheerio": "1.0.0-rc.2",
+    "cheerio": "1.0.0-rc.3",
     "csvtojson": "^2.0.8",
     "electron-log": "^3.0.5",
     "electron-settings": "^3.2.0",
