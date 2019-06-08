@@ -77,6 +77,7 @@
 </template>
 
 <script>
+const mainWindow = require('electron').remote.getCurrentWindow()
 import { openDirectory } from '../../../utilities/electron-dialog'
 import * as processingModule from '../../../utilities/process'
 
@@ -111,6 +112,12 @@ export default Vue.extend({
     },
   },
 
+  watch: {
+    running() {
+      mainWindow.setProgressBar(0)
+    },
+  },
+
   created() {
     processingModule.stop()
   },
@@ -133,7 +140,13 @@ export default Vue.extend({
             this.totalImages = totalImages
             this.totalWorkers = totalWorkers
           })
-          .catch(this.$toasted.show)
+          .catch(err => {
+            console.error(err)
+
+            this.$toasted.show(err, {
+              type: 'error',
+            })
+          })
       }
 
       this.running = !this.running
@@ -145,6 +158,12 @@ export default Vue.extend({
         if (m.time) {
           this.perImageTime = m.time
         }
+
+        // set taskbar progress and
+        mainWindow.setProgressBar(this.processedImages / this.totalImages)
+        // flash taskbar when done
+        mainWindow.once('focus', () => mainWindow.flashFrame(false))
+        mainWindow.flashFrame(true)
       } else if (m.completed) {
         this.running = false
 

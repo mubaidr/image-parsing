@@ -1,6 +1,5 @@
 import * as cheerio from 'cheerio'
 import fs from 'fs'
-
 import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
 import StringPatternEnum from './@enums/StringPatternEnum'
 import IDesignData from './@interfaces/IDesignData'
@@ -35,68 +34,7 @@ const getDesignData: getDesignDataGetter = file => {
   const $ = cheerio.load(fs.readFileSync(file, 'utf8'))
   const svgViewBox = $('svg')[0].attribs.viewBox.split(' ')
 
-  const questions: IQuestionsLocations = {
-    q1: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q2: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q3: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q4: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q5: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q6: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q7: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q8: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q9: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q10: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q11: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q12: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q13: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q14: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q15: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q16: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q17: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q18: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q19: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q20: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q21: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q22: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q23: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q24: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q25: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q26: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q27: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q28: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q29: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q30: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q31: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q32: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q33: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q34: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q35: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q36: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q37: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q38: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q39: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q40: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q41: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q42: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q43: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q44: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q45: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q46: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q47: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q48: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q49: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q50: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q51: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q52: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q53: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q54: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q55: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q56: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q57: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q58: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q59: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    q60: { x1: 0, y1: 0, x2: 0, y2: 0 },
-  }
+  let questions: IQuestionsLocations = {}
   let code: ILocation = { x1: 0, y1: 0, x2: 0, y2: 0 }
 
   let x
@@ -149,14 +87,18 @@ const getDesignData: getDesignDataGetter = file => {
     width = parseInt(rect.attr('width'), 10) || 0 + rx
     height = parseInt(rect.attr('height'), 10) || 0 + ry
 
-    let questionNumber
-    let optionTitle
+    let questionNumber: string
+    let optionTitle: string
     const PATTERN = getPatternGroup(title)
 
     switch (PATTERN) {
       case StringPatternEnum.QUESTION:
         optionTitle = title.slice(-1)
         questionNumber = title.slice(0, -1)
+
+        if (!questions[questionNumber]) {
+          questions[questionNumber] = { x1: 0, y1: 0, x2: 0, y2: 0 }
+        }
 
         if (optionTitle === QuestionOptionsEnum.A) {
           questions[questionNumber].x1 = x - 1

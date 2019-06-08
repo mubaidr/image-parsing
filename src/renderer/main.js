@@ -1,17 +1,13 @@
+// import the styles
+import 'bulma-pro/bulma.sass'
+import { ipcRenderer } from 'electron'
+import 'material-design-icons/iconfont/material-icons.css'
 import Vue from 'vue'
 import Toasted from 'vue-toasted'
-
-// import the styles
-import 'bulma-fluent/bulma.sass'
-import 'material-design-icons/iconfont/material-icons.css'
-
+import App from './App.vue'
 import './assets/style/animations.scss'
 import './assets/style/main.scss'
-
-import App from './App.vue'
 import router from './router/index'
-
-import { ipcRenderer } from 'electron'
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -35,7 +31,7 @@ new Vue({
 })
 
 // menu routes handler
-ipcRenderer.addListener('event', data => {
+ipcRenderer.on('change-view', (event, data) => {
   if (data.route) {
     router.push(data.route)
   }

@@ -1,12 +1,11 @@
-import electronSettings from 'electron-settings'
-import { productName } from '../../package.json'
-
 // import * as devtron from 'devtron'
 // import electronDebug from 'electron-debug'
 // import * as vueDevtools from 'vue-devtools'
+import { app, BrowserWindow, Menu } from 'electron';
+import electronSettings from 'electron-settings';
+import { productName } from '../../package.json';
+import { dataPaths } from '../utilities/dataPaths';
 
-import { app, BrowserWindow, Menu } from 'electron'
-import { dataPaths } from '../utilities/dataPaths'
 
 // disable electron warning
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
@@ -140,7 +139,7 @@ app.on('ready', () => {
  */
 
 const sendMenuEvent = async data => {
-  mainWindow.webContents.send('event', data)
+  mainWindow.webContents.send('change-view', data)
 }
 
 const template = [

@@ -16,9 +16,11 @@ let electronProcess = null
 let manualRestart = null
 
 async function startRenderer() {
-  rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(
-    rendererConfig.entry.renderer
-  )
+  rendererConfig.entry.renderer = [
+    path.join(__dirname, 'dev-client'),
+    rendererConfig.entry.renderer,
+  ]
+  // rendererConfig.entry.processTaskWorker = [path.join(__dirname, 'dev-client'), rendererConfig.entry.processTaskWorker]
 
   return new Promise(resolve => {
     const compiler = webpack(rendererConfig)

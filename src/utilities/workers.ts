@@ -18,7 +18,7 @@ const createWorkerProcesses: createWorkerProcessesGetter = async imagesCount => 
 
   for (let i = 0; i < CORE_COUNT; i += 1) {
     WORKERS.push(
-      childProcess.fork(`${__dirname}/processTaskWorker.js`, [], {
+      childProcess.fork(`./dist/processTaskWorker.js`, [], {
         silent: true,
       })
     )
