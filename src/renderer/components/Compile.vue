@@ -9,6 +9,7 @@
 
     <form class="control">
       <div class="field">
+        <label class="label">Result File</label>
         <div class="file has-name is-fullwidth">
           <label class="file-label">
             <button
@@ -19,17 +20,18 @@
             />
             <span class="file-cta">
               <i class="material-icons">list</i>
-              <span class="file-label">Choose result File</span>
+              <span class="file-label">Choose File</span>
             </span>
             <span class="file-name">{{ resultFilePath }}</span>
           </label>
         </div>
-        <p class="help">
+        <!-- <p class="help">
           Choose the result file
-        </p>
+        </p> -->
       </div>
 
       <div class="field">
+        <label class="label">Key File</label>
         <div class="file has-name is-fullwidth">
           <label class="file-label">
             <button
@@ -40,17 +42,17 @@
             />
             <span class="file-cta">
               <i class="material-icons">insert_drive_file</i>
-              <span class="file-label">Choose Key File</span>
+              <span class="file-label">Choose File</span>
             </span>
             <span class="file-name">{{ keyFilePath }}</span>
           </label>
         </div>
-        <p class="help">
+        <!-- <p class="help">
           Choose the key file
-        </p>
+        </p> -->
       </div>
 
-      <div class="columns is-multiline">
+      <div class="columns is-multiline is-mobile">
         <div class="column is-6">
           <div class="field">
             <label class="label">Correct Marks</label>
@@ -80,8 +82,6 @@
         </div>
       </div>
 
-      <br />
-
       <div class="buttons">
         <button
           :disabled="running || !inputIsValid"
@@ -107,7 +107,7 @@ export default Vue.extend({
   data() {
     return {
       resultFilePath:
-        'D:\\Current\\image-parsing\\__tests__\\test-data\\result-output.xlsx',
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\result.xlsx',
       keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.jpg',
       correctMarks: 3,
       incorrectMarks: 1,

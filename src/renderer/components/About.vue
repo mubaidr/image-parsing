@@ -1,17 +1,18 @@
 <template>
   <div class="section">
     <h1 class="title is-4">About</h1>
-    <h2 class="subtitle is-6">Developed By</h2>
     <div class="box">
       <article class="media">
         <div class="media-content">
           <div class="content">
             <p>
+              <h2 class="subtitle is-6">Developed By: </h2>
               <strong>Muhammad Ubaid Raza</strong>
+              <br/>
               <a
                 href="//github.com/mubaidr"
                 target="_blank"
-              >@mubaidr</a>
+              >mubaidr@gmail.com</a>
             </p>
           </div>
         </div>

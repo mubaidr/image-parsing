@@ -5,29 +5,10 @@ import { getRollNoFromImage, getSharpObjectFromSource } from './images'
 import { getQuestionsNeuralNet } from './index'
 import { getQuestionsData } from './questions'
 
-// sends progress to parent
-async function sendProgress(p: {
-  progress?: boolean
-  completed?: boolean
-  time?: number
-  results?: ICodeScan[]
-}) {
-  if (process && process.send) {
-    return process.send(p, () => {
-      if (p.completed) {
-        process.exit(0)
-      }
-    })
-  }
-
-  // return only key for non-wroker
-  return p.results
-}
-
 type processTaskGetter = (
   designData: IDesignData,
   imagePaths: string[]
-) => Promise<void>
+) => Promise<ICodeScan[]>
 
 const processTask: processTaskGetter = async (designData, imagePaths) => {
   const neuralNet = getQuestionsNeuralNet()
@@ -39,7 +20,7 @@ const processTask: processTaskGetter = async (designData, imagePaths) => {
     const sharpImage = getSharpObjectFromSource(img)
 
     const [result, questionsData] = await Promise.all([
-      getRollNoFromImage(designData, sharpImage, false),
+      getRollNoFromImage(designData, sharpImage, true),
       getQuestionsData(designData, sharpImage.clone()),
     ])
 
@@ -72,17 +53,28 @@ const processTask: processTaskGetter = async (designData, imagePaths) => {
     results.push(result)
 
     // report progress status
-    sendProgress({
-      progress: true,
-      time: Date.now() - startTime,
-    })
+    if (process && process.send) {
+      process.send({
+        progress: true,
+        time: Date.now() - startTime,
+      })
+    }
   }
 
   // report completed status & exit process
-  sendProgress({
-    completed: true,
-    results,
-  })
+  if (process && process.send) {
+    process.send(
+      {
+        completed: true,
+        results,
+      },
+      () => {
+        process.exit(0)
+      }
+    )
+  }
+
+  return results
 }
 
 // add message listner

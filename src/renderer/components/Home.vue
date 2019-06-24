@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="hero is-white">
+    <section class="hero is-dark is-bold">
       <div class="hero-body">
         <br />
         <div class="block has-text-centered">
@@ -19,23 +19,13 @@
             Generate answeer sheets and extract results from the scanned answer
             sheets.
           </p>
-          <RouterLink class="button is-dark" to="generate">
+          <RouterLink class="button is-light" to="generate">
             <i class="material-icons">view_carousel</i>
             <span>Generate</span>
           </RouterLink>
-          <RouterLink class="button is-dark" to="process">
+          <RouterLink class="button is-light" to="process">
             <i class="material-icons">flash_on</i>
             <span>Process</span>
-          </RouterLink>
-
-          <button @click="test()" class="button is-info">
-            <i class="material-icons">flash_on</i>
-            <span>CPU-GPU</span>
-          </button>
-
-          <br />
-          <RouterLink class="button is-white is-fullwidth" to="train">
-            <span>Train</span>
           </RouterLink>
         </div>
       </div>
@@ -44,17 +34,10 @@
 </template>
 
 <script>
-import { test } from '../../utilities/cpu-gpu-test'
 import Vue from 'vue'
 
 export default Vue.extend({
   name: 'Home',
-
-  methods: {
-    test() {
-      test()
-    },
-  },
 })
 </script>
 

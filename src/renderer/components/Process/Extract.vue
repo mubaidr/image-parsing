@@ -7,6 +7,7 @@
       Process scanned images to generate result.
     </h2>
     <div class="field">
+      <label class="label">Scanned Images Directory</label>
       <div class="file has-name is-fullwidth">
         <label class="file-label">
           <button

@@ -1,4 +1,4 @@
-import * as csvtojson from 'csvtojson'
+import csvtojson from 'csvtojson'
 import IKey from './@interfaces/IKey'
 
 type CsvToJsonGetter = (csv: string, isPath: boolean) => Promise<IKey[]>

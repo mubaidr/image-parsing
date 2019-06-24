@@ -1,5 +1,4 @@
 import sharp, { Sharp } from 'sharp'
-
 // import { imageDataToBinary } from './gpu'
 import IDesignData from './@interfaces/IDesignData'
 import IKey from './@interfaces/IKey'
@@ -20,8 +19,8 @@ const getQuestionsData: getQuestionsDataGetter = async (
   results
 ) => {
   const SCALE = 0.5
-  const TARGET_WIDTH = design.width * SCALE
-  const TARGET_HEIGHT = design.height * SCALE
+  const TARGET_WIDTH = Math.floor(design.width * SCALE)
+  const TARGET_HEIGHT = Math.floor(design.height * SCALE)
 
   // resize if image is larger than design
   img.resize(TARGET_WIDTH, TARGET_HEIGHT, {

@@ -1,13 +1,16 @@
-import * as VALIDTYPES from './validTypes'
-import { dataPaths } from './dataPaths'
-
 import { importExcelToJson } from '../utilities/excel'
+import ICodeScan from './@interfaces/ICodeScan'
+import IKey from './@interfaces/IKey'
+import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { processTask } from './processTaskWorker'
+import * as VALIDTYPES from './validTypes'
 
-import IKey from './@interfaces/IKey'
+// TODO: Fix export to csv option
+// TODO: Export data as excel file
+// TODO: replace IKey with ICodeScan
 
-type ReadKeyGetter = (a: string) => Promise<void | IKey[]>
+type ReadKeyGetter = (a: string) => Promise<void | IKey[] | ICodeScan[]>
 
 const readKey: ReadKeyGetter = async src => {
   const ext = src.split('.').pop()

@@ -1,6 +1,14 @@
 {
   "presets": [
-    ["@babel/env", { "useBuiltIns": "usage", "corejs": "3.0.0" }],
+    [
+      "@babel/env",
+      {
+        "targets": {
+          "chrome": "73",
+          "node": 12
+        }
+      }
+    ],
     "@babel/typescript"
   ],
   "plugins": [
