@@ -70,12 +70,12 @@ const addWorkerHandlers: addWorkerHandlersGetter = async (worker, callback) => {
 
   // logging
   worker.stdout.on('data', data => {
-    console.info(new Buffer(data, 'utf-8').toString())
+    console.info(Buffer.from(data, 'utf-8').toString())
   })
 
   // error
   worker.stderr.on('data', data => {
-    console.error(new Buffer(data, 'utf-8').toString())
+    console.error(Buffer.from(data, 'utf-8').toString())
   })
 }
 

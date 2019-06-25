@@ -16,44 +16,6 @@ const workersConfig = require('./webpack.workers.config')
 let electronProcess = null
 let manualRestart = null
 
-async function startRenderer() {
-  rendererConfig.entry.renderer = [
-    path.join(__dirname, 'dev-client'),
-    rendererConfig.entry.renderer,
-  ]
-  // rendererConfig.entry.processTaskWorker = [path.join(__dirname, 'dev-client'), rendererConfig.entry.processTaskWorker]
-
-  return new Promise(resolve => {
-    const compiler = webpack(rendererConfig)
-    const hotMiddleware = webpackHotMiddleware(compiler, {
-      log: false,
-    })
-
-    compiler.hooks.afterEmit.tap('afterEmit', () => {
-      console.log('\nCompiled renderer script!')
-      console.log('\nWatching file changes...')
-    })
-
-    const server = new WebpackDevServer(compiler, {
-      contentBase: path.join(__dirname, '../'),
-      hot: true,
-      inline: true,
-      noInfo: true,
-      overlay: true,
-      stats: 'minimal',
-      before(app, ctx) {
-        app.use(hotMiddleware)
-
-        ctx.middleware.waitUntilValid(() => {
-          resolve()
-        })
-      },
-    })
-
-    server.listen(9080)
-  })
-}
-
 async function killElectron(pid) {
   return new Promise((resolve, reject) => {
     if (pid) {
@@ -75,48 +37,89 @@ async function restartElectron() {
   await killElectron(pid)
 
   electronProcess = spawn(electron, [path.join(__dirname, '../dist/main.js')])
-
   electronProcess.on('exit', (code, signal) => {
     if (!manualRestart) process.exit(0)
   })
 }
 
-async function startWorkers() {
-  const compiler = webpack(workersConfig)
+async function startMain() {
+  const webpackSetup = webpack([mainConfig, workersConfig])
 
-  compiler.hooks.afterEmit.tap('afterEmit', async () => {
-    console.log('\nCompiled workers!')
-    console.log('\nWatching file changes...')
-  })
+  webpackSetup.compilers.forEach(compiler => {
+    const { name } = compiler
 
-  compiler.watch({}, err => {
-    if (err) console.error(err)
+    switch (name) {
+      case 'workers':
+        compiler.hooks.afterEmit.tap('afterEmit', async () => {
+          console.log(`\nCompiled ${name} script!`)
+          console.log(`\nWatching file changes for ${name} script...`)
+        })
+        break
+      case 'main':
+      default:
+        compiler.hooks.afterEmit.tap('afterEmit', async () => {
+          console.log(`\nCompiled ${name} script!`)
+
+          manualRestart = true
+          await restartElectron()
+
+          setTimeout(() => {
+            manualRestart = false
+          }, 2500)
+
+          console.log(`\nWatching file changes for ${name} script...`)
+        })
+        break
+    }
+
+    compiler.watch(
+      {
+        aggregateTimeout: 500,
+      },
+      err => {
+        if (err) console.error(err)
+      }
+    )
   })
 }
 
-async function startMain() {
-  const compiler = webpack(mainConfig)
+async function startRenderer() {
+  rendererConfig.entry.renderer = [
+    path.join(__dirname, 'dev-client'),
+    rendererConfig.entry.renderer,
+  ]
 
-  compiler.hooks.afterEmit.tap('afterEmit', async () => {
-    console.log('\nCompiled main script!')
+  return new Promise(resolve => {
+    const compiler = webpack(rendererConfig)
+    const hotMiddleware = webpackHotMiddleware(compiler, {
+      log: false,
+    })
 
-    manualRestart = true
-    await restartElectron()
+    compiler.hooks.afterEmit.tap('afterEmit', () => {
+      console.log('\nCompiled renderer script!')
+      console.log('\nWatching file changes...')
+    })
 
-    setTimeout(() => {
-      manualRestart = false
-    }, 2500)
+    const server = new WebpackDevServer(compiler, {
+      contentBase: path.join(__dirname, '../'),
+      hot: true,
+      noInfo: true,
+      overlay: true,
+      before(app, ctx) {
+        app.use(hotMiddleware)
 
-    console.log('\nWatching file changes...')
-  })
+        ctx.middleware.waitUntilValid(() => {
+          resolve()
+        })
+      },
+    })
 
-  compiler.watch({}, err => {
-    if (err) console.error(err)
+    server.listen(9080)
   })
 }
 
 async function start() {
-  await Promise.all([startWorkers(), startRenderer()])
+  await startRenderer()
   startMain()
 }
 
