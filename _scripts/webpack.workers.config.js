@@ -1,6 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
-const WriteFilePlugin = require('write-file-webpack-plugin')
+// const WriteFilePlugin = require('write-file-webpack-plugin')
 
 const {
   dependencies,
@@ -10,7 +10,6 @@ const {
 
 const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
-const whiteListedModules = ['vue']
 
 const config = {
   name: 'workers',
@@ -27,7 +26,7 @@ const config = {
     path: path.join(__dirname, '../dist'),
     filename: '[name].js',
   },
-  externals: externals.filter(d => !whiteListedModules.includes(d)),
+  externals: externals,
   module: {
     rules: [
       {
@@ -46,7 +45,7 @@ const config = {
     __filename: isDevMode,
   },
   plugins: [
-    new WriteFilePlugin(),
+    // new WriteFilePlugin(),
     new webpack.DefinePlugin({
       'process.env.PRODUCT_NAME': JSON.stringify(productName),
     }),

@@ -1,6 +1,6 @@
 import childProcess from 'child_process'
-import * as workerPath from 'file-loader?name=[name].js!./processTaskWorker'
 import os from 'os'
+import path from 'path'
 import NO_OF_CORES from 'physical-cpu-count'
 
 type createWorkerProcessesGetter = (
@@ -16,6 +16,12 @@ const createWorkerProcesses: createWorkerProcessesGetter = async imagesCount => 
     imagesCount || Infinity,
     availMemory < 0.15 ? 2 : NO_OF_CORES
   )
+
+  //TODO: test build load
+  let workerPath =
+    process.env.NODE_ENV === 'development'
+      ? path.resolve(__dirname, '../../dist/processTaskWorker.js')
+      : path.resolve(__dirname, './processTaskWorker.js')
 
   for (let i = 0; i < CORE_COUNT; i += 1) {
     WORKERS.push(

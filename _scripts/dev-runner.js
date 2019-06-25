@@ -91,13 +91,14 @@ async function startRenderer() {
 
   return new Promise(resolve => {
     const compiler = webpack(rendererConfig)
+    const { name } = compiler
     const hotMiddleware = webpackHotMiddleware(compiler, {
       log: false,
     })
 
     compiler.hooks.afterEmit.tap('afterEmit', () => {
-      console.log('\nCompiled renderer script!')
-      console.log('\nWatching file changes...')
+      console.log(`\nCompiled ${name} script!`)
+      console.log(`\nWatching file changes for ${name} script...`)
     })
 
     const server = new WebpackDevServer(compiler, {
