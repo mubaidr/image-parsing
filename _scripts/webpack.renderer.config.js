@@ -6,7 +6,7 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const PurgecssPlugin = require('purgecss-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const WriteFilePlugin = require('write-file-webpack-plugin')
+// const WriteFilePlugin = require('write-file-webpack-plugin')
 
 const {
   dependencies,
@@ -19,17 +19,10 @@ const isDevMode = process.env.NODE_ENV === 'development'
 const whiteListedModules = ['vue']
 
 const config = {
-  devServer: {
-    // writeToDisk: true,
-  },
   mode: process.env.NODE_ENV,
   devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
     renderer: path.join(__dirname, '../src/renderer/main.js'),
-    processTaskWorker: path.join(
-      __dirname,
-      '../src/utilities/processTaskWorker.ts'
-    ),
   },
   output: {
     libraryTarget: 'commonjs2',
@@ -114,7 +107,7 @@ const config = {
     __filename: isDevMode,
   },
   plugins: [
-    new WriteFilePlugin(),
+    // new WriteFilePlugin(),
     new HtmlWebpackPlugin({
       excludeChunks: ['processTaskWorker'],
       filename: 'index.html',

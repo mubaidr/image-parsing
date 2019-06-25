@@ -11,6 +11,7 @@ const { spawn } = require('child_process')
 
 const mainConfig = require('./webpack.main.config')
 const rendererConfig = require('./webpack.renderer.config')
+const workersConfig = require('./webpack.workers.config')
 
 let electronProcess = null
 let manualRestart = null
@@ -80,6 +81,19 @@ async function restartElectron() {
   })
 }
 
+async function startWorkers() {
+  const compiler = webpack(workersConfig)
+
+  compiler.hooks.afterEmit.tap('afterEmit', async () => {
+    console.log('\nCompiled workers!')
+    console.log('\nWatching file changes...')
+  })
+
+  compiler.watch({}, err => {
+    if (err) console.error(err)
+  })
+}
+
 async function startMain() {
   const compiler = webpack(mainConfig)
 
@@ -101,4 +115,9 @@ async function startMain() {
   })
 }
 
-startRenderer().then(startMain)
+async function start() {
+  await Promise.all([startWorkers(), startRenderer()])
+  startMain()
+}
+
+start()

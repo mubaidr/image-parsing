@@ -1,4 +1,5 @@
 import childProcess from 'child_process'
+import * as workerPath from 'file-loader?name=[name].js!./processTaskWorker'
 import os from 'os'
 import NO_OF_CORES from 'physical-cpu-count'
 
@@ -18,7 +19,7 @@ const createWorkerProcesses: createWorkerProcessesGetter = async imagesCount => 
 
   for (let i = 0; i < CORE_COUNT; i += 1) {
     WORKERS.push(
-      childProcess.fork(`./dist/processTaskWorker.js`, [], {
+      childProcess.fork(workerPath, [], {
         silent: true,
       })
     )
