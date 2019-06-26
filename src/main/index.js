@@ -1,11 +1,13 @@
-// import * as devtron from 'devtron'
-// import electronDebug from 'electron-debug'
-// import * as vueDevtools from 'vue-devtools'
-import { app, BrowserWindow, Menu } from 'electron';
-import electronSettings from 'electron-settings';
-import { productName } from '../../package.json';
-import { dataPaths } from '../utilities/dataPaths';
+import * as devtron from 'devtron'
+import { app, BrowserWindow, Menu } from 'electron'
+import electronDebug from 'electron-debug'
+import electronSettings from 'electron-settings'
+import * as vueDevtools from 'vue-devtools'
+import { productName } from '../../package.json'
+import { dataPaths } from '../utilities/dataPaths'
 
+// set app name
+app.setName(productName)
 
 // disable electron warning
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
@@ -29,13 +31,13 @@ if (!isDev) {
     process.exit(0)
   }
 } else {
-  // electronDebug()
+  electronDebug()
 }
 
 async function installDevTools() {
   try {
-    // devtron.install()
-    // vueDevtools.install()
+    devtron.install()
+    vueDevtools.install()
   } catch (err) {
     console.log(err)
   }
@@ -77,8 +79,6 @@ function createWindow() {
 
   // Show when loaded
   mainWindow.on('ready-to-show', () => {
-    mainWindow.setTitle(productName)
-
     if (isDev || process.argv.indexOf('--debug') > -1) {
       mainWindow.webContents.openDevTools()
     }
@@ -93,7 +93,6 @@ function createWindow() {
 }
 
 app.on('ready', () => {
-  app.setName(productName)
   createWindow()
 
   if (isDev) {
