@@ -13,6 +13,8 @@ const mainConfig = require('./webpack.main.config')
 const rendererConfig = require('./webpack.renderer.config')
 const workersConfig = require('./webpack.workers.config')
 
+let electronProcess = null
+let manualRestart = null
 const remoteDebugging = !!(
   process.argv[2] && process.argv[2] === '--remote-debug'
 )
@@ -21,11 +23,6 @@ if (remoteDebugging) {
   // disable dvtools open in electron
   process.env.RENDERER_REMOTE_DEBUGGING = true
 }
-
-console.log(process.env.RENDERER_REMOTE_DEBUGGING === 'true')
-
-let electronProcess = null
-let manualRestart = null
 
 async function killElectron(pid) {
   return new Promise((resolve, reject) => {
@@ -49,7 +46,9 @@ async function restartElectron() {
 
   electronProcess = spawn(electron, [
     path.join(__dirname, '../dist/main.js'),
-    remoteDebugging ? '--remote-debugging-port=9222' : '',
+    // '--enable-logging', Enable to show logs from all electron processes
+    remoteDebugging ? '--inspect=9222' : '',
+    remoteDebugging ? '--remote-debugging-port=9223' : '',
   ])
 
   electronProcess.on('exit', (code, signal) => {

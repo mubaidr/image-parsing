@@ -14,7 +14,7 @@ const whiteListedModules = []
 const config = {
   name: 'main',
   mode: process.env.NODE_ENV,
-  devtool: isDevMode ? 'cheap-eval-source-map' : false,
+  devtool: isDevMode ? 'eval' : false,
   entry: {
     main: path.join(__dirname, '../src/main/index.js'),
   },

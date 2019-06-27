@@ -14,7 +14,7 @@ const isDevMode = process.env.NODE_ENV === 'development'
 const config = {
   name: 'workers',
   mode: process.env.NODE_ENV,
-  devtool: isDevMode ? 'cheap-eval-source-map' : false,
+  devtool: isDevMode ? 'eval' : false,
   entry: {
     processTaskWorker: path.join(
       __dirname,

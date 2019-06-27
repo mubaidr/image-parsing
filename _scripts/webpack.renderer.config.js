@@ -21,7 +21,7 @@ const whiteListedModules = ['vue']
 const config = {
   name: 'renderer',
   mode: process.env.NODE_ENV,
-  devtool: isDevMode ? 'cheap-eval-source-map' : false,
+  devtool: isDevMode ? 'eval' : false,
   entry: {
     renderer: path.join(__dirname, '../src/renderer/main.js'),
   },
