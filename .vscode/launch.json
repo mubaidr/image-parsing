@@ -5,20 +5,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
-      "request": "launch",
-      "name": "Test Process",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "test-process"],
-      "port": 9229
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Test Training",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "test-train"],
-      "port": 9229
+      "type": "chrome",
+      "request": "attach",
+      "name": "Renderer",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}"
     }
   ]
 }

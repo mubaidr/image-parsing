@@ -31,7 +31,9 @@ if (!isDev) {
     process.exit(0)
   }
 } else {
-  electronDebug()
+  electronDebug({
+    showDevTools: !(process.env.RENDERER_REMOTE_DEBUGGING === 'true'),
+  })
 }
 
 async function installDevTools() {
@@ -79,10 +81,6 @@ function createWindow() {
 
   // Show when loaded
   mainWindow.on('ready-to-show', () => {
-    if (isDev || process.argv.indexOf('--debug') > -1) {
-      mainWindow.webContents.openDevTools()
-    }
-
     mainWindow.show()
     mainWindow.focus()
   })

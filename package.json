@@ -100,6 +100,7 @@
   },
   "scripts": {
     "build": "npm run pack && node _scripts/build.js",
+    "debug": "node _scripts/dev-runner.js --remote-debug",
     "dev": "node _scripts/dev-runner.js",
     "lint": "eslint --fix --ext .js,.ts,.vue src",
     "pack": "npm run pack:main && npm run pack:renderer && npm run pack:workers",
