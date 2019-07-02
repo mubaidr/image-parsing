@@ -50,7 +50,7 @@ const addWorkerHandlers: addWorkerHandlersGetter = async (worker, callback) => {
         // report view of completion
         callback({
           completed: true,
-          results: [...RESULTS],
+          results: RESULTS.slice(0),
         })
 
         // exit all workers & reset data
@@ -64,9 +64,6 @@ const addWorkerHandlers: addWorkerHandlersGetter = async (worker, callback) => {
   if (!worker.stdout || !worker.stderr) {
     return
   }
-
-  // worker.stderr.pipe(process.stderr)
-  // worker.stdout.pipe(process.stdout)
 
   // logging
   worker.stdout.on('data', data => {
@@ -95,13 +92,12 @@ const start: startGetter = async (callback, imagesDirectory, imageFile?) => {
   const imagePaths = imagesDirectory
     ? await getImagePaths(imagesDirectory)
     : [imageFile]
-
-  TOTAL_IMAGES = imagePaths.length
   ;[DESIGNDATA, WORKER_PROCESSES] = await Promise.all([
     getDesignData(dataPaths.design),
-    createWorkerProcesses(TOTAL_IMAGES),
+    createWorkerProcesses(),
   ])
 
+  TOTAL_IMAGES = imagePaths.length
   const TOTAL_PROCESS = WORKER_PROCESSES.length
   const STEP = Math.floor(TOTAL_IMAGES / TOTAL_PROCESS)
 
