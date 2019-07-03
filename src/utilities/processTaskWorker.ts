@@ -12,7 +12,7 @@ type processTaskGetter = (
 
 const processTask: processTaskGetter = async (designData, imagePaths) => {
   const neuralNet = getQuestionsNeuralNet()
-  const results = []
+  const results: ICodeScan[] = []
 
   // loop through all images
   for (const img of imagePaths) {

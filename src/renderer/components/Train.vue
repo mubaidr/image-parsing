@@ -64,7 +64,7 @@ export default Vue.extend({
     },
 
     startProcess() {
-      this.worker = fork(`${__dirname}/src/utilities/train.ts`, [], {
+      this.worker = fork(`${ __dirname }/src/utilities/train.ts`, [], {
         silent: true,
       })
 

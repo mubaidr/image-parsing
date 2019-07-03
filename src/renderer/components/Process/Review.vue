@@ -24,7 +24,7 @@
                 :disabled="!hasResults"
                 v-model="filterQuery"
                 class="input"
-                placeholder="Filter"
+                placeholder="Filter By Roll No."
                 type="text"
               />
               <span class="icon is-right">

@@ -1,6 +1,5 @@
 import brain, { INeuralNetworkJSON } from 'brain.js'
 import fs from 'fs'
-
 import { dataPaths } from './dataPaths'
 
 type QuestionsNeuralNetGetter = () => brain.NeuralNetwork
@@ -21,8 +20,9 @@ const convertToBitArray: ConvertToBitArrayGetter = (data, channels) => {
   for (let i = 0; i < data.length; i += channels) {
     const threshold = 15
     const thresholdBlack = 80
-    const [r, g, b, a] = data.slice(i, i + channels)
-    const avg = Math.ceil(((r + g + b) * a) / (channels - 1))
+    const [r, g, b] = data.slice(i, i + channels)
+    // const avg = Math.ceil(((r + g + b) * a) / (channels - 1))
+    const avg = Math.ceil((r + g + b) / channels)
     const upperLimit = avg + threshold
     const lowerLimit = avg - threshold
 
@@ -32,8 +32,10 @@ const convertToBitArray: ConvertToBitArrayGetter = (data, channels) => {
     } else if (
       r <= upperLimit &&
       r >= lowerLimit &&
-      (g <= upperLimit && g >= lowerLimit) &&
-      (b <= upperLimit && b >= lowerLimit)
+      g <= upperLimit &&
+      g >= lowerLimit &&
+      b <= upperLimit &&
+      b >= lowerLimit
     ) {
       // Grey pixel
       binaryData.push(1)

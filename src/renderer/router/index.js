@@ -76,7 +76,7 @@ router.afterEach(to => {
   let title =
     to.path === '/home'
       ? process.env.PRODUCT_NAME
-      : `${to.meta.title} - ${process.env.PRODUCT_NAME}`
+      : `${ to.meta.title } - ${ process.env.PRODUCT_NAME }`
 
   if (!title) {
     title = 'Home'

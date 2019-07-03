@@ -4,6 +4,7 @@ import IKey from './@interfaces/IKey'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { getImagePaths } from './images'
+import { processTask } from './processTaskWorker'
 import { createWorkerProcesses } from './workers'
 
 // store reference to all workers
@@ -84,41 +85,57 @@ interface IFileInfo {
 type startGetter = (
   callback: (data: object) => void,
   imagesDirectory: string,
-  imageFile?: string
+  imageFile?: string,
+  inProcess?: boolean
 ) => Promise<IFileInfo>
 
-const start: startGetter = async (callback, imagesDirectory, imageFile?) => {
-  // reset result collection
-  const imagePaths = imagesDirectory
-    ? await getImagePaths(imagesDirectory)
-    : [imageFile]
+const start: startGetter = async (
+  callback,
+  imagesDirectory,
+  imageFile?,
+  inProcess?
+) => {
   ;[DESIGNDATA, WORKER_PROCESSES] = await Promise.all([
-    getDesignData(dataPaths.design),
+    getDesignData(dataPaths.designBarcode),
     createWorkerProcesses(),
   ])
 
-  TOTAL_IMAGES = imagePaths.length
-  const TOTAL_PROCESS = WORKER_PROCESSES.length
-  const STEP = Math.floor(TOTAL_IMAGES / TOTAL_PROCESS)
+  // reset result collection
+  const imagePaths = imagesDirectory
+    ? await getImagePaths(imagesDirectory)
+    : [imageFile || '']
 
-  for (let i = 0; i < TOTAL_PROCESS; i += 1) {
-    const startIndex = i * STEP
-    const endIndex = i === TOTAL_PROCESS - 1 ? TOTAL_IMAGES : (i + 1) * STEP
-    const worker = WORKER_PROCESSES[i]
-
-    // initiate processing
-    worker.send({
-      designData: DESIGNDATA,
-      imagePaths: imagePaths.slice(startIndex, endIndex),
+  if (inProcess) {
+    processTask(DESIGNDATA, imagePaths).then(res => {
+      callback({
+        completed: true,
+        results: res,
+      })
     })
+  } else {
+    TOTAL_IMAGES = imagePaths.length
+    const TOTAL_PROCESS = WORKER_PROCESSES.length
+    const STEP = Math.floor(TOTAL_IMAGES / TOTAL_PROCESS)
 
-    // add handlers
-    addWorkerHandlers(worker, callback)
+    for (let i = 0; i < TOTAL_PROCESS; i += 1) {
+      const startIndex = i * STEP
+      const endIndex = i === TOTAL_PROCESS - 1 ? TOTAL_IMAGES : (i + 1) * STEP
+      const worker = WORKER_PROCESSES[i]
+
+      // initiate processing
+      worker.send({
+        designData: DESIGNDATA,
+        imagePaths: imagePaths.slice(startIndex, endIndex),
+      })
+
+      // add handlers
+      addWorkerHandlers(worker, callback)
+    }
   }
 
   return {
     totalImages: TOTAL_IMAGES,
-    totalWorkers: WORKER_PROCESSES.length,
+    totalWorkers: inProcess ? 1 : WORKER_PROCESSES.length,
   }
 }
 

@@ -81,6 +81,7 @@
 const mainWindow = require('electron').remote.getCurrentWindow()
 import { openDirectory } from '../../../utilities/electron-dialog'
 import * as processingModule from '../../../utilities/process'
+import { dataPaths } from '../../../utilities/dataPaths'
 
 import Vue from 'vue'
 
@@ -89,8 +90,7 @@ export default Vue.extend({
 
   data() {
     return {
-      imageDirectory:
-        'D:\\current\\image-parsing\\__tests__\\test-data\\images-qrcode',
+      imageDirectory: dataPaths.imagesBarcode,
       running: false,
       processedImages: 0,
       totalImages: 0,
@@ -136,7 +136,7 @@ export default Vue.extend({
         if (this.imageDirectory === undefined) return
 
         processingModule
-          .start(this.listner, this.imageDirectory)
+          .start(this.listner, this.imageDirectory, undefined, true)
           .then(({ totalImages, totalWorkers }) => {
             this.totalImages = totalImages
             this.totalWorkers = totalWorkers
@@ -191,15 +191,15 @@ export default Vue.extend({
       const seconds = (input - hours * 3600 - minutes * 60).toFixed(2)
 
       if (hours) {
-        str += `${hours} hours `
+        str += `${ hours } hours `
       }
 
       if (minutes) {
-        str += `${minutes} minutes `
+        str += `${ minutes } minutes `
       }
 
       if (seconds) {
-        str += `${seconds} seconds `
+        str += `${ seconds } seconds `
       }
 
       return str

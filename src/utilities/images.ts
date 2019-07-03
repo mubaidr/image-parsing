@@ -1,10 +1,9 @@
 import fastGlob from 'fast-glob'
-import { javascriptBarcodeReader } from 'javascript-barcode-reader'
+import javascriptBarcodeReader from 'javascript-barcode-reader'
 import javascriptQRReader from 'jsqr'
 import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import uuid from 'uuid'
-
 import ICache from './@interfaces/ICache'
 import ICodeScan from './@interfaces/ICodeScan'
 import IDesignData from './@interfaces/IDesignData'
@@ -16,9 +15,12 @@ const CACHE: ICache = {}
 type getSharpObjectFromSourceGetter = (src: string) => Sharp
 
 const getSharpObjectFromSource: getSharpObjectFromSourceGetter = src => {
-  return sharp(src)
-    .raw()
-    .ensureAlpha()
+  return (
+    sharp(src)
+      .raw()
+      // .toColorspace('b-w')
+      .removeAlpha()
+  )
 }
 
 type convertImageGetter = (src: string) => Promise<string>
@@ -30,7 +32,7 @@ const convertImage: convertImageGetter = async src => {
 
   const ext = src.split('.').pop()
 
-  if (!ext) {
+  if (!ext || !Images.includes(ext)) {
     throw new Error('Invalid source provided')
   }
 
@@ -50,7 +52,9 @@ const convertImage: convertImageGetter = async src => {
   CACHE[src] = url
 
   // save file for preview
-  await getSharpObjectFromSource(src).toFile(url)
+  await getSharpObjectFromSource(src)
+    .jpeg()
+    .toFile(url)
 
   // returns new url
   return url
@@ -73,7 +77,13 @@ const logImageData: logImageDataGetter = async (src, name) => {
 type getImagePathsGetter = (dir: string) => Promise<string[]>
 
 const getImagePaths: getImagePathsGetter = async dir => {
-  return fastGlob(`${dir}/*.{${Images.join(',')}}`, { onlyFiles: true })
+  const loc = dir.replace(/\\/gi, '/')
+  const exts = Images.join(',')
+  const glob = `${loc}/*.{${exts}}`
+
+  return fastGlob(glob, {
+    onlyFiles: true,
+  })
 }
 
 type getRollNoFromImageGetter = (
@@ -87,11 +97,15 @@ const getRollNoFromImage: getRollNoFromImageGetter = async (
   img,
   isBarcode
 ) => {
-  const rollNoPos = designData.code
+  const rollNumberCoordinates = designData.code
   const metadata = await img.metadata()
   const ratio = metadata.width ? metadata.width / designData.width : 1
-  const width = Math.ceil((rollNoPos.x2 - rollNoPos.x1) * ratio)
-  const height = Math.ceil((rollNoPos.y2 - rollNoPos.y1) * ratio)
+  const width = Math.ceil(
+    (rollNumberCoordinates.x2 - rollNumberCoordinates.x1) * ratio
+  )
+  const height = Math.ceil(
+    (rollNumberCoordinates.y2 - rollNumberCoordinates.y1) * ratio
+  )
   const obj: ICodeScan = {
     id: uuid(),
     center: '',
@@ -103,8 +117,8 @@ const getRollNoFromImage: getRollNoFromImageGetter = async (
   }
 
   img.extract({
-    left: Math.floor(rollNoPos.x1 * ratio),
-    top: Math.floor(rollNoPos.y1 * ratio),
+    left: Math.floor(rollNumberCoordinates.x1 * ratio),
+    top: Math.floor(rollNumberCoordinates.y1 * ratio),
     width,
     height,
   })
@@ -123,15 +137,25 @@ const getRollNoFromImage: getRollNoFromImageGetter = async (
         { barcode: 'code-39' }
       )
     } else {
-      // @ts-ignore
-      rollNo = javascriptQRReader(data, width, height, {
-        inversionAttempts: 'dontInvert',
-      }).data
+      const res = javascriptQRReader(
+        new Uint8ClampedArray(data),
+        width,
+        height,
+        {
+          inversionAttempts: 'dontInvert',
+        }
+      )
+
+      if (res === null) throw 'QR Code not found!'
+
+      rollNo = res.data
     }
 
     obj.rollNo = rollNo
     obj.hasValidRollNo = !!obj.rollNo
   } catch (err) {
+    console.log(err)
+
     obj.rollNo = null
     obj.hasValidRollNo = false
   }

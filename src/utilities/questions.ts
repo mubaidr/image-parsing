@@ -1,11 +1,8 @@
 import sharp, { Sharp } from 'sharp'
-// import { imageDataToBinary } from './gpu'
 import IDesignData from './@interfaces/IDesignData'
 import IKey from './@interfaces/IKey'
 import IQuestionData from './@interfaces/IQuestionData'
 import { convertToBitArray } from './index'
-
-// import { logImageData } from './images'
 
 type getQuestionsDataGetter = (
   design: IDesignData,
@@ -40,6 +37,9 @@ const getQuestionsData: getQuestionsDataGetter = async (
       height: Math.ceil((q.y2 - q.y1) * SCALE),
     })
 
+    // debug image
+    // logImageData(img, title)
+
     const { data, info } = await img.toBuffer({ resolveWithObject: true })
     const binaryData = convertToBitArray([...data], info.channels)
 
@@ -55,9 +55,6 @@ const getQuestionsData: getQuestionsDataGetter = async (
     }
 
     extractedQuestionData.push({ title, input: binaryData })
-
-    // debug
-    // logImageData(img, `${title}`)
   }
 
   return extractedQuestionData

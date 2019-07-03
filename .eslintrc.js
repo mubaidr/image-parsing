@@ -33,5 +33,6 @@ module.exports = {
 
   rules: {
     'no-console': 0,
+    'template-curly-spacing': [2, 'always'],
   },
 }
