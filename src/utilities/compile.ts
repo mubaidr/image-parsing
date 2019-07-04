@@ -1,6 +1,5 @@
 import { importExcelToJson } from '../utilities/excel'
 import ICodeScan from './@interfaces/ICodeScan'
-import IKey from './@interfaces/IKey'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { processTask } from './processTaskWorker'
@@ -8,9 +7,9 @@ import * as VALIDTYPES from './validTypes'
 
 // TODO: Fix export to csv option
 // TODO: Export data as excel file
-// TODO: replace IKey with ICodeScan
+// TODO: replace ICodeScan with ICodeScan
 
-type ReadKeyGetter = (a: string) => Promise<void | IKey[] | ICodeScan[]>
+type ReadKeyGetter = (a: string) => Promise<void | ICodeScan[] | ICodeScan[]>
 
 const readKey: ReadKeyGetter = async src => {
   const ext = src.split('.').pop()
@@ -34,7 +33,7 @@ type CompileResultGetter = (
     correctMarks: number
     incorrectMarks: number
   }
-) => Promise<IKey[]>
+) => Promise<ICodeScan[]>
 
 const compileResult: CompileResultGetter = async (resultPath, keyPath) => {
   const [results, keys] = await Promise.all([
@@ -47,13 +46,13 @@ const compileResult: CompileResultGetter = async (resultPath, keyPath) => {
     throw new Error('Invalid key file.')
   }
 
-  const compiledResults: IKey[] = []
+  const compiledResults: ICodeScan[] = []
   const IS_PROCESSED: string[] = []
 
   for (const result of results) {
     // skip processed result
-    if (IS_PROCESSED.indexOf(result.ROLL_NO)) {
-      continue
+    if (result.rollNo) {
+      if (IS_PROCESSED.includes(result.rollNo)) continue
     }
 
     const columns = Object.keys(key).filter(col => col[0].toLowerCase() === 'q')
@@ -100,7 +99,9 @@ const compileResult: CompileResultGetter = async (resultPath, keyPath) => {
     compiledResults.push({ ...result, ...compiledResult })
 
     // update status of result to skip it for next iterations
-    IS_PROCESSED.push(result.ROLL_NO)
+    if (result.hasValidRollNo && result.rollNo) {
+      IS_PROCESSED.push(result.rollNo)
+    }
   }
 
   return compiledResults

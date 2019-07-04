@@ -4,9 +4,7 @@ import path from 'path'
 const isDev: boolean = process.env.NODE_ENV === 'development'
 
 const tmp: string = isDev ? path.resolve('.tmp') : os.tmpdir()
-const home: string = isDev
-  ? path.resolve('.')
-  : path.join(os.homedir(), 'desktop')
+const home: string = path.join(os.homedir(), 'desktop')
 
 const dataPaths = {
   design: path.resolve('__tests__/test-data', 'design.qr.svg'),

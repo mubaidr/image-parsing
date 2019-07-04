@@ -1,13 +1,13 @@
 import sharp, { Sharp } from 'sharp'
+import ICodeScan from './@interfaces/ICodeScan'
 import IDesignData from './@interfaces/IDesignData'
-import IKey from './@interfaces/IKey'
 import IQuestionData from './@interfaces/IQuestionData'
 import { convertToBitArray } from './index'
 
 type getQuestionsDataGetter = (
   design: IDesignData,
   img: Sharp,
-  results?: IKey
+  results?: ICodeScan
 ) => Promise<IQuestionData[]>
 
 const getQuestionsData: getQuestionsDataGetter = async (

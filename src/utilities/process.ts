@@ -1,6 +1,6 @@
 import childProcess from 'child_process'
+import ICodeScan from './@interfaces/ICodeScan'
 import IDesignData from './@interfaces/IDesignData'
-import IKey from './@interfaces/IKey'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { getImagePaths } from './images'
@@ -8,12 +8,12 @@ import { processTask } from './processTaskWorker'
 import { createWorkerProcesses } from './workers'
 
 // store reference to all workers
-let DESIGNDATA: IDesignData
+let DESIGN_DATA: IDesignData
 let WORKER_PROCESSES: childProcess.ChildProcess[]
-let TOTAL_IMAGES: number
+let IMAGES_COUNT: number
 
 // result collection
-const RESULTS: IKey[] = []
+const RESULT_SET: ICodeScan[] = []
 
 /**
  * Stops all worker processes
@@ -31,8 +31,8 @@ async function stop() {
   }
 
   WORKER_PROCESSES.length = 0
-  RESULTS.length = 0
-  TOTAL_IMAGES = 0
+  RESULT_SET.length = 0
+  IMAGES_COUNT = 0
 }
 
 type addWorkerHandlersGetter = (
@@ -44,14 +44,14 @@ const addWorkerHandlers: addWorkerHandlersGetter = async (worker, callback) => {
   // results collection and progress
   worker.on('message', data => {
     if (data.completed) {
-      RESULTS.push(...data.results)
+      RESULT_SET.push(...data.results)
 
       // check if all process have returned result
-      if (RESULTS.length === TOTAL_IMAGES) {
+      if (RESULT_SET.length === IMAGES_COUNT) {
         // report view of completion
         callback({
           completed: true,
-          results: RESULTS.slice(0),
+          results: RESULT_SET.slice(0),
         })
 
         // exit all workers & reset data
@@ -95,7 +95,7 @@ const start: startGetter = async (
   imageFile?,
   inProcess?
 ) => {
-  ;[DESIGNDATA, WORKER_PROCESSES] = await Promise.all([
+  ;[DESIGN_DATA, WORKER_PROCESSES] = await Promise.all([
     getDesignData(dataPaths.designBarcode),
     createWorkerProcesses(),
   ])
@@ -106,25 +106,25 @@ const start: startGetter = async (
     : [imageFile || '']
 
   if (inProcess) {
-    processTask(DESIGNDATA, imagePaths).then(res => {
+    processTask(DESIGN_DATA, imagePaths).then(res => {
       callback({
         completed: true,
         results: res,
       })
     })
   } else {
-    TOTAL_IMAGES = imagePaths.length
+    IMAGES_COUNT = imagePaths.length
     const TOTAL_PROCESS = WORKER_PROCESSES.length
-    const STEP = Math.floor(TOTAL_IMAGES / TOTAL_PROCESS)
+    const STEP = Math.floor(IMAGES_COUNT / TOTAL_PROCESS)
 
     for (let i = 0; i < TOTAL_PROCESS; i += 1) {
       const startIndex = i * STEP
-      const endIndex = i === TOTAL_PROCESS - 1 ? TOTAL_IMAGES : (i + 1) * STEP
+      const endIndex = i === TOTAL_PROCESS - 1 ? IMAGES_COUNT : (i + 1) * STEP
       const worker = WORKER_PROCESSES[i]
 
       // initiate processing
       worker.send({
-        designData: DESIGNDATA,
+        designData: DESIGN_DATA,
         imagePaths: imagePaths.slice(startIndex, endIndex),
       })
 
@@ -134,7 +134,7 @@ const start: startGetter = async (
   }
 
   return {
-    totalImages: TOTAL_IMAGES,
+    totalImages: IMAGES_COUNT,
     totalWorkers: inProcess ? 1 : WORKER_PROCESSES.length,
   }
 }

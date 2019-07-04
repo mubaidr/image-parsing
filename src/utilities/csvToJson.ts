@@ -1,7 +1,7 @@
 import csvtojson from 'csvtojson'
-import IKey from './@interfaces/IKey'
+import ICodeScan from './@interfaces/ICodeScan'
 
-type CsvToJsonGetter = (csv: string, isPath: boolean) => Promise<IKey[]>
+type CsvToJsonGetter = (csv: string, isPath: boolean) => Promise<ICodeScan[]>
 
 const csvToJson: CsvToJsonGetter = async (csv, isPath) => {
   const csvTool = csvtojson({
