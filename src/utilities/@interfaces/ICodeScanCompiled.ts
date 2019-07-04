@@ -14,5 +14,3 @@ interface ICodeScanCompiled extends ICodeScan {
 }
 
 export default ICodeScanCompiled
-
-//TODO: implement and use classes

@@ -108,7 +108,7 @@ export default Vue.extend({
     return {
       resultFilePath:
         'D:\\Current\\image-parsing\\__tests__\\test-data\\result.xlsx',
-      keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.jpg',
+      keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.xlsx',
       correctMarks: 3,
       incorrectMarks: 1,
       running: false,

@@ -1,5 +1,7 @@
 <template>
-  <div>Generate</div>
+  <div class="section">
+    Generate
+  </div>
 </template>
 
 <script>
