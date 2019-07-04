@@ -1,5 +1,5 @@
 interface ICodeScan {
-  [key: string]: string | number | boolean | null
+  [key: string]: string | number | boolean | null | string[]
   id: string
   center: string
   post: string
