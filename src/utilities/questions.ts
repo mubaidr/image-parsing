@@ -4,17 +4,11 @@ import IDesignData from './@interfaces/IDesignData'
 import IQuestionData from './@interfaces/IQuestionData'
 import { convertToBitArray } from './index'
 
-type getQuestionsDataGetter = (
+const getQuestionsData = async (
   design: IDesignData,
   img: Sharp,
   results?: ICodeScan
-) => Promise<IQuestionData[]>
-
-const getQuestionsData: getQuestionsDataGetter = async (
-  design,
-  img,
-  results
-) => {
+): Promise<IQuestionData[]> => {
   const SCALE = 0.5
   const TARGET_WIDTH = Math.floor(design.width * SCALE)
   const TARGET_HEIGHT = Math.floor(design.height * SCALE)

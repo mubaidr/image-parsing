@@ -6,9 +6,7 @@ import IDesignData from './@interfaces/IDesignData'
 import ILocation from './@interfaces/ILocation'
 import IQuestionsLocations from './@interfaces/IQuestionsLocations'
 
-type getPatternGroupGETTER = (str: string) => string
-
-const getPatternGroup: getPatternGroupGETTER = str => {
+const getPatternGroup = (str: string): string => {
   const QUESTION_PATTERN = new RegExp(/(q[1-9][0-9]?[ad])\b/gi)
   const PATTERN_BARCODE = new RegExp(/barcode/gi)
   const PATTERN_QR = new RegExp(/qrcode/gi)
@@ -28,9 +26,7 @@ const getPatternGroup: getPatternGroupGETTER = str => {
   return StringPatternEnum.NONE
 }
 
-type getDesignDataGetter = (file: string) => IDesignData
-
-const getDesignData: getDesignDataGetter = file => {
+const getDesignData = (file: string): IDesignData => {
   const $ = cheerio.load(fs.readFileSync(file, 'utf8'))
   const svgViewBox = $('svg')[0].attribs.viewBox.split(' ')
 

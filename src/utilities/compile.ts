@@ -9,9 +9,7 @@ import * as VALIDTYPES from './validTypes'
 // TODO: Export data as excel file
 // TODO: replace ICodeScan with ICodeScan
 
-type ReadKeyGetter = (a: string) => Promise<void | ICodeScan[] | ICodeScan[]>
-
-const readKey: ReadKeyGetter = async src => {
+const readKey = async (src: string): Promise<ICodeScan[] | void> => {
   const ext = src.split('.').pop()
 
   if (ext === undefined) {
@@ -26,16 +24,10 @@ const readKey: ReadKeyGetter = async src => {
   return processTask(designData, [src])
 }
 
-type CompileResultGetter = (
+const compileResult = async (
   resultPath: string,
-  keyPath: string,
-  options: {
-    correctMarks: number
-    incorrectMarks: number
-  }
-) => Promise<ICodeScan[]>
-
-const compileResult: CompileResultGetter = async (resultPath, keyPath) => {
+  keyPath: string
+): Promise<ICodeScan[]> => {
   const [results, keys] = await Promise.all([
     importExcelToJson(resultPath),
     readKey(keyPath),

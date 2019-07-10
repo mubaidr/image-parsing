@@ -1,15 +1,12 @@
 import brain from 'brain.js'
 import fs from 'fs'
-
 import { csvToJson } from './csvToJson'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { getSharpObjectFromSource } from './images'
 import { getQuestionsData } from './questions'
 
-type completedGetter = (success: boolean) => void
-
-const completed: completedGetter = success => {
+const completed = (success: boolean): void => {
   if (success) {
     console.log('Completed')
   } else {

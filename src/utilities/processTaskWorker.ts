@@ -5,12 +5,10 @@ import { getRollNoFromImage, getSharpObjectFromSource } from './images'
 import { getQuestionsNeuralNet } from './index'
 import { getQuestionsData } from './questions'
 
-type processTaskGetter = (
+const processTask = async (
   designData: IDesignData,
   imagePaths: string[]
-) => Promise<ICodeScan[] | undefined>
-
-const processTask: processTaskGetter = async (designData, imagePaths) => {
+): Promise<ICodeScan[] | undefined> => {
   const neuralNet = getQuestionsNeuralNet()
   const results: ICodeScan[] = []
 

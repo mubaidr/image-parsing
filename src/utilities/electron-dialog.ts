@@ -3,9 +3,9 @@ import * as settings from 'electron-settings'
 
 const { dialog, getCurrentWindow } = remote
 
-type openDirectoryGetter = (filters?: FileFilter[]) => Promise<string | void>
-
-const openDirectory: openDirectoryGetter = async filters => {
+const openDirectory = async (
+  filters?: FileFilter[]
+): Promise<string | void> => {
   // @ts-ignore
   const dirList = dialog.showOpenDialog<BrowserWindow, OpenDialogOptions>(
     getCurrentWindow(),
@@ -24,9 +24,7 @@ const openDirectory: openDirectoryGetter = async filters => {
   return dir
 }
 
-type openFileGetter = (filters?: FileFilter[]) => Promise<string | void>
-
-const openFile: openFileGetter = async filters => {
+const openFile = async (filters?: FileFilter[]): Promise<string | void> => {
   // @ts-ignore
   const fileList = dialog.showOpenDialog(getCurrentWindow(), {
     defaultPath: settings.get('open-file'),
@@ -42,9 +40,7 @@ const openFile: openFileGetter = async filters => {
   return file
 }
 
-type saveFileGetter = (filters?: FileFilter[]) => Promise<string | void>
-
-const saveFile: saveFileGetter = async filters => {
+const saveFile = async (filters?: FileFilter[]): Promise<string | void> => {
   // @ts-ignore
   const file = dialog.showSaveDialog(getCurrentWindow(), {
     defaultPath: settings.get('save-file'),

@@ -2,9 +2,9 @@ import childProcess from 'child_process'
 import path from 'path'
 import NO_OF_CORES from 'physical-cpu-count'
 
-type createWorkerProcessesGetter = () => Promise<childProcess.ChildProcess[]>
-
-const createWorkerProcesses: createWorkerProcessesGetter = async () => {
+const createWorkerProcesses = async (): Promise<
+  childProcess.ChildProcess[]
+> => {
   const WORKERS = []
 
   let workerPath =

@@ -35,12 +35,10 @@ async function stop() {
   IMAGES_COUNT = 0
 }
 
-type addWorkerHandlersGetter = (
+const addWorkerHandlers = async (
   worker: childProcess.ChildProcess,
   callback: (data: object) => void
-) => Promise<void>
-
-const addWorkerHandlers: addWorkerHandlersGetter = async (worker, callback) => {
+): Promise<void> => {
   // results collection and progress
   worker.on('message', data => {
     if (data.completed) {

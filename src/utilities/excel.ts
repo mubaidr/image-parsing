@@ -2,9 +2,7 @@ import XLSX from 'xlsx'
 import ICodeScan from './@interfaces/ICodeScan'
 import { csvToJson } from './csvToJson'
 
-type importExcelToJsonGetter = (src: string) => Promise<ICodeScan[]>
-
-const importExcelToJson: importExcelToJsonGetter = async src => {
+const importExcelToJson = async (src: string): Promise<ICodeScan[]> => {
   const ext = src.split('.').pop()
 
   if (ext === 'csv') {
@@ -27,28 +25,18 @@ const importExcelToJson: importExcelToJsonGetter = async src => {
   return output
 }
 
-type exportHtmlToExcelGetter = (
+const exportHtmltoExcel = async (
   htmlTable: string,
   destination: string
-) => Promise<void>
-
-const exportHtmltoExcel: exportHtmlToExcelGetter = async (
-  htmlTable,
-  destination
-) => {
+): Promise<void> => {
   const wb = XLSX.utils.table_to_book(htmlTable)
   XLSX.writeFile(wb, destination)
 }
 
-type exportJsonToExcelGetter = (
+const exportJsonToExcel = async (
   results: ICodeScan[],
   destination: string
-) => Promise<void>
-
-const exportJsonToExcel: exportJsonToExcelGetter = async (
-  results,
-  destination
-) => {
+): Promise<void> => {
   const worksheet = XLSX.utils.json_to_sheet(results)
   const workbook = XLSX.utils.book_new()
   XLSX.utils.book_append_sheet(workbook, worksheet)

@@ -1,11 +1,25 @@
 class Cache {
-  private list: string[] = []
+  private list: {
+    [key: string]: string
+  } = {}
 
-  get ( id: string ): string | undefined {
-    if(!id) return undefined
+  public get(key: string): string | null {
+    if (typeof key !== 'string') return null
 
-    const item = this.list[id]
-    if ( item ) return item else return undefined
+    const item = this.list[key]
+    if (item) {
+      return item
+    } else {
+      return null
+    }
+  }
+
+  public set(key: string, value: string): string | null {
+    if (typeof key !== 'string' && value) return null
+
+    this.list[key] = value
+
+    return value
   }
 }
 

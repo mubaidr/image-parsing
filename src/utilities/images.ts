@@ -4,17 +4,15 @@ import javascriptQRReader from 'jsqr'
 import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import uuid from 'uuid'
-import ICache from './@interfaces/ICache'
+import Cache from './@classes/Cache'
 import ICodeScan from './@interfaces/ICodeScan'
 import IDesignData from './@interfaces/IDesignData'
 import { dataPaths } from './dataPaths'
 import { Images, NativeImages } from './validTypes'
 
-const CACHE: ICache = {}
+const CACHE = new Cache()
 
-type getSharpObjectFromSourceGetter = (src: string) => Sharp
-
-const getSharpObjectFromSource: getSharpObjectFromSourceGetter = src => {
+const getSharpObjectFromSource = (src: string): Sharp => {
   return (
     sharp(src)
       .raw()
@@ -23,9 +21,7 @@ const getSharpObjectFromSource: getSharpObjectFromSourceGetter = src => {
   )
 }
 
-type convertImageGetter = (src: string) => Promise<string>
-
-const convertImage: convertImageGetter = async src => {
+const convertImage = async (src: string): Promise<string> => {
   if (!src) {
     throw new Error('Invalid source provided')
   }
@@ -42,14 +38,14 @@ const convertImage: convertImageGetter = async src => {
   }
 
   // check cache
-  const cached = CACHE[src]
+  const cached = CACHE.get(src)
   if (cached) {
     return cached
   }
 
   // generate random tmp url
   const url = path.join(dataPaths.tmp, `${uuid()}.jpg`)
-  CACHE[src] = url
+  CACHE.set(src, url)
 
   // save file for preview
   await getSharpObjectFromSource(src)
@@ -60,9 +56,10 @@ const convertImage: convertImageGetter = async src => {
   return url
 }
 
-type logImageDataGetter = (src: string | Sharp, name?: string) => Promise<void>
-
-const logImageData: logImageDataGetter = async (src, name) => {
+const logImageData = async (
+  src: string | Sharp,
+  name?: string
+): Promise<void> => {
   let img
 
   if (typeof src === 'string') {
@@ -74,9 +71,7 @@ const logImageData: logImageDataGetter = async (src, name) => {
   img.jpeg().toFile(path.join(dataPaths.tmp, `${name || uuid()}.jpg`))
 }
 
-type getImagePathsGetter = (dir: string) => Promise<string[]>
-
-const getImagePaths: getImagePathsGetter = async dir => {
+const getImagePaths = async (dir: string): Promise<string[]> => {
   const loc = dir.replace(/\\/gi, '/')
   const exts = Images.join(',')
   const glob = `${loc}/*.{${exts}}`
@@ -86,17 +81,11 @@ const getImagePaths: getImagePathsGetter = async dir => {
   })
 }
 
-type getRollNoFromImageGetter = (
+const getRollNoFromImage = async (
   designData: IDesignData,
   img: Sharp,
   isBarcode: boolean
-) => Promise<ICodeScan>
-
-const getRollNoFromImage: getRollNoFromImageGetter = async (
-  designData,
-  img,
-  isBarcode
-) => {
+): Promise<ICodeScan> => {
   const rollNumberCoordinates = designData.code
   const metadata = await img.metadata()
   const ratio = metadata.width ? metadata.width / designData.width : 1

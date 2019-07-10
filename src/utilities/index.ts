@@ -2,18 +2,14 @@ import brain, { INeuralNetworkJSON } from 'brain.js'
 import fs from 'fs'
 import { dataPaths } from './dataPaths'
 
-type QuestionsNeuralNetGetter = () => brain.NeuralNetwork
-
-const getQuestionsNeuralNet: QuestionsNeuralNetGetter = () => {
+const getQuestionsNeuralNet = (): brain.NeuralNetwork => {
   const text = fs.readFileSync(dataPaths.questionsModel).toString()
   const json: INeuralNetworkJSON = JSON.parse(text)
 
   return new brain.NeuralNetwork().fromJSON(json)
 }
 
-type ConvertToBitArrayGetter = (a: number[], b: number) => number[]
-
-const convertToBitArray: ConvertToBitArrayGetter = (data, channels) => {
+const convertToBitArray = (data: number[], channels: number): number[] => {
   // Convert image data to binary
   const binaryData: number[] = []
 
