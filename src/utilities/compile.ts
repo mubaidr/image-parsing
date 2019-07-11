@@ -1,22 +1,18 @@
 import { importExcelToJson } from '../utilities/excel'
-import ICodeScan from './@interfaces/ICodeScan'
+import CompiledResult from './@classes/CompiledResult'
+import { KeyNativeEnum } from './@enums/ExtensionsEnum'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { processTask } from './processTaskWorker'
-import * as VALIDTYPES from './validTypes'
 
-// TODO: Fix export to csv option
-// TODO: Export data as excel file
-// TODO: replace ICodeScan with ICodeScan
-
-const readKey = async (src: string): Promise<ICodeScan[] | void> => {
+const readKey = async (src: string): Promise<CompiledResult[] | void> => {
   const ext = src.split('.').pop()
 
   if (ext === undefined) {
     return
   }
 
-  if (VALIDTYPES.NativeKeys.indexOf(ext) !== -1) {
+  if (ext in KeyNativeEnum) {
     return importExcelToJson(src)
   }
 
@@ -27,7 +23,7 @@ const readKey = async (src: string): Promise<ICodeScan[] | void> => {
 const compileResult = async (
   resultPath: string,
   keyPath: string
-): Promise<ICodeScan[]> => {
+): Promise<CompiledResult[]> => {
   const [results, keys] = await Promise.all([
     importExcelToJson(resultPath),
     readKey(keyPath),
@@ -38,7 +34,7 @@ const compileResult = async (
     throw new Error('Invalid key file.')
   }
 
-  const compiledResults: ICodeScan[] = []
+  const compiledResults: CompiledResult[] = []
   const IS_PROCESSED: string[] = []
 
   for (const result of results) {

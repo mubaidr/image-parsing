@@ -1,10 +1,10 @@
 import csvtojson from 'csvtojson'
-import ICodeScan from './@interfaces/ICodeScan'
+import CompiledResult from './@classes/CompiledResult'
 
 const csvToJson = async (
   csv: string,
   isPath: boolean
-): Promise<ICodeScan[]> => {
+): Promise<CompiledResult[]> => {
   const csvTool = csvtojson({
     flatKeys: true,
   })

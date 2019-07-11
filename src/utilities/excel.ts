@@ -1,8 +1,8 @@
 import XLSX from 'xlsx'
-import ICodeScan from './@interfaces/ICodeScan'
+import CompiledResult from './@classes/CompiledResult'
 import { csvToJson } from './csvToJson'
 
-const importExcelToJson = async (src: string): Promise<ICodeScan[]> => {
+const importExcelToJson = async (src: string): Promise<CompiledResult[]> => {
   const ext = src.split('.').pop()
 
   if (ext === 'csv') {
@@ -10,11 +10,11 @@ const importExcelToJson = async (src: string): Promise<ICodeScan[]> => {
   }
 
   const workbook = XLSX.readFile(src)
-  const output: ICodeScan[] = []
+  const output: CompiledResult[] = []
 
   workbook.SheetNames.forEach(sheetName => {
     const sheet = workbook.Sheets[sheetName]
-    const json: ICodeScan[] = XLSX.utils.sheet_to_json(sheet, {
+    const json: CompiledResult[] = XLSX.utils.sheet_to_json(sheet, {
       blankrows: false,
       raw: true,
     })
@@ -34,7 +34,7 @@ const exportHtmltoExcel = async (
 }
 
 const exportJsonToExcel = async (
-  results: ICodeScan[],
+  results: CompiledResult[],
   destination: string
 ): Promise<void> => {
   const worksheet = XLSX.utils.json_to_sheet(results)

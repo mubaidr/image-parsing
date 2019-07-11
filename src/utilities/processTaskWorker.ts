@@ -1,4 +1,4 @@
-import ICodeScan from './@interfaces/ICodeScan'
+import CompiledResult from './@classes/CompiledResult'
 import IDesignData from './@interfaces/IDesignData'
 import INNQuestionOutput from './@interfaces/INNQuestionOutput'
 import { getRollNoFromImage, getSharpObjectFromSource } from './images'
@@ -7,13 +7,13 @@ import { getQuestionsData } from './questions'
 
 const processTask = async (
   designData: IDesignData,
-  imagePaths: string[]
-): Promise<ICodeScan[] | undefined> => {
+  images: string[]
+): Promise<CompiledResult[] | undefined> => {
   const neuralNet = getQuestionsNeuralNet()
-  const results: ICodeScan[] = []
+  const compiledResult: CompiledResult[] = []
 
   // loop through all images
-  for (const img of imagePaths) {
+  for (const img of images) {
     const startTime = Date.now()
     const sharpImage = getSharpObjectFromSource(img)
 
@@ -48,7 +48,7 @@ const processTask = async (
     result.img = img
 
     // collect option selection
-    results.push(result)
+    compiledResult.push(result)
 
     // report progress status
     if (process && process.send) {
@@ -64,14 +64,14 @@ const processTask = async (
     process.send(
       {
         completed: true,
-        results,
+        results: compiledResult,
       },
       () => {
         process.exit(0)
       }
     )
   } else {
-    return results
+    return compiledResult
   }
 }
 

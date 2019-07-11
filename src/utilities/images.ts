@@ -5,10 +5,10 @@ import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import uuid from 'uuid'
 import Cache from './@classes/Cache'
-import ICodeScan from './@interfaces/ICodeScan'
+import CompiledResult from './@classes/CompiledResult'
+import { ImageNativeTypesEnum, ImageTypesEnum } from './@enums/ExtensionsEnum'
 import IDesignData from './@interfaces/IDesignData'
 import { dataPaths } from './dataPaths'
-import { Images, NativeImages } from './validTypes'
 
 const CACHE = new Cache()
 
@@ -28,12 +28,12 @@ const convertImage = async (src: string): Promise<string> => {
 
   const ext = src.split('.').pop()
 
-  if (!ext || !Images.includes(ext)) {
+  if (!ext || ext in ImageTypesEnum) {
     throw new Error('Invalid source provided')
   }
 
   // native supported images
-  if (NativeImages.includes(ext)) {
+  if (ext in ImageNativeTypesEnum) {
     return src
   }
 
@@ -73,7 +73,7 @@ const logImageData = async (
 
 const getImagePaths = async (dir: string): Promise<string[]> => {
   const loc = dir.replace(/\\/gi, '/')
-  const exts = Images.join(',')
+  const exts = Object.keys(ImageTypesEnum).filter(t => typeof t === 'string')
   const glob = `${loc}/*.{${exts}}`
 
   return fastGlob(glob, {
@@ -85,7 +85,7 @@ const getRollNoFromImage = async (
   designData: IDesignData,
   img: Sharp,
   isBarcode: boolean
-): Promise<ICodeScan> => {
+): Promise<CompiledResult> => {
   const rollNumberCoordinates = designData.code
   const metadata = await img.metadata()
   const ratio = metadata.width ? metadata.width / designData.width : 1
@@ -95,15 +95,7 @@ const getRollNoFromImage = async (
   const height = Math.ceil(
     (rollNumberCoordinates.y2 - rollNumberCoordinates.y1) * ratio
   )
-  const obj: ICodeScan = {
-    id: uuid(),
-    center: '',
-    time: '',
-    post: '',
-    type: '',
-    rollNo: '',
-    hasValidRollNo: false,
-  }
+  const obj = new CompiledResult()
 
   img.extract({
     left: Math.floor(rollNumberCoordinates.x1 * ratio),
@@ -141,12 +133,9 @@ const getRollNoFromImage = async (
     }
 
     obj.rollNo = rollNo
-    obj.hasValidRollNo = !!obj.rollNo
   } catch (err) {
     console.log(err)
-
-    obj.rollNo = null
-    obj.hasValidRollNo = false
+    obj.rollNo = ''
   }
 
   return obj

@@ -3,6 +3,8 @@ class Cache {
     [key: string]: string
   } = {}
 
+  public constructor() {}
+
   public get(key: string): string | null {
     if (typeof key !== 'string') return null
 
@@ -20,6 +22,12 @@ class Cache {
     this.list[key] = value
 
     return value
+  }
+
+  public reset() {
+    Object.keys(this.list).forEach(k => {
+      delete this.list[k]
+    })
   }
 }
 

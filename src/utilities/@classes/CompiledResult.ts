@@ -1,46 +1,56 @@
 import uuid from 'uuid'
 
-//store answer objects in list, easy tocalculate types
+class Option {
+  [key: string]: {
+    option: string
+    secondOption: string
+    confidence: number
+  }
 
-class Result {
-  public option: string = ''
-  public correct: boolean = false
-  public incorrect: boolean = false
-  public unattempted: boolean = false
-  public skipped: boolean = false
+  public constructor() {}
 }
 
-class CompiledResult {
+class Result {
   private id: string = uuid()
 
-  public center: string = ''
-  public post: string = ''
   public rollNo: string = ''
-  public time: string = ''
-  public type: string = ''
-  public imagePath: string = ''
+  public imageFile: string = ''
 
-  public list: Result[] = []
+  public correct: Option[] = []
+  public incorrect: Option[] = []
+  public unattempted: Option[] = []
 
-  //TODO: convert to methods
-  // public attemptedAnswers: number = 0
-  // public correctAnswers: number = 0
-  // public incorrectAnswers: number = 0
-  // public skippedAnswers: number = 0
-  // public skippedQuestions: number = 0
-  // public totalQuestions: number = 0
-
-  // public unattemptedAnswersList: string[] = []
-  // public correctAnswersList: string[] = []
-  // public incorrectAnswersList: string[] = []
-  // public skippedQuestionsList: string[] = []
-
-  // public result: {
-  //   [key: string]: string
-  // } = {}
+  public constructor() {}
 
   public hasValidRollNo(): boolean {
     return this.rollNo !== ''
+  }
+}
+
+class CompiledResult {
+  public center: string = ''
+  public post: string = ''
+  public time: string = ''
+  public type: string = ''
+  public keyPath: string = ''
+
+  public skippedQuestions: string[] = []
+  public list: Result[] = []
+
+  public constructor() {}
+
+  public getCount(): number {
+    return this.list.length
+  }
+
+  public empty() {
+    this.list.length = 0
+  }
+
+  public add(result: Result) {
+    this.list.push(result)
+
+    return this.getCount()
   }
 }
 

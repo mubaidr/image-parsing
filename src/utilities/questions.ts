@@ -1,5 +1,5 @@
 import sharp, { Sharp } from 'sharp'
-import ICodeScan from './@interfaces/ICodeScan'
+import CompiledResult from './@classes/CompiledResult'
 import IDesignData from './@interfaces/IDesignData'
 import IQuestionData from './@interfaces/IQuestionData'
 import { convertToBitArray } from './index'
@@ -7,7 +7,7 @@ import { convertToBitArray } from './index'
 const getQuestionsData = async (
   design: IDesignData,
   img: Sharp,
-  results?: ICodeScan
+  results?: CompiledResult
 ): Promise<IQuestionData[]> => {
   const SCALE = 0.5
   const TARGET_WIDTH = Math.floor(design.width * SCALE)

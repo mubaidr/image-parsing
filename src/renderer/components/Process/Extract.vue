@@ -136,7 +136,7 @@ export default Vue.extend({
         if (this.imageDirectory === undefined) return
 
         processingModule
-          .start(this.listner, this.imageDirectory, undefined, true)
+          .start(this.listner, this.imageDirectory, true, true)
           .then(({ totalImages, totalWorkers }) => {
             this.totalImages = totalImages
             this.totalWorkers = totalWorkers

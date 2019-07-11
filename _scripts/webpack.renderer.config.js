@@ -3,18 +3,16 @@ const fg = require('fast-glob')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const PurgecssPlugin = require('purgecss-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 // const WriteFilePlugin = require('write-file-webpack-plugin')
 
 const {
-  dependencies,
-  devDependencies,
+  // dependencies,
+  // devDependencies,
   productName,
 } = require('../package.json')
 
-const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
+// const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
 const whiteListedModules = ['vue']
 
@@ -30,7 +28,7 @@ const config = {
     path: path.join(__dirname, '../dist'),
     filename: '[name].js',
   },
-  externals: externals.filter(d => !whiteListedModules.includes(d)),
+  externals: ['sharp'],
   module: {
     rules: [
       {
@@ -58,9 +56,7 @@ const config = {
         test: /\.s(c|a)ss$/,
         use: [
           {
-            loader: isDevMode
-              ? 'vue-style-loader'
-              : MiniCssExtractPlugin.loader,
+            loader: 'vue-style-loader',
           },
           {
             loader: 'css-loader',
@@ -76,10 +72,7 @@ const config = {
       },
       {
         test: /\.css$/,
-        use: [
-          isDevMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
-        ],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|jpe?g|gif|tif?f|bmp|webp|svg)(\?.*)?$/,
@@ -144,15 +137,6 @@ if (isDevMode) {
     new ScriptExtHtmlWebpackPlugin({
       async: [/runtime/],
       defaultAttribute: 'defer',
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name].css',
-    }),
-    new PurgecssPlugin({
-      paths: fg.sync([`./src/renderer/**/*`], {
-        onlyFiles: true,
-        absolute: true,
-      }),
     })
     // new CopyWebpackPlugin([
     //   {
