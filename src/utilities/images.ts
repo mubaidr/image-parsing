@@ -5,7 +5,6 @@ import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import uuid from 'uuid'
 import Cache from './@classes/Cache'
-import CompiledResult from './@classes/CompiledResult'
 import { ImageNativeTypesEnum, ImageTypesEnum } from './@enums/ExtensionsEnum'
 import IDesignData from './@interfaces/IDesignData'
 import { dataPaths } from './dataPaths'
@@ -85,7 +84,7 @@ const getRollNoFromImage = async (
   designData: IDesignData,
   img: Sharp,
   isBarcode: boolean
-): Promise<CompiledResult> => {
+): Promise<string> => {
   const rollNumberCoordinates = designData.code
   const metadata = await img.metadata()
   const ratio = metadata.width ? metadata.width / designData.width : 1
@@ -95,7 +94,6 @@ const getRollNoFromImage = async (
   const height = Math.ceil(
     (rollNumberCoordinates.y2 - rollNumberCoordinates.y1) * ratio
   )
-  const obj = new CompiledResult()
 
   img.extract({
     left: Math.floor(rollNumberCoordinates.x1 * ratio),
@@ -131,14 +129,11 @@ const getRollNoFromImage = async (
 
       rollNo = res.data
     }
-
-    obj.rollNo = rollNo
   } catch (err) {
     console.log(err)
-    obj.rollNo = ''
   }
 
-  return obj
+  return rollNo
 }
 
 export {

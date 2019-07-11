@@ -1,31 +1,4 @@
-import uuid from 'uuid'
-
-class Option {
-  [key: string]: {
-    option: string
-    secondOption: string
-    confidence: number
-  }
-
-  public constructor() {}
-}
-
-class Result {
-  private id: string = uuid()
-
-  public rollNo: string = ''
-  public imageFile: string = ''
-
-  public correct: Option[] = []
-  public incorrect: Option[] = []
-  public unattempted: Option[] = []
-
-  public constructor() {}
-
-  public hasValidRollNo(): boolean {
-    return this.rollNo !== ''
-  }
-}
+import Result from './Result'
 
 class CompiledResult {
   public center: string = ''
