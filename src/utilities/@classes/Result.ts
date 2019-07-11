@@ -1,20 +1,44 @@
 import uuid from 'uuid'
-import Option from './Option'
+import IAnswer from '../@interfaces/IAnswer'
 
 class Result {
-  private id: string = uuid()
-
+  private id: string
+  public list: IAnswer = {}
   public rollNo: string = ''
   public imageFile: string = ''
 
-  public correct: Option[] = []
-  public incorrect: Option[] = []
-  public unattempted: Option[] = []
+  public constructor(rollNo: string, imageFile: string) {
+    this.id = uuid()
+    this.rollNo = rollNo
+    this.imageFile = imageFile
+  }
 
-  public constructor() {}
+  public isKey(): boolean {
+    return this.rollNo === 'key'
+  }
 
   public hasValidRollNo(): boolean {
-    return this.rollNo !== ''
+    return !this.isKey() && this.rollNo !== ''
+  }
+
+  public compile(key: Result) {
+    const l = this.list
+
+    Object.keys(l).forEach(k => {
+      const userOption = l[k].value
+      const keyOption = key.list[k].value
+
+      if (['?', '*', '', ' '].includes(keyOption)) return
+      if (userOption === '?') return
+
+      if (userOption === keyOption) {
+        // correct answer
+      } else {
+        // incorrect answer
+      }
+    })
+
+    throw 'No implemented'
   }
 }
 
