@@ -36,8 +36,8 @@ const compileResult = async (
 
   const compiledResult = new CompiledResult()
 
-  compiledResult.addKey(key[0])
-  compiledResult.addResult(results)
+  compiledResult.addKeyFromJson(key[0])
+  compiledResult.addResultFromJson(results)
   compiledResult.compile()
 
   return compiledResult

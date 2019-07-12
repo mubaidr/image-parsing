@@ -26,8 +26,16 @@ class CompiledResult {
     this.list.length = 0
   }
 
+  public addKeyFromJson(obj: object) {
+    throw 'Not Implemented'
+  }
+
   public addKey(result: Result) {
     this.key = result
+  }
+
+  public addResultFromJson(obj: object) {
+    throw 'Not Implemented'
   }
 
   public addResult(result: Result | Result[]) {
