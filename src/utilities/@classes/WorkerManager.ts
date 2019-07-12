@@ -1,13 +1,13 @@
-import childProcess, { ChildProcess } from 'child_process'
-import path from 'path'
-import noOfCores from 'physical-cpu-count'
-import IDesignData from '../@interfaces/IDesignData'
-import CompiledResult from './CompiledResult'
+import childProcess, { ChildProcess } from 'child_process';
+import path from 'path';
+import noOfCores from 'physical-cpu-count';
+import IDesignData from '../@interfaces/IDesignData';
+import CompiledResult from './CompiledResult';
 
 class WorkerManager {
   private workers: ChildProcess[] = []
   private imagesCount: number = 0
-  private resultSet: CompiledResult[] = []
+  private resultSet: CompiledResult = []
 
   private workerPath: string =
     process.env.NODE_ENV === 'development'

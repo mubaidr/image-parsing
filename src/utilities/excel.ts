@@ -1,8 +1,29 @@
 import XLSX from 'xlsx'
 import CompiledResult from './@classes/CompiledResult'
-import { csvToJson } from './csvToJson'
+import Result from './@classes/Result'
 
-const importExcelToJson = async (src: string): Promise<CompiledResult[]> => {
+const csvToJson = async (csv: string, isPath: boolean): Promise<Result[]> => {
+  const list: Result = []
+
+  console.log(csv, isPath)
+  throw 'Not Implemented'
+
+  return list
+
+  /*
+  const csvTool = csvtojson({
+    flatKeys: true,
+  })
+
+  if (isPath) {
+    return csvTool.fromFile(csv)
+  }
+
+  return csvTool.fromString(csv)
+  */
+}
+
+const importExcelToJson = async (src: string): Promise<Result[]> => {
   const ext = src.split('.').pop()
 
   if (ext === 'csv') {
@@ -10,11 +31,11 @@ const importExcelToJson = async (src: string): Promise<CompiledResult[]> => {
   }
 
   const workbook = XLSX.readFile(src)
-  const output: CompiledResult[] = []
+  const output: Result[] = []
 
   workbook.SheetNames.forEach(sheetName => {
     const sheet = workbook.Sheets[sheetName]
-    const json: CompiledResult[] = XLSX.utils.sheet_to_json(sheet, {
+    const json: Result[] = XLSX.utils.sheet_to_json(sheet, {
       blankrows: false,
       raw: true,
     })
@@ -34,13 +55,13 @@ const exportHtmltoExcel = async (
 }
 
 const exportJsonToExcel = async (
-  results: CompiledResult[],
+  results: CompiledResult,
   destination: string
 ): Promise<void> => {
-  const worksheet = XLSX.utils.json_to_sheet(results)
+  const worksheet = XLSX.utils.json_to_sheet(results.toJson())
   const workbook = XLSX.utils.book_new()
   XLSX.utils.book_append_sheet(workbook, worksheet)
   XLSX.writeFile(workbook, destination)
 }
 
-export { exportHtmltoExcel, exportJsonToExcel, importExcelToJson }
+export { csvToJson, exportHtmltoExcel, exportJsonToExcel, importExcelToJson }

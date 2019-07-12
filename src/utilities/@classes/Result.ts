@@ -13,32 +13,16 @@ class Result {
     this.imageFile = imageFile
   }
 
+  public addAnswer(title: string, value: string) {
+    this.list[title] = { value }
+  }
+
   public isKey(): boolean {
     return this.rollNo === 'key'
   }
 
   public hasValidRollNo(): boolean {
     return !this.isKey() && this.rollNo !== ''
-  }
-
-  public compile(key: Result) {
-    const l = this.list
-
-    Object.keys(l).forEach(k => {
-      const userOption = l[k].value
-      const keyOption = key.list[k].value
-
-      if (['?', '*', '', ' '].includes(keyOption)) return
-      if (userOption === '?') return
-
-      if (userOption === keyOption) {
-        // correct answer
-      } else {
-        // incorrect answer
-      }
-    })
-
-    throw 'No implemented'
   }
 }
 

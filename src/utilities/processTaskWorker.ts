@@ -1,4 +1,4 @@
-import CompiledResult from './@classes/CompiledResult'
+import Result from './@classes/Result'
 import IDesignData from './@interfaces/IDesignData'
 import INNQuestionOutput from './@interfaces/INNQuestionOutput'
 import { getRollNoFromImage, getSharpObjectFromSource } from './images'
@@ -8,53 +8,52 @@ import { getQuestionsData } from './questions'
 const processTask = async (
   designData: IDesignData,
   images: string[]
-): Promise<CompiledResult[] | undefined> => {
+): Promise<Result[] | undefined> => {
   const neuralNet = getQuestionsNeuralNet()
-  const compiledResult: CompiledResult[] = []
+  const results: Result[] = []
 
   // loop through all images
   for (const img of images) {
-    const startTime = Date.now()
     const sharpImage = getSharpObjectFromSource(img)
 
-    const [result, questionsData] = await Promise.all([
+    const [rollNo, questionsData] = await Promise.all([
       getRollNoFromImage(designData, sharpImage, true),
       getQuestionsData(designData, sharpImage.clone()),
     ])
+    const result = new Result(rollNo, img)
 
     for (const questionData of questionsData) {
       const { title, input } = questionData
       const pre = neuralNet.run<number[], INNQuestionOutput>(input)
+      let value: string
 
       if (!title) {
         continue
       }
 
       if (pre['?'] >= 0.95) {
-        result[title] = '?'
+        value = '?'
       } else {
         const [first, second] = Object.entries(pre).sort((a, b) => b[1] - a[1])
 
         // 20% more sure than any other option
         if (first[1] - second[1] >= 0.2) {
-          result[title] = first[0]
+          value = first[0]
         } else {
-          result[title] = '*'
+          value = '*'
         }
       }
+
+      result.addAnswer(title, value)
     }
 
-    // store img reference
-    result.img = img
-
     // collect option selection
-    compiledResult.push(result)
+    results.push(result)
 
     // report progress status
     if (process && process.send) {
       process.send({
         progress: true,
-        time: Date.now() - startTime,
       })
     }
   }
@@ -64,14 +63,14 @@ const processTask = async (
     process.send(
       {
         completed: true,
-        results: compiledResult,
+        results: results,
       },
       () => {
         process.exit(0)
       }
     )
   } else {
-    return compiledResult
+    return results
   }
 }
 

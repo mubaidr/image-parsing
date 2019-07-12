@@ -106,10 +106,9 @@ const getRollNoFromImage = async (
   // logImageData(img)
 
   const data = await img.toBuffer()
+  let rollNo = ''
 
   try {
-    let rollNo: string
-
     if (isBarcode) {
       rollNo = await javascriptBarcodeReader(
         { data, width, height },
