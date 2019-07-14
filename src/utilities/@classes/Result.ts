@@ -24,6 +24,11 @@ class Result {
   public hasValidRollNo(): boolean {
     return !this.isKey() && this.rollNo !== ''
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public static fromJson(obj: any): Result {
+    throw 'Not Implemented'
+  }
 }
 
 export default Result

@@ -1,39 +1,41 @@
 import XLSX from 'xlsx'
 import CompiledResult from './@classes/CompiledResult'
 
-const importExcelToJson = async (src: string): Promise<object[]> => {
+const importExcelToJson = (src: string): any[] => {
   const workbook = XLSX.readFile(src)
-  const output: object[] = []
+  const arr: any[] = []
 
   workbook.SheetNames.forEach(sheetName => {
     const sheet = workbook.Sheets[sheetName]
-    const json: object = XLSX.utils.sheet_to_json(sheet, {
-      blankrows: false,
-      raw: true,
-    })
 
-    output.push(json)
+    arr.push(
+      XLSX.utils.sheet_to_json(sheet, {
+        blankrows: false,
+        raw: true,
+      })
+    )
   })
 
-  return output
+  return arr
 }
 
-const exportHtmltoExcel = async (
-  htmlTable: string,
+const exportJsonToExcel = (
+  compiledResults: CompiledResult[],
   destination: string
-): Promise<void> => {
+) => {
+  const workbook = XLSX.utils.book_new()
+
+  compiledResults.forEach(compiledResult => {
+    const worksheet = XLSX.utils.json_to_sheet(compiledResult.toJson())
+    XLSX.utils.book_append_sheet(workbook, worksheet)
+  })
+
+  XLSX.writeFile(workbook, destination)
+}
+
+const exportHtmltoExcel = (htmlTable: string, destination: string) => {
   const wb = XLSX.utils.table_to_book(htmlTable)
   XLSX.writeFile(wb, destination)
 }
 
-const exportJsonToExcel = async (
-  results: CompiledResult,
-  destination: string
-): Promise<void> => {
-  const worksheet = XLSX.utils.json_to_sheet(results.toJson())
-  const workbook = XLSX.utils.book_new()
-  XLSX.utils.book_append_sheet(workbook, worksheet)
-  XLSX.writeFile(workbook, destination)
-}
-
-export { exportHtmltoExcel, exportJsonToExcel, importExcelToJson }
+export { importExcelToJson, exportJsonToExcel, exportHtmltoExcel }

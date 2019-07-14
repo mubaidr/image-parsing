@@ -1,3 +1,3 @@
-import { importExcelToJson } from '../excel'
+import CompiledResult from '../@classes/CompiledResult'
 
-importExcelToJson('./__tests__/test-data/key.csv')
+console.log(CompiledResult.fromJson('./__tests__/test-data/key.csv'))

@@ -1,8 +1,8 @@
 import brain from 'brain.js'
 import fs from 'fs'
-import { csvToJson } from './csvToJson'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
+import { csvToJson } from './excel'
 import { getSharpObjectFromSource } from './images'
 import { getQuestionsData } from './questions'
 

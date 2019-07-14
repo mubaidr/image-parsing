@@ -1,4 +1,5 @@
 import uuid from 'uuid'
+import { importExcelToJson } from '../excel'
 import Result from './Result'
 
 class CompiledResult {
@@ -26,28 +27,41 @@ class CompiledResult {
     this.list.length = 0
   }
 
-  public addKeyFromJson(obj: object) {
-    throw 'Not Implemented'
-  }
-
   public addKey(result: Result) {
     this.key = result
   }
 
-  public addResultFromJson(obj: object) {
-    throw 'Not Implemented'
-  }
-
-  public addResult(result: Result | Result[]) {
-    if (result instanceof Result) {
-      this.list.push(result)
-    } else {
-      this.list.push(...result)
-    }
+  public addResult(result: Result) {
+    this.list.push(result)
 
     return this.getCount()
   }
 
+  public static fromJson(src: string): CompiledResult[] {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sheets: any[][] = importExcelToJson(src)
+    const compiledResults: CompiledResult[] = []
+
+    sheets.forEach(sheet => {
+      const compiledResult = new CompiledResult()
+
+      sheet.forEach(row => {
+        const result = Result.fromJson(row)
+
+        if (result.isKey()) {
+          compiledResult.addKey(result)
+        } else {
+          compiledResult.addResult(result)
+        }
+      })
+
+      compiledResults.push(compiledResult)
+    })
+
+    return compiledResults
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJson(): any[] {
     if (!this.isCompiled) this.compile()
 

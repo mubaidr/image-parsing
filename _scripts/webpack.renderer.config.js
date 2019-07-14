@@ -4,17 +4,10 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-// const WriteFilePlugin = require('write-file-webpack-plugin')
 
-const {
-  // dependencies,
-  // devDependencies,
-  productName,
-} = require('../package.json')
+const { productName } = require('../package.json')
 
-// const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
-const whiteListedModules = ['vue']
 
 const config = {
   name: 'renderer',
