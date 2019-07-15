@@ -4,40 +4,86 @@ import Result from './Result'
 
 class CompiledResult {
   private id: string
-  private lastSavedTime: Date
-  private isCompiled: boolean = false
-  public post: string = ''
-  public testCenter: string = ''
-  public testTime: string = ''
-  public type: string = ''
+  private lastSavedTime: Date | undefined
 
-  private key!: Result
-  public list: Result[] = []
+  private keys: Result[] = []
+  private results: Result[] = []
 
   public constructor() {
     this.id = uuid()
-    this.lastSavedTime = new Date()
   }
 
-  public getCount(): number {
-    return this.list.length
+  public clear() {
+    this.keys.length = 0
+    this.results.length = 0
   }
 
-  public empty() {
-    this.list.length = 0
+  public compilationRequired(): boolean {
+    return !this.results.every(result => result.isCompiled)
+  }
+
+  public getKeyCount(): number {
+    return this.keys.length
+  }
+
+  public getResultCount(): number {
+    return this.results.length
   }
 
   public addKey(result: Result) {
-    this.key = result
+    this.keys.push(result)
+
+    return this.keys.length
   }
 
   public addResult(result: Result) {
-    this.list.push(result)
+    this.results.push(result)
 
-    return this.getCount()
+    return this.results.length
   }
 
-  public static fromJson(src: string): CompiledResult[] {
+  public compile() {
+    if (this.keys.length === 0) throw 'Keys not loaded'
+    if (this.results.length === 0) throw 'Results not loaded'
+
+    if (!this.compilationRequired()) return
+
+    for (let i = 0; i < this.keys.length; i += 1) {
+      const key = this.keys[i]
+      const props = Object.keys(key.answers)
+
+      for (let j = 0; j < this.results.length; j += 1) {
+        const result = this.results[j]
+
+        if (result.isCompiled) continue
+        if (!result.matchWithKey(key)) continue
+
+        result.isCompiled = true
+
+        for (let k = 0; k < props.length; k += 1) {
+          const prop = props[k]
+
+          const keyChoice = key.answers[prop]
+          const candidateChoice = result.answers[prop]
+
+          // question not attempted
+          if ([' ', '?'].includes(candidateChoice.value)) {
+            candidateChoice.unattempted = true
+            continue
+          }
+
+          // question skipped
+          if ([' ', '?', '*'].includes(keyChoice.value)) {
+            candidateChoice.skipped = true
+          }
+
+          candidateChoice.correct = candidateChoice.value === keyChoice.value
+        }
+      }
+    }
+  }
+
+  public static fromExcel(src: string): CompiledResult[] {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sheets: any[][] = importExcelToJson(src)
     const compiledResults: CompiledResult[] = []
@@ -61,36 +107,28 @@ class CompiledResult {
     return compiledResults
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public toJson(): any[] {
-    if (!this.isCompiled) this.compile()
+  public fromExcel(src: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sheets: any[][] = importExcelToJson(src)
 
-    throw 'Not Implemented'
-  }
+    sheets.forEach(sheet => {
+      sheet.forEach(row => {
+        const result = Result.fromJson(row)
 
-  public compile() {
-    if (!this.key) throw 'Key not loaded'
-    if (this.list.length === 0) throw 'Results not loaded'
-
-    this.list.forEach(l => {
-      Object.keys(l).forEach(k => {
-        const userOption = l.list[k].value
-        const keyOption = this.key.list[k].value
-
-        if (['?', '*', '', ' '].includes(keyOption)) return
-        if (userOption === '?') return
-
-        if (userOption === keyOption) {
-          // correct answer
+        if (result.isKey()) {
+          this.addKey(result)
         } else {
-          // incorrect answer
+          this.addResult(result)
         }
-
-        throw 'Not Implemented'
       })
     })
+  }
 
-    this.isCompiled = true
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public toJson(): any[] {
+    this.compile()
+
+    throw 'Not Implemented'
   }
 
   public save() {
