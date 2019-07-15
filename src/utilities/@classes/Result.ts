@@ -22,8 +22,15 @@ class Result implements IResult {
     this.imageFile = imageFile
   }
 
-  public addAnswer(title: string, value: string) {
-    this.answers[title] = { value }
+  public addAnswer(title: string, value: string): Result {
+    this.answers[title] = {
+      value,
+      unattempted: false,
+      correct: false,
+      skipped: false,
+    }
+
+    return this
   }
 
   public isKey(): boolean {

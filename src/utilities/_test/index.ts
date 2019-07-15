@@ -5,8 +5,7 @@ const compiledResults = CompiledResult.fromExcel(
 )
 
 compiledResults.forEach(compiledResult => {
-  compiledResult.fromExcel('./__tests__/test-data/key.xlsx')
-  compiledResult.compile()
+  compiledResult.fromExcel('./__tests__/test-data/key.xlsx').compile()
 })
 
-console.log(compiledResults)
+console.dir(compiledResults[0])

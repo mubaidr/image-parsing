@@ -13,11 +13,6 @@ class CompiledResult {
     this.id = uuid()
   }
 
-  public clear() {
-    this.keys.length = 0
-    this.results.length = 0
-  }
-
   public compilationRequired(): boolean {
     return !this.results.every(result => result.isCompiled)
   }
@@ -30,23 +25,31 @@ class CompiledResult {
     return this.results.length
   }
 
-  public addKey(result: Result) {
+  public addKey(result: Result): CompiledResult {
     this.keys.push(result)
 
-    return this.keys.length
+    return this
   }
 
-  public addResult(result: Result) {
+  public addResult(result: Result): CompiledResult {
     this.results.push(result)
 
-    return this.results.length
+    return this
   }
 
-  public compile() {
+  public getKeys(): Result[] {
+    return this.keys
+  }
+
+  public getResults(): Result[] {
+    return this.results
+  }
+
+  public compile(): CompiledResult {
     if (this.keys.length === 0) throw 'Keys not loaded'
     if (this.results.length === 0) throw 'Results not loaded'
 
-    if (!this.compilationRequired()) return
+    if (!this.compilationRequired()) return this
 
     for (let i = 0; i < this.keys.length; i += 1) {
       const key = this.keys[i]
@@ -81,6 +84,8 @@ class CompiledResult {
         }
       }
     }
+
+    return this
   }
 
   public static fromExcel(src: string): CompiledResult[] {
@@ -107,7 +112,7 @@ class CompiledResult {
     return compiledResults
   }
 
-  public fromExcel(src: string) {
+  public fromExcel(src: string): CompiledResult {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sheets: any[][] = importExcelToJson(src)
 
@@ -122,20 +127,22 @@ class CompiledResult {
         }
       })
     })
+
+    return this
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJson(): any[] {
-    this.compile()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const obj: any[] = []
 
-    throw 'Not Implemented'
+    return obj
   }
 
-  public save() {
+  public save(): CompiledResult {
     this.lastSavedTime = new Date()
 
-    // save to local storage
-    throw 'Not Implemented'
+    return this
   }
 }
 
