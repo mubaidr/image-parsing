@@ -101,9 +101,8 @@ import { openFile, saveFile } from '../../utilities/electron-dialog'
 import { compileResult } from '../../utilities/compile'
 import { exportJsonToExcel } from '../../utilities/excel'
 import * as VALIDTYPES from '../../utilities/validTypes'
-import Vue from 'vue'
 
-export default Vue.extend({
+export default {
   data() {
     return {
       resultFilePath:
@@ -179,7 +178,7 @@ export default Vue.extend({
       ])
     },
   },
-})
+}
 </script>
 
 <style></style>

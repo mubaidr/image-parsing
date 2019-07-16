@@ -9,13 +9,9 @@ import { processTask } from './processTaskWorker'
 const readKey = async (src: string): Promise<Result[] | undefined> => {
   const ext = src.split('.').pop()
 
-  if (ext === undefined) {
-    throw 'Invalid path specified'
-  }
+  if (ext === undefined) throw 'Invalid path specified'
 
-  if (ext in KeyNativeEnum) {
-    return importExcelToJson(src)
-  }
+  if (ext in KeyNativeEnum) return importExcelToJson(src)
 
   const designData = await getDesignData(dataPaths.design)
   return processTask(designData, [src])
@@ -23,24 +19,25 @@ const readKey = async (src: string): Promise<Result[] | undefined> => {
 
 const compileResult = async (
   resultPath: string,
-  keyPath: string
-): Promise<CompiledResult> => {
+  keyPath: string,
+  marks: number,
+  negativeMarks: number
+): Promise<CompiledResult[]> => {
   const [results, key] = await Promise.all([
     importExcelToJson(resultPath),
     readKey(keyPath),
   ])
 
-  if (!key) {
-    throw new Error('Invalid key file.')
-  }
+  const compiledResults = CompiledResult.fromExcel(resultPath)
 
-  const compiledResult = new CompiledResult()
+  if (!key || key.length === 0) throw new Error('Invalid key file.')
+  if (!results || results.length === 0) throw new Error('Invalid results file.')
 
-  compiledResult.addKeyFromJson(key[0])
-  compiledResult.addResultFromJson(results)
-  compiledResult.compile()
+  compiledResults.forEach(cr => {
+    cr.addKeys(key).compile(marks, negativeMarks)
+  })
 
-  return compiledResult
+  return compiledResults
 }
 
 export { compileResult }

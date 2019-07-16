@@ -21,14 +21,22 @@ class CompiledResult {
     return this.results.length
   }
 
-  public addKey(result: Result): CompiledResult {
-    this.keys.push(result)
+  public addKeys(key: Result | Result[]): CompiledResult {
+    if (key instanceof Result) {
+      this.keys.push(key)
+    } else {
+      this.keys.push(...key)
+    }
 
     return this
   }
 
-  public addResult(result: Result): CompiledResult {
-    this.results.push(result)
+  public addResults(result: Result | Result[]): CompiledResult {
+    if (result instanceof Result) {
+      this.results.push(result)
+    } else {
+      this.results.push(...result)
+    }
 
     return this
   }
@@ -66,9 +74,9 @@ class CompiledResult {
         const result = Result.fromJson(row)
 
         if (result.isKey()) {
-          compiledResult.addKey(result)
+          compiledResult.addKeys(result)
         } else {
-          compiledResult.addResult(result)
+          compiledResult.addResults(result)
         }
       })
 
@@ -87,9 +95,9 @@ class CompiledResult {
         const result = Result.fromJson(row)
 
         if (result.isKey()) {
-          this.addKey(result)
+          this.addKeys(result)
         } else {
-          this.addResult(result)
+          this.addResults(result)
         }
       })
     })
