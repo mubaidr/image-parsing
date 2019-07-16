@@ -6,7 +6,8 @@ class Result implements IResult {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
   private id: string
-  public isCompiled: boolean = false
+  private isCompiled: boolean = false
+
   public answers: IAnswer = {}
   public rollNo: string | undefined
   public imageFile: string | undefined
@@ -15,18 +16,18 @@ class Result implements IResult {
   public testTime: string = ''
   public questionPaperType: string = ''
 
+  private marks: number = 0
+  private totalMarks: number = 0
+  private correctCount: number = 0
+  private inCorrectCount: number = 0
+  private unattemptedCount: number = 0
+  private skippedCount: number = 0
+
   public constructor(rollNo?: string, imageFile?: string) {
     this.id = uuid()
     this.rollNo = rollNo
     this.imageFile = imageFile
   }
-
-  public getMarks() {}
-  public getTotalMarks() {}
-  public getCorrectAnswers() {}
-  public getInCorrectAnswers() {}
-  public getUnattemptedAnswers() {}
-  public getSkippedAnswers() {}
 
   public addAnswer(title: string, value: string): Result {
     this.answers[title] = {
@@ -37,6 +38,30 @@ class Result implements IResult {
     }
 
     return this
+  }
+
+  public getMarks(): number {
+    return this.marks
+  }
+
+  public getTotalMarks(): number {
+    return this.totalMarks
+  }
+
+  public getCorrectCount(): number {
+    return this.correctCount
+  }
+
+  public getInCorrectCount(): number {
+    return this.inCorrectCount
+  }
+
+  public getUnattemptedCount(): number {
+    return this.unattemptedCount
+  }
+
+  public getSkippedCount(): number {
+    return this.skippedCount
   }
 
   public isKey(): boolean {
@@ -62,6 +87,62 @@ class Result implements IResult {
       this.testTime === key.testTime &&
       this.questionPaperType === key.questionPaperType
     )
+  }
+
+  public compile(key: Result, marks?: number, negativeMarks?: number): Result {
+    const props = Object.keys(key.answers)
+
+    if (this.isCompiled) return this
+    if (!this.matchWithKey(key)) return this
+
+    for (let k = 0; k < props.length; k += 1) {
+      const prop = props[k]
+
+      const keyChoice = key.answers[prop]
+      const candidateChoice = this.answers[prop]
+
+      // question not attempted
+      if ([' ', '?'].includes(candidateChoice.value)) {
+        candidateChoice.unattempted = true
+        this.unattemptedCount += 1
+        continue
+      }
+
+      // question skipped
+      if ([' ', '?', '*'].includes(keyChoice.value)) {
+        candidateChoice.skipped = true
+        this.skippedCount += 1
+        continue
+      }
+
+      if (candidateChoice.value === keyChoice.value) {
+        candidateChoice.correct = true
+        this.correctCount += 1
+      } else {
+        candidateChoice.correct = false
+        this.inCorrectCount += 1
+      }
+    }
+
+    this.isCompiled = true
+
+    if (marks && negativeMarks) {
+      this.setMarks(marks, negativeMarks)
+    }
+
+    return this
+  }
+
+  public setMarks(marks: number, negativeMarks: number) {
+    if (!this.isCompiled) throw 'Key not provided'
+
+    this.marks = this.correctCount * marks - this.inCorrectCount * negativeMarks
+    this.totalMarks =
+      (this.correctCount +
+        this.inCorrectCount +
+        this.unattemptedCount -
+        this.skippedCount) *
+      marks
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -91,6 +172,7 @@ class Result implements IResult {
       if (typeof value === 'object') {
         for (const subProp in value) {
           o[subProp] = value[subProp].value
+          // TODO: add stats for correct, incorrect, unattmepted, skipped questions
         }
       } else {
         o[prop] = value

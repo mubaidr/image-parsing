@@ -13,10 +13,6 @@ class CompiledResult {
     this.id = uuid()
   }
 
-  public compilationRequired(): boolean {
-    return !this.results.every(result => result.isCompiled)
-  }
-
   public getKeyCount(): number {
     return this.keys.length
   }
@@ -45,43 +41,13 @@ class CompiledResult {
     return this.results
   }
 
-  public compile(): CompiledResult {
+  public compile(marks?: number, negativeMarks?: number): CompiledResult {
     if (this.keys.length === 0) throw 'Keys not loaded'
     if (this.results.length === 0) throw 'Results not loaded'
 
-    if (!this.compilationRequired()) return this
-
     for (let i = 0; i < this.keys.length; i += 1) {
-      const key = this.keys[i]
-      const props = Object.keys(key.answers)
-
       for (let j = 0; j < this.results.length; j += 1) {
-        const result = this.results[j]
-
-        if (result.isCompiled) continue
-        if (!result.matchWithKey(key)) continue
-
-        result.isCompiled = true
-
-        for (let k = 0; k < props.length; k += 1) {
-          const prop = props[k]
-
-          const keyChoice = key.answers[prop]
-          const candidateChoice = result.answers[prop]
-
-          // question not attempted
-          if ([' ', '?'].includes(candidateChoice.value)) {
-            candidateChoice.unattempted = true
-            continue
-          }
-
-          // question skipped
-          if ([' ', '?', '*'].includes(keyChoice.value)) {
-            candidateChoice.skipped = true
-          }
-
-          candidateChoice.correct = candidateChoice.value === keyChoice.value
-        }
+        this.results[j].compile(this.keys[i], marks, negativeMarks)
       }
     }
 
