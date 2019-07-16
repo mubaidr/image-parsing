@@ -1,21 +1,13 @@
 {
   "compilerOptions": {
-    // Target latest version of ECMAScript.
-    "target": "esnext",
-    // Report errors in .js files
-    "checkJs": true,
-    // Search under node_modules for non-relative imports.
-    "moduleResolution": "node",
-    // Process & infer types from .js files.
     "allowJs": false,
-    // Don't emit; allow Babel to transform files.
-    "noEmit": true,
-    // Enable strictest settings like strictNullChecks & noImplicitAny.
-    "strict": true,
-    // Import non-ES modules as default imports.
+    "checkJs": false,
     "esModuleInterop": true,
-    // Include modules imported with .json extension.
-    "resolveJsonModule": true
+    "moduleResolution": "node",
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "esnext"
   },
   "include": ["_scripts/**/*", "src/**/*"]
 }

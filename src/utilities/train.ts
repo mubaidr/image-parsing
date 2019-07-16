@@ -2,11 +2,11 @@ import brain from 'brain.js'
 import fs from 'fs'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
-import { csvToJson } from './excel'
+import { importExcelToJson } from './excel'
 import { getSharpObjectFromSource } from './images'
 import { getQuestionsData } from './questions'
 
-const completed = (success: boolean): void => {
+const completed = ( success: boolean ): void => {
   if (success) {
     console.log('Completed')
   } else {
@@ -23,7 +23,7 @@ const completed = (success: boolean): void => {
 async function start() {
   const [designData, resultsData, sharpImage] = await Promise.all([
     getDesignData(dataPaths.design),
-    csvToJson(dataPaths.key, true),
+    importExcelToJson(dataPaths.key, true),
     getSharpObjectFromSource(dataPaths.keyImage),
   ])
 
@@ -56,3 +56,4 @@ process.on('message', e => {
 })
 
 export { start }
+
