@@ -132,17 +132,25 @@ class CompiledResult {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public toJson(): any[] {
+  public export(): any[] {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const obj: any[] = []
+
+    this.results.forEach(result => {
+      obj.push(result.toJson())
+    })
 
     return obj
   }
 
   public save(): CompiledResult {
-    this.lastSavedTime = new Date()
+    //TODO: use electron settings
+    throw 'Not Implemented'
+  }
 
-    return this
+  public static load(): CompiledResult[] {
+    //TODO: use electron settings
+    throw 'Not Implemented'
   }
 }
 

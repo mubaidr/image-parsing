@@ -48,7 +48,7 @@ const exportJsonToExcel = (
   const workbook = XLSX.utils.book_new()
 
   compiledResults.forEach(compiledResult => {
-    const worksheet = XLSX.utils.json_to_sheet(compiledResult.toJson())
+    const worksheet = XLSX.utils.json_to_sheet(compiledResult.export())
     XLSX.utils.book_append_sheet(workbook, worksheet)
   })
 

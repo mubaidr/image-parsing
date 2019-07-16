@@ -9,7 +9,6 @@ const {
 
 const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
-const whiteListedModules = []
 
 const config = {
   name: 'main',
@@ -18,7 +17,7 @@ const config = {
   entry: {
     main: path.join(__dirname, '../src/main/index.js'),
   },
-  externals: externals.filter(d => !whiteListedModules.includes(d)),
+  externals: externals,
   module: {
     rules: [
       {

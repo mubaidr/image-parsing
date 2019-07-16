@@ -21,7 +21,7 @@ const config = {
     path: path.join(__dirname, '../dist'),
     filename: '[name].js',
   },
-  externals: ['sharp'],
+  externals: ['sharp', 'electron'],
   module: {
     rules: [
       {

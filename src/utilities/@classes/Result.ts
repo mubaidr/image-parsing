@@ -1,5 +1,4 @@
 import uuid from 'uuid'
-import QuestionPaperTypeEnum from '../@enums/QuestionPaperTypeEnum'
 import IAnswer from '../@interfaces/IAnswer'
 import IResult from '../@interfaces/IResult'
 
@@ -14,13 +13,20 @@ class Result implements IResult {
   public post: string = ''
   public testCenter: string = ''
   public testTime: string = ''
-  public questionPaperType: string = QuestionPaperTypeEnum.A
+  public questionPaperType: string = ''
 
   public constructor(rollNo?: string, imageFile?: string) {
     this.id = uuid()
     this.rollNo = rollNo
     this.imageFile = imageFile
   }
+
+  public getMarks() {}
+  public getTotalMarks() {}
+  public getCorrectAnswers() {}
+  public getInCorrectAnswers() {}
+  public getUnattemptedAnswers() {}
+  public getSkippedAnswers() {}
 
   public addAnswer(title: string, value: string): Result {
     this.answers[title] = {
@@ -74,6 +80,25 @@ class Result implements IResult {
     })
 
     return result
+  }
+
+  public toJson(): { [key: string]: string } {
+    const o: { [key: string]: string } = Object.create(this)
+
+    for (const prop in this) {
+      const value = this[prop]
+
+      if (typeof value === 'object') {
+        for (const subProp in value) {
+          o[subProp] = value[subProp].value
+        }
+      } else {
+        o[prop] = value
+      }
+    }
+
+    delete o.isCompiled
+    return o
   }
 }
 

@@ -6,6 +6,7 @@ const compiledResults = CompiledResult.fromExcel(
 
 compiledResults.forEach(compiledResult => {
   compiledResult.fromExcel('./__tests__/test-data/key.xlsx').compile()
+  console.log(compiledResult.export())
 })
 
-console.dir(compiledResults[0])
+// console.dir(compiledResults)
