@@ -21,6 +21,14 @@ class CompiledResult {
     return this.results.length
   }
 
+  public getKeys(): Result[] {
+    return this.keys
+  }
+
+  public getResults(): Result[] {
+    return this.results
+  }
+
   public addKeys(key: Result | Result[]): CompiledResult {
     if (key instanceof Result) {
       this.keys.push(key)
@@ -41,14 +49,6 @@ class CompiledResult {
     return this
   }
 
-  public getKeys(): Result[] {
-    return this.keys
-  }
-
-  public getResults(): Result[] {
-    return this.results
-  }
-
   public compile(marks?: number, negativeMarks?: number): CompiledResult {
     if (this.keys.length === 0) throw 'Keys not loaded'
     if (this.results.length === 0) throw 'Results not loaded'
@@ -62,47 +62,49 @@ class CompiledResult {
     return this
   }
 
-  public static fromExcel(src: string): CompiledResult[] {
+  public static loadFromExcel(src: string): CompiledResult {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const sheets: any[][] = importExcelToJson(src)
-    const compiledResults: CompiledResult[] = []
+    const rows: any[] = importExcelToJson(src)
+    const compiledResult = new CompiledResult()
 
-    sheets.forEach(sheet => {
-      const compiledResult = new CompiledResult()
+    rows.forEach(row => {
+      const result = Result.fromJson(row)
 
-      sheet.forEach(row => {
-        const result = Result.fromJson(row)
-
-        if (result.isKey()) {
-          compiledResult.addKeys(result)
-        } else {
-          compiledResult.addResults(result)
-        }
-      })
-
-      compiledResults.push(compiledResult)
+      if (result.isKey()) {
+        compiledResult.addKeys(result)
+      } else {
+        compiledResult.addResults(result)
+      }
     })
 
-    return compiledResults
+    return compiledResult
   }
 
-  public fromExcel(src: string): CompiledResult {
+  public addFromExcel(src: string): CompiledResult {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const sheets: any[][] = importExcelToJson(src)
+    const rows: any[] = importExcelToJson(src)
 
-    sheets.forEach(sheet => {
-      sheet.forEach(row => {
-        const result = Result.fromJson(row)
+    rows.forEach(row => {
+      const result = Result.fromJson(row)
 
-        if (result.isKey()) {
-          this.addKeys(result)
-        } else {
-          this.addResults(result)
-        }
-      })
+      if (result.isKey()) {
+        this.addKeys(result)
+      } else {
+        this.addResults(result)
+      }
     })
 
     return this
+  }
+
+  public static merge(compiledResults: CompiledResult[]): CompiledResult {
+    const compiledResult = new CompiledResult()
+
+    compiledResults.forEach(cr => {
+      compiledResult.addKeys(cr.getKeys()).addResults(cr.getResults())
+    })
+
+    return compiledResult
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -122,7 +124,7 @@ class CompiledResult {
     throw 'Not Implemented'
   }
 
-  public static load(): CompiledResult[] {
+  public static load(): CompiledResult {
     //TODO: use electron settings
     throw 'Not Implemented'
   }

@@ -138,9 +138,9 @@ import modalPreview from './_modal-preview.vue'
 import Vue from 'vue'
 
 import { saveFile } from '../../../utilities/electron-dialog'
-import { NativeKeys } from '../../../utilities/validTypes'
 import { exportHtmltoExcel } from '../../../utilities/excel'
 import { convertImage } from '../../../utilities/images'
+import { KeyNativeEnum } from '../../../utilities/@enums/ExtensionsEnum'
 
 export default Vue.extend({
   name: 'ReviewResult',
@@ -292,7 +292,7 @@ export default Vue.extend({
       const destination = await saveFile([
         {
           name: 'Excel File',
-          extensions: NativeKeys,
+          extensions: Object.keys(KeyNativeEnum),
         },
       ])
 

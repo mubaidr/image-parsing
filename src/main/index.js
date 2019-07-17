@@ -4,7 +4,7 @@ import electronDebug from 'electron-debug'
 import electronSettings from 'electron-settings'
 import * as vueDevtools from 'vue-devtools'
 import { productName } from '../../package.json'
-import { dataPaths } from '../utilities/dataPaths'
+import dataPaths from '../utilities/dataPaths'
 
 // set app name
 app.setName(productName)

@@ -21,4 +21,4 @@ const dataPaths = {
   tmp,
 }
 
-export { dataPaths }
+export default dataPaths

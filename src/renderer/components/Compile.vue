@@ -13,7 +13,6 @@
         <div class="file has-name is-fullwidth">
           <label class="file-label">
             <button
-              :disabled="running"
               @click="chooseResultFile"
               class="file-input"
               name="resume"
@@ -34,12 +33,7 @@
         <label class="label">Key File</label>
         <div class="file has-name is-fullwidth">
           <label class="file-label">
-            <button
-              :disabled="running"
-              @click="chooseKeyFile"
-              class="file-input"
-              name="resume"
-            />
+            <button @click="chooseKeyFile" class="file-input" name="resume" />
             <span class="file-cta">
               <i class="material-icons">insert_drive_file</i>
               <span class="file-label">Choose File</span>
@@ -84,7 +78,7 @@
 
       <div class="buttons">
         <button
-          :disabled="running || !inputIsValid"
+          :disabled="!inputIsValid"
           @click="compile"
           class="button is-primary"
         >
@@ -100,7 +94,7 @@
 import { openFile, saveFile } from '../../utilities/electron-dialog'
 import { compileResult } from '../../utilities/compile'
 import { exportJsonToExcel } from '../../utilities/excel'
-import * as VALIDTYPES from '../../utilities/validTypes'
+import { KeyNativeEnum } from '../../utilities/@enums/ExtensionsEnum'
 
 export default {
   data() {
@@ -110,7 +104,6 @@ export default {
       keyFilePath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.xlsx',
       correctMarks: 3,
       incorrectMarks: 1,
-      running: false,
     }
   },
 
@@ -126,56 +119,47 @@ export default {
   },
 
   methods: {
-    async compile() {
-      this.running = true
-
-      if (!this.resultFilePath || !this.keyFilePath) return
-
-      const results = await compileResult(
-        this.resultFilePath,
-        this.keyFilePath,
-        {
-          correctMarks: this.correctMarks,
-          incorrectMarks: this.incorrectMarks,
-        }
-      )
-
-      await this.exportCompiledResults(results)
-      this.running = false
-    },
-
-    async exportCompiledResults(json) {
-      const destination = await saveFile([
+    chooseResultFile() {
+      openFile([
         {
           name: 'Excel File',
-          extensions: VALIDTYPES.NativeKeys,
+          extensions: Object.keys(KeyNativeEnum),
         },
-      ])
-
-      if (destination) {
-        await exportJsonToExcel(json, destination)
-        this.$toasted.show('File saved succesfully. ')
-      } else {
-        this.$toasted.show('File cannot be saved. ', { type: 'warn' })
-      }
+      ]).then(file => {
+        this.resultFilePath = file
+      })
     },
 
-    async chooseResultFile() {
-      this.resultFilePath = await openFile([
-        {
-          name: 'Excel File',
-          extensions: VALIDTYPES.NativeKeys,
-        },
-      ])
-    },
-
-    async chooseKeyFile() {
-      this.keyFilePath = await openFile([
+    chooseKeyFile() {
+      openFile([
         {
           name: 'Excel or Image File',
-          extensions: VALIDTYPES.Key,
+          extensions: Object.keys(KeyNativeEnum),
         },
-      ])
+      ]).then(file => {
+        this.keyFilePath = file
+      })
+    },
+
+    async compile() {
+      saveFile([
+        {
+          name: 'Excel File',
+          extensions: Object.keys(KeyNativeEnum),
+        },
+      ]).then(async dest => {
+        if (!dest) return
+
+        const results = await compileResult(
+          this.resultFilePath,
+          this.keyFilePath,
+          this.correctMarks,
+          this.incorrectMarks
+        )
+
+        exportJsonToExcel(results, dest)
+        this.$toasted.show('File saved succesfully. ')
+      })
     },
   },
 }

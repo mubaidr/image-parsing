@@ -1,12 +1,12 @@
 import brain from 'brain.js'
 import fs from 'fs'
-import { dataPaths } from './dataPaths'
+import dataPaths from './dataPaths'
 import { getDesignData } from './design'
 import { importExcelToJson } from './excel'
 import { getSharpObjectFromSource } from './images'
 import { getQuestionsData } from './questions'
 
-const completed = ( success: boolean ): void => {
+const completed = (success: boolean): void => {
   if (success) {
     console.log('Completed')
   } else {
@@ -56,4 +56,3 @@ process.on('message', e => {
 })
 
 export { start }
-

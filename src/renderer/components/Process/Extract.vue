@@ -81,7 +81,7 @@
 const mainWindow = require('electron').remote.getCurrentWindow()
 import { openDirectory } from '../../../utilities/electron-dialog'
 import * as processingModule from '../../../utilities/process'
-import { dataPaths } from '../../../utilities/dataPaths'
+import dataPaths from '../../../utilities/dataPaths'
 
 import Vue from 'vue'
 

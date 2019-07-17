@@ -1,12 +1,10 @@
 import CompiledResult from '../@classes/CompiledResult'
+import { exportJsonToExcel } from '../excel'
 
-const compiledResults = CompiledResult.fromExcel(
+const compiledResult = CompiledResult.loadFromExcel(
   './__tests__/test-data/result.xlsx'
 )
+  .addFromExcel('./__tests__/test-data/key.xlsx')
+  .compile(3, 1)
 
-compiledResults.forEach(compiledResult => {
-  compiledResult.fromExcel('./__tests__/test-data/key.xlsx').compile(3, 1)
-  console.log(compiledResult.export())
-})
-
-// console.dir(compiledResults)
+exportJsonToExcel(compiledResult, './tmp.xlsx')

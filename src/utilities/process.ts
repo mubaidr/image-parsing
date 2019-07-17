@@ -1,5 +1,5 @@
 import WorkerManager from './@classes/WorkerManager'
-import { dataPaths } from './dataPaths'
+import dataPaths from './dataPaths'
 import { getDesignData } from './design'
 import { getImagePaths } from './images'
 import { processTask } from './processTaskWorker'

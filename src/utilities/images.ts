@@ -7,7 +7,7 @@ import uuid from 'uuid'
 import Cache from './@classes/Cache'
 import { ImageNativeTypesEnum, ImageTypesEnum } from './@enums/ExtensionsEnum'
 import IDesignData from './@interfaces/IDesignData'
-import { dataPaths } from './dataPaths'
+import dataPaths from './dataPaths'
 
 const CACHE = new Cache()
 

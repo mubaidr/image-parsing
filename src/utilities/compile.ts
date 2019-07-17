@@ -2,7 +2,7 @@ import { importExcelToJson } from '../utilities/excel'
 import CompiledResult from './@classes/CompiledResult'
 import Result from './@classes/Result'
 import { KeyNativeEnum } from './@enums/ExtensionsEnum'
-import { dataPaths } from './dataPaths'
+import dataPaths from './dataPaths'
 import { getDesignData } from './design'
 import { processTask } from './processTaskWorker'
 
@@ -22,22 +22,14 @@ const compileResult = async (
   keyPath: string,
   marks: number,
   negativeMarks: number
-): Promise<CompiledResult[]> => {
-  const [results, key] = await Promise.all([
-    importExcelToJson(resultPath),
-    readKey(keyPath),
-  ])
+): Promise<CompiledResult> => {
+  const keys = await readKey(keyPath)
 
-  const compiledResults = CompiledResult.fromExcel(resultPath)
+  if (!keys || keys.length === 0) throw new Error('Invalid key file.')
 
-  if (!key || key.length === 0) throw new Error('Invalid key file.')
-  if (!results || results.length === 0) throw new Error('Invalid results file.')
-
-  compiledResults.forEach(cr => {
-    cr.addKeys(key).compile(marks, negativeMarks)
-  })
-
-  return compiledResults
+  return CompiledResult.loadFromExcel(resultPath)
+    .addKeys(keys)
+    .compile(marks, negativeMarks)
 }
 
 export { compileResult }

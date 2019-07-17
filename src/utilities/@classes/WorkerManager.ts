@@ -89,7 +89,7 @@ class WorkerManager {
           if (this.resultSet.length === this.imagesCount) {
             callback({
               completed: true,
-              results: this.resultSet.slice(0),
+              results: CompiledResult.merge(this.resultSet),
             })
 
             this.stop()

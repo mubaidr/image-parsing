@@ -19,7 +19,7 @@ class Result implements IResult {
   private marks: number = 0
   private totalMarks: number = 0
   private correctCount: number = 0
-  private inCorrectCount: number = 0
+  private incorrectCount: number = 0
   private unattemptedCount: number = 0
   private skippedCount: number = 0
 
@@ -53,7 +53,7 @@ class Result implements IResult {
   }
 
   public getInCorrectCount(): number {
-    return this.inCorrectCount
+    return this.incorrectCount
   }
 
   public getUnattemptedCount(): number {
@@ -90,10 +90,10 @@ class Result implements IResult {
   }
 
   public compile(key: Result, marks?: number, negativeMarks?: number): Result {
-    const props = Object.keys(key.answers)
-
     if (this.isCompiled) return this
     if (!this.matchWithKey(key)) return this
+
+    const props = Object.keys(key.answers)
 
     for (let k = 0; k < props.length; k += 1) {
       const prop = props[k]
@@ -120,7 +120,7 @@ class Result implements IResult {
         this.correctCount += 1
       } else {
         candidateChoice.correct = false
-        this.inCorrectCount += 1
+        this.incorrectCount += 1
       }
     }
 
@@ -134,12 +134,12 @@ class Result implements IResult {
   }
 
   public setMarks(marks: number, negativeMarks: number) {
-    if (!this.isCompiled) throw 'Key not provided'
+    if (!this.isCompiled) return
 
-    this.marks = this.correctCount * marks - this.inCorrectCount * negativeMarks
+    this.marks = this.correctCount * marks - this.incorrectCount * negativeMarks
     this.totalMarks =
       (this.correctCount +
-        this.inCorrectCount +
+        this.incorrectCount +
         this.unattemptedCount -
         this.skippedCount) *
       marks
@@ -164,7 +164,7 @@ class Result implements IResult {
   }
 
   public toJson(): { [key: string]: string } {
-    const o: { [key: string]: string } = Object.create(this)
+    const o: { [key: string]: string } = this
 
     for (const prop in this) {
       const value = this[prop]
@@ -172,14 +172,15 @@ class Result implements IResult {
       if (typeof value === 'object') {
         for (const subProp in value) {
           o[subProp] = value[subProp].value
-          // TODO: add stats for correct, incorrect, unattmepted, skipped questions
         }
+
+        delete o[prop]
       } else {
         o[prop] = value
       }
     }
 
-    delete o.isCompiled
+    // delete o.isCompiled
     return o
   }
 }
