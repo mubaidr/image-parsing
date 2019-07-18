@@ -95,6 +95,7 @@ import { openFile, saveFile } from '../../utilities/electron-dialog'
 import { compileResult } from '../../utilities/compile'
 import { exportJsonToExcel } from '../../utilities/excel'
 import { KeyNativeEnum } from '../../utilities/@enums/ExtensionsEnum'
+import { Promise } from 'core-js'
 
 export default {
   data() {
@@ -141,23 +142,24 @@ export default {
       })
     },
 
-    async compile() {
-      saveFile([
-        {
-          name: 'Excel File',
-          extensions: Object.keys(KeyNativeEnum),
-        },
-      ]).then(async dest => {
-        if (!dest) return
-
-        const results = await compileResult(
+    compile() {
+      Promise.all([
+        saveFile([
+          {
+            name: 'Excel File',
+            extensions: Object.keys(KeyNativeEnum),
+          },
+        ]),
+        compileResult(
           this.resultFilePath,
           this.keyFilePath,
           this.correctMarks,
           this.incorrectMarks
-        )
+        ),
+      ]).then(([destination, results]) => {
+        console.log(destination, results)
 
-        exportJsonToExcel(results, dest)
+        exportJsonToExcel(results, destination)
         this.$toasted.show('File saved succesfully. ')
       })
     },

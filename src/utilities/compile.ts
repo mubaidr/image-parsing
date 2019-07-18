@@ -8,10 +8,18 @@ import { processTask } from './processTaskWorker'
 
 const readKey = async (src: string): Promise<Result[] | undefined> => {
   const ext = src.split('.').pop()
-
   if (ext === undefined) throw 'Invalid path specified'
 
-  if (ext in KeyNativeEnum) return importExcelToJson(src)
+  if (ext in KeyNativeEnum) {
+    const results: Result[] = []
+    const rows = importExcelToJson(src)
+
+    rows.forEach(row => {
+      results.push(Result.fromJson(row))
+    })
+
+    return results
+  }
 
   const designData = await getDesignData(dataPaths.design)
   return processTask(designData, [src])

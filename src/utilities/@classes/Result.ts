@@ -1,5 +1,6 @@
 import uuid from 'uuid'
 import IAnswer from '../@interfaces/IAnswer'
+import IObject from '../@interfaces/IObject'
 import IResult from '../@interfaces/IResult'
 
 class Result implements IResult {
@@ -146,7 +147,7 @@ class Result implements IResult {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static fromJson(o: { [key: string]: string }): Result {
+  public static fromJson(o: IObject): Result {
     const result = new Result()
     const answerRegExp = /q[0-9]{1,2}$$/im
 
@@ -163,8 +164,8 @@ class Result implements IResult {
     return result
   }
 
-  public toJson(): { [key: string]: string } {
-    const o: { [key: string]: string } = this
+  public toJson(): IObject {
+    const o: { [key: string]: string } = JSON.parse(JSON.stringify(this))
 
     for (const prop in this) {
       const value = this[prop]

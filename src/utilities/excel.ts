@@ -1,19 +1,16 @@
 import XLSX from 'xlsx'
 import CompiledResult from './@classes/CompiledResult'
+import IObject from './@interfaces/IObject'
 import { toCamelCase, toHeadingCase } from './string'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const importExcelToJson = (src: string): any[] => {
+const importExcelToJson = (src: string): IObject[] => {
   const workbook = XLSX.readFile(src)
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const arr: any[] = []
+  const arr: IObject[] = []
 
   workbook.SheetNames.forEach(sheetName => {
     const sheet = workbook.Sheets[sheetName]
-    const rows: {
-      [key: string]: string | number
-    }[] = XLSX.utils.sheet_to_json(sheet, {
+    const rows: IObject[] = XLSX.utils.sheet_to_json(sheet, {
       blankrows: false,
       raw: true,
     })
