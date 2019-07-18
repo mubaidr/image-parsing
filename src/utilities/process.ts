@@ -9,21 +9,22 @@ let workerManager: WorkerManager
 const start = async (
   callback: (data: object) => void,
   path: string,
-  isFile: boolean,
   inProcess: boolean
 ): Promise<{
   totalImages: number
   totalWorkers: number
 }> => {
+  const [designData, images] = await Promise.all([
+    getDesignData(dataPaths.designBarcode),
+    getImagePaths(path),
+  ])
   workerManager = new WorkerManager()
-  const designData = await getDesignData(dataPaths.designBarcode)
-  const images = isFile ? [path] : await getImagePaths(path)
 
   if (inProcess) {
-    processTask(designData, images).then(res => {
+    processTask(designData, images).then(compiledResult => {
       callback({
         completed: true,
-        results: res,
+        compiledResult: compiledResult,
       })
     })
 
@@ -37,7 +38,8 @@ const start = async (
 }
 
 const stop = async () => {
-  workerManager.reset()
+  if (workerManager) workerManager.reset()
 }
 
 export { start, stop }
+

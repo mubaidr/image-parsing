@@ -1,3 +1,4 @@
+import CompiledResult from './@classes/CompiledResult'
 import Result from './@classes/Result'
 import IDesignData from './@interfaces/IDesignData'
 import INNQuestionOutput from './@interfaces/INNQuestionOutput'
@@ -8,9 +9,9 @@ import { getQuestionsData } from './questions'
 const processTask = async (
   designData: IDesignData,
   images: string[]
-): Promise<Result[] | undefined> => {
+): Promise<CompiledResult | undefined> => {
   const neuralNet = getQuestionsNeuralNet()
-  const results: Result[] = []
+  const compiledResult = new CompiledResult()
 
   // loop through all images
   for (const img of images) {
@@ -48,7 +49,11 @@ const processTask = async (
     }
 
     // collect option selection
-    results.push(result)
+    if (result.isKey()) {
+      compiledResult.addKeys(result)
+    } else {
+      compiledResult.addResults(result)
+    }
 
     // report progress status
     if (process && process.send) {
@@ -63,14 +68,14 @@ const processTask = async (
     process.send(
       {
         completed: true,
-        results: results,
+        compiledResult: compiledResult,
       },
       () => {
         process.exit(0)
       }
     )
   } else {
-    return results
+    return compiledResult
   }
 }
 

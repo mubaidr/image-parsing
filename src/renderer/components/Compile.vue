@@ -147,7 +147,7 @@ export default {
         saveFile([
           {
             name: 'Excel File',
-            extensions: Object.keys(KeyNativeEnum),
+            extensions: Object.keys(KeyNativeEnum).reverse(),
           },
         ]),
         compileResult(

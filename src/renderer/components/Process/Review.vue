@@ -117,6 +117,7 @@
         </article>
       </div>
     </transition>
+
     <!-- Preview component -->
     <Transition mode="out-in" name="slide-up">
       <modal-preview
@@ -128,21 +129,21 @@
         v-if="selectedRow"
       />
     </Transition>
-    <!-- {{results}} -->
+
+    {{ compiledResult }}
     <!-- {{columns}} -->
   </div>
 </template>
 
 <script>
 import modalPreview from './_modal-preview.vue'
-import Vue from 'vue'
-
 import { saveFile } from '../../../utilities/electron-dialog'
-import { exportHtmltoExcel } from '../../../utilities/excel'
+import { exportJsonToExcel } from '../../../utilities/excel'
 import { convertImage } from '../../../utilities/images'
 import { KeyNativeEnum } from '../../../utilities/@enums/ExtensionsEnum'
+import CompiledResult from '../../../utilities/@classes/CompiledResult'
 
-export default Vue.extend({
+export default {
   name: 'ReviewResult',
 
   components: {
@@ -150,10 +151,10 @@ export default Vue.extend({
   },
 
   props: {
-    results: {
-      type: Array,
+    compiledResult: {
+      type: CompiledResult,
       default: () => {
-        return []
+        return new CompiledResult()
       },
     },
   },
@@ -169,61 +170,44 @@ export default Vue.extend({
 
   computed: {
     hasResults() {
-      return this.results.length > 0
+      return this.compiledResult.getResultCount() > 0
     },
 
     selectedRow() {
-      if (this.selectedIndex !== null && this.filteredResults.length > 0)
+      if (this.selectedIndex !== null && this.filteredResults.length > 0) {
         return this.filteredResults[this.selectedIndex]
+      }
 
       return null
     },
 
     filteredResults() {
-      const frs = this.results
+      const filteredCompiledResult = this.compiledResult
+        .getResults()
         .filter(r => {
           if (!this.filterQuery) return true
           return r.rollNo ? r.rollNo.indexOf(this.filterQuery) > -1 : false
         })
-        .map((r, index) => {
-          const cr = r
-          cr.id = r.id || index
-          return r
-        })
 
       if (this.sortOrder === 'asc') {
-        frs.sort()
+        filteredCompiledResult.sort()
       } else {
-        frs.reverse()
+        filteredCompiledResult.reverse()
       }
 
-      return frs
-    },
-
-    columns() {
-      // rename and hide columns
-      const columns = {}
-      const hiddenColumns = ['id', 'img', 'hasValidRollNo']
-      const renameColumns = {
-        rollNo: 'Roll #',
-      }
-
-      Object.keys(this.results[0])
-        .filter(col => hiddenColumns.indexOf(col) === -1)
-        .forEach(col => {
-          columns[col] = {
-            title: renameColumns[col] || col,
-            label: col,
-          }
-        })
-
-      return columns
+      return filteredCompiledResult
     },
   },
 
   watch: {
-    async selectedRow(row) {
-      this.imageSource = row ? await convertImage(row.img) : null
+    selectedRow(row) {
+      if (row) {
+        convertImage(row.img).then(is => {
+          this.imageSource = is
+        })
+      } else {
+        this.imageSource = row
+      }
     },
   },
 
@@ -288,44 +272,35 @@ export default Vue.extend({
       }
     },
 
-    async exportResult() {
-      const destination = await saveFile([
+    exportResult() {
+      saveFile([
         {
           name: 'Excel File',
-          extensions: Object.keys(KeyNativeEnum),
+          extensions: Object.keys(KeyNativeEnum).reverse(),
         },
-      ])
-
-      await exportHtmltoExcel(this.$refs.tbl_data, destination)
-      this.$toasted.show('File saved succesfully. ')
+      ]).then(destination => {
+        exportJsonToExcel(this.compiledResult.export(), destination)
+        this.$toasted.show('File saved succesfully. ')
+      })
     },
   },
-})
+}
 </script>
 
 <style lang="scss" scoped>
 .scroll-container {
   width: 100%;
   min-height: 296px;
-  overflow-x: auto;
+  max-height: calc(100vh - 110px);
+  overflow: auto;
 }
 
 table.has-text-centered {
   font-size: small;
-  .has-background-danger {
-    color: #fff;
-  }
   th,
   td {
-    font-weight: normal;
     text-align: left;
     vertical-align: middle;
-  }
-  th:nth-child(1) {
-    min-width: 50px;
-  }
-  th:nth-child(2) {
-    min-width: 75px;
   }
 }
 </style>

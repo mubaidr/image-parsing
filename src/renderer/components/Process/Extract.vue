@@ -82,10 +82,9 @@ const mainWindow = require('electron').remote.getCurrentWindow()
 import { openDirectory } from '../../../utilities/electron-dialog'
 import * as processingModule from '../../../utilities/process'
 import dataPaths from '../../../utilities/dataPaths'
+import prettyMs from 'pretty-ms'
 
-import Vue from 'vue'
-
-export default Vue.extend({
+export default {
   name: 'ExtractResult',
 
   data() {
@@ -96,8 +95,6 @@ export default Vue.extend({
       totalImages: 0,
       totalWorkers: 0,
       perImageTime: 0,
-      startTime: 0,
-      endTime: 0,
     }
   },
 
@@ -109,7 +106,10 @@ export default Vue.extend({
     remainingTime() {
       const ms =
         (this.totalImages - this.processedImages) * (this.perImageTime || 500)
-      return this.toHHMMSS(ms)
+
+      return prettyMs(ms, {
+        verbose: true,
+      })
     },
   },
 
@@ -133,10 +133,8 @@ export default Vue.extend({
         this.totalWorkers = 0
         this.perImageTime = 0
       } else {
-        if (this.imageDirectory === undefined) return
-
         processingModule
-          .start(this.listner, this.imageDirectory, true, true)
+          .start(this.listner, this.imageDirectory, true)
           .then(({ totalImages, totalWorkers }) => {
             this.totalImages = totalImages
             this.totalWorkers = totalWorkers
@@ -167,45 +165,24 @@ export default Vue.extend({
         mainWindow.flashFrame(true)
       } else if (m.completed) {
         this.running = false
-
-        this.$emit('results', m) // m contains both key and results
+        this.$emit('compiledResult', m) // m contains both key and results
       } else if (m.error) {
-        this.$toasted.show(
-          'A critical error has occured, please contact developer. ',
-          {
-            type: 'error',
-          }
-        )
+        this.running = false
+        console.error(m.error)
+
+        this.$toasted.show(m.error, {
+          type: 'error',
+        })
       }
     },
 
-    async chooseImageDirectory() {
-      this.imageDirectory = await openDirectory()
-    },
-
-    toHHMMSS(s) {
-      let str = ''
-      const input = s / 1000
-      const hours = Math.floor(input / 3600)
-      const minutes = Math.floor((input - hours * 3600) / 60)
-      const seconds = (input - hours * 3600 - minutes * 60).toFixed(2)
-
-      if (hours) {
-        str += `${ hours } hours `
-      }
-
-      if (minutes) {
-        str += `${ minutes } minutes `
-      }
-
-      if (seconds) {
-        str += `${ seconds } seconds `
-      }
-
-      return str
+    chooseImageDirectory() {
+      openDirectory().then(dir => {
+        this.imageDirectory = dir
+      })
     },
   },
-})
+}
 </script>
 
 <style scoped lang="scss">

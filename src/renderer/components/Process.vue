@@ -1,8 +1,8 @@
 <template>
   <div class="section">
     <Transition mode="out-in" name="slide-left">
-      <review-result :results="extractedResult" v-if="extractedResult" />
-      <extract-result @results="getExtractedResult" v-else />
+      <review-result :compiledResult="compiledResult" v-if="compiledResult" />
+      <extract-result @compiledResult="gotCompiledResult" v-else />
     </Transition>
   </div>
 </template>
@@ -21,14 +21,13 @@ export default {
 
   data() {
     return {
-      extractedResult: null,
-      extractedKey: null,
+      compiledResult: null,
     }
   },
 
   methods: {
-    getExtractedResult(m) {
-      this.$set(this, 'extractedResult', m.results)
+    gotCompiledResult(m) {
+      this.$set(this, 'compiledResult', m.compiledResult)
     },
   },
 }

@@ -20,12 +20,16 @@
             sheets.
           </p>
           <RouterLink class="button is-light" to="generate">
-            <i class="material-icons">view_carousel</i>
+            <i class="material-icons">print</i>
             <span>Generate</span>
           </RouterLink>
           <RouterLink class="button is-light" to="process">
             <i class="material-icons">flash_on</i>
             <span>Process</span>
+          </RouterLink>
+          <RouterLink class="button is-light" to="compile">
+            <i class="material-icons">assessment</i>
+            <span>Compile</span>
           </RouterLink>
         </div>
       </div>

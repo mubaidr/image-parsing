@@ -22,7 +22,11 @@ const readKey = async (src: string): Promise<Result[] | undefined> => {
   }
 
   const designData = await getDesignData(dataPaths.design)
-  return processTask(designData, [src])
+  const compiledResult = await processTask(designData, [src])
+
+  if (compiledResult) {
+    return compiledResult.getKeys()
+  }
 }
 
 const compileResult = async (

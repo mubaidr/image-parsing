@@ -7,7 +7,7 @@ import CompiledResult from './CompiledResult'
 class WorkerManager {
   private imagesCount: number = 0
   private workers: ChildProcess[] = []
-  private resultSet: CompiledResult[] = []
+  private resultsCollection: CompiledResult[] = []
 
   private workerPath: string =
     process.env.NODE_ENV === 'development'
@@ -42,6 +42,8 @@ class WorkerManager {
     }
 
     this.imagesCount = 0
+    this.workers = []
+    this.resultsCollection = []
   }
 
   public async reset(): Promise<ChildProcess[]> {
@@ -83,13 +85,13 @@ class WorkerManager {
     this.workers.forEach(worker => {
       worker.on('message', data => {
         if (data.completed) {
-          this.resultSet.push(...data.results)
+          this.resultsCollection.push(...data.results)
 
           // check if all process have returned result
-          if (this.resultSet.length === this.imagesCount) {
+          if (this.resultsCollection.length === this.imagesCount) {
             callback({
               completed: true,
-              results: CompiledResult.merge(this.resultSet),
+              compiledResult: CompiledResult.merge(this.resultsCollection),
             })
 
             this.stop()
