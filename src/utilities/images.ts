@@ -27,12 +27,8 @@ const convertImage = async (src: string): Promise<string> => {
 
   const ext = src.split('.').pop()
 
-  if (!ext || ext in ImageTypesEnum) {
-    throw new Error('Invalid source provided')
-  }
-
   // native supported images
-  if (ext in ImageNativeTypesEnum) {
+  if (ext && ext in ImageNativeTypesEnum) {
     return src
   }
 

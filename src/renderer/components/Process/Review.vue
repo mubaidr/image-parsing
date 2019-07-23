@@ -63,49 +63,26 @@
             ref="tbl_data"
             class="table is-hoverable is-narrow has-text-centered"
           >
-            <thead>
-              <tr>
-                <th>#</th>
-                <th :key="column.label" v-for="column in columns">
-                  {{ column.title }}
-                </th>
-              </tr>
-            </thead>
             <tbody is="transition-group" mode="out-in" name="list-complete">
-              <!-- Show table rows if data rows are available -->
-              <template v-if="filteredResults.length > 0">
-                <tr
-                  :key="result.id"
-                  v-for="(result, index) in filteredResults"
-                  v-on:dblclick="selectRow(index)"
-                  class="list-complete-item"
-                >
-                  <td>{{ index + 1 }}</td>
-                  <template v-for="[column, value] in Object.entries(result)">
-                    <td
-                      :class="{
-                        'has-background-danger':
-                          !result.hasValidRollNo && column === 'rollNo',
-                      }"
-                      :key="result.id + '-' + column"
-                      v-if="columns[column]"
-                    >
-                      {{ value }}
-                    </td>
-                  </template>
-                </tr>
-              </template>
-              <!-- Show message if now data rows are available -->
-              <template v-else>
-                <tr key="message-row" class="list-complete-item">
+              <tr
+                :key="result.id"
+                v-for="(result, index) in filteredResults"
+                v-on:dblclick="selectRow(index)"
+                class="list-complete-item"
+              >
+                <td>{{ index + 1 }}</td>
+                <template v-for="[column, value] in Object.entries(result)">
                   <td
-                    :colspan="Object.keys(columns).length + 1"
-                    class="has-text-left"
+                    :class="{
+                      'has-background-danger': !result.hasValidRollNo(),
+                    }"
+                    :key="result.id + '-' + column"
+                    v-if="column !== 'answers'"
                   >
-                    <span class="tag is-warning">No data found...</span>
+                    {{ value }}
                   </td>
-                </tr>
-              </template>
+                </template>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -129,9 +106,6 @@
         v-if="selectedRow"
       />
     </Transition>
-
-    {{ compiledResult }}
-    <!-- {{columns}} -->
   </div>
 </template>
 
@@ -186,6 +160,7 @@ export default {
         .getResults()
         .filter(r => {
           if (!this.filterQuery) return true
+
           return r.rollNo ? r.rollNo.indexOf(this.filterQuery) > -1 : false
         })
 
@@ -201,12 +176,12 @@ export default {
 
   watch: {
     selectedRow(row) {
-      if (row) {
-        convertImage(row.img).then(is => {
+      if (row && row.imageFile) {
+        convertImage(row.imageFile).then(is => {
           this.imageSource = is
         })
       } else {
-        this.imageSource = row
+        this.imageSource = null
       }
     },
   },
