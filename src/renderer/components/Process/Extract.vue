@@ -91,7 +91,7 @@ export default {
   data() {
     return {
       imageDirectory: dataPaths.imagesBarcode,
-      perImageTime: 500,
+      perImageTime: 0,
       processedImages: 0,
       progressState: ProgressStateEnum.STOPPED,
       totalImages: 0,
@@ -113,6 +113,21 @@ export default {
     },
   },
 
+  watch: {
+    // set taskbar progress
+    processedImages(val) {
+      if (val < this.totalImages) {
+        mainWindow.setProgressBar(val / this.totalImages)
+      } else {
+        mainWindow.setProgressBar(0)
+
+        // flash taskbar icon
+        mainWindow.once('focus', () => mainWindow.flashFrame(false))
+        mainWindow.flashFrame(true)
+      }
+    },
+  },
+
   created() {
     processingModule.stop()
   },
@@ -122,7 +137,7 @@ export default {
       this.progressState = ProgressStateEnum.RUNNING
 
       processingModule
-        .start(this.listner, this.imageDirectory)
+        .start(this.callback, this.imageDirectory)
         .then(({ totalImages }) => {
           this.totalImages = totalImages
         })
@@ -136,20 +151,20 @@ export default {
     stopProcess() {
       processingModule.stop()
 
-      this.perImageTime = 500
+      this.perImageTime = 0
       this.processedImages = 0
       this.progressState = ProgressStateEnum.STOPPED
       this.totalImages = 0
     },
 
-    listner(m) {
+    callback(m) {
       switch (m.state) {
-        case ProgressStateEnum.PROGRESS:
-          this.perImageTime = m.time
+        case ProgressStateEnum.RUNNING:
+          this.perImageTime = (this.perImageTime + m.time) / 2
           this.processedImages += 1
 
-          // set taskbar progress
-          mainWindow.setProgressBar(this.processedImages / this.totalImages)
+          console.log(this.perImageTime)
+
           break
         case ProgressStateEnum.COMPLETED:
           mainWindow.setProgressBar(0)
