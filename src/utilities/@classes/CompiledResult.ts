@@ -119,6 +119,18 @@ class CompiledResult {
     return obj
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public static export(compiledResult: CompiledResult): any[] {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const obj: any[] = []
+
+    compiledResult.results.forEach(result => {
+      obj.push(result.toJson())
+    })
+
+    return obj
+  }
+
   public save(): CompiledResult {
     //TODO: use electron settings
     throw 'Not Implemented'

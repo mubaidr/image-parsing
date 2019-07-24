@@ -1,4 +1,5 @@
 import uuid from 'uuid'
+import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
 import IAnswer from '../@interfaces/IAnswer'
 import IObject from '../@interfaces/IObject'
 import IResult from '../@interfaces/IResult'
@@ -103,14 +104,16 @@ class Result implements IResult {
       const candidateChoice = this.answers[prop]
 
       // question not attempted
-      if ([' ', '?'].includes(candidateChoice.value)) {
+      if (candidateChoice.value === QuestionOptionsEnum.NONE) {
         candidateChoice.unattempted = true
         this.unattemptedCount += 1
-        continue
       }
 
       // question skipped
-      if ([' ', '?', '*'].includes(keyChoice.value)) {
+      if (
+        keyChoice.value === QuestionOptionsEnum.NONE ||
+        keyChoice.value === QuestionOptionsEnum.MULTIPLE
+      ) {
         candidateChoice.skipped = true
         this.skippedCount += 1
         continue
@@ -181,7 +184,6 @@ class Result implements IResult {
       }
     }
 
-    // delete o.isCompiled
     return o
   }
 }

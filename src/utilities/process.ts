@@ -1,4 +1,5 @@
 import WorkerManager from './@classes/WorkerManager'
+import ProgressStateEnum from './@enums/ProgressStateEnum'
 import dataPaths from './dataPaths'
 import { getDesignData } from './design'
 import { getImagePaths } from './images'
@@ -21,10 +22,10 @@ const start = async (
   workerManager = new WorkerManager()
 
   if (inProcess) {
-    processTask(designData, images).then(compiledResult => {
+    processTask(designData, images).then(results => {
       callback({
-        completed: true,
-        compiledResult: compiledResult,
+        state: ProgressStateEnum.COMPLETED,
+        results: results,
       })
     })
 
@@ -42,4 +43,3 @@ const stop = async () => {
 }
 
 export { start, stop }
-

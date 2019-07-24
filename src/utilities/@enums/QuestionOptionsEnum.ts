@@ -4,9 +4,8 @@ enum QuestionOptionsEnum {
   C = 'C',
   D = 'D',
   E = 'E',
-  '*' = '*',
-  ' ' = ' ',
-  '?' = '?',
+  MULTIPLE = '*',
+  NONE = '?',
 }
 
 export default QuestionOptionsEnum

@@ -157,8 +157,6 @@ export default {
           this.incorrectMarks
         ),
       ]).then(([destination, results]) => {
-        console.log(destination, results)
-
         exportJsonToExcel(results, destination)
         this.$toasted.show('File saved succesfully. ')
       })

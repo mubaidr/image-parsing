@@ -11,7 +11,7 @@
       <div class="file has-name is-fullwidth">
         <label class="file-label">
           <button
-            :disabled="running"
+            :disabled="isRunning"
             @click="chooseImageDirectory"
             class="file-input"
             name="resume"
@@ -32,8 +32,8 @@
 
     <div class="buttons">
       <button
-        :disabled="running || !inputIsValid"
-        @click="toggleProcess"
+        :disabled="isRunning || !inputIsValid"
+        @click="startProcess"
         class="button is-primary"
       >
         <i class="material-icons">flash_on</i>
@@ -41,8 +41,8 @@
       </button>
 
       <button
-        :disabled="!running"
-        @click="toggleProcess"
+        :disabled="!isRunning"
+        @click="stopProcess"
         class="button is-danger"
       >
         <i class="material-icons">stop</i>
@@ -55,7 +55,7 @@
     <br />
 
     <Transition mode="out-in" name="slide-down">
-      <table v-if="running" class="table is-fullwidth">
+      <table v-if="isRunning" class="table is-fullwidth">
         <thead>
           <tr>
             <th />
@@ -83,6 +83,7 @@ import { openDirectory } from '../../../utilities/electron-dialog'
 import * as processingModule from '../../../utilities/process'
 import dataPaths from '../../../utilities/dataPaths'
 import prettyMs from 'pretty-ms'
+import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
 
 export default {
   name: 'ExtractResult',
@@ -90,11 +91,10 @@ export default {
   data() {
     return {
       imageDirectory: dataPaths.imagesBarcode,
-      running: false,
+      perImageTime: 500,
       processedImages: 0,
+      progressState: ProgressStateEnum.STOPPED,
       totalImages: 0,
-      totalWorkers: 0,
-      perImageTime: 0,
     }
   },
 
@@ -104,18 +104,12 @@ export default {
     },
 
     remainingTime() {
-      const ms =
-        (this.totalImages - this.processedImages) * (this.perImageTime || 500)
-
-      return prettyMs(ms, {
-        verbose: true,
-      })
+      const ms = (this.totalImages - this.processedImages) * this.perImageTime
+      return prettyMs(ms)
     },
-  },
 
-  watch: {
-    running() {
-      mainWindow.setProgressBar(0)
+    isRunning() {
+      return this.progressState === ProgressStateEnum.RUNNING
     },
   },
 
@@ -124,56 +118,51 @@ export default {
   },
 
   methods: {
-    toggleProcess() {
-      if (this.running) {
-        processingModule.stop()
+    startProcess() {
+      this.progressState = ProgressStateEnum.RUNNING
 
-        this.processedImages = 0
-        this.totalImages = 0
-        this.totalWorkers = 0
-        this.perImageTime = 0
-      } else {
-        processingModule
-          .start(this.listner, this.imageDirectory, true)
-          .then(({ totalImages, totalWorkers }) => {
-            this.totalImages = totalImages
-            this.totalWorkers = totalWorkers
+      processingModule
+        .start(this.listner, this.imageDirectory)
+        .then(({ totalImages }) => {
+          this.totalImages = totalImages
+        })
+        .catch(err => {
+          this.$toasted.show(err, {
+            type: 'error',
           })
-          .catch(err => {
-            console.error(err)
+        })
+    },
 
-            this.$toasted.show(err, {
-              type: 'error',
-            })
-          })
-      }
+    stopProcess() {
+      processingModule.stop()
 
-      this.running = !this.running
+      this.perImageTime = 500
+      this.processedImages = 0
+      this.progressState = ProgressStateEnum.STOPPED
+      this.totalImages = 0
     },
 
     listner(m) {
-      if (m.progress) {
-        this.processedImages += 1
-        if (m.time) {
+      switch (m.state) {
+        case ProgressStateEnum.PROGRESS:
           this.perImageTime = m.time
-        }
+          this.processedImages += 1
 
-        // set taskbar progress and
-        mainWindow.setProgressBar(this.processedImages / this.totalImages)
-        // flash taskbar when done
-        mainWindow.once('focus', () => mainWindow.flashFrame(false))
-        mainWindow.flashFrame(true)
-      } else if (m.completed) {
-        this.running = false
-        this.$emit('compiledResult', m) // m contains both key and results
-      } else if (m.error) {
-        this.running = false
-        console.error(m.error)
-
-        this.$toasted.show(m.error, {
-          type: 'error',
-        })
+          // set taskbar progress
+          mainWindow.setProgressBar(this.processedImages / this.totalImages)
+          break
+        case ProgressStateEnum.COMPLETED:
+          mainWindow.setProgressBar(0)
+          this.$emit('compiledResult', m)
+          break
+        case ProgressStateEnum.ERROR:
+          this.$toasted.show(m.error, {
+            type: 'error',
+          })
+          break
       }
+
+      this.progressState = m.state
     },
 
     chooseImageDirectory() {
@@ -186,10 +175,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-table {
-  th,
-  td {
-    text-align: center;
-  }
-}
 </style>

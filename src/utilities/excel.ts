@@ -17,10 +17,12 @@ const importExcelToJson = (src: string): IObject[] => {
 
     rows.forEach(row => {
       for (var key in row) {
-        const value = row[key]
+        const newKeyName = toCamelCase(key)
 
-        delete row[key]
-        row[toCamelCase(key)] = value
+        if (newKeyName !== key) {
+          row[newKeyName] = row[key]
+          delete row[key]
+        }
       }
     })
 
@@ -31,16 +33,24 @@ const importExcelToJson = (src: string): IObject[] => {
 }
 
 const exportJsonToExcel = (
-  compiledResult: CompiledResult,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  compiledResult: CompiledResult | any[],
   destination: string
 ) => {
   const workbook = XLSX.utils.book_new()
-  const rows = compiledResult.export()
+  const rows =
+    compiledResult instanceof CompiledResult
+      ? compiledResult.export()
+      : compiledResult
 
   rows.forEach(row => {
     for (var key in row) {
-      row[toHeadingCase(key)] = row[key]
-      delete row[key]
+      const newKeyName = toHeadingCase(key)
+
+      if (newKeyName !== key) {
+        row[newKeyName] = row[key]
+        delete row[key]
+      }
     }
   })
 

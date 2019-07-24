@@ -58,34 +58,7 @@
     <transition mode="out-in" name="slide-up">
       <!-- Show table when data is loaded -->
       <div key="table" v-if="hasResults">
-        <div class="scroll-container">
-          <table
-            ref="tbl_data"
-            class="table is-hoverable is-narrow has-text-centered"
-          >
-            <tbody is="transition-group" mode="out-in" name="list-complete">
-              <tr
-                :key="result.id"
-                v-for="(result, index) in filteredResults"
-                v-on:dblclick="selectRow(index)"
-                class="list-complete-item"
-              >
-                <td>{{ index + 1 }}</td>
-                <template v-for="[column, value] in Object.entries(result)">
-                  <td
-                    :class="{
-                      'has-background-danger': !result.hasValidRollNo(),
-                    }"
-                    :key="result.id + '-' + column"
-                    v-if="column !== 'answers'"
-                  >
-                    {{ value }}
-                  </td>
-                </template>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="scroll-container"></div>
       </div>
       <!-- Show message when no data is loaded -->
       <div key="message" v-else>
@@ -254,7 +227,9 @@ export default {
           extensions: Object.keys(KeyNativeEnum).reverse(),
         },
       ]).then(destination => {
-        exportJsonToExcel(this.compiledResult.export(), destination)
+        if (!destination) return
+
+        exportJsonToExcel(this.compiledResult, destination)
         this.$toasted.show('File saved succesfully. ')
       })
     },
@@ -272,6 +247,7 @@ export default {
 
 table.has-text-centered {
   font-size: small;
+
   th,
   td {
     text-align: left;

@@ -102,7 +102,7 @@ const getRollNoFromImage = async (
   // logImageData(img)
 
   const data = await img.toBuffer()
-  let rollNo = ''
+  let rollNo: string
 
   try {
     if (isBarcode) {
@@ -120,12 +120,12 @@ const getRollNoFromImage = async (
         }
       )
 
-      if (res === null) throw 'QR Code not found!'
+      if (res === null) throw new Error('QR Code not found!')
 
       rollNo = res.data
     }
-  } catch (err) {
-    console.log(err)
+  } catch {
+    rollNo = ''
   }
 
   return rollNo

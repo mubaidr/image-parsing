@@ -35,5 +35,6 @@ module.exports = {
     // https://github.com/typescript-eslint/typescript-eslint/issues/103
     '@typescript-eslint/no-parameter-properties': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
+    'no-buffer-constructor': 'error',
   },
 }
