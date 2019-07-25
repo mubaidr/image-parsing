@@ -4,12 +4,10 @@ import javascriptQRReader from 'jsqr'
 import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import uuid from 'uuid'
-import Cache from './@classes/Cache'
 import { ImageNativeTypesEnum, ImageTypesEnum } from './@enums/ExtensionsEnum'
 import IDesignData from './@interfaces/IDesignData'
+import cache from './cache'
 import dataPaths from './dataPaths'
-
-const CACHE = new Cache()
 
 const getSharpObjectFromSource = (src: string): Sharp => {
   return (
@@ -33,14 +31,14 @@ const convertImage = async (src: string): Promise<string> => {
   }
 
   // check cache
-  const cached = CACHE.get(src)
+  const cached = cache.get(src)
   if (cached) {
     return cached
   }
 
   // generate random tmp url
   const url = path.join(dataPaths.tmp, `${uuid()}.jpg`)
-  CACHE.set(src, url)
+  cache.set(src, url)
 
   // save file for preview
   await getSharpObjectFromSource(src)

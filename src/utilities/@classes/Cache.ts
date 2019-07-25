@@ -14,7 +14,7 @@ class Cache {
   }
 
   public set(key: string, value: any): any {
-    this.list[key] = value
+    this.list[ key ] = value
 
     return value
   }

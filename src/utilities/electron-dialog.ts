@@ -1,5 +1,4 @@
 import { BrowserWindow, FileFilter, OpenDialogOptions, remote } from 'electron'
-import * as settings from 'electron-settings'
 import dataPaths from './dataPaths'
 const { dialog, getCurrentWindow } = remote
 
@@ -43,3 +42,4 @@ const saveFile = async (
 }
 
 export { openDirectory, openFile, saveFile }
+

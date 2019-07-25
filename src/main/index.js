@@ -1,12 +1,8 @@
 import * as devtron from 'devtron'
 import { app, BrowserWindow, Menu } from 'electron'
 import electronDebug from 'electron-debug'
-import electronSettings from 'electron-settings'
 import * as vueDevtools from 'vue-devtools'
 import { productName } from '../../package.json'
-import dataPaths from '../utilities/dataPaths'
-
-// set app name
 app.setName(productName)
 
 // disable electron warning
@@ -95,11 +91,6 @@ app.on('ready', () => {
 
   if (isDev) {
     installDevTools()
-
-    // reset settings
-    electronSettings.set('open-directory', dataPaths.home)
-    electronSettings.set('open-file', dataPaths.home)
-    electronSettings.set('save-file', dataPaths.home)
   }
 })
 
