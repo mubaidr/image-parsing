@@ -47,7 +47,7 @@
       </div>
 
       <div class="columns is-multiline is-mobile">
-        <div class="column is-6">
+        <div class="column is-2">
           <div class="field">
             <label class="label">Correct Marks</label>
             <div class="control">
@@ -60,7 +60,7 @@
             </div>
           </div>
         </div>
-        <div class="column is-6">
+        <div class="column is-2">
           <div class="field">
             <label class="label">Negative Marks</label>
             <div class="control">
@@ -95,7 +95,6 @@ import { openFile, saveFile } from '../../utilities/electron-dialog'
 import { compileResult } from '../../utilities/compile'
 import { exportJsonToExcel } from '../../utilities/excel'
 import { KeyNativeEnum } from '../../utilities/@enums/ExtensionsEnum'
-import { Promise } from 'core-js'
 
 export default {
   data() {

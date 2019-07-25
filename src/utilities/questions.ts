@@ -1,5 +1,6 @@
 import sharp, { Sharp } from 'sharp'
 import CompiledResult from './@classes/CompiledResult'
+import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
 import IDesignData from './@interfaces/IDesignData'
 import IQuestionData from './@interfaces/IQuestionData'
 import { convertToBitArray } from './index'
@@ -7,7 +8,7 @@ import { convertToBitArray } from './index'
 const getQuestionsData = async (
   design: IDesignData,
   img: Sharp,
-  results?: CompiledResult
+  compiledResult?: CompiledResult
 ): Promise<IQuestionData[]> => {
   const SCALE = 0.5
   const TARGET_WIDTH = Math.floor(design.width * SCALE)
@@ -37,18 +38,19 @@ const getQuestionsData = async (
     const { data, info } = await img.toBuffer({ resolveWithObject: true })
     const binaryData = convertToBitArray([...data], info.channels)
 
-    if (results) {
-      if (results[title] !== '*') {
-        // for training data
+    // for training purpose
+    if (compiledResult) {
+      const result = compiledResult.getResults()[0].answers
+
+      if (result[title].value !== QuestionOptionsEnum.MULTIPLE) {
         extractedQuestionData.push({
           input: binaryData,
-          output: { [results[title]]: 1 },
+          output: { [result[title].value]: 1 },
         })
       }
-      continue
+    } else {
+      extractedQuestionData.push({ title, input: binaryData })
     }
-
-    extractedQuestionData.push({ title, input: binaryData })
   }
 
   return extractedQuestionData

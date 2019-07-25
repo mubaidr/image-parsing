@@ -27,6 +27,12 @@ const getPatternGroup = (str: string): string => {
 }
 
 const getDesignData = (file: string): IDesignData => {
+  // TODO: test fast-xml-parser
+  // const xml = fs.readFileSync(file, 'utf8')
+  // const json = convertToJson(xml)
+
+  // console.log(xml, json)
+
   const $ = cheerio.load(fs.readFileSync(file, 'utf8'))
   const svgViewBox = $('svg')[0].attribs.viewBox.split(' ')
 

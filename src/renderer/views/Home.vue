@@ -21,15 +21,19 @@
           </p>
           <RouterLink class="button is-light" to="generate">
             <i class="material-icons">print</i>
-            <span>Generate</span>
+            <span>Generate Answer Sheets</span>
           </RouterLink>
-          <RouterLink class="button is-light" to="process">
+          <RouterLink class="button is-light" to="extract">
             <i class="material-icons">flash_on</i>
-            <span>Process</span>
+            <span>Extract Result</span>
+          </RouterLink>
+          <RouterLink class="button is-light" to="review">
+            <i class="material-icons">flash_on</i>
+            <span>Review Result</span>
           </RouterLink>
           <RouterLink class="button is-light" to="compile">
             <i class="material-icons">assessment</i>
-            <span>Compile</span>
+            <span>Compile Result</span>
           </RouterLink>
         </div>
       </div>
@@ -47,6 +51,7 @@ export default Vue.extend({
 
 <style>
 .hero-body {
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
 }
 </style>

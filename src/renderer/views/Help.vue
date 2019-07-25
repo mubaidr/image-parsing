@@ -11,18 +11,17 @@
       System Information
     </h2>
     <SystemInformation />
-    <br >
+    <br />
   </div>
 </template>
 
 <script>
-import SystemInformation from './About/SystemInformation.vue'
-import Vue from 'vue'
+import SystemInformation from '../components/SystemInformation'
 
-export default Vue.extend({
+export default {
   name: 'About',
   components: { SystemInformation },
-})
+}
 </script>
 
 <style>

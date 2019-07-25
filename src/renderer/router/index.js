@@ -1,5 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import About from '../views/About'
+import Compile from '../views/Compile'
+import Extract from '../views/Extract'
+import Generate from '../views/Generate'
+import Help from '../views/Help'
+import Home from '../views/Home'
+import Review from '../views/Review'
+import Train from '../views/Train'
 
 Vue.use(Router)
 
@@ -15,7 +23,7 @@ const router = new Router({
         title: 'Home',
         icon: 'fa-home',
       },
-      component: require('@/renderer/components/Home.vue').default,
+      component: Home,
     },
     {
       path: '/generate',
@@ -23,15 +31,27 @@ const router = new Router({
         title: 'Generate',
         icon: 'fa-file-alt',
       },
-      component: require('@/renderer/components/Generate.vue').default,
+      component: Generate,
     },
     {
       path: '/process',
+      redirect: '/extract',
+    },
+    {
+      path: '/extract',
       meta: {
-        title: 'Process',
+        title: 'Extract Results',
         icon: 'fa-play',
       },
-      component: require('@/renderer/components/Process.vue').default,
+      component: Extract,
+    },
+    {
+      path: '/review',
+      meta: {
+        title: 'Review Results',
+        icon: 'fa-play',
+      },
+      component: Review,
     },
     {
       path: '/compile',
@@ -39,7 +59,7 @@ const router = new Router({
         title: 'Compile',
         icon: 'fa-tasks',
       },
-      component: require('@/renderer/components/Compile.vue').default,
+      component: Compile,
     },
     {
       path: '/train',
@@ -47,7 +67,7 @@ const router = new Router({
         title: 'Train',
         icon: 'fa-vials',
       },
-      component: require('@/renderer/components/Train.vue').default,
+      component: Train,
     },
     {
       path: '/about',
@@ -55,7 +75,7 @@ const router = new Router({
         title: 'About',
         icon: 'fa-info-circle',
       },
-      component: require('@/renderer/components/About.vue').default,
+      component: About,
     },
     {
       path: '/help',
@@ -63,7 +83,7 @@ const router = new Router({
         title: 'Help',
         icon: 'fa-info-circle',
       },
-      component: require('@/renderer/components/Help.vue').default,
+      component: Help,
     },
     {
       path: '*',
@@ -73,16 +93,10 @@ const router = new Router({
 })
 
 router.afterEach(to => {
-  let title =
+  document.title =
     to.path === '/home'
       ? process.env.PRODUCT_NAME
       : `${ to.meta.title } - ${ process.env.PRODUCT_NAME }`
-
-  if (!title) {
-    title = 'Home'
-  }
-
-  document.title = title
 })
 
 export default router

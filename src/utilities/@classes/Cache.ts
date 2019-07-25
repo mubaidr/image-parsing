@@ -1,34 +1,36 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 class Cache {
   private list: {
-    [key: string]: string
-  } = {}
-
-  public constructor() {}
-
-  public get(key: string): string | null {
-    if (typeof key !== 'string') return null
-
-    const item = this.list[key]
-    if (item) {
-      return item
-    } else {
-      return null
-    }
+    [key: string]: any
   }
 
-  public set(key: string, value: string): string | null {
-    if (typeof key !== 'string' && value) return null
+  public constructor() {
+    this.list = {}
+  }
 
+  public get(key: string): any {
+    return this.list[key]
+  }
+
+  public set(key: string, value: any): any {
     this.list[key] = value
 
     return value
   }
 
+  public remove(key: string): any {
+    const t = this.list[key]
+    delete this.list[key]
+
+    return t
+  }
+
   public reset() {
-    Object.keys(this.list).forEach(k => {
-      delete this.list[k]
-    })
+    this.list = {}
   }
 }
+
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export default Cache

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="section">
     <h1 class="title is-5">
       Process
     </h1>
@@ -79,11 +79,11 @@
 
 <script>
 const mainWindow = require('electron').remote.getCurrentWindow()
-import { openDirectory } from '../../../utilities/electron-dialog'
-import * as processingModule from '../../../utilities/process'
-import dataPaths from '../../../utilities/dataPaths'
+import { openDirectory } from '../../utilities/electron-dialog'
+import * as processingModule from '../../utilities/process'
+import dataPaths from '../../utilities/dataPaths'
 import prettyMs from 'pretty-ms'
-import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
+import ProgressStateEnum from '../../utilities/@enums/ProgressStateEnum'
 
 export default {
   name: 'ExtractResult',
@@ -162,9 +162,6 @@ export default {
         case ProgressStateEnum.RUNNING:
           this.perImageTime = (this.perImageTime + m.time) / 2
           this.processedImages += 1
-
-          console.log(this.perImageTime)
-
           break
         case ProgressStateEnum.COMPLETED:
           mainWindow.setProgressBar(0)

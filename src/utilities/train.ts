@@ -1,39 +1,20 @@
 import brain from 'brain.js'
 import fs from 'fs'
+import CompiledResult from './@classes/CompiledResult'
 import dataPaths from './dataPaths'
 import { getDesignData } from './design'
-import { importExcelToJson } from './excel'
 import { getSharpObjectFromSource } from './images'
 import { getQuestionsData } from './questions'
 
-const completed = (success: boolean): void => {
-  if (success) {
-    console.log('Completed')
-  } else {
-    console.log('Failed')
-  }
-
-  if (process && process.send) {
-    process.send({ completed: true }, () => {
-      process.exit(0)
-    })
-  }
-}
-
 async function start() {
-  const [designData, resultsData, sharpImage] = await Promise.all([
-    getDesignData(dataPaths.design),
-    importExcelToJson(dataPaths.key, true),
-    getSharpObjectFromSource(dataPaths.keyImage),
-  ])
-
   const trainingData = await getQuestionsData(
-    designData,
-    sharpImage,
-    resultsData[0]
+    getDesignData(dataPaths.design),
+    getSharpObjectFromSource(dataPaths.keyImage),
+    CompiledResult.loadFromExcel(dataPaths.key)
   )
 
   const net = new brain.NeuralNetwork()
+
   net.train(trainingData, {
     log: true,
     logPeriod: 10,
@@ -43,12 +24,15 @@ async function start() {
   // write trained network configuration to disk
   fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
 
-  completed(true)
+  if (process && process.send) {
+    process.send({ completed: true }, () => {
+      process.exit(0)
+    })
+  }
 }
 
 process.on('message', e => {
   if (e.stop) {
-    console.log('Stoping...')
     process.exit(0)
   } else {
     start()

@@ -174,9 +174,16 @@ const template = [
     submenu: [
       {
         label: 'Extract Result',
-        accelerator: 'CommandOrControl+P',
+        accelerator: 'CommandOrControl+E',
         click() {
-          sendMenuEvent({ route: '/process' })
+          sendMenuEvent({ route: '/extract' })
+        },
+      },
+      {
+        label: 'Review Result',
+        accelerator: 'CommandOrControl+R',
+        click() {
+          sendMenuEvent({ route: '/review' })
         },
       },
     ],

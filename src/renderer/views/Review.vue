@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="section">
     <!-- toolbar -->
     <nav class="level is-mobile">
       <!-- Left side -->
@@ -83,12 +83,12 @@
 </template>
 
 <script>
-import modalPreview from './_modal-preview.vue'
-import { saveFile } from '../../../utilities/electron-dialog'
-import { exportJsonToExcel } from '../../../utilities/excel'
-import { convertImage } from '../../../utilities/images'
-import { KeyNativeEnum } from '../../../utilities/@enums/ExtensionsEnum'
-import CompiledResult from '../../../utilities/@classes/CompiledResult'
+import modalPreview from '../components/ModalPreview'
+import { saveFile } from '../../utilities/electron-dialog'
+import { exportJsonToExcel } from '../../utilities/excel'
+import { convertImage } from '../../utilities/images'
+import { KeyNativeEnum } from '../../utilities/@enums/ExtensionsEnum'
+import CompiledResult from '../../utilities/@classes/CompiledResult'
 
 export default {
   name: 'ReviewResult',

@@ -39,9 +39,8 @@
 <script>
 import { fork } from 'child_process'
 import * as trainingProcess from '../../utilities/train.ts'
-import Vue from 'vue'
 
-export default Vue.extend({
+export default {
   data() {
     return {
       logs: [],
@@ -105,7 +104,7 @@ export default Vue.extend({
       )
     },
   },
-})
+}
 </script>
 
 <style lang="scss">
