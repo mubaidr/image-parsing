@@ -130,16 +130,6 @@ class CompiledResult {
 
     return obj
   }
-
-  public save(): CompiledResult {
-    //TODO: use electron settings
-    throw 'Not Implemented'
-  }
-
-  public static load(): CompiledResult {
-    //TODO: use electron settings
-    throw 'Not Implemented'
-  }
 }
 
 export default CompiledResult

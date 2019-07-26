@@ -32,7 +32,7 @@ const getQuestionsData = async (
       height: Math.ceil((q.y2 - q.y1) * SCALE),
     })
 
-    // debug image
+    // log image
     // logImageData(img, title)
 
     const { data, info } = await img.toBuffer({ resolveWithObject: true })

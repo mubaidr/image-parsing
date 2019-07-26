@@ -99,7 +99,6 @@ class Result implements IResult {
 
     for (let k = 0; k < props.length; k += 1) {
       const prop = props[k]
-
       const keyChoice = key.answers[prop]
       const candidateChoice = this.answers[prop]
 
@@ -138,15 +137,8 @@ class Result implements IResult {
   }
 
   public setMarks(marks: number, negativeMarks: number) {
-    if (!this.isCompiled) return
-
     this.marks = this.correctCount * marks - this.incorrectCount * negativeMarks
-    this.totalMarks =
-      (this.correctCount +
-        this.incorrectCount +
-        this.unattemptedCount -
-        this.skippedCount) *
-      marks
+    this.totalMarks = (60 - this.skippedCount) * marks
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

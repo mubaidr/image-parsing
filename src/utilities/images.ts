@@ -95,7 +95,7 @@ const getRollNoFromImage = async (
     height,
   })
 
-  // debug image
+  // log image
   // logImageData(img)
 
   const data = await img.toBuffer()
