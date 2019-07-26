@@ -122,7 +122,13 @@ export default {
         mainWindow.setProgressBar(0)
 
         // flash taskbar icon
-        mainWindow.once('focus', () => mainWindow.flashFrame(false))
+        if (mainWindow.isFocused()) {
+          window.setTimeout(() => {
+            mainWindow.flashFrame(false)
+          }, 1000)
+        } else {
+          mainWindow.once('focus', () => mainWindow.flashFrame(false))
+        }
         mainWindow.flashFrame(true)
       }
     },
@@ -165,7 +171,7 @@ export default {
           break
         case ProgressStateEnum.COMPLETED:
           mainWindow.setProgressBar(0)
-          this.$emit('compiledResult', m)
+          // TODO: set results in store
           break
         case ProgressStateEnum.ERROR:
           this.$toasted.show(m.error, {

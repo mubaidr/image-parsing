@@ -88,22 +88,12 @@ import { saveFile } from '../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../utilities/excel'
 import { convertImage } from '../../utilities/images'
 import { KeyNativeEnum } from '../../utilities/@enums/ExtensionsEnum'
-import CompiledResult from '../../utilities/@classes/CompiledResult'
 
 export default {
   name: 'ReviewResult',
 
   components: {
     modalPreview,
-  },
-
-  props: {
-    compiledResult: {
-      type: CompiledResult,
-      default: () => {
-        return new CompiledResult()
-      },
-    },
   },
 
   data() {
