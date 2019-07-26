@@ -1,5 +1,6 @@
 import { BrowserWindow, FileFilter, OpenDialogOptions, remote } from 'electron'
-import dataPaths from './dataPaths'
+import store from './store'
+
 const { dialog, getCurrentWindow } = remote
 
 const openDirectory = async (
@@ -9,37 +10,48 @@ const openDirectory = async (
   const dir = await dialog.showOpenDialog<BrowserWindow, OpenDialogOptions>(
     getCurrentWindow(),
     {
-      defaultPath: settings.get('open-directory'),
+      defaultPath: store.lastOpenDir(),
       filters,
       properties: ['openDirectory'],
     }
   )
 
-  return dir.filePaths
+  const dest = dir.filePaths ? dir.filePaths[0] : undefined
+
+  if (dest) store.updateLastOpenDir(dest)
+
+  return dest
 }
 
 const openFile = async (
   filters?: FileFilter[]
-): Promise<string[] | undefined> => {
+): Promise<string | undefined> => {
   const file = await dialog.showOpenDialog(getCurrentWindow(), {
-    defaultPath: dataPaths.home,
+    defaultPath: store.lastOpenFile(),
     filters,
     properties: ['openFile'],
   })
 
-  return file.filePaths
+  const dest = file.filePaths ? file.filePaths[0] : undefined
+
+  if (dest) store.updateLastOpenDir(dest)
+
+  return dest
 }
 
 const saveFile = async (
   filters?: FileFilter[]
 ): Promise<string | undefined> => {
   const file = await dialog.showSaveDialog(getCurrentWindow(), {
-    defaultPath: dataPaths.home,
+    defaultPath: store.lastSaveDir(),
     filters,
   })
 
-  return file.filePath
+  const dest = file.filePath ? file.filePath : undefined
+
+  if (dest) store.updateLastOpenDir(dest)
+
+  return dest
 }
 
 export { openDirectory, openFile, saveFile }
-
