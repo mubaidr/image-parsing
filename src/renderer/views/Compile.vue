@@ -94,7 +94,7 @@
 import { openFile, saveFile } from '../../utilities/electron-dialog'
 import { compileResult } from '../../utilities/compile'
 import { exportJsonToExcel } from '../../utilities/excel'
-import { KeyNativeEnum } from '../../utilities/@enums/ExtensionsEnum'
+import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
 
 export default {
   data() {

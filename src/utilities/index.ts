@@ -1,6 +1,7 @@
 import brain, { INeuralNetworkJSON } from 'brain.js'
 import fs from 'fs'
-import dataPaths from './dataPaths'
+
+import { dataPaths } from './dataPaths'
 
 const getQuestionsNeuralNet = (): brain.NeuralNetwork => {
   const text = fs.readFileSync(dataPaths.questionsModel).toString()

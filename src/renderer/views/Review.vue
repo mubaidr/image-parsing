@@ -87,7 +87,7 @@ import modalPreview from '../components/ModalPreview'
 import { saveFile } from '../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../utilities/excel'
 import { convertImage } from '../../utilities/images'
-import { KeyNativeEnum } from '../../utilities/@enums/ExtensionsEnum'
+import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
 
 export default {
   name: 'ReviewResult',

@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import ICache from '../@interfaces/ICache'
 
-class Cache {
+class Cache implements ICache {
   private list: {
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     [key: string]: any
   }
 
@@ -9,16 +10,19 @@ class Cache {
     this.list = {}
   }
 
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   public get(key: string): any {
     return this.list[key]
   }
 
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   public set(key: string, value: any): any {
-    this.list[ key ] = value
+    this.list[key] = value
 
     return value
   }
 
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   public remove(key: string): any {
     const t = this.list[key]
     delete this.list[key]
@@ -30,7 +34,5 @@ class Cache {
     this.list = {}
   }
 }
-
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export default Cache

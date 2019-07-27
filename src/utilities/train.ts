@@ -1,7 +1,7 @@
 import brain from 'brain.js'
 import fs from 'fs'
 import CompiledResult from './@classes/CompiledResult'
-import dataPaths from './dataPaths'
+import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { getSharpObjectFromSource } from './images'
 import { getQuestionsData } from './questions'

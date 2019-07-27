@@ -29,12 +29,10 @@ module.exports = {
   plugins: ['@typescript-eslint'],
 
   rules: {
+    semi: 0,
     'no-console': 0,
-    '@typescript-eslint/no-var-requires': 0,
-    '@typescript-eslint/interface-name-prefix': 0,
-    // https://github.com/typescript-eslint/typescript-eslint/issues/103
+    'no-buffer-constructor': 2,
     '@typescript-eslint/no-parameter-properties': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
-    'no-buffer-constructor': 'error',
   },
 }

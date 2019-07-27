@@ -4,10 +4,11 @@ import javascriptQRReader from 'jsqr'
 import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import uuid from 'uuid'
-import { ImageNativeTypesEnum, ImageTypesEnum } from './@enums/ExtensionsEnum'
+import ImageNativeTypesEnum from './@enums/ImageNativeTypesEnum'
+import ImageTypesEnum from './@enums/ImageTypesEnum'
 import IDesignData from './@interfaces/IDesignData'
-import cache from './cache'
-import dataPaths from './dataPaths'
+import { cache } from './cache'
+import { dataPaths } from './dataPaths'
 
 const getSharpObjectFromSource = (src: string): Sharp => {
   return (

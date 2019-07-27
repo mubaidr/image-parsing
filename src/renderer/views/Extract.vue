@@ -81,7 +81,6 @@
 const mainWindow = require('electron').remote.getCurrentWindow()
 import { openDirectory } from '../../utilities/electron-dialog'
 import * as processingModule from '../../utilities/process'
-import dataPaths from '../../utilities/dataPaths'
 import prettyMs from 'pretty-ms'
 import ProgressStateEnum from '../../utilities/@enums/ProgressStateEnum'
 
@@ -90,7 +89,8 @@ export default {
 
   data() {
     return {
-      imageDirectory: dataPaths.imagesBarcode,
+      imageDirectory:
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\images-barcode\\',
       perImageTime: 0,
       processedImages: 0,
       progressState: ProgressStateEnum.STOPPED,

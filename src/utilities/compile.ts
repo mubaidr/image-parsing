@@ -1,8 +1,8 @@
 import { importExcelToJson } from '../utilities/excel'
 import CompiledResult from './@classes/CompiledResult'
 import Result from './@classes/Result'
-import { KeyNativeEnum } from './@enums/ExtensionsEnum'
-import dataPaths from './dataPaths'
+import KeyNativeEnum from './@enums/KeyNativeEnum'
+import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { processTask } from './processTaskWorker'
 
@@ -40,4 +40,4 @@ const compileResult = async (
     .compile(marks, negativeMarks)
 }
 
-export { compileResult }
+export { readKey, compileResult }

@@ -1,5 +1,5 @@
 import Store from 'electron-store'
-import dataPaths from './dataPaths'
+import { dataPaths } from './dataPaths'
 
 const newStore = new Store()
 
@@ -53,4 +53,4 @@ const store = {
   },
 }
 
-export default store
+export { store }

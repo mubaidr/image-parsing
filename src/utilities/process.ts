@@ -1,6 +1,6 @@
 import WorkerManager from './@classes/WorkerManager'
 import ProgressStateEnum from './@enums/ProgressStateEnum'
-import dataPaths from './dataPaths'
+import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { getImagePaths } from './images'
 import { processTask } from './processTaskWorker'

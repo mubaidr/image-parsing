@@ -1,5 +1,5 @@
 import { BrowserWindow, FileFilter, OpenDialogOptions, remote } from 'electron'
-import store from './store'
+import { store } from './store'
 
 const { dialog, getCurrentWindow } = remote
 
