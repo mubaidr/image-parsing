@@ -111,11 +111,15 @@ class WorkerManager {
 
       worker.stdout.on('readable', () => {
         const buff: Buffer = worker.stdout && worker.stdout.read()
+        if (!buff) return
+
         console.info(buff.toString())
       })
 
       worker.stderr.on('readable', () => {
         const buff = worker.stderr && worker.stderr.read()
+        if (!buff) return
+
         console.error(buff.toString())
       })
     })

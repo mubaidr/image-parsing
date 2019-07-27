@@ -14,19 +14,23 @@ const processTask = async (
   const neuralNet = getQuestionsNeuralNet()
   const results: Result[] = []
 
-  // loop through all images
-  for (const img of images) {
+  for (let i = 0, imagesLength = images.length; i < imagesLength; i += 1) {
+    const image = images[i]
+    const sharpImage = getSharpObjectFromSource(image)
     const startTime = Date.now()
-    const sharpImage = getSharpObjectFromSource(img)
 
     const [rollNo, questionsData] = await Promise.all([
       getRollNoFromImage(designData, sharpImage, true),
       getQuestionsData(designData, sharpImage.clone()),
     ])
-    const result = new Result(rollNo, img)
+    const result = new Result(rollNo, image)
 
-    for (const questionData of questionsData) {
-      const { title, input } = questionData
+    for (
+      let j = 0, questionsDataLength = questionsData.length;
+      j < questionsDataLength;
+      j += 1
+    ) {
+      const { title, input } = questionsData[j]
       const pre = neuralNet.run<number[], INNQuestionOutput>(input)
       let value: string
 

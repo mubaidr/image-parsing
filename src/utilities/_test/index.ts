@@ -1,15 +1,18 @@
-import CompiledResult from '../@classes/CompiledResult'
-// import { exportJsonToExcel } from '../excel'
+import { parse } from 'fast-xml-parser'
+import { readFileSync } from 'fs'
 
-const compiledResult = CompiledResult.loadFromExcel(
-  './__tests__/test-data/result.xlsx'
+const str = readFileSync(
+  'D:\\current\\image-parsing\\__tests__\\test-data\\design.svg'
 )
-  .addFromExcel('./__tests__/test-data/key.xlsx')
-  .compile(3, 1)
 
-// exportJsonToExcel(compiledResult, './.tmp/tmp.xlsx')
+const options = {
+  attributeNamePrefix: '',
+  ignoreAttributes: false,
+  parseNodeValue: true,
+  parseAttributeValue: true,
+  allowBooleanAttributes: true,
+}
 
-console
-  .log
-  // Result.fromJson(importExcelToJson('./__tests__/test-data/key.xlsx')[0])
-  ()
+const json = parse(str.toString(), options)
+
+console.dir(json.svg)

@@ -12,11 +12,12 @@ const readKey = async (src: string): Promise<Result[] | undefined> => {
   if (ext === undefined) throw 'Invalid path specified'
 
   if (ext in KeyNativeEnum) {
+    let rows = importExcelToJson(src)
     const results: Result[] = []
 
-    importExcelToJson(src).forEach(row => {
-      results.push(Result.fromJson(row))
-    })
+    for (let i = 0, len = rows.length; i < len; i += 1) {
+      results.push(Result.fromJson(rows[i]))
+    }
 
     return results
   }

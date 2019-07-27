@@ -3,28 +3,30 @@ import CompiledResult from './@classes/CompiledResult'
 import IObject from './@interfaces/IObject'
 import { toCamelCase, toHeadingCase } from './string'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const importExcelToJson = (src: string): IObject[] => {
   const workbook = XLSX.readFile(src)
   const arr: IObject[] = []
 
-  workbook.SheetNames.forEach(sheetName => {
-    const sheet = workbook.Sheets[sheetName]
+  Object.values(workbook.Sheets).forEach(sheet => {
     const rows: IObject[] = XLSX.utils.sheet_to_json(sheet, {
       blankrows: false,
       raw: true,
     })
 
-    rows.forEach(row => {
-      for (var key in row) {
-        const newKeyName = toCamelCase(key)
+    for (let i = 0, rowsLength = rows.length; i < rowsLength; i += 1) {
+      const row = rows[i]
+      const keys = Object.keys(row)
 
-        if (newKeyName !== key) {
-          row[newKeyName] = row[key]
-          delete row[key]
-        }
+      for (let j = 0, keysLength = keys.length; j < keysLength; j += 1) {
+        const key = keys[j]
+        const newKey = toCamelCase(key)
+
+        if (newKey === key) continue
+
+        row[newKey] = row[key]
+        delete row[key]
       }
-    })
+    }
 
     arr.push(...rows)
   })
@@ -43,16 +45,20 @@ const exportJsonToExcel = (
       ? compiledResult.export()
       : compiledResult
 
-  rows.forEach(row => {
-    for (var key in row) {
-      const newKeyName = toHeadingCase(key)
+  for (let i = 0, rowsLength = rows.length; i < rowsLength; i += 1) {
+    const row = rows[i]
+    const keys = Object.keys(row)
 
-      if (newKeyName !== key) {
-        row[newKeyName] = row[key]
-        delete row[key]
-      }
+    for (let j = 0, keysLength = keys.length; j < keysLength; j += 1) {
+      const key = keys[j]
+      const newKey = toHeadingCase(key)
+
+      if (newKey === key) continue
+
+      row[newKey] = row[key]
+      delete row[key]
     }
-  })
+  }
 
   const worksheet = XLSX.utils.json_to_sheet(rows)
   XLSX.utils.book_append_sheet(workbook, worksheet)

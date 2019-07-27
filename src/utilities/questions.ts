@@ -21,9 +21,14 @@ const getQuestionsData = async (
   })
 
   const extractedQuestionData: IQuestionData[] = []
+  const questions = Object.entries(design.questions)
 
-  for (const question of Object.entries(design.questions)) {
-    const [title, q] = question
+  for (
+    let i = 0, questionsLength = questions.length;
+    i < questionsLength;
+    i += 1
+  ) {
+    const [title, q] = questions[i]
 
     img.extract({
       left: Math.floor(q.x1 * SCALE),

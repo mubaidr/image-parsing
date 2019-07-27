@@ -37,7 +37,7 @@ async function installDevTools() {
     devtron.install()
     vueDevtools.install()
   } catch (err) {
-    console.log(err)
+    console.error(err)
   }
 }
 
@@ -79,10 +79,6 @@ function createWindow() {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
     mainWindow.focus()
-  })
-
-  mainWindow.on('closed', () => {
-    console.log('closed')
   })
 }
 

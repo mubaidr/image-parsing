@@ -13,7 +13,7 @@ const convertToBitArray = (data: number[], channels: number): number[] => {
   // Convert image data to binary
   const binaryData: number[] = []
 
-  for (let i = 0; i < data.length; i += channels) {
+  for (let i = 0, dataLength = data.length; i < dataLength; i += channels) {
     const threshold = 15
     const thresholdBlack = 80
     const [r, g, b] = data.slice(i, i + channels)
