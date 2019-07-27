@@ -13,11 +13,12 @@ import store from './store/index'
 const isDev = process.env.NODE_ENV === 'development'
 
 Vue.use(Toasted, {
-  duration: 3000,
+  duration: 2500,
   Icon: 'info',
-  iconPack: 'material',
+  iconPack: 'mdi',
   position: 'bottom-center',
   type: 'info',
+  // theme: 'outline',
 })
 
 Vue.config.devtools = isDev

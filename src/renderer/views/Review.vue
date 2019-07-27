@@ -58,7 +58,9 @@
     <transition mode="out-in" name="slide-up">
       <!-- Show table when data is loaded -->
       <div key="table" v-if="hasResults">
-        <div class="scroll-container"></div>
+        <div class="scroll-container">
+          {{ filteredResults }}
+        </div>
       </div>
       <!-- Show message when no data is loaded -->
       <div key="message" v-else>
@@ -84,6 +86,7 @@
 
 <script>
 import modalPreview from '../components/ModalPreview'
+import { mapState } from 'vuex'
 import { saveFile } from '../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../utilities/excel'
 import { convertImage } from '../../utilities/images'
@@ -106,6 +109,8 @@ export default {
   },
 
   computed: {
+    ...mapState(['compiledResult']),
+
     hasResults() {
       return this.compiledResult.getResultCount() > 0
     },

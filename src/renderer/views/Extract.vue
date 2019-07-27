@@ -50,39 +50,23 @@
       </button>
     </div>
 
-    <br />
-    <br />
-    <br />
-
     <Transition mode="out-in" name="slide-down">
-      <table v-if="isRunning" class="table is-fullwidth">
-        <thead>
-          <tr>
-            <th />
-            <th>Total</th>
-            <th>Processed</th>
-            <th>Remaining Time</th>
-          </tr>
-        </thead>
-        <tr>
-          <td>
-            <i class="material-icons rotating">fiber_smart_record</i>
-          </td>
-          <td>{{ totalImages }}</td>
-          <td>{{ processedImages }}</td>
-          <td>{{ remainingTime }}</td>
-        </tr>
-      </table>
+      {{ processedImages }} / {{ totalImages }}
     </Transition>
   </div>
 </template>
 
 <script>
-const mainWindow = require('electron').remote.getCurrentWindow()
-import { openDirectory } from '../../utilities/electron-dialog'
+import { remote } from 'electron'
+import { mapActions } from 'vuex'
+import { openDirectory, saveFile } from '../../utilities/electron-dialog'
+import { exportJsonToExcel } from '../../utilities/excel'
+import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
 import * as processingModule from '../../utilities/process'
-import prettyMs from 'pretty-ms'
 import ProgressStateEnum from '../../utilities/@enums/ProgressStateEnum'
+import prettyMs from 'pretty-ms'
+
+const mainWindow = remote.getCurrentWindow()
 
 export default {
   name: 'ExtractResult',
@@ -103,13 +87,17 @@ export default {
       return this.imageDirectory
     },
 
+    isRunning() {
+      return this.progressState === ProgressStateEnum.RUNNING
+    },
+
+    progress() {
+      return Math.floor((this.processedImages * 100) / this.totalImages)
+    },
+
     remainingTime() {
       const ms = (this.totalImages - this.processedImages) * this.perImageTime
       return prettyMs(ms)
-    },
-
-    isRunning() {
-      return this.progressState === ProgressStateEnum.RUNNING
     },
   },
 
@@ -139,6 +127,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['setCompiledResult']),
+
     startProcess() {
       this.progressState = ProgressStateEnum.RUNNING
 
@@ -171,7 +161,8 @@ export default {
           break
         case ProgressStateEnum.COMPLETED:
           mainWindow.setProgressBar(0)
-          // TODO: set results in store
+          this.stopProcess()
+          this.exportData(m.compiledResult)
           break
         case ProgressStateEnum.ERROR:
           this.$toasted.show(m.error, {
@@ -181,6 +172,31 @@ export default {
       }
 
       this.progressState = m.state
+    },
+
+    exportData(compiledResult) {
+      saveFile([
+        {
+          name: 'Excel File',
+          extensions: Object.keys(KeyNativeEnum).reverse(),
+        },
+      ]).then(destination => {
+        if (!destination) return
+
+        exportJsonToExcel(compiledResult, destination)
+
+        this.$toasted.show('File Saved successfully. ', {
+          type: 'info',
+          duration: 5000,
+          action: {
+            text: 'Review Extracted Result Now',
+            onClick: () => {
+              this.setCompiledResult(compiledResult)
+              this.$router.push('review')
+            },
+          },
+        })
+      })
     },
 
     chooseImageDirectory() {

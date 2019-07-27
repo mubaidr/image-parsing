@@ -4,13 +4,19 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
-  state: {},
+  state: {
+    compiledResult: undefined,
+  },
 
-  getters: {},
+  // getters: {},
 
-  mutations: {},
+  // mutations: {},
 
-  actions: {},
+  actions: {
+    setCompiledResult(context, compiledResult) {
+      context.state.compiledResult = compiledResult
+    },
+  },
 })
 
 export default store
