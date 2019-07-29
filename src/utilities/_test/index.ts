@@ -3,7 +3,7 @@ import { readFileSync } from 'fs'
 
 const str = readFileSync(
   'D:\\current\\image-parsing\\__tests__\\test-data\\design.svg'
-)
+).toString()
 
 const options = {
   attributeNamePrefix: '',
@@ -13,6 +13,6 @@ const options = {
   allowBooleanAttributes: true,
 }
 
-const json = parse(str.toString(), options)
+const json = parse(str, options)
 
 console.dir(json.svg)

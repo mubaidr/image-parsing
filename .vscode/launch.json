@@ -1,6 +1,14 @@
 {
   "configurations": [
     {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch via NPM",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "test-code"],
+      "port": 9229
+    },
+    {
       "cwd": "${workspaceFolder}",
       "name": "Electron: Main",
       "port": 9222,

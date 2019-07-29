@@ -110,7 +110,7 @@
     "prettier": "prettier --write '**/*.{js,ts,vue}'",
     "release": "build",
     "test": "jest",
-    "test-code": "nodemon --watch src/**/* --exec ts-node src/utilities/_test/index.ts",
+    "test-code": "nodemon --inspect src/utilities/_test/index.ts",
     "typesync": "typesync && npm install"
   },
   "version": "0.0.1"
