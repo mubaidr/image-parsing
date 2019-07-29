@@ -118,8 +118,9 @@ class WorkerManager {
         electronLog.error(data.toString())
       })
 
-      worker.on('close', (a, b) => {
+      worker.on( 'close', ( a, b ) => {
         if (a) {
+          // TODO: track error state in parent
           electronLog.info(
             `child process exited with code: ${a} and signal ${b}`
           )

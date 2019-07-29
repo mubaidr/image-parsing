@@ -59,7 +59,16 @@
       <!-- Show table when data is loaded -->
       <div key="table" v-if="hasResults">
         <div class="scroll-container">
-          {{ filteredResults }}
+          <table class="table is-bordered is-condense">
+            <tbody>
+              <!-- TODO: finish table render -->
+              <tr for="result in filteredResults">
+                {{
+                  result
+                }}
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <!-- Show message when no data is loaded -->
@@ -86,7 +95,7 @@
 
 <script>
 import modalPreview from '../components/ModalPreview'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { saveFile } from '../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../utilities/excel'
 import { convertImage } from '../../utilities/images'
@@ -159,7 +168,13 @@ export default {
     window.addEventListener('keydown', this.handleKeyDown)
   },
 
+  beforeDestroy() {
+    this.clearCompiledResult()
+  },
+
   methods: {
+    ...mapActions(['clearCompiledResult']),
+
     selectRow(index) {
       this.selectedIndex = index
     },

@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    compiledResult: undefined,
+    compiledResult: null,
   },
 
   // getters: {},
@@ -16,6 +16,10 @@ const store = new Vuex.Store({
     setCompiledResult(context, compiledResult) {
       context.state.compiledResult = compiledResult
     },
+
+    clearCompiledResult ( context ) {
+      context.state.compiledResult = null
+    }
   },
 })
 
