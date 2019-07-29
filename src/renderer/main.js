@@ -1,5 +1,6 @@
 // import the styles
 import 'bulma-pro/bulma.sass'
+// import easyCircularProgress from 'easy-circular-progress'
 import { ipcRenderer } from 'electron'
 import 'material-design-icons/iconfont/material-icons.css'
 import Vue from 'vue'
@@ -20,6 +21,7 @@ Vue.use(Toasted, {
   type: 'info',
   // theme: 'outline',
 })
+// Vue.use(easyCircularProgress)
 
 Vue.config.devtools = isDev
 Vue.config.performance = isDev

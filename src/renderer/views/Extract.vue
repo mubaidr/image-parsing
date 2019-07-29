@@ -50,8 +50,23 @@
       </button>
     </div>
 
-    <Transition mode="out-in" name="slide-down">
-      {{ processedImages }} / {{ totalImages }}
+    <Transition mode="out-in" name="slide-up">
+      <div
+        v-show="isRunning"
+        class="notification is-dark botton-centered-content"
+      >
+        <progress
+          :value="progress"
+          max="100"
+          class="progress is-success is-large"
+        >
+          {{ progress }}
+        </progress>
+        <div>
+          <p>Files Processed: {{ processedImages }} / {{ totalImages }}</p>
+          <p>Estimated Time Remaining: {{ remainingTime }}</p>
+        </div>
+      </div>
     </Transition>
   </div>
 </template>
@@ -122,7 +137,7 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     processingModule.stop()
   },
 
@@ -186,11 +201,14 @@ export default {
         exportJsonToExcel(compiledResult, destination)
 
         this.$toasted.show('File Saved successfully. ', {
-          type: 'info',
+          type: 'success',
           duration: 5000,
+          keepOnHover: true,
           action: {
             text: 'Review Extracted Result Now',
-            onClick: () => {
+            onClick: (e, toast) => {
+              toast.goAway(0)
+
               this.setCompiledResult(compiledResult)
               this.$router.push('review')
             },
@@ -209,4 +227,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.botton-centered-content {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.notification {
+  padding: 0;
+  padding-bottom: 1.5em;
+}
 </style>
