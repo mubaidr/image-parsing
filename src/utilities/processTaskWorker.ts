@@ -81,4 +81,9 @@ process.on('message', m => {
   processTask(m.designData, m.imagePaths)
 })
 
+// @ts-ignore
+process.on('warning', warning => {
+  console.error(warning)
+})
+
 export { processTask }

@@ -1,4 +1,5 @@
 import childProcess, { ChildProcess } from 'child_process'
+import electronLog from 'electron-log'
 import path from 'path'
 import noOfCores from 'physical-cpu-count'
 import Result from '../@classes/Result'
@@ -109,18 +110,22 @@ class WorkerManager {
         return
       }
 
-      worker.stdout.on('readable', () => {
-        const buff: Buffer = worker.stdout && worker.stdout.read()
-        if (!buff) return
-
-        console.info(buff.toString())
+      worker.stdout.on('data', (data: Buffer) => {
+        electronLog.log(data.toString())
       })
 
-      worker.stderr.on('readable', () => {
-        const buff = worker.stderr && worker.stderr.read()
-        if (!buff) return
+      worker.stderr.on('data', (data: Buffer) => {
+        electronLog.error(data.toString())
+      })
 
-        console.error(buff.toString())
+      worker.on('close', (a, b) => {
+        if (a) {
+          electronLog.info(
+            `child process exited with code: ${a} and signal ${b}`
+          )
+        } else {
+          electronLog.info('child process exited with code 0.')
+        }
       })
     })
   }

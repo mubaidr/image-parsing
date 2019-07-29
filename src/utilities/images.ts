@@ -118,9 +118,7 @@ const getRollNoFromImage = async (
         }
       )
 
-      if (res === null) throw new Error('QR Code not found!')
-
-      rollNo = res.data
+      rollNo = res ? res.data : ''
     }
   } catch {
     rollNo = ''
