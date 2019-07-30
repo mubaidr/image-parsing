@@ -34,7 +34,7 @@ const openFile = async (
 
   const dest = file.filePaths ? file.filePaths[0] : undefined
 
-  if (dest) store.updateLastOpenDir(dest)
+  if (dest) store.updateLastOpenFile(dest)
 
   return dest
 }
@@ -49,7 +49,7 @@ const saveFile = async (
 
   const dest = file.filePath ? file.filePath : undefined
 
-  if (dest) store.updateLastOpenDir(dest)
+  if (dest) store.updateLastSaveDir(dest)
 
   return dest
 }

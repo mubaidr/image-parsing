@@ -1,80 +1,155 @@
 <template>
   <div class="section">
     <!-- toolbar -->
-    <nav class="level is-mobile">
-      <!-- Left side -->
-      <div class="level-left">
-        <div class="level-item">
-          <div class="field has-addons">
-            <p class="control">
+    <div class="columns">
+      <div class="column is-6">
+        <div class="field">
+          <!-- <label class="label">Load result file for review: </label> -->
+          <div class="file has-name is-fullwidth">
+            <label class="file-label">
               <button
-                :disabled="!hasResults"
-                @click="toggleSortOrder"
-                class="button"
-              >
-                <span>Sort</span>
-                <i v-if="sortOrder === 'asc'" class="material-icons has-pointer"
-                  >arrow_drop_up</i
-                >
-                <i v-else class="material-icons has-pointer">arrow_drop_down</i>
-              </button>
-            </p>
-            <p class="control has-icons-right">
-              <input
-                :disabled="!hasResults"
-                v-model="filterQuery"
-                class="input"
-                placeholder="Filter By Roll No."
-                type="text"
+                @click="chooseResultFile"
+                class="file-input"
+                name="resume"
               />
-              <span class="icon is-right">
-                <i class="material-icons">search</i>
+              <span class="file-cta">
+                <i class="material-icons">list</i>
+                <span class="file-label">Choose File</span>
               </span>
-            </p>
+              <span class="file-name">{{
+                resultFilePath || 'Please choose a excel file...'
+              }}</span>
+            </label>
           </div>
+          <p class="help">
+            Choose the result file (excel) to review.
+          </p>
         </div>
       </div>
-
-      <!-- Right side -->
-      <div class="level-right">
-        <div class="level-item">
-          <div class="field has-addons">
-            <p class="control">
-              <button
-                :disabled="!hasResults"
-                @click="exportResult"
-                class="button is-success"
-              >
-                <i class="material-icons">save</i>
-                <span>Export Results</span>
-              </button>
-            </p>
-          </div>
-        </div>
+      <div class="column is-2">
+        <button class="button is-primary" @click="loadResult">
+          <i class="material-icons">cloud_upload</i>
+          <span>Import result</span>
+        </button>
       </div>
-    </nav>
+    </div>
 
     <!-- Data list -->
     <transition mode="out-in" name="slide-up">
       <!-- Show table when data is loaded -->
       <div key="table" v-if="hasResults">
+        <!-- toolbar -->
+        <nav class="level is-mobile">
+          <!-- Left side -->
+          <div class="level-left">
+            <div class="level-item">
+              <div class="field has-addons">
+                <p class="control">
+                  <button
+                    :disabled="!hasResults"
+                    @click="toggleSortOrder"
+                    class="button"
+                  >
+                    <span>Sort</span>
+                    <i
+                      v-if="sortOrder === 'asc'"
+                      class="material-icons has-pointer"
+                      >arrow_drop_up</i
+                    >
+                    <i v-else class="material-icons has-pointer"
+                      >arrow_drop_down</i
+                    >
+                  </button>
+                </p>
+                <p class="control has-icons-right">
+                  <input
+                    :disabled="!hasResults"
+                    v-model="filterQuery"
+                    class="input"
+                    placeholder="Filter By Roll No."
+                    type="text"
+                  />
+                  <span class="icon is-right">
+                    <i class="material-icons">search</i>
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right side -->
+          <div class="level-right">
+            <div class="level-item">
+              <div class="field has-addons">
+                <p class="control">
+                  <button
+                    :disabled="!hasResults"
+                    @click="exportResult"
+                    class="button is-success"
+                  >
+                    <i class="material-icons">save</i>
+                    <span>Export</span>
+                  </button>
+                </p>
+              </div>
+            </div>
+          </div>
+        </nav>
+
         <div class="scroll-container">
-          <table class="table is-bordered is-condense">
+          <table class="table is-bordered is-narrow is-hoverable is-fullwidth">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Roll No</th>
+                <th>Answer Sheet</th>
+                <th>Post</th>
+                <th>Test Center</th>
+                <th>Test Time</th>
+                <th>Question Paper Type</th>
+              </tr>
+            </thead>
             <tbody>
               <!-- TODO: finish table render -->
-              <tr for="result in filteredResults">
-                {{
-                  result
-                }}
+              <tr v-for="(result, index) in filteredResults" :key="result.id">
+                <td>{{ index + 1 }}</td>
+                <td>
+                  <input
+                    :class="{ 'is-danger': !result.rollNo }"
+                    v-model="result.rollNo"
+                    type="text"
+                    class="input is-small is-fullwidth"
+                  />
+                </td>
+                <td>
+                  <button
+                    @click="selectRow(index)"
+                    class="button is-default is-small is-fullwidth"
+                  >
+                    <span class="material-icons md-18">zoom_in</span>
+                    <span> View Image</span>
+                  </button>
+                </td>
+                <td>{{ result.post }}</td>
+                <td>{{ result.testCenter }}</td>
+                <td>{{ result.testTime }}</td>
+                <td>{{ result.questionPaperType }}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
       <!-- Show message when no data is loaded -->
-      <div key="message" v-else>
-        <article class="message is-info">
-          <div class="message-body">No data found.</div>
+      <div key="notification" v-else>
+        <br />
+        <br />
+        <article class="notification is-dark">
+          <div class="notification-body">
+            <span>
+              <i class="material-icons">info</i>
+              No data loaded.
+            </span>
+          </div>
         </article>
       </div>
     </transition>
@@ -94,12 +169,13 @@
 </template>
 
 <script>
-import modalPreview from '../components/ModalPreview'
 import { mapState, mapActions } from 'vuex'
-import { saveFile } from '../../utilities/electron-dialog'
+import modalPreview from '../components/ModalPreview'
+import { saveFile, openFile } from '../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../utilities/excel'
 import { convertImage } from '../../utilities/images'
 import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
+import CompiledResult from '../../utilities/@classes/CompiledResult'
 
 export default {
   name: 'ReviewResult',
@@ -114,14 +190,14 @@ export default {
       imageSource: null,
       sortOrder: 'asc',
       filterQuery: '',
+      resultFilePath: '',
+      compiledResult: new CompiledResult(),
     }
   },
 
   computed: {
-    ...mapState(['compiledResult']),
-
     hasResults() {
-      return this.compiledResult.getResultCount() > 0
+      return this.filteredResults.length > 0
     },
 
     selectedRow() {
@@ -142,9 +218,15 @@ export default {
         })
 
       if (this.sortOrder === 'asc') {
-        filteredCompiledResult.sort()
+        filteredCompiledResult.sort((a, b) => {
+          return parseInt(a.rollNo, 10) - parseInt(b.rollNo, 10)
+        })
       } else {
-        filteredCompiledResult.reverse()
+        filteredCompiledResult
+          .sort((a, b) => {
+            return parseInt(a.rollNo, 10) - parseInt(b.rollNo, 10)
+          })
+          .reverse()
       }
 
       return filteredCompiledResult
@@ -168,13 +250,7 @@ export default {
     window.addEventListener('keydown', this.handleKeyDown)
   },
 
-  beforeDestroy() {
-    this.clearCompiledResult()
-  },
-
   methods: {
-    ...mapActions(['clearCompiledResult']),
-
     selectRow(index) {
       this.selectedIndex = index
     },
@@ -243,6 +319,23 @@ export default {
         this.$toasted.show('File saved succesfully. ')
       })
     },
+
+    chooseResultFile() {
+      openFile([
+        {
+          name: 'Excel File',
+          extensions: Object.keys(KeyNativeEnum),
+        },
+      ]).then(file => {
+        if (!file) return
+
+        this.resultFilePath = file
+      })
+    },
+
+    loadResult() {
+      this.compiledResult = CompiledResult.loadFromExcel(this.resultFilePath)
+    },
   },
 }
 </script>
@@ -251,17 +344,21 @@ export default {
 .scroll-container {
   width: 100%;
   min-height: 296px;
-  max-height: calc(100vh - 110px);
+  max-height: calc(100vh - 140px);
   overflow: auto;
 }
 
-table.has-text-centered {
+table {
   font-size: small;
 
   th,
   td {
     text-align: left;
     vertical-align: middle;
+  }
+
+  button {
+    padding: 0.25em;
   }
 }
 </style>

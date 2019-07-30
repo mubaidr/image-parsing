@@ -3,24 +3,11 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-const store = new Vuex.Store({
-  state: {
-    compiledResult: null,
-  },
-
-  // getters: {},
-
-  // mutations: {},
-
-  actions: {
-    setCompiledResult(context, compiledResult) {
-      context.state.compiledResult = compiledResult
-    },
-
-    clearCompiledResult ( context ) {
-      context.state.compiledResult = null
-    }
-  },
-})
+const store = new Vuex.Store( {
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {},
+} )
 
 export default store

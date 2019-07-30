@@ -7,7 +7,7 @@
       Process scanned images to generate result.
     </h2>
     <div class="field">
-      <label class="label">Scanned Images Directory</label>
+      <label class="label">Scanned images directory:</label>
       <div class="file has-name is-fullwidth">
         <label class="file-label">
           <button
@@ -53,7 +53,7 @@
     <Transition mode="out-in" name="slide-up">
       <div
         v-show="isRunning"
-        class="notification is-dark botton-centered-content"
+        class="notification is-primary botton-centered-content"
       >
         <progress
           :value="progress"
@@ -73,7 +73,6 @@
 
 <script>
 import { remote } from 'electron'
-import { mapActions } from 'vuex'
 import { openDirectory, saveFile } from '../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../utilities/excel'
 import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
@@ -112,7 +111,7 @@ export default {
 
     remainingTime() {
       const ms = (this.totalImages - this.processedImages) * this.perImageTime
-      return prettyMs(ms)
+      return ms === 0 ? 'calculating...' : prettyMs(ms)
     },
   },
 
@@ -142,8 +141,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(['setCompiledResult']),
-
     startProcess() {
       this.progressState = ProgressStateEnum.RUNNING
 
@@ -202,18 +199,9 @@ export default {
 
         this.$toasted.show('File Saved successfully. ', {
           type: 'success',
-          duration: 5000,
-          keepOnHover: true,
-          action: {
-            text: 'Review Extracted Result Now',
-            onClick: (e, toast) => {
-              toast.goAway(0)
-
-              this.setCompiledResult(compiledResult)
-              this.$router.push('review')
-            },
-          },
         })
+
+        //TODO: open folder in explorer action
       })
     },
 

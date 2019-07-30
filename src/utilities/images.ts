@@ -78,7 +78,7 @@ const getRollNoFromImage = async (
   designData: IDesignData,
   img: Sharp,
   isBarcode: boolean
-): Promise<string> => {
+): Promise<string | undefined> => {
   const rollNumberCoordinates = designData.code
   const metadata = await img.metadata()
   const ratio = metadata.width ? metadata.width / designData.width : 1
@@ -118,19 +118,14 @@ const getRollNoFromImage = async (
         }
       )
 
-      rollNo = res ? res.data : ''
+      rollNo = res ? res.data : undefined
     }
   } catch {
-    rollNo = ''
+    rollNo = undefined
   }
 
   return rollNo
 }
 
-export {
-  convertImage,
-  getImagePaths,
-  logImageData,
-  getRollNoFromImage,
-  getSharpObjectFromSource,
-}
+export { convertImage, getImagePaths, logImageData, getRollNoFromImage, getSharpObjectFromSource, }
+

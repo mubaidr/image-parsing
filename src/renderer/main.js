@@ -16,7 +16,7 @@ const isDev = process.env.NODE_ENV === 'development'
 Vue.use(Toasted, {
   duration: 2500,
   Icon: 'info',
-  iconPack: 'mdi',
+  iconPack: 'material',
   position: 'bottom-center',
   type: 'info',
   // theme: 'outline',

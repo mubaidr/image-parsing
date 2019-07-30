@@ -21,19 +21,19 @@
           </p>
           <RouterLink class="button is-light" to="generate">
             <i class="material-icons">print</i>
-            <span>Generate Answer Sheets</span>
+            <span>Generate</span>
           </RouterLink>
           <RouterLink class="button is-light" to="extract">
-            <i class="material-icons">flash_on</i>
-            <span>Extract Result</span>
+            <i class="material-icons">list</i>
+            <span>Extract</span>
           </RouterLink>
           <RouterLink class="button is-light" to="review">
-            <i class="material-icons">flash_on</i>
-            <span>Review Result</span>
+            <i class="material-icons">playlist_add_check</i>
+            <span>Review</span>
           </RouterLink>
           <RouterLink class="button is-light" to="compile">
             <i class="material-icons">assessment</i>
-            <span>Compile Result</span>
+            <span>Compile</span>
           </RouterLink>
         </div>
       </div>
