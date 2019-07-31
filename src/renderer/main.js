@@ -3,6 +3,8 @@ import { ipcRenderer } from 'electron'
 import 'material-design-icons/iconfont/material-icons.css'
 import Vue from 'vue'
 import Toasted from 'vue-toasted'
+import VueVirtualScroller from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import App from './App.vue'
 import './assets/style/animations.scss'
 import './assets/style/main.scss'
@@ -17,8 +19,8 @@ Vue.use(Toasted, {
   iconPack: 'material',
   position: 'bottom-center',
   type: 'info',
-  // theme: 'outline',
 })
+Vue.use(VueVirtualScroller)
 
 Vue.config.devtools = isDev
 Vue.config.performance = isDev

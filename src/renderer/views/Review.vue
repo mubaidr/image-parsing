@@ -1,32 +1,33 @@
 <template>
   <div class="section">
-    <!-- toolbar -->
-    <div class="columns">
-      <div class="column is-6">
-        <div class="field">
-          <!-- <label class="label">Load result file for review: </label> -->
-          <div class="file has-name is-fullwidth">
-            <label class="file-label">
-              <button
-                @click="chooseResultFile"
-                class="file-input"
-                name="resume"
-              />
-              <span class="file-cta">
-                <i class="material-icons">list</i>
-                <span class="file-label">Choose File</span>
-              </span>
-              <span class="file-name">{{
-                resultFilePath || 'Please choose a excel file...'
-              }}</span>
-            </label>
+    <nav class="level is-mobile">
+      <!-- Left side -->
+      <div class="level-left">
+        <div class="level-item">
+          <div class="field">
+            <!-- <label class="label">Choose result file for review: </label> -->
+            <div class="file has-name is-fullwidth">
+              <label class="file-label">
+                <button
+                  @click="chooseResultFile"
+                  class="file-input"
+                  name="resume"
+                />
+                <span class="file-cta">
+                  <i class="material-icons">list</i>
+                  <span class="file-label"
+                    >Choose result file to load for review:
+                  </span>
+                </span>
+                <span class="file-name">{{
+                  resultFilePath || 'Please choose a excel file...'
+                }}</span>
+              </label>
+            </div>
           </div>
-          <p class="help">
-            Choose the result file (excel) to review.
-          </p>
         </div>
       </div>
-    </div>
+    </nav>
 
     <!-- Data list -->
     <transition mode="out-in" name="slide-up">
@@ -42,24 +43,20 @@
                   <button
                     :disabled="!hasResults"
                     @click="toggleSortOrder"
-                    class="button"
+                    class="button is-small"
                   >
                     <span>Sort</span>
-                    <i
-                      v-if="sortOrder === 'asc'"
-                      class="material-icons has-pointer"
+                    <i v-if="sortOrder === 'asc'" class="material-icons md-18"
                       >arrow_drop_up</i
                     >
-                    <i v-else class="material-icons has-pointer"
-                      >arrow_drop_down</i
-                    >
+                    <i v-else class="material-icons md-18">arrow_drop_down</i>
                   </button>
                 </p>
                 <p class="control has-icons-right">
                   <input
                     :disabled="!hasResults"
                     v-model="filterQuery"
-                    class="input"
+                    class="input is-small"
                     placeholder="Filter By Roll No."
                     type="text"
                   />
@@ -79,9 +76,9 @@
                   <button
                     :disabled="!hasResults"
                     @click="exportResult"
-                    class="button is-success"
+                    class="button is-success is-small"
                   >
-                    <i class="material-icons">save</i>
+                    <i class="material-icons md-18">save</i>
                     <span>Export</span>
                   </button>
                 </p>
@@ -90,47 +87,45 @@
           </div>
         </nav>
 
-        <div class="scroll-container">
-          <table class="table is-bordered is-narrow is-hoverable is-fullwidth">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Roll No</th>
-                <th>Answer Sheet</th>
-                <th>Post</th>
-                <th>Test Center</th>
-                <th>Test Time</th>
-                <th>Question Paper Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(result, index) in filteredResults" :key="result.id">
-                <td>{{ index + 1 }}</td>
-                <td>
-                  <input
-                    :class="{ 'is-danger': !result.rollNo }"
-                    v-model="result.rollNo"
-                    type="text"
-                    class="input is-small is-fullwidth"
-                  />
-                </td>
-                <td>
-                  <button
-                    @click="selectRow(index)"
-                    class="button is-default is-small is-fullwidth"
-                  >
-                    <span class="material-icons md-18">zoom_in</span>
-                    <span> View Image</span>
-                  </button>
-                </td>
-                <td>{{ result.post }}</td>
-                <td>{{ result.testCenter }}</td>
-                <td>{{ result.testTime }}</td>
-                <td>{{ result.questionPaperType }}</td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- Data display -->
+        <!-- Header -->
+        <div class="row header">
+          <div class="col is-1">#</div>
+          <div class="col is-2">Roll No</div>
+          <div class="col is-2">Image</div>
         </div>
+
+        <!-- Custom table view using recycler-->
+        <RecycleScroller
+          :items="filteredResults"
+          :item-size="24"
+          class="scroll-container"
+          key-field="id"
+        >
+          <template v-slot="{ item, index }">
+            <div class="row">
+              <div class="col is-1">{{ index + 1 }}</div>
+              <div class="col is-2">
+                <i v-if="item.rollNo" class="material-icons has-text-success">
+                  check
+                </i>
+                <i v-else class="material-icons has-text-danger">
+                  info
+                </i>
+                <span>
+                  {{ item.rollNo }}
+                </span>
+              </div>
+              <div class="col is-3">
+                <a @click="selectRow(index)" class="custom-link">
+                  <i class="material-icons">open_in_new</i>
+                  <span v-if="item.rollNo">&nbsp; &nbsp; &nbsp; View</span>
+                  <span v-else>&nbsp; &nbsp; &nbsp; View & Enter Roll No</span>
+                </a>
+              </div>
+            </div>
+          </template>
+        </RecycleScroller>
       </div>
 
       <!-- Show message when no data is loaded -->
@@ -200,12 +195,13 @@ export default {
     },
 
     filteredResults() {
+      // TODO: fix sorting
       const filteredCompiledResult = this.compiledResult
         .getResults()
         .filter(r => {
           if (!this.filterQuery) return true
 
-          return r.rollNo ? r.rollNo.indexOf(this.filterQuery) > -1 : false
+          return r.rollNo && r.rollNo.toString().includes(this.filterQuery)
         })
 
       if (this.sortOrder === 'asc') {
@@ -241,10 +237,12 @@ export default {
     window.addEventListener('keydown', this.handleKeyDown)
   },
 
-  mounted(){
-    const {resultFilePath} = this.$route.query
+  mounted() {
+    const resultFilePath =
+      this.$route.query.resultFilePath ||
+      'D:\\Current\\image-parsing\\__tests__\\test-data\\result.xlsx'
 
-    if(!resultFilePath) return
+    if (!resultFilePath) return
 
     this.resultFilePath = resultFilePath
     this.loadResult()
@@ -316,7 +314,7 @@ export default {
         if (!destination) return
 
         exportJsonToExcel(this.compiledResult, destination)
-        this.$toasted.show('File saved succesfully. ',{
+        this.$toasted.show('File saved succesfully. ', {
           icon: 'check_circle',
           type: 'success',
         })
@@ -345,24 +343,66 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.scroll-container {
-  width: 100%;
-  min-height: 296px;
-  max-height: calc(100vh - 140px);
-  overflow: auto;
+.level {
+  margin-bottom: 12px;
 }
 
-table {
-  font-size: small;
+.vue-recycle-scroller.scroll-container {
+  width: 100%;
+  height: calc(100vh - 160px);
+  border-bottom: 1px solid #dbdbdb;
+  overflow: auto;
 
-  th,
-  td {
-    text-align: left;
-    vertical-align: middle;
+  .material-icons {
+    font-size: 24px;
+  }
+}
+
+.row {
+  height: 24px;
+  width: 100%;
+  border: 1px solid #dbdbdb;
+  border-top-color: transparent;
+
+  &.header {
+    border-top-color: #dbdbdb;
+    font-weight: bold;
   }
 
-  button {
-    padding: 0.25em;
+  .col {
+    display: inline-block;
+    padding: 0 0.5em;
+
+    &.is-1 {
+      width: 10%;
+    }
+    &.is-2 {
+      width: 20%;
+    }
+    &.is-3 {
+      width: 30%;
+    }
+    &.is-4 {
+      width: 40%;
+    }
+    &.is-5 {
+      width: 50%;
+    }
+    &.is-6 {
+      width: 60%;
+    }
+    &.is-7 {
+      width: 70%;
+    }
+    &.is-8 {
+      width: 80%;
+    }
+    &.is-9 {
+      width: 90%;
+    }
+    &.is-10 {
+      width: 100%;
+    }
   }
 }
 </style>
