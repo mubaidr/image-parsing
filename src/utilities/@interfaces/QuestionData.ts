@@ -1,4 +1,4 @@
-interface IQuestionData {
+interface QuestionData {
   input: number[]
   output?: {
     [x: string]: number
@@ -6,4 +6,4 @@ interface IQuestionData {
   title?: string
 }
 
-export default IQuestionData
+export default QuestionData

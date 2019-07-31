@@ -2,9 +2,10 @@ import childProcess, { ChildProcess } from 'child_process'
 import electronLog from 'electron-log'
 import path from 'path'
 import noOfCores from 'physical-cpu-count'
+
 import Result from '../@classes/Result'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
-import IDesignData from '../@interfaces/IDesignData'
+import DesignData from '../@interfaces/DesignData'
 import CompiledResult from './CompiledResult'
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -56,7 +57,7 @@ class WorkerManager {
   }
 
   public process(
-    designData: IDesignData,
+    designData: DesignData,
     images: string[],
     callback: Function
   ): {

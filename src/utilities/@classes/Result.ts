@@ -1,16 +1,15 @@
 import uuid from 'uuid'
-import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
-import IAnswer from '../@interfaces/IAnswer'
-import IObject from '../@interfaces/IObject'
-import IResult from '../@interfaces/IResult'
 
-class Result implements IResult {
+import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
+import AnswerCollection from '../@interfaces/AnswerCollection'
+
+class Result{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
   private id: string
   private isCompiled: boolean = false
 
-  public answers: IAnswer = {}
+  public answers: AnswerCollection = {}
   public rollNo: string | undefined
   public imageFile: string | undefined
   public post: string = ''
@@ -142,7 +141,7 @@ class Result implements IResult {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static fromJson(o: IObject): Result {
+  public static fromJson(o: Record<string, any>): Result {
     const result = new Result()
     const answerRegExp = /q[0-9]{1,2}$$/im
 
@@ -159,7 +158,8 @@ class Result implements IResult {
     return result
   }
 
-  public toJson(): IObject {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public toJson(): Record<string, any> {
     const o: { [key: string]: string } = JSON.parse(JSON.stringify(this))
 
     for (const prop in this) {

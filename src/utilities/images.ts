@@ -4,9 +4,10 @@ import javascriptQRReader from 'jsqr'
 import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import uuid from 'uuid'
+
 import ImageNativeTypesEnum from './@enums/ImageNativeTypesEnum'
 import ImageTypesEnum from './@enums/ImageTypesEnum'
-import IDesignData from './@interfaces/IDesignData'
+import DesignData from './@interfaces/DesignData'
 import { cache } from './cache'
 import { dataPaths } from './dataPaths'
 
@@ -75,7 +76,7 @@ const getImagePaths = async (dir: string): Promise<string[]> => {
 }
 
 const getRollNoFromImage = async (
-  designData: IDesignData,
+  designData: DesignData,
   img: Sharp,
   isBarcode: boolean
 ): Promise<string | undefined> => {
@@ -100,7 +101,7 @@ const getRollNoFromImage = async (
   // logImageData(img)
 
   const data = await img.toBuffer()
-  let rollNo: string
+  let rollNo: string | undefined
 
   try {
     if (isBarcode) {
@@ -128,4 +129,3 @@ const getRollNoFromImage = async (
 }
 
 export { convertImage, getImagePaths, logImageData, getRollNoFromImage, getSharpObjectFromSource, }
-

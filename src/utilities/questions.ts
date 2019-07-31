@@ -1,26 +1,27 @@
 import sharp, { Sharp } from 'sharp'
+
 import CompiledResult from './@classes/CompiledResult'
 import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
-import IDesignData from './@interfaces/IDesignData'
-import IQuestionData from './@interfaces/IQuestionData'
+import DesignData from './@interfaces/DesignData'
+import QuestionData from './@interfaces/QuestionData'
 import { convertToBitArray } from './index'
 
 const getQuestionsData = async (
-  design: IDesignData,
+  design: DesignData,
   img: Sharp,
   compiledResult?: CompiledResult
-): Promise<IQuestionData[]> => {
-  const SCALE = 0.5
-  const TARGET_WIDTH = Math.floor(design.width * SCALE)
-  const TARGET_HEIGHT = Math.floor(design.height * SCALE)
+): Promise<QuestionData[]> => {
+  const scale = 0.5
+  const targetWidth = Math.floor(design.width * scale)
+  const targetHeight = Math.floor(design.height * scale)
 
   // resize if image is larger than design
-  img.resize(TARGET_WIDTH, TARGET_HEIGHT, {
+  img.resize(targetWidth, targetHeight, {
     fit: sharp.fit.inside,
     kernel: sharp.kernel.nearest,
   })
 
-  const extractedQuestionData: IQuestionData[] = []
+  const extractedQuestionData: QuestionData[] = []
   const questions = Object.entries(design.questions)
 
   for (
@@ -31,17 +32,17 @@ const getQuestionsData = async (
     const [title, q] = questions[i]
 
     img.extract({
-      left: Math.floor(q.x1 * SCALE),
-      top: Math.floor(q.y1 * SCALE),
-      width: Math.ceil((q.x2 - q.x1) * SCALE),
-      height: Math.ceil((q.y2 - q.y1) * SCALE),
+      left: Math.floor(q.x1 * scale),
+      top: Math.floor(q.y1 * scale),
+      width: Math.ceil((q.x2 - q.x1) * scale),
+      height: Math.ceil((q.y2 - q.y1) * scale),
     })
 
     // log image
     // logImageData(img, title)
 
     const { data, info } = await img.toBuffer({ resolveWithObject: true })
-    const binaryData = convertToBitArray([...data], info.channels)
+    const binaryData = convertToBitArray(Array.prototype.slice.call(data, 0), info.channels)
 
     // for training purpose
     if (compiledResult) {

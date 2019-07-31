@@ -1,4 +1,4 @@
-interface INNQuestionOutput {
+interface NNQuestionOutput {
   [key: string]: number
   '*': number
   '?': number
@@ -9,4 +9,4 @@ interface INNQuestionOutput {
   E: number
 }
 
-export default INNQuestionOutput
+export default NNQuestionOutput

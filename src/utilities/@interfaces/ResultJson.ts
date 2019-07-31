@@ -1,4 +1,4 @@
-interface IResultJson {
+interface ResultJson {
   [key: string]: string | object | undefined
 
   answers: {
@@ -7,4 +7,4 @@ interface IResultJson {
   }
 }
 
-export default IResultJson
+export default ResultJson

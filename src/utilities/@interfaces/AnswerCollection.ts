@@ -1,4 +1,4 @@
-interface IAnswer {
+interface AnswerCollection {
   [key: string]: {
     value: string
     unattempted?: boolean
@@ -7,4 +7,4 @@ interface IAnswer {
   }
 }
 
-export default IAnswer
+export default AnswerCollection

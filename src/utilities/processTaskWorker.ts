@@ -1,14 +1,14 @@
 import Result from './@classes/Result'
 import ProgressStateEnum from './@enums/ProgressStateEnum'
 import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
-import IDesignData from './@interfaces/IDesignData'
-import INNQuestionOutput from './@interfaces/INNQuestionOutput'
+import DesignData from './@interfaces/DesignData'
+import NNQuestionOutput from './@interfaces/NNQuestionOutput'
 import { getRollNoFromImage, getSharpObjectFromSource } from './images'
 import { getQuestionsNeuralNet } from './index'
 import { getQuestionsData } from './questions'
 
 const processTask = async (
-  designData: IDesignData,
+  designData: DesignData,
   images: string[]
 ): Promise<Result[] | undefined> => {
   const neuralNet = getQuestionsNeuralNet()
@@ -31,7 +31,7 @@ const processTask = async (
       j += 1
     ) {
       const { title, input } = questionsData[j]
-      const pre = neuralNet.run<number[], INNQuestionOutput>(input)
+      const pre = neuralNet.run<number[], NNQuestionOutput>(input)
       let value: string
 
       if (!title) {

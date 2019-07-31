@@ -1,10 +1,11 @@
 import * as cheerio from 'cheerio'
 import fs from 'fs'
+
 import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
 import StringPatternEnum from './@enums/StringPatternEnum'
-import IDesignData from './@interfaces/IDesignData'
-import ILocation from './@interfaces/ILocation'
-import IQuestionsLocations from './@interfaces/IQuestionsLocations'
+import DesignData from './@interfaces/DesignData'
+import Location from './@interfaces/Location'
+import QuestionsLocations from './@interfaces/QuestionsLocations'
 
 const getPatternGroup = (str: string): string => {
   const QUESTION_PATTERN = new RegExp(/(q[1-9][0-9]?[ad])\b/gi)
@@ -26,12 +27,12 @@ const getPatternGroup = (str: string): string => {
   return StringPatternEnum.NONE
 }
 
-const getDesignData = (file: string): IDesignData => {
+const getDesignData = (file: string): DesignData => {
   const $ = cheerio.load(fs.readFileSync(file, 'utf8'))
   const svgViewBox = $('svg')[0].attribs.viewBox.split(' ')
 
-  let questions: IQuestionsLocations = {}
-  let code: ILocation = { x1: 0, y1: 0, x2: 0, y2: 0 }
+  let questions: QuestionsLocations = {}
+  let code: Location = { x1: 0, y1: 0, x2: 0, y2: 0 }
 
   let x
   let y

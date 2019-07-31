@@ -1,6 +1,4 @@
-import ICache from '../@interfaces/ICache'
-
-class Cache implements ICache {
+class Cache {
   private list: {
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     [key: string]: any
