@@ -24,7 +24,7 @@
         </label>
       </div>
       <p class="help">
-        Choose the directory which contains scanned answer sheets.
+        Choose the directory which contains scanned answer sheet files.
       </p>
     </div>
 
@@ -152,6 +152,7 @@ export default {
         .catch(err => {
           this.$toasted.show(err, {
             type: 'error',
+            icon: 'info'
           })
         })
     },
@@ -179,6 +180,7 @@ export default {
         case ProgressStateEnum.ERROR:
           this.$toasted.show(m.error, {
             type: 'error',
+            icon: 'info'
           })
           break
       }
@@ -197,11 +199,20 @@ export default {
 
         exportJsonToExcel(compiledResult, destination)
 
-        this.$toasted.show('File Saved successfully. ', {
+        this.$toasted.show('Result exported successfully. ', {
+          icon: 'check_circle',
           type: 'success',
+          duration: 5000,
+          keepOnHover: true,
+          action: {
+            text: 'Open for Review',
+            class: 'has-text-white has-text-underlined',
+            onClick: (e, toastObject) => {
+              toastObject.goAway(0)
+              this.$router.push(`review?resultFilePath=${ destination }`)
+            },
+          },
         })
-
-        //TODO: open folder in explorer action
       })
     },
 

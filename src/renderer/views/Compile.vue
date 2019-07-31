@@ -159,7 +159,10 @@ export default {
         if(!destination) return
 
         exportJsonToExcel(results, destination)
-        this.$toasted.show('File saved succesfully. ')
+        this.$toasted.show('File saved succesfully. ',{
+          icon: 'check_circle',
+          type: 'success',
+        })
       })
     },
   },

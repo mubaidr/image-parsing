@@ -1,3 +1,37 @@
 {
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "files.exclude": {
+    "**/.tmp": true,
+    "**/build": true,
+    "**/dist": true
+  },
+  "files.watcherExclude": {
+    "**/.tmp/**": true,
+    "**/build/**": true,
+    "**/dist/**": true
+  },
+  "search.exclude": {
+    "**/.tmp": true,
+    "**/build": true,
+    "**/dist": true
+  },
+  "todo.file.exclude": [
+    "**/.!(todo|todos|task|tasks)/**",
+    "**/_output/**",
+    "**/bower_components/**",
+    "**/build/**",
+    "**/dist/**",
+    "**/node_modules/**",
+    "**/out/**",
+    "**/output/**",
+    "**/release/**",
+    "**/releases/**",
+    "**/static/**",
+    "**/target/**",
+    "**/third_party/**",
+    "**/vendor/**",
+    "**/build/**",
+    "**/dist/**",
+    "**/.tmp/**"
+  ]
 }

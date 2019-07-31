@@ -26,12 +26,6 @@
           </p>
         </div>
       </div>
-      <div class="column is-2">
-        <button class="button is-primary" @click="loadResult">
-          <i class="material-icons">cloud_upload</i>
-          <span>Import result</span>
-        </button>
-      </div>
     </div>
 
     <!-- Data list -->
@@ -110,7 +104,6 @@
               </tr>
             </thead>
             <tbody>
-              <!-- TODO: finish table render -->
               <tr v-for="(result, index) in filteredResults" :key="result.id">
                 <td>{{ index + 1 }}</td>
                 <td>
@@ -139,12 +132,11 @@
           </table>
         </div>
       </div>
+
       <!-- Show message when no data is loaded -->
-      <div key="notification" v-else>
-        <br />
-        <br />
-        <article class="notification is-dark">
-          <div class="notification-body">
+      <div key="message" v-else>
+        <article class="message is-light">
+          <div class="message-body">
             <span>
               <i class="material-icons">info</i>
               No data loaded.
@@ -169,7 +161,6 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
 import modalPreview from '../components/ModalPreview'
 import { saveFile, openFile } from '../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../utilities/excel'
@@ -250,6 +241,15 @@ export default {
     window.addEventListener('keydown', this.handleKeyDown)
   },
 
+  mounted(){
+    const {resultFilePath} = this.$route.query
+
+    if(!resultFilePath) return
+
+    this.resultFilePath = resultFilePath
+    this.loadResult()
+  },
+
   methods: {
     selectRow(index) {
       this.selectedIndex = index
@@ -288,7 +288,7 @@ export default {
       if (this.selectedIndex === null) return
 
       if (e.shiftKey) {
-        if (e.key === 'Tab') this.selectPreviousRow()
+        if (e.key === 'Tab' || e.key === 'Enter') this.selectPreviousRow()
 
         return
       }
@@ -316,7 +316,10 @@ export default {
         if (!destination) return
 
         exportJsonToExcel(this.compiledResult, destination)
-        this.$toasted.show('File saved succesfully. ')
+        this.$toasted.show('File saved succesfully. ',{
+          icon: 'check_circle',
+          type: 'success',
+        })
       })
     },
 
@@ -330,6 +333,7 @@ export default {
         if (!file) return
 
         this.resultFilePath = file
+        this.loadResult()
       })
     },
 
