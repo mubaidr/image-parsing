@@ -72,15 +72,13 @@
 </template>
 
 <script>
-import { remote } from 'electron'
+import { currentWindow } from '../../utilities/electron-utilities'
 import { openDirectory, saveFile } from '../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../utilities/excel'
 import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
 import * as processingModule from '../../utilities/process'
 import ProgressStateEnum from '../../utilities/@enums/ProgressStateEnum'
 import prettyMs from 'pretty-ms'
-
-const mainWindow = remote.getCurrentWindow()
 
 export default {
   name: 'ExtractResult',
@@ -119,19 +117,19 @@ export default {
     // set taskbar progress
     processedImages(val) {
       if (val < this.totalImages) {
-        mainWindow.setProgressBar(val / this.totalImages)
+        currentWindow.setProgressBar(val / this.totalImages)
       } else {
-        mainWindow.setProgressBar(0)
+        currentWindow.setProgressBar(0)
 
         // flash taskbar icon
-        if (mainWindow.isFocused()) {
+        if (currentWindow.isFocused()) {
           window.setTimeout(() => {
-            mainWindow.flashFrame(false)
+            currentWindow.flashFrame(false)
           }, 1000)
         } else {
-          mainWindow.once('focus', () => mainWindow.flashFrame(false))
+          currentWindow.once('focus', () => currentWindow.flashFrame(false))
         }
-        mainWindow.flashFrame(true)
+        currentWindow.flashFrame(true)
       }
     },
   },
@@ -152,7 +150,7 @@ export default {
         .catch(err => {
           this.$toasted.show(err, {
             type: 'error',
-            icon: 'info'
+            icon: 'info',
           })
         })
     },
@@ -173,14 +171,14 @@ export default {
           this.processedImages += 1
           break
         case ProgressStateEnum.COMPLETED:
-          mainWindow.setProgressBar(0)
+          currentWindow.setProgressBar(0)
           this.stopProcess()
           this.exportData(m.compiledResult)
           break
         case ProgressStateEnum.ERROR:
           this.$toasted.show(m.error, {
             type: 'error',
-            icon: 'info'
+            icon: 'info',
           })
           break
       }

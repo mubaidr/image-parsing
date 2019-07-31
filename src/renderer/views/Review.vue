@@ -29,6 +29,8 @@
       </div>
     </nav>
 
+    <br />
+
     <!-- Data list -->
     <transition mode="out-in" name="slide-up">
       <!-- Show table when data is loaded -->
@@ -71,18 +73,24 @@
           <!-- Right side -->
           <div class="level-right">
             <div class="level-item">
-              <div class="field has-addons">
-                <p class="control">
-                  <button
-                    :disabled="!hasResults"
-                    @click="exportResult"
-                    class="button is-success is-small"
-                  >
-                    <i class="material-icons md-18">save</i>
-                    <span>Export</span>
-                  </button>
-                </p>
-              </div>
+              <p class="control">
+                <button class="button is-success is-small">
+                  <i class="material-icons md-18">save</i>
+                  <span>Save</span>
+                </button>
+              </p>
+            </div>
+            <div class="level-item">
+              <p class="control">
+                <button
+                  :disabled="!hasResults"
+                  @click="exportResult"
+                  class="button is-success is-small"
+                >
+                  <i class="material-icons md-18">cloud_download</i>
+                  <span>Export</span>
+                </button>
+              </p>
             </div>
           </div>
         </nav>
@@ -117,11 +125,15 @@
                 </span>
               </div>
               <div class="col is-3">
-                <a @click="selectRow(index)" class="custom-link">
+                <button
+                  :disabled="!item.imageFile"
+                  @click="selectRow(index)"
+                  class="button is-default is-small custom-link"
+                >
                   <i class="material-icons">open_in_new</i>
-                  <span v-if="item.rollNo">&nbsp; &nbsp; &nbsp; View</span>
-                  <span v-else>&nbsp; &nbsp; &nbsp; View & Enter Roll No</span>
-                </a>
+                  <span v-if="item.rollNo">View</span>
+                  <span v-else>View & Enter Roll No</span>
+                </button>
               </div>
             </div>
           </template>
@@ -349,7 +361,7 @@ export default {
 
 .vue-recycle-scroller.scroll-container {
   width: 100%;
-  height: calc(100vh - 160px);
+  height: calc(100vh - 190px);
   border-bottom: 1px solid #dbdbdb;
   overflow: auto;
 
@@ -363,6 +375,7 @@ export default {
   width: 100%;
   border: 1px solid #dbdbdb;
   border-top-color: transparent;
+  overflow: hidden;
 
   &.header {
     border-top-color: #dbdbdb;
@@ -372,6 +385,7 @@ export default {
   .col {
     display: inline-block;
     padding: 0 0.5em;
+    height: 24px !important;
 
     &.is-1 {
       width: 10%;
