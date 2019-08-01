@@ -78,6 +78,8 @@ class CompiledResult {
       }
     })
 
+    compiledResult.sortResults()
+
     return compiledResult
   }
 
@@ -95,6 +97,8 @@ class CompiledResult {
       }
     })
 
+    this.sortResults()
+
     return this
   }
 
@@ -102,7 +106,10 @@ class CompiledResult {
     const compiledResult = new CompiledResult()
 
     compiledResults.forEach(cr => {
-      compiledResult.addKeys(cr.getKeys()).addResults(cr.getResults())
+      compiledResult
+        .addKeys(cr.getKeys())
+        .addResults(cr.getResults())
+        .sortResults()
     })
 
     return compiledResult
@@ -113,9 +120,11 @@ class CompiledResult {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const obj: any[] = []
 
-    this.results.forEach(result => {
-      obj.push(result.toJson())
-    })
+    this.sortResults()
+      .getResults()
+      .forEach(result => {
+        obj.push(result.toJson())
+      })
 
     return obj
   }
@@ -125,11 +134,28 @@ class CompiledResult {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const obj: any[] = []
 
-    compiledResult.results.forEach(result => {
-      obj.push(result.toJson())
-    })
+    compiledResult
+      .sortResults()
+      .getResults()
+      .forEach(result => {
+        obj.push(result.toJson())
+      })
 
     return obj
+  }
+
+  public sortResults(): CompiledResult {
+    this.results.sort((a, b) => {
+      return a.rollNo ? a.rollNo.toString().localeCompare(b.rollNo || '') : 1
+    })
+
+    return this
+  }
+
+  public reverseResults(): CompiledResult {
+    this.results.reverse()
+
+    return this
   }
 }
 

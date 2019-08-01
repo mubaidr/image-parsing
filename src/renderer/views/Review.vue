@@ -1,20 +1,55 @@
 <template>
   <div class="section">
-    <div class="field">
-      <!-- <label class="label">Choose result file for review: </label> -->
-      <div class="file has-name is-fullwidth">
-        <label class="file-label">
-          <button @click="chooseResultFile" class="file-input" name="resume" />
-          <span class="file-cta">
-            <i class="material-icons">list</i>
-            <span class="file-label">Choose Result File for Review: </span>
-          </span>
-          <span class="file-name">{{
-            resultFilePath || 'Please choose a excel file...'
-          }}</span>
-        </label>
+    <nav class="level is-mobile">
+      <!-- Left side -->
+      <div class="level-left">
+        <div class="level-item">
+          <div class="field">
+            <!-- <label class="label">Choose result file for review: </label> -->
+            <div class="file has-name">
+              <label class="file-label">
+                <button
+                  @click="chooseResultFile"
+                  class="file-input"
+                  name="resume"
+                />
+                <span class="file-cta">
+                  <i class="material-icons">list</i>
+                  <span class="file-label">Choose Result File: </span>
+                </span>
+                <span class="file-name">{{
+                  resultFilePath || 'Please choose a excel file...'
+                }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <!-- Right side -->
+      <div class="level-right">
+        <div class="level-item">
+          <p class="control">
+            <button class="button is-dark">
+              <i class="material-icons md-18">save</i>
+              <span>Save</span>
+            </button>
+          </p>
+        </div>
+        <div class="level-item">
+          <p class="control">
+            <button
+              :disabled="!hasResults"
+              @click="exportResult"
+              class="button is-success"
+            >
+              <i class="material-icons md-18">cloud_download</i>
+              <span>Export</span>
+            </button>
+          </p>
+        </div>
+      </div>
+    </nav>
 
     <br />
 
@@ -26,6 +61,22 @@
         <nav class="level is-mobile">
           <!-- Left side -->
           <div class="level-left">
+            <div class="level-item">
+              <div class="field">
+                <div class="select is-small">
+                  <select v-model="showAllResults">
+                    <option :value="true">Show all results</option>
+                    <option :value="false"
+                      >Show results with missing roll numbers</option
+                    >
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right side -->
+          <div class="level-right">
             <div class="level-item">
               <div class="field has-addons">
                 <p class="control">
@@ -41,7 +92,7 @@
                     <i v-else class="material-icons md-18">arrow_drop_down</i>
                   </button>
                 </p>
-                <p class="control has-icons-right">
+                <p class="control">
                   <input
                     :disabled="!hasResults"
                     v-model="filterQuery"
@@ -49,35 +100,8 @@
                     placeholder="Filter By Roll No."
                     type="text"
                   />
-                  <span class="icon is-right">
-                    <i class="material-icons">search</i>
-                  </span>
                 </p>
               </div>
-            </div>
-          </div>
-
-          <!-- Right side -->
-          <div class="level-right">
-            <div class="level-item">
-              <p class="control">
-                <button class="button is-light is-small">
-                  <i class="material-icons md-18">save</i>
-                  <span>Save</span>
-                </button>
-              </p>
-            </div>
-            <div class="level-item">
-              <p class="control">
-                <button
-                  :disabled="!hasResults"
-                  @click="exportResult"
-                  class="button is-success is-small"
-                >
-                  <i class="material-icons md-18">cloud_download</i>
-                  <span>Export</span>
-                </button>
-              </p>
             </div>
           </div>
         </nav>
@@ -123,7 +147,7 @@
                 >
                   <i class="material-icons">pageview</i>
                   <span v-if="item.rollNo">View</span>
-                  <span v-else class="">Enter Roll No</span>
+                  <span v-else class="">Input Roll No</span>
                 </a>
                 <span v-else>
                   Image Source Not available
@@ -156,6 +180,8 @@
         v-if="selectedRow"
       />
     </Transition>
+
+    {{ showAllResults }}
   </div>
 </template>
 
@@ -180,14 +206,15 @@ export default {
       imageSource: null,
       sortOrder: 'asc',
       filterQuery: '',
-      resultFilePath: '',
+      resultFilePath: null,
+      showAllResults: true,
       compiledResult: new CompiledResult(),
     }
   },
 
   computed: {
     hasResults() {
-      return this.filteredResults.length > 0
+      return this.compiledResult.getResults().length > 0
     },
 
     selectedRow() {
@@ -199,28 +226,17 @@ export default {
     },
 
     filteredResults() {
-      // TODO: fix sorting
-      const filteredCompiledResult = this.compiledResult
-        .getResults()
-        .filter(r => {
-          if (!this.filterQuery) return true
+      let results = this.compiledResult.getResults()
 
+      if (this.filterQuery) {
+        return results.filter(r => {
           return r.rollNo && r.rollNo.toString().includes(this.filterQuery)
         })
-
-      if (this.sortOrder === 'asc') {
-        filteredCompiledResult.sort((a, b) => {
-          return parseInt(a.rollNo, 10) - parseInt(b.rollNo, 10)
-        })
       } else {
-        filteredCompiledResult
-          .sort((a, b) => {
-            return parseInt(a.rollNo, 10) - parseInt(b.rollNo, 10)
-          })
-          .reverse()
-      }
+        if (this.showAllResults) return results
 
-      return filteredCompiledResult
+        return results.filter(r => !r.rollNo)
+      }
     },
   },
 
@@ -282,8 +298,8 @@ export default {
     },
 
     toggleSortOrder() {
-      if (this.sortOrder === 'asc') this.sortOrder = 'desc'
-      else this.sortOrder = 'asc'
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'
+      this.compiledResult.reverseResults()
     },
 
     handleKeyDown(e) {
@@ -332,11 +348,19 @@ export default {
           extensions: Object.keys(KeyNativeEnum),
         },
       ]).then(file => {
-        if (!file) return
+        if (!file) {
+          this.clearResult()
+
+          return
+        }
 
         this.resultFilePath = file
         this.loadResult()
       })
+    },
+
+    clearResult() {
+      this.compiledResult = new CompiledResult()
     },
 
     loadResult() {
