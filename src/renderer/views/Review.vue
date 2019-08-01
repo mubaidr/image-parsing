@@ -1,33 +1,20 @@
 <template>
   <div class="section">
-    <nav class="level is-mobile">
-      <!-- Left side -->
-      <div class="level-left">
-        <div class="level-item">
-          <div class="field">
-            <!-- <label class="label">Choose result file for review: </label> -->
-            <div class="file has-name is-fullwidth">
-              <label class="file-label">
-                <button
-                  @click="chooseResultFile"
-                  class="file-input"
-                  name="resume"
-                />
-                <span class="file-cta">
-                  <i class="material-icons">list</i>
-                  <span class="file-label"
-                    >Choose result file to load for review:
-                  </span>
-                </span>
-                <span class="file-name">{{
-                  resultFilePath || 'Please choose a excel file...'
-                }}</span>
-              </label>
-            </div>
-          </div>
-        </div>
+    <div class="field">
+      <!-- <label class="label">Choose result file for review: </label> -->
+      <div class="file has-name is-fullwidth">
+        <label class="file-label">
+          <button @click="chooseResultFile" class="file-input" name="resume" />
+          <span class="file-cta">
+            <i class="material-icons">list</i>
+            <span class="file-label">Choose Result File for Review: </span>
+          </span>
+          <span class="file-name">{{
+            resultFilePath || 'Please choose a excel file...'
+          }}</span>
+        </label>
       </div>
-    </nav>
+    </div>
 
     <br />
 
@@ -74,7 +61,7 @@
           <div class="level-right">
             <div class="level-item">
               <p class="control">
-                <button class="button is-success is-small">
+                <button class="button is-light is-small">
                   <i class="material-icons md-18">save</i>
                   <span>Save</span>
                 </button>
@@ -100,7 +87,7 @@
         <div class="row header">
           <div class="col is-1">#</div>
           <div class="col is-2">Roll No</div>
-          <div class="col is-2">Image</div>
+          <div class="col is-3">Answer Sheet Image</div>
         </div>
 
         <!-- Custom table view using recycler-->
@@ -112,28 +99,35 @@
         >
           <template v-slot="{ item, index }">
             <div class="row">
-              <div class="col is-1">{{ index + 1 }}</div>
+              <div class="col is-1">
+                <span>
+                  {{ index + 1 }}
+                </span>
+              </div>
               <div class="col is-2">
-                <i v-if="item.rollNo" class="material-icons has-text-success">
-                  check
+                <i v-if="!item.rollNo" class="material-icons has-text-danger">
+                  report_problem
                 </i>
-                <i v-else class="material-icons has-text-danger">
-                  info
+                <i v-else class="material-icons has-text-success">
+                  check
                 </i>
                 <span>
                   {{ item.rollNo }}
                 </span>
               </div>
               <div class="col is-3">
-                <button
-                  :disabled="!item.imageFile"
+                <a
                   @click="selectRow(index)"
-                  class="button is-default is-small custom-link"
+                  v-if="item.imageFile"
+                  class="custom-link"
                 >
-                  <i class="material-icons">open_in_new</i>
+                  <i class="material-icons">pageview</i>
                   <span v-if="item.rollNo">View</span>
-                  <span v-else>View & Enter Roll No</span>
-                </button>
+                  <span v-else class="">Enter Roll No</span>
+                </a>
+                <span v-else>
+                  Image Source Not available
+                </span>
               </div>
             </div>
           </template>
@@ -144,10 +138,8 @@
       <div key="message" v-else>
         <article class="message is-light">
           <div class="message-body">
-            <span>
-              <i class="material-icons">info</i>
-              No data loaded.
-            </span>
+            <i class="material-icons">info</i>
+            <span>No data loaded.</span>
           </div>
         </article>
       </div>
@@ -361,34 +353,38 @@ export default {
 
 .vue-recycle-scroller.scroll-container {
   width: 100%;
-  height: calc(100vh - 190px);
+  height: calc(100vh - 200px);
   border-bottom: 1px solid #dbdbdb;
   overflow: auto;
+  font-size: small;
 
-  .material-icons {
-    font-size: 24px;
+  * {
+    vertical-align: middle;
   }
 }
 
 .row {
-  height: 24px;
+  height: 24px !important;
   width: 100%;
   border: 1px solid #dbdbdb;
   border-top-color: transparent;
-  overflow: hidden;
 
   &.header {
     border-top-color: #dbdbdb;
     font-weight: bold;
+    font-size: small;
+
+    * {
+      vertical-align: middle;
+    }
   }
 
   .col {
     display: inline-block;
     padding: 0 0.5em;
-    height: 24px !important;
 
     &.is-1 {
-      width: 10%;
+      width: 5%;
     }
     &.is-2 {
       width: 20%;
