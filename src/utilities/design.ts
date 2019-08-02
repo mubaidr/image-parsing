@@ -1,127 +1,83 @@
-import * as cheerio from 'cheerio'
-import fs from 'fs'
+import { parse } from 'fast-xml-parser'
+import { readFileSync } from 'fs'
 
-import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
-import StringPatternEnum from './@enums/StringPatternEnum'
+import RegExpPatterns from './@enums/RegExpPatterns'
 import DesignData from './@interfaces/DesignData'
 import Location from './@interfaces/Location'
 import QuestionsLocations from './@interfaces/QuestionsLocations'
 
-const getPatternGroup = (str: string): string => {
-  const QUESTION_PATTERN = new RegExp(/(q[1-9][0-9]?[ad])\b/gi)
-  const PATTERN_BARCODE = new RegExp(/barcode/gi)
-  const PATTERN_QR = new RegExp(/qrcode/gi)
-
-  if (QUESTION_PATTERN.test(str)) {
-    return StringPatternEnum.QUESTION
-  }
-
-  if (PATTERN_BARCODE.test(str)) {
-    return StringPatternEnum.BARCODE
-  }
-
-  if (PATTERN_QR.test(str)) {
-    return StringPatternEnum.QRCODE
-  }
-
-  return StringPatternEnum.NONE
-}
-
 const getDesignData = (file: string): DesignData => {
-  const $ = cheerio.load(fs.readFileSync(file, 'utf8'))
-  const svgViewBox = $('svg')[0].attribs.viewBox.split(' ')
+  const { svg } = parse(readFileSync(file).toString(), {
+    attributeNamePrefix: '',
+    ignoreAttributes: false,
+    parseNodeValue: true,
+    parseAttributeValue: true,
+    allowBooleanAttributes: true,
+  })
 
-  let questions: QuestionsLocations = {}
+  // TODO: fix the box siz calculations obtained from svg
+  console.log(svg)
+
+  // get width, height from viewbox
+  const [x1, y1, x2, y2] = svg.viewBox
+    .split(' ')
+    .map((i: string) => parseInt(i, 10))
+  const width = x2 - x1
+  const height = y2 - y1
+
+  // prepare pattern matching reg expressions
+  const PATTERN_QUESTION = new RegExp(RegExpPatterns.QUESTION, 'i')
+  const PATTERN_BARCODE = new RegExp(RegExpPatterns.BARCODE, 'i')
+  const PATTERN_QRCODE = new RegExp(RegExpPatterns.QRCODE, 'i')
+
+  // for export
+  const questions: QuestionsLocations = {}
   let code: Location = { x1: 0, y1: 0, x2: 0, y2: 0 }
 
-  let x
-  let y
-  let rx
-  let ry
-  let width
-  let height
-  let left
-  let top
-  const groups = $('g')
+  // local vars
+  let x = 0
+  let y = 0
+  let rx = 0
+  let ry = 0
+  let w = 0
+  let h = 0
+  let xTransform = 0
+  let yTransform = 0
 
-  // tslint:disable-next-line
-  for (let i = 0; i < groups.length; i += 1) {
-    const group = groups[i]
-    const titleCheerio = $(group)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  svg.g.forEach((group: any) => {
+    const { title, transform, rect } = group
 
-    const title = (
-      titleCheerio
-        .find('title')
-        .first()
-        .html() || ''
-    )
-      .trim()
-      .toUpperCase()
-
-    if (!title) {
-      continue
+    if (rect) {
+      ;({ x, y, width: w, height: h, rx, ry } = rect)
     }
 
-    const transform = $(group)
-      .attr('transform')
-      .replace(/(translate)|\(|\)/gi, '')
-      .split(',')
-      .map(val => parseInt(val, 10) || 0)
-
-    const rect = $(group)
-      .find('rect')
-      .first()
-
-    left = parseInt(rect.attr('x'), 10) || 0
-    top = parseInt(rect.attr('y'), 10) || 0
-
-    rx = parseInt(rect.attr('rx'), 10) || 0
-    ry = parseInt(rect.attr('ry'), 10) || 0
-
-    x = left - rx + transform[0]
-    y = top - ry + transform[1]
-
-    width = parseInt(rect.attr('width'), 10) || 0 + rx
-    height = parseInt(rect.attr('height'), 10) || 0 + ry
-
-    let questionNumber: string
-    let optionTitle: string
-    const PATTERN = getPatternGroup(title)
-
-    switch (PATTERN) {
-      case StringPatternEnum.QUESTION:
-        optionTitle = title.slice(-1)
-        questionNumber = title.slice(0, -1)
-
-        if (!questions[questionNumber]) {
-          questions[questionNumber] = { x1: 0, y1: 0, x2: 0, y2: 0 }
-        }
-
-        if (optionTitle === QuestionOptionsEnum.A) {
-          questions[questionNumber].x1 = x - 1
-          questions[questionNumber].y1 = y - 1
-        } else {
-          // donot check last option to suport any number of options
-          questions[questionNumber].x2 = x + width + 1
-          questions[questionNumber].y2 = y + height + 1
-        }
-        break
-      case StringPatternEnum.BARCODE:
-      case StringPatternEnum.QRCODE:
-        code = { x1: x, y1: y, x2: x + width, y2: y + height }
-        break
-      default:
-        break
+    if (transform) {
+      ;[xTransform, yTransform] = transform
+        .replace(/(translate)|\(|\)/gi, '')
+        .split(',')
+        .map((val: string) => parseInt(val, 10) || 0)
     }
-  }
+
+    const x1 = x + rx + xTransform
+    const y1 = y + ry + yTransform
+
+    const location = { x1: x1, y1: y1, x2: x1 + w, y2: y1 + h }
+
+    if (PATTERN_QUESTION.test(title)) {
+      questions[title] = location
+    }
+
+    if (PATTERN_BARCODE.test(title) || PATTERN_QRCODE.test(title)) {
+      code = location
+    }
+  })
 
   return {
     code,
     questions,
-    width: Math.ceil(parseInt(svgViewBox[2], 10) - parseInt(svgViewBox[0], 10)),
-    height: Math.ceil(
-      parseInt(svgViewBox[3], 10) - parseInt(svgViewBox[1], 10)
-    ),
+    width,
+    height,
   }
 }
 

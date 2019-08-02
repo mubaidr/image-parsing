@@ -1,4 +1,4 @@
-export enum ImageNativeTypesEnum {
+enum ImageNativeTypesEnum {
   'bmp' = 'bmp',
   'gif' = 'gif',
   'jfif' = 'jfif',
