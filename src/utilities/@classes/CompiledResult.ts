@@ -146,7 +146,7 @@ class CompiledResult {
 
   public sortResults(): CompiledResult {
     this.results.sort((a, b) => {
-      return a.rollNo ? a.rollNo.toString().localeCompare(b.rollNo || '') : 1
+      return parseInt(a.rollNo || '0', 10) - parseInt(b.rollNo || '0', 10)
     })
 
     return this

@@ -30,7 +30,7 @@
       <div class="level-right">
         <div class="level-item">
           <p class="control">
-            <button class="button is-dark">
+            <button @click="saveResult" class="button is-dark">
               <i class="material-icons md-18">save</i>
               <span>Save</span>
             </button>
@@ -38,11 +38,7 @@
         </div>
         <div class="level-item">
           <p class="control">
-            <button
-              :disabled="!hasResults"
-              @click="exportResult"
-              class="button is-success"
-            >
+            <button @click="exportResult" class="button is-success">
               <i class="material-icons md-18">cloud_download</i>
               <span>Export</span>
             </button>
@@ -109,9 +105,9 @@
         <!-- Data display -->
         <!-- Header -->
         <div class="row header">
-          <div class="col is-1">#</div>
-          <div class="col is-2">Roll No</div>
-          <div class="col is-3">Answer Sheet Image</div>
+          <div class="col">#</div>
+          <div class="col">Roll No</div>
+          <div class="col">Answer Sheet Image</div>
         </div>
 
         <!-- Custom table view using recycler-->
@@ -123,12 +119,12 @@
         >
           <template v-slot="{ item, index }">
             <div class="row">
-              <div class="col is-1">
+              <div class="col">
                 <span>
                   {{ index + 1 }}
                 </span>
               </div>
-              <div class="col is-2">
+              <div class="col">
                 <i v-if="!item.rollNo" class="material-icons has-text-danger">
                   report_problem
                 </i>
@@ -139,7 +135,7 @@
                   {{ item.rollNo }}
                 </span>
               </div>
-              <div class="col is-3">
+              <div class="col">
                 <a
                   @click="selectRow(index)"
                   v-if="item.imageFile"
@@ -180,8 +176,6 @@
         v-if="selectedRow"
       />
     </Transition>
-
-    {{ showAllResults }}
   </div>
 </template>
 
@@ -324,23 +318,6 @@ export default {
       }
     },
 
-    exportResult() {
-      saveFile([
-        {
-          name: 'Excel File',
-          extensions: Object.keys(KeyNativeEnum).reverse(),
-        },
-      ]).then(destination => {
-        if (!destination) return
-
-        exportJsonToExcel(this.compiledResult, destination)
-        this.$toasted.show('File saved succesfully. ', {
-          icon: 'check_circle',
-          type: 'success',
-        })
-      })
-    },
-
     chooseResultFile() {
       openFile([
         {
@@ -363,6 +340,31 @@ export default {
       this.compiledResult = new CompiledResult()
     },
 
+    saveResult() {
+      exportJsonToExcel(this.compiledResult, this.resultFilePath)
+      this.$toasted.show('File saved succesfully. ', {
+        icon: 'check_circle',
+        type: 'success',
+      })
+    },
+
+    exportResult() {
+      saveFile([
+        {
+          name: 'Excel File',
+          extensions: Object.keys(KeyNativeEnum).reverse(),
+        },
+      ]).then(destination => {
+        if (!destination) return
+
+        exportJsonToExcel(this.compiledResult, destination)
+        this.$toasted.show('File saved succesfully. ', {
+          icon: 'check_circle',
+          type: 'success',
+        })
+      })
+    },
+
     loadResult() {
       this.compiledResult = CompiledResult.loadFromExcel(this.resultFilePath)
     },
@@ -375,68 +377,38 @@ export default {
   margin-bottom: 12px;
 }
 
-.vue-recycle-scroller.scroll-container {
-  width: 100%;
-  height: calc(100vh - 200px);
-  border-bottom: 1px solid #dbdbdb;
-  overflow: auto;
-  font-size: small;
-
-  * {
-    vertical-align: middle;
-  }
-}
-
 .row {
   height: 24px !important;
   width: 100%;
   border: 1px solid #dbdbdb;
   border-top-color: transparent;
 
+  * {
+    vertical-align: middle;
+  }
+
   &.header {
     border-top-color: #dbdbdb;
     font-weight: bold;
     font-size: small;
-
-    * {
-      vertical-align: middle;
-    }
   }
 
   .col {
     display: inline-block;
     padding: 0 0.5em;
+    min-width: 120px;
 
-    &.is-1 {
-      width: 5%;
-    }
-    &.is-2 {
-      width: 20%;
-    }
-    &.is-3 {
-      width: 30%;
-    }
-    &.is-4 {
-      width: 40%;
-    }
-    &.is-5 {
-      width: 50%;
-    }
-    &.is-6 {
-      width: 60%;
-    }
-    &.is-7 {
-      width: 70%;
-    }
-    &.is-8 {
-      width: 80%;
-    }
-    &.is-9 {
-      width: 90%;
-    }
-    &.is-10 {
-      width: 100%;
+    &:first-of-type {
+      min-width: 60px;
     }
   }
+}
+
+.vue-recycle-scroller.scroll-container {
+  width: 100%;
+  height: calc(100vh - 200px);
+  border-bottom: 1px solid #dbdbdb;
+  overflow: auto;
+  font-size: small;
 }
 </style>
