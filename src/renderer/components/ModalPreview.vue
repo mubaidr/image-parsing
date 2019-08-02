@@ -9,7 +9,7 @@
 
     <div class="modal-card">
       <header class="modal-card-head">
-        <a @click="previous" class="button is-pulled-left is-dark">
+        <a @click="previous" class="button is-pulled-left is-default">
           <i class="material-icons">skip_previous</i>
         </a>
 
@@ -23,7 +23,7 @@
           type="text"
         />
 
-        <a @click="next" class="button is-pulled-right is-dark">
+        <a @click="next" class="button is-pulled-right is-default">
           <i class="material-icons">skip_next</i>
         </a>
       </header>

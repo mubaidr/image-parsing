@@ -2,11 +2,11 @@
   <div class="section">
     <nav class="level is-mobile">
       <!-- Left side -->
-      <div class="level-left">
+      <div class="level-left custom">
         <div class="level-item">
           <div class="field">
             <!-- <label class="label">Choose result file for review: </label> -->
-            <div :title="resultFilePath" class="file has-name">
+            <div :title="resultFilePath" class="file has-name is-fullwidth">
               <label class="file-label">
                 <button
                   @click="chooseResultFile"
@@ -15,10 +15,10 @@
                 />
                 <span class="file-cta">
                   <i class="material-icons">list</i>
-                  <span class="file-label">Choose Result File: </span>
+                  <span class="file-label">Choose File: </span>
                 </span>
                 <span class="file-name">{{
-                  resultFilePath || 'Please choose a excel file...'
+                  resultFilePath || 'Please choose a result file...'
                 }}</span>
               </label>
             </div>
@@ -30,7 +30,11 @@
       <div class="level-right">
         <div class="level-item">
           <p class="control">
-            <button @click="saveResult" class="button is-dark">
+            <button
+              @click="saveResult"
+              :disabled="!resultFilePath"
+              class="button is-dark"
+            >
               <i class="material-icons md-18">save</i>
               <span>Save</span>
             </button>
@@ -38,7 +42,11 @@
         </div>
         <div class="level-item">
           <p class="control">
-            <button @click="exportResult" class="button is-success">
+            <button
+              @click="exportResult"
+              :disabled="!resultFilePath"
+              class="button is-success"
+            >
               <i class="material-icons md-18">cloud_download</i>
               <span>Export</span>
             </button>
@@ -172,7 +180,7 @@
         <article class="message is-light">
           <div class="message-body">
             <i class="material-icons">info</i>
-            <span>Please load a file to review, save or export results.</span>
+            <span>Please load a result file to review, save or export.</span>
           </div>
         </article>
       </div>
@@ -391,6 +399,14 @@ export default {
 <style lang="scss" scoped>
 .level {
   margin-bottom: 12px;
+
+  .level-left.custom {
+    min-width: 50%;
+
+    .field {
+      width: 100%;
+    }
+  }
 }
 
 .row {
