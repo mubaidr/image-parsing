@@ -1,8 +1,6 @@
 const path = require('path')
-const fg = require('fast-glob')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 const { productName } = require('../package.json')
@@ -127,10 +125,6 @@ if (isDevMode) {
   config.plugins.push(new webpack.HotModuleReplacementPlugin())
 } else {
   config.plugins.push(
-    new ScriptExtHtmlWebpackPlugin({
-      async: [/runtime/],
-      defaultAttribute: 'defer',
-    })
     // new CopyWebpackPlugin([
     //   {
     //     from: path.join(__dirname, '../src/data'),

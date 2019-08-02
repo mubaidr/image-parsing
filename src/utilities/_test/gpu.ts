@@ -1,16 +1,12 @@
+/* eslint-disable */
+
 import { GPU } from 'gpu.js'
 
 const gpu = new GPU()
 
-// sample script to convert image data array to binary
-// this script takes 10x more times than CPU version DOH!
-
-type iToBGetter = (data: number[], ch: number) => number[]
-
-// tslint:disable-next-line:no-function-expression only-arrow-functions
-const iToB: iToBGetter = function(data, ch) {
+function arrayToBinary(data: number[], ch: number): number[] {
   // convert image data to binary
-  const binaryData = []
+  const binaryData = Array()
 
   for (let i = 0; i < data.length; i += ch) {
     const r = data[i]
@@ -41,14 +37,10 @@ const iToB: iToBGetter = function(data, ch) {
   return binaryData
 }
 
-const innerFN = gpu.createKernel(iToB)
+const innerFN = gpu.createKernel(arrayToBinary)
 
-type imageDataToBinaryGetter = (arr: number[], channels: number) => number[]
-
-const imageDataToBinary: imageDataToBinaryGetter = (arr, channels) => {
-  innerFN.setOutput([arr.length / channels])
-
-  return innerFN(arr, channels)
+function imageDataToBinary(arr: number[], channels: number) {
+  return innerFN.setOutput([arr.length / channels])(arr, channels)
 }
 
 export { imageDataToBinary }
