@@ -6,7 +6,7 @@
         <div class="level-item">
           <div class="field">
             <!-- <label class="label">Choose result file for review: </label> -->
-            <div class="file has-name">
+            <div :title="resultFilePath" class="file has-name">
               <label class="file-label">
                 <button
                   @click="chooseResultFile"
@@ -105,7 +105,8 @@
         <!-- Data display -->
         <!-- Header -->
         <div class="row header">
-          <div class="col">#</div>
+          <div class="col is-half">#</div>
+          <div class="col is-half"></div>
           <div class="col">Roll No</div>
           <div class="col">Answer Sheet Image</div>
         </div>
@@ -113,37 +114,49 @@
         <!-- Custom table view using recycler-->
         <RecycleScroller
           :items="filteredResults"
-          :item-size="24"
+          :item-size="32"
           class="scroll-container"
           key-field="id"
         >
           <template v-slot="{ item, index }">
             <div class="row">
-              <div class="col">
+              <!-- Row Index -->
+              <div class="col is-half">
                 <span>
                   {{ index + 1 }}
                 </span>
               </div>
-              <div class="col">
+              <!-- Status Icon -->
+              <div class="col is-half">
                 <i v-if="!item.rollNo" class="material-icons has-text-danger">
                   report_problem
+                </i>
+                <i
+                  v-else-if="!item.isRollNoExtracted"
+                  class="material-icons has-text-warning"
+                >
+                  priority_high
                 </i>
                 <i v-else class="material-icons has-text-success">
                   check
                 </i>
+              </div>
+              <!-- Roll No -->
+              <div class="col">
                 <span>
                   {{ item.rollNo }}
                 </span>
               </div>
+              <!-- Answer sheet image -->
               <div class="col">
                 <a
                   @click="selectRow(index)"
                   v-if="item.imageFile"
                   class="custom-link"
                 >
-                  <i class="material-icons">pageview</i>
-                  <span v-if="item.rollNo">View</span>
-                  <span v-else class="">Input Roll No</span>
+                  <i class="material-icons">open_in_new</i>
+                  <span v-if="item.isRollNoExtracted">View</span>
+                  <span v-else>Update Roll No</span>
                 </a>
                 <span v-else>
                   Image Source Not available
@@ -159,7 +172,7 @@
         <article class="message is-light">
           <div class="message-body">
             <i class="material-icons">info</i>
-            <span>No data loaded.</span>
+            <span>Please load a file to review, save or export results.</span>
           </div>
         </article>
       </div>
@@ -252,9 +265,7 @@ export default {
   },
 
   mounted() {
-    const resultFilePath =
-      this.$route.query.resultFilePath ||
-      'D:\\Current\\image-parsing\\__tests__\\test-data\\result.xlsx'
+    const resultFilePath = this.$route.query.resultFilePath
 
     if (!resultFilePath) return
 
@@ -293,7 +304,12 @@ export default {
 
     toggleSortOrder() {
       this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'
-      this.compiledResult.reverseResults()
+
+      this.compiledResult.sortResults()
+
+      if (this.sortOrder === 'desc') {
+        this.compiledResult.reverseResults()
+      }
     },
 
     handleKeyDown(e) {
@@ -378,7 +394,7 @@ export default {
 }
 
 .row {
-  height: 24px !important;
+  height: 32px !important;
   width: 100%;
   border: 1px solid #dbdbdb;
   border-top-color: transparent;
@@ -390,7 +406,7 @@ export default {
   &.header {
     border-top-color: #dbdbdb;
     font-weight: bold;
-    font-size: small;
+    // font-size: small;
   }
 
   .col {
@@ -398,7 +414,7 @@ export default {
     padding: 0 0.5em;
     min-width: 120px;
 
-    &:first-of-type {
+    &.is-half {
       min-width: 60px;
     }
   }
@@ -409,6 +425,6 @@ export default {
   height: calc(100vh - 200px);
   border-bottom: 1px solid #dbdbdb;
   overflow: auto;
-  font-size: small;
+  // font-size: small;
 }
 </style>

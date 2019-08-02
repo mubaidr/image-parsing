@@ -6,35 +6,26 @@
       aria-label="close"
       class="delete is-large is-top-right"
     />
+
     <div class="modal-card">
       <header class="modal-card-head">
-        <div class="columns is-mobile">
-          <div class="column is-3">
-            <a @click="previous" class="button is-pulled-left is-info">
-              <i class="material-icons">skip_previous</i>
-            </a>
-          </div>
-          <div class="column">
-            <div class="field">
-              <p class="control">
-                <input
-                  ref="txt_roll_no"
-                  :class="{ 'is-danger': !row.hasValidRollNo }"
-                  :readonly="row.hasValidRollNo"
-                  v-model="row.rollNo"
-                  class="input has-text-centered is-uppercase has-text-weight-bold is-family-code"
-                  placeholder="Roll No"
-                  type="text"
-                />
-              </p>
-            </div>
-          </div>
-          <div class="column is-3">
-            <a @click="next" class="button is-pulled-right is-info">
-              <i class="material-icons">skip_next</i>
-            </a>
-          </div>
-        </div>
+        <a @click="previous" class="button is-pulled-left is-dark">
+          <i class="material-icons">skip_previous</i>
+        </a>
+
+        <input
+          ref="txt_roll_no"
+          :class="{ 'is-danger': !row.rollNo }"
+          :readonly="row.isRollNoExtracted"
+          v-model="row.rollNo"
+          class="input has-text-centered is-uppercase has-text-weight-bold is-family-code"
+          placeholder="Input Roll Number"
+          type="text"
+        />
+
+        <a @click="next" class="button is-pulled-right is-dark">
+          <i class="material-icons">skip_next</i>
+        </a>
       </header>
 
       <section class="modal-card-body">
@@ -83,7 +74,6 @@ export default Vue.extend({
   },
 
   created() {
-    // @ts-ignore
     this.row = this.selectedRow
   },
 
@@ -109,13 +99,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-.modal-card-head {
-  .columns {
-    width: calc(100% + 1.5rem);
-  }
-}
-
+<style lang="scss" scoped>
 .delete.is-top-right {
   position: absolute;
   top: 0;

@@ -3,14 +3,15 @@ import uuid from 'uuid'
 import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
 import AnswerCollection from '../@interfaces/AnswerCollection'
 
-class Result{
+class Result {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
   private id: string
   private isCompiled: boolean = false
-
   public answers: AnswerCollection = {}
   public rollNo: string | undefined
+  public isRollNoExtracted: boolean
+
   public imageFile: string | undefined
   public post: string = ''
   public testCenter: string = ''
@@ -28,6 +29,7 @@ class Result{
     this.id = uuid()
     this.rollNo = rollNo
     this.imageFile = imageFile
+    this.isRollNoExtracted = !!rollNo
   }
 
   public addAnswer(title: string, value: string): Result {
@@ -142,7 +144,7 @@ class Result{
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fromJson(o: Record<string, any>): Result {
-    const result = new Result()
+    const result = new Result(o.rollNo)
     const answerRegExp = /q[0-9]{1,2}$$/im
 
     Object.keys(o).forEach(key => {
