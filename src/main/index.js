@@ -1,8 +1,10 @@
 import * as devtron from 'devtron'
-import { app, BrowserWindow, Menu } from 'electron'
+import { app, BrowserWindow, Menu, shell } from 'electron'
 import electronDebug from 'electron-debug'
+import { URL } from 'url'
 import * as vueDevtools from 'vue-devtools'
 import { productName } from '../../package.json'
+
 app.setName(productName)
 
 // disable electron warning
@@ -51,13 +53,13 @@ function createWindow() {
     height: 540,
     minWidth: 960,
     minHeight: 540,
-    // useContentSize: true,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: false,
-      webSecurity: false,
+      webSecurity: true,
     },
     show: false,
+    backgroundThrottling: false
   })
 
   // eslint-disable-next-line
@@ -100,6 +102,24 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+app.on('web-contents-created', (e, contents) => {
+  contents.on('will-navigate', (event, navigationUrl) => {
+    const parsedUrl = new URL(navigationUrl)
+
+    if (parsedUrl.origin !== 'http://localhost:9080') {
+      event.preventDefault()
+    }
+  })
+
+  contents.on('new-window', async (event, navigationUrl) => {
+    // In this example, we'll ask the operating system
+    // to open this event's url in the default browser.
+    event.preventDefault()
+
+    await shell.openExternal(navigationUrl)
+  })
 })
 
 /**

@@ -2,6 +2,9 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+var MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const { productName } = require('../package.json')
 
@@ -19,7 +22,7 @@ const config = {
     path: path.join(__dirname, '../dist'),
     filename: '[name].js',
   },
-  externals: ['sharp', 'electron'],
+  externals: ['sharp', 'electron', 'jimp', 'xlsx', 'jsqr', 'brain.js'],
   module: {
     rules: [
       {
@@ -47,7 +50,7 @@ const config = {
         test: /\.s(c|a)ss$/,
         use: [
           {
-            loader: 'vue-style-loader',
+            loader: isDevMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
           },
           {
             loader: 'css-loader',
@@ -63,12 +66,12 @@ const config = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [isDevMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.(png|jpe?g|gif|tif?f|bmp|webp|svg)(\?.*)?$/,
         use: {
-          loader: 'url-loader',
+          loader: 'file-loader',
           query: {
             limit: 10000,
             name: 'imgs/[name]--[folder].[ext]',
@@ -78,7 +81,7 @@ const config = {
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         use: {
-          loader: 'url-loader',
+          loader: 'file-loader',
           query: {
             limit: 10000,
             name: 'fonts/[name]--[folder].[ext]',
@@ -92,11 +95,12 @@ const config = {
     __filename: isDevMode,
   },
   plugins: [
-    // new WriteFilePlugin(),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       excludeChunks: ['processTaskWorker'],
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
+      isDevMode,
       nodeModules: isDevMode
         ? path.resolve(__dirname, '../node_modules')
         : false,
@@ -122,9 +126,15 @@ const config = {
  */
 if (isDevMode) {
   // any dev only config
-  config.plugins.push(new webpack.HotModuleReplacementPlugin())
+  config.plugins.push(
+    new webpack.HotModuleReplacementPlugin(),
+    new BundleAnalyzerPlugin()
+  )
 } else {
   config.plugins.push(
+    new MiniCssExtractPlugin({
+      filename: '[name].css'
+    })
     // new CopyWebpackPlugin([
     //   {
     //     from: path.join(__dirname, '../src/data'),
@@ -133,11 +143,11 @@ if (isDevMode) {
     // ])
   )
 
-  // config.optimization = {
-  //   splitChunks: {
-  //     chunks: 'all',
-  //   },
-  // }
+  config.optimization = {
+    splitChunks: {
+      chunks: 'all',
+    },
+  }
 }
 
 module.exports = config

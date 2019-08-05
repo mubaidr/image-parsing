@@ -14,13 +14,6 @@ class Cache {
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  public set(key: string, value: any): any {
-    this.list[key] = value
-
-    return value
-  }
-
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   public remove(key: string): any {
     const t = this.list[key]
     delete this.list[key]
@@ -30,6 +23,13 @@ class Cache {
 
   public reset() {
     this.list = {}
+  }
+
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  public set(key: string, value: any): any {
+    this.list[key] = value
+
+    return value
   }
 }
 

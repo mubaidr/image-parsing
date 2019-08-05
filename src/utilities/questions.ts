@@ -4,6 +4,7 @@ import CompiledResult from './@classes/CompiledResult'
 import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
 import DesignData from './@interfaces/DesignData'
 import QuestionData from './@interfaces/QuestionData'
+// import { logImageData } from './images';
 import { convertToBitArray } from './index'
 
 const getQuestionsData = async (
@@ -42,7 +43,10 @@ const getQuestionsData = async (
     // logImageData(img, title)
 
     const { data, info } = await img.toBuffer({ resolveWithObject: true })
-    const binaryData = convertToBitArray(Array.prototype.slice.call(data, 0), info.channels)
+    const binaryData = convertToBitArray(
+      Array.prototype.slice.call(data, 0),
+      info.channels
+    )
 
     // for training purpose
     if (compiledResult) {
@@ -61,5 +65,4 @@ const getQuestionsData = async (
 
   return extractedQuestionData
 }
-
 export { getQuestionsData }

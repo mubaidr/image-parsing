@@ -1,35 +1,54 @@
 import uuid from 'uuid'
-
 import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
+import RegExpPattern from '../@enums/RegExpPatterns'
 import AnswerCollection from '../@interfaces/AnswerCollection'
-
 class Result {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
+
+  private correctCount: number = 0
   private id: string
+  private incorrectCount: number = 0
   private isCompiled: boolean = false
+  private marks: number = 0
+  private skippedCount: number = 0
+  private totalMarks: number = 0
+  private unattemptedCount: number = 0
+
   public answers: AnswerCollection = {}
-  public rollNo: string | undefined
-  public isRollNoExtracted: boolean
 
   public imageFile: string | undefined
+  public isRollNoExtracted: boolean
   public post: string = ''
+  public questionPaperType: string = ''
+  public rollNo: string | undefined
   public testCenter: string = ''
   public testTime: string = ''
-  public questionPaperType: string = ''
-
-  private marks: number = 0
-  private totalMarks: number = 0
-  private correctCount: number = 0
-  private incorrectCount: number = 0
-  private unattemptedCount: number = 0
-  private skippedCount: number = 0
 
   public constructor(rollNo?: string, imageFile?: string) {
     this.id = uuid()
     this.rollNo = rollNo
     this.imageFile = imageFile
     this.isRollNoExtracted = !!rollNo
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public static fromJson(o: Record<string, string>): Result {
+    const answerRegExp = new RegExp(RegExpPattern.QUESTION)
+    const result =
+      typeof o.rollNo === 'string' ? new Result(o.rollNo) : new Result()
+
+    Object.keys(o).forEach(key => {
+      const value = o[key]
+
+      if (answerRegExp.test(key)) {
+        result.addAnswer(key, value)
+      } else {
+        result[key] = value
+      }
+    })
+
+    return result
   }
 
   public addAnswer(title: string, value: string): Result {
@@ -41,55 +60,6 @@ class Result {
     }
 
     return this
-  }
-
-  public getMarks(): number {
-    return this.marks
-  }
-
-  public getTotalMarks(): number {
-    return this.totalMarks
-  }
-
-  public getCorrectCount(): number {
-    return this.correctCount
-  }
-
-  public getInCorrectCount(): number {
-    return this.incorrectCount
-  }
-
-  public getUnattemptedCount(): number {
-    return this.unattemptedCount
-  }
-
-  public getSkippedCount(): number {
-    return this.skippedCount
-  }
-
-  public isKey(): boolean {
-    return this.rollNo === 'key'
-  }
-
-  public isResult(): boolean {
-    return !this.isKey()
-  }
-
-  public hasValidRollNo(): boolean {
-    return !this.isKey() && this.rollNo !== undefined
-  }
-
-  public hasImageFile(): boolean {
-    return this.imageFile !== undefined
-  }
-
-  public matchWithKey(key: Result): boolean {
-    return (
-      this.post === key.post &&
-      this.testCenter === key.testCenter &&
-      this.testTime === key.testTime &&
-      this.questionPaperType === key.questionPaperType
-    )
   }
 
   public compile(key: Result, marks?: number, negativeMarks?: number): Result {
@@ -137,44 +107,77 @@ class Result {
     return this
   }
 
+  public getCorrectCount(): number {
+    return this.correctCount
+  }
+
+  public getInCorrectCount(): number {
+    return this.incorrectCount
+  }
+
+  public getMarks(): number {
+    return this.marks
+  }
+
+  public getSkippedCount(): number {
+    return this.skippedCount
+  }
+
+  public getTotalMarks(): number {
+    return this.totalMarks
+  }
+
+  public getUnattemptedCount(): number {
+    return this.unattemptedCount
+  }
+
+  public hasImageFile(): boolean {
+    return this.imageFile !== undefined
+  }
+
+  public hasValidRollNo(): boolean {
+    return !this.isKey() && this.rollNo !== undefined
+  }
+
+  public isKey(): boolean {
+    return this.rollNo === 'key'
+  }
+
+  public isResult(): boolean {
+    return !this.isKey()
+  }
+
+  public matchWithKey(key: Result): boolean {
+    return (
+      this.post === key.post &&
+      this.testCenter === key.testCenter &&
+      this.testTime === key.testTime &&
+      this.questionPaperType === key.questionPaperType
+    )
+  }
+
   public setMarks(marks: number, negativeMarks: number) {
     this.marks = this.correctCount * marks - this.incorrectCount * negativeMarks
     this.totalMarks = (60 - this.skippedCount) * marks
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static fromJson(o: Record<string, any>): Result {
-    const result = new Result(o.rollNo)
-    const answerRegExp = /q[0-9]{1,2}$$/im
-
-    Object.keys(o).forEach(key => {
-      const value = o[key]
-
-      if (answerRegExp.test(key)) {
-        result.addAnswer(key, value)
-      } else {
-        result[key] = value
-      }
-    })
-
-    return result
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJson(): Record<string, any> {
-    const o: { [key: string]: string } = JSON.parse(JSON.stringify(this))
+    const o: { [key: string]: string | AnswerCollection } = JSON.parse(
+      JSON.stringify(this)
+    )
 
-    for (const prop in this) {
-      const value = this[prop]
+    for (const prop in o) {
+      const value = o[prop]
 
-      if (typeof value === 'object') {
+      if (typeof value === 'string') {
+        o[prop] = value
+      } else {
         for (const subProp in value) {
           o[subProp] = value[subProp].value
         }
 
         delete o[prop]
-      } else {
-        o[prop] = value
       }
     }
 

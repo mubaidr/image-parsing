@@ -22,7 +22,7 @@
     "vue-toasted": "^1.1.27",
     "vue-virtual-scroller": "^1.0.0-rc.2",
     "vuex": "^3.1.1",
-    "xlsx": "^0.14.4"
+    "xlsx": "^0.15.0"
   },
   "description": "A complete solution for Forms/MCQ based paper checking",
   "devDependencies": {
@@ -50,11 +50,13 @@
     "@typescript-eslint/parser": "^1.13.0",
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.1.0",
     "devtron": "^1.4.0",
     "electron": "^6.0.0",
     "electron-builder": "^21.2.0",
     "electron-debug": "^3.0.1",
+    "electron-nightly": "^8.0.0-nightly.20190803",
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
@@ -62,6 +64,7 @@
     "file-loader": "^4.1.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^24.8.0",
+    "mini-css-extract-plugin": "^0.8.0",
     "node-loader": "^0.6.0",
     "nodemon": "^1.19.1",
     "prettier": "^1.18.2",
@@ -79,6 +82,7 @@
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.39.1",
+    "webpack-bundle-analyzer": "^3.4.1",
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0"

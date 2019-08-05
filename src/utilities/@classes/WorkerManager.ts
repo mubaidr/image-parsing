@@ -12,19 +12,14 @@ const isDev = process.env.NODE_ENV === 'development'
 
 class WorkerManager {
   private imagesCount: number = 0
-  private workers: ChildProcess[] = []
   private results: Result[] = []
-
   private workerPath: string = isDev
     ? path.resolve('./dist/processTaskWorker.js')
     : path.resolve(__dirname, './processTaskWorker.js')
+  private workers: ChildProcess[] = []
 
   public constructor() {
     this.create()
-  }
-
-  public getCount(): number {
-    return this.workers.length
   }
 
   public create(): ChildProcess[] {
@@ -39,21 +34,8 @@ class WorkerManager {
     return this.workers
   }
 
-  public stop() {
-    for (const worker of this.workers) {
-      if (worker.connected) {
-        worker.kill()
-      }
-    }
-
-    this.imagesCount = 0
-    this.workers.length = 0
-    this.results.length = 0
-  }
-
-  public async reset(): Promise<ChildProcess[]> {
-    this.stop()
-    return this.create()
+  public getCount(): number {
+    return this.workers.length
   }
 
   public process(
@@ -81,6 +63,23 @@ class WorkerManager {
     }
 
     return { totalImages: images.length, totalWorkers: totalWorkers }
+  }
+
+  public async reset(): Promise<ChildProcess[]> {
+    this.stop()
+    return this.create()
+  }
+
+  public stop() {
+    for (const worker of this.workers) {
+      if (worker.connected) {
+        worker.kill()
+      }
+    }
+
+    this.imagesCount = 0
+    this.workers.length = 0
+    this.results.length = 0
   }
 
   private addWorkerHandlers(callback: Function) {
@@ -119,7 +118,7 @@ class WorkerManager {
         electronLog.error(data.toString())
       })
 
-      worker.on( 'close', ( a, b ) => {
+      worker.on('close', (a, b) => {
         if (a) {
           // TODO: track error state in parent
           electronLog.info(

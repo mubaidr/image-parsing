@@ -5,29 +5,79 @@ import Result from './Result'
 
 class CompiledResult {
   private id: string
-  private lastSavedTime: Date | undefined
-
   private keys: Result[] = []
+  private lastSavedTime: Date | undefined
   private results: Result[] = []
 
   public constructor() {
     this.id = uuid()
   }
 
-  public getKeyCount(): number {
-    return this.keys.length
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public static export(compiledResult: CompiledResult): any[] {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const obj: any[] = []
+
+    compiledResult
+      .sortResults()
+      .getResults()
+      .forEach(result => {
+        obj.push(result.toJson())
+      })
+
+    return obj
   }
 
-  public getResultCount(): number {
-    return this.results.length
+  public static loadFromExcel(src: string): CompiledResult {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rows: any[] = importExcelToJson(src)
+    const compiledResult = new CompiledResult()
+
+    rows.forEach(row => {
+      const result = Result.fromJson(row)
+
+      if (result.isKey()) {
+        compiledResult.addKeys(result)
+      } else {
+        compiledResult.addResults(result)
+      }
+    })
+
+    compiledResult.sortResults()
+
+    return compiledResult
   }
 
-  public getKeys(): Result[] {
-    return this.keys
+  public static merge(compiledResults: CompiledResult[]): CompiledResult {
+    const compiledResult = new CompiledResult()
+
+    compiledResults.forEach(cr => {
+      compiledResult
+        .addKeys(cr.getKeys())
+        .addResults(cr.getResults())
+        .sortResults()
+    })
+
+    return compiledResult
   }
 
-  public getResults(): Result[] {
-    return this.results
+  public addFromExcel(src: string): CompiledResult {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rows: any[] = importExcelToJson(src)
+
+    rows.forEach(row => {
+      const result = Result.fromJson(row)
+
+      if (result.isKey()) {
+        this.addKeys(result)
+      } else {
+        this.addResults(result)
+      }
+    })
+
+    this.sortResults()
+
+    return this
   }
 
   public addKeys(key: Result | Result[]): CompiledResult {
@@ -63,58 +113,6 @@ class CompiledResult {
     return this
   }
 
-  public static loadFromExcel(src: string): CompiledResult {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rows: any[] = importExcelToJson(src)
-    const compiledResult = new CompiledResult()
-
-    rows.forEach(row => {
-      const result = Result.fromJson(row)
-
-      if (result.isKey()) {
-        compiledResult.addKeys(result)
-      } else {
-        compiledResult.addResults(result)
-      }
-    })
-
-    compiledResult.sortResults()
-
-    return compiledResult
-  }
-
-  public addFromExcel(src: string): CompiledResult {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rows: any[] = importExcelToJson(src)
-
-    rows.forEach(row => {
-      const result = Result.fromJson(row)
-
-      if (result.isKey()) {
-        this.addKeys(result)
-      } else {
-        this.addResults(result)
-      }
-    })
-
-    this.sortResults()
-
-    return this
-  }
-
-  public static merge(compiledResults: CompiledResult[]): CompiledResult {
-    const compiledResult = new CompiledResult()
-
-    compiledResults.forEach(cr => {
-      compiledResult
-        .addKeys(cr.getKeys())
-        .addResults(cr.getResults())
-        .sortResults()
-    })
-
-    return compiledResult
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public export(): any[] {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -129,31 +127,32 @@ class CompiledResult {
     return obj
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static export(compiledResult: CompiledResult): any[] {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const obj: any[] = []
+  public getKeyCount(): number {
+    return this.keys.length
+  }
 
-    compiledResult
-      .sortResults()
-      .getResults()
-      .forEach(result => {
-        obj.push(result.toJson())
-      })
+  public getKeys(): Result[] {
+    return this.keys
+  }
 
-    return obj
+  public getResultCount(): number {
+    return this.results.length
+  }
+
+  public getResults(): Result[] {
+    return this.results
+  }
+
+  public reverseResults(): CompiledResult {
+    this.results.reverse()
+
+    return this
   }
 
   public sortResults(): CompiledResult {
     this.results.sort((a, b) => {
       return parseInt(a.rollNo || '0', 10) - parseInt(b.rollNo || '0', 10)
     })
-
-    return this
-  }
-
-  public reverseResults(): CompiledResult {
-    this.results.reverse()
 
     return this
   }

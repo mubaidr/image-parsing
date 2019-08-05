@@ -128,4 +128,10 @@ const getRollNoFromImage = async (
   return rollNo
 }
 
-export { convertImage, getImagePaths, logImageData, getRollNoFromImage, getSharpObjectFromSource, }
+export {
+  convertImage,
+  getImagePaths,
+  logImageData,
+  getRollNoFromImage,
+  getSharpObjectFromSource,
+}
