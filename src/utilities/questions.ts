@@ -4,7 +4,7 @@ import CompiledResult from './@classes/CompiledResult'
 import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
 import DesignData from './@interfaces/DesignData'
 import QuestionData from './@interfaces/QuestionData'
-// import { logImageData } from './images';
+// import { logImageData } from './images'
 import { convertToBitArray } from './index'
 
 const getQuestionsData = async (
@@ -31,6 +31,7 @@ const getQuestionsData = async (
     i += 1
   ) {
     const [title, q] = questions[i]
+    let titleLowerCase = title.toLowerCase()
 
     img.extract({
       left: Math.floor(q.x1 * scale),
@@ -50,12 +51,12 @@ const getQuestionsData = async (
 
     // for training purpose
     if (compiledResult) {
-      const result = compiledResult.getResults()[0].answers
+      const result = compiledResult.getKeys()[0].answers
 
-      if (result[title].value !== QuestionOptionsEnum.MULTIPLE) {
+      if (result[titleLowerCase].value !== QuestionOptionsEnum.MULTIPLE) {
         extractedQuestionData.push({
           input: binaryData,
-          output: { [result[title].value]: 1 },
+          output: { [result[titleLowerCase].value]: 1 },
         })
       }
     } else {
@@ -65,4 +66,5 @@ const getQuestionsData = async (
 
   return extractedQuestionData
 }
+
 export { getQuestionsData }

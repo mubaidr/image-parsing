@@ -56,10 +56,10 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: false,
-      webSecurity: true,
+      webSecurity: false,
     },
     show: false,
-    backgroundThrottling: false
+    backgroundThrottling: false,
   })
 
   // eslint-disable-next-line

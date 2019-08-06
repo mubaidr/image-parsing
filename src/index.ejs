@@ -3,16 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><% htmlWebpackPlugin.options.productName %></title>
+
+    <!-- add prefetch links for modules -->
+    <% if (htmlWebpackPlugin.options.isDevMode) { %>
     <meta
       http-equiv="Content-Security-Policy"
-      content="script-src 'self' 'unsafe-eval' 'unsafe-inline' http://localhost:9080"
+      content="default-src 'self' 'unsafe-eval' 'unsafe-inline' http://localhost:9080 file://*"
     />
-    <title></title>
+    <% } else { %>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' file://*"
+    />
+    <% } %>
 
     <!-- add prefetch links for modules -->
     <% if (htmlWebpackPlugin.options.isDevMode) { %>
     <link rel="prefetch" href="./dist/processTaskWorker.js" as="script" />
-    <% } else{ %>
+    <% } else { %>
     <link rel="prefetch" href="./processTaskWorker.js" as="script" />
     <% } %>
   </head>

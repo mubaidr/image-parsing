@@ -113,10 +113,11 @@
         <!-- Data display -->
         <!-- Header -->
         <div class="row header">
-          <div class="col is-half">#</div>
-          <div class="col is-half"></div>
-          <div class="col">Roll No</div>
+          <div class="col is-third">#</div>
+          <div class="col is-third"></div>
+          <div class="col is-half">Roll No</div>
           <div class="col">Answer Sheet Image</div>
+          <div class="col">Answers</div>
         </div>
 
         <!-- Custom table view using recycler-->
@@ -129,28 +130,31 @@
           <template v-slot="{ item, index }">
             <div class="row">
               <!-- Row Index -->
-              <div class="col is-half">
+              <div class="col is-third">
                 <span>
                   {{ index + 1 }}
                 </span>
               </div>
               <!-- Status Icon -->
-              <div class="col is-half">
-                <i v-if="!item.rollNo" class="material-icons has-text-danger">
+              <div class="col is-third">
+                <i
+                  v-if="!item.rollNo"
+                  class="material-icons is-18 has-text-danger"
+                >
                   report_problem
                 </i>
                 <i
                   v-else-if="!item.isRollNoExtracted"
-                  class="material-icons has-text-warning"
+                  class="material-icons is-18 has-text-warning"
                 >
                   priority_high
                 </i>
-                <i v-else class="material-icons has-text-success">
+                <i v-else class="material-icons is-18 has-text-success">
                   check
                 </i>
               </div>
               <!-- Roll No -->
-              <div class="col">
+              <div class="col is-half">
                 <span>
                   {{ item.rollNo }}
                 </span>
@@ -162,13 +166,18 @@
                   v-if="item.imageFile"
                   class="custom-link"
                 >
-                  <i class="material-icons">open_in_new</i>
+                  <i class="material-icons is-18">open_in_new</i>
                   <span v-if="item.isRollNoExtracted">View</span>
                   <span v-else>Update Roll No</span>
                 </a>
                 <span v-else>
                   Image Source Not available
                 </span>
+              </div>
+              <div class="col">
+                <template v-for="answer in item.answers">
+                  {{ answer.value }}
+                </template>
               </div>
             </div>
           </template>
@@ -410,10 +419,11 @@ export default {
 }
 
 .row {
-  height: 32px !important;
+  height: 24px !important;
   width: 100%;
   border: 1px solid #dbdbdb;
   border-top-color: transparent;
+  font-family: monospace;
 
   * {
     vertical-align: middle;
@@ -428,10 +438,14 @@ export default {
   .col {
     display: inline-block;
     padding: 0 0.5em;
-    min-width: 120px;
+    min-width: 210px;
+
+    &.is-third {
+      min-width: 70px;
+    }
 
     &.is-half {
-      min-width: 60px;
+      min-width: 140px;
     }
   }
 }

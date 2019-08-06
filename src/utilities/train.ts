@@ -1,5 +1,6 @@
 import brain from 'brain.js'
 import fs from 'fs'
+
 import CompiledResult from './@classes/CompiledResult'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
@@ -7,10 +8,14 @@ import { getSharpObjectFromSource } from './images'
 import { getQuestionsData } from './questions'
 
 async function start() {
+  const designData = getDesignData(dataPaths.designBarcode)
+  const sharpImage = getSharpObjectFromSource(dataPaths.keyImage)
+  const compiledResult = await CompiledResult.loadFromExcel(dataPaths.key)
+
   const trainingData = await getQuestionsData(
-    getDesignData(dataPaths.design),
-    getSharpObjectFromSource(dataPaths.keyImage),
-    CompiledResult.loadFromExcel(dataPaths.key)
+    designData,
+    sharpImage,
+    compiledResult
   )
 
   const net = new brain.NeuralNetwork()

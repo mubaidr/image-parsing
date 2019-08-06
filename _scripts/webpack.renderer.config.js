@@ -50,7 +50,9 @@ const config = {
         test: /\.s(c|a)ss$/,
         use: [
           {
-            loader: isDevMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
+            loader: isDevMode
+              ? 'vue-style-loader'
+              : MiniCssExtractPlugin.loader,
           },
           {
             loader: 'css-loader',
@@ -66,7 +68,10 @@ const config = {
       },
       {
         test: /\.css$/,
-        use: [isDevMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader, 'css-loader'],
+        use: [
+          isDevMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+        ],
       },
       {
         test: /\.(png|jpe?g|gif|tif?f|bmp|webp|svg)(\?.*)?$/,
@@ -101,6 +106,7 @@ const config = {
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
       isDevMode,
+      productName,
       nodeModules: isDevMode
         ? path.resolve(__dirname, '../node_modules')
         : false,
@@ -133,17 +139,12 @@ if (isDevMode) {
 } else {
   config.plugins.push(
     new MiniCssExtractPlugin({
-      filename: '[name].css'
+      filename: '[name].css',
     })
-    // new CopyWebpackPlugin([
-    //   {
-    //     from: path.join(__dirname, '../src/data'),
-    //     to: path.join(__dirname, '../dist/data'),
-    //   },
-    // ])
   )
 
   config.optimization = {
+    runtimeChunk: 'single',
     splitChunks: {
       chunks: 'all',
     },

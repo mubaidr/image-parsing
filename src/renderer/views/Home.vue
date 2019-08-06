@@ -35,6 +35,10 @@
             <i class="material-icons">assessment</i>
             <span>Compile</span>
           </RouterLink>
+          <RouterLink class="button is-light" to="train">
+            <i class="material-icons">build</i>
+            <span>Train</span>
+          </RouterLink>
         </div>
       </div>
     </section>
