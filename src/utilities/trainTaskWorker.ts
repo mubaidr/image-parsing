@@ -1,5 +1,6 @@
 import brain from 'brain.js'
 import fs from 'fs'
+
 import CompiledResult from './@classes/CompiledResult'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'

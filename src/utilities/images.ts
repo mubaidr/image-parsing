@@ -4,6 +4,7 @@ import javascriptQRReader from 'jsqr'
 import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import uuid from 'uuid'
+
 import ImageNativeTypesEnum from './@enums/ImageNativeTypesEnum'
 import ImageTypesEnum from './@enums/ImageTypesEnum'
 import DesignData from './@interfaces/DesignData'
@@ -11,13 +12,7 @@ import { cache } from './cache'
 import { dataPaths } from './dataPaths'
 
 const getSharpObjectFromSource = (src: string): Sharp => {
-  // TODO: optimize image data
   return sharp(src).raw()
-  // .removeAlpha()
-  // .greyscale()
-  // .flatten()
-  // .threshold(80)
-  // .toColourspace('b-w')
 }
 
 const convertImage = async (src: string): Promise<string> => {
@@ -90,12 +85,14 @@ const getRollNoFromImage = async (
     (rollNumberCoordinates.y2 - rollNumberCoordinates.y1) * ratio
   )
 
-  img.extract({
-    left: Math.floor(rollNumberCoordinates.x1 * ratio),
-    top: Math.floor(rollNumberCoordinates.y1 * ratio),
-    width,
-    height,
-  })
+  img
+    .extract({
+      left: Math.floor(rollNumberCoordinates.x1 * ratio),
+      top: Math.floor(rollNumberCoordinates.y1 * ratio),
+      width,
+      height,
+    })
+    .blur()
 
   // log image
   // logImageData(img)

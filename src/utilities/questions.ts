@@ -4,8 +4,9 @@ import CompiledResult from './@classes/CompiledResult'
 import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
 import DesignData from './@interfaces/DesignData'
 import QuestionData from './@interfaces/QuestionData'
+
 // import { logImageData } from './images'
-import { convertToBitArray } from './index'
+// import { convertToBitArray } from './index'
 
 const getQuestionsData = async (
   design: DesignData,
@@ -33,34 +34,35 @@ const getQuestionsData = async (
     const [title, q] = questions[i]
     let titleLowerCase = title.toLowerCase()
 
-    img.extract({
-      left: Math.floor(q.x1 * scale),
-      top: Math.floor(q.y1 * scale),
-      width: Math.ceil((q.x2 - q.x1) * scale),
-      height: Math.ceil((q.y2 - q.y1) * scale),
-    })
+    img
+      .extract({
+        left: Math.floor(q.x1 * scale),
+        top: Math.floor(q.y1 * scale),
+        width: Math.ceil((q.x2 - q.x1) * scale),
+        height: Math.ceil((q.y2 - q.y1) * scale),
+      })
+      .toColourspace('b-w')
 
     // log image
     // logImageData(img, title)
 
-    const { data, info } = await img.toBuffer({ resolveWithObject: true })
-    const binaryData = convertToBitArray(
-      Array.prototype.slice.call(data, 0),
-      info.channels
-    )
+    const { data } = await img.toBuffer({ resolveWithObject: true })
 
-    // for training purpose
     if (compiledResult) {
+      // for training purpose
       const result = compiledResult.getKeys()[0].answers
 
       if (result[titleLowerCase].value !== QuestionOptionsEnum.MULTIPLE) {
         extractedQuestionData.push({
-          input: binaryData,
+          input: Array.prototype.slice.call(data, 0),
           output: { [result[titleLowerCase].value]: 1 },
         })
       }
     } else {
-      extractedQuestionData.push({ title, input: binaryData })
+      extractedQuestionData.push({
+        title,
+        input: Array.prototype.slice.call(data, 0),
+      })
     }
   }
 

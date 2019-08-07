@@ -211,6 +211,12 @@ const template = [
     role: 'help',
     submenu: [
       {
+        label: 'Train network for new design',
+        click() {
+          sendMenuEvent({ route: '/train' })
+        },
+      },
+      {
         label: 'Get Help',
         role: 'help',
         accelerator: 'F1',

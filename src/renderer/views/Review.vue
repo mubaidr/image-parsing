@@ -113,60 +113,60 @@
         <!-- Data display -->
         <!-- Header -->
         <div class="row header">
-          <div class="col is-third">#</div>
-          <div class="col is-third"></div>
-          <div class="col is-half">Roll No</div>
-          <div class="col">Answer Sheet Image</div>
-          <div class="col">Answers</div>
+          <div class="col">#</div>
+          <div class="col"></div>
+          <div class="col is-100">Roll No</div>
+          <div class="col is-200">Answer Sheet Image</div>
+          <div class="col custom-hidden">Answers</div>
         </div>
 
         <!-- Custom table view using recycler-->
         <RecycleScroller
           :items="filteredResults"
-          :item-size="32"
+          :item-size="24"
           class="scroll-container"
           key-field="id"
         >
           <template v-slot="{ item, index }">
             <div class="row">
               <!-- Row Index -->
-              <div class="col is-third">
+              <div class="col">
                 <span>
                   {{ index + 1 }}
                 </span>
               </div>
               <!-- Status Icon -->
-              <div class="col is-third">
+              <div class="col">
                 <i
                   v-if="!item.rollNo"
-                  class="material-icons is-18 has-text-danger"
+                  class="material-icons md-18 has-text-danger"
                 >
                   report_problem
                 </i>
                 <i
                   v-else-if="!item.isRollNoExtracted"
-                  class="material-icons is-18 has-text-warning"
+                  class="material-icons md-18 has-text-warning"
                 >
                   priority_high
                 </i>
-                <i v-else class="material-icons is-18 has-text-success">
+                <i v-else class="material-icons md-18 has-text-success">
                   check
                 </i>
               </div>
               <!-- Roll No -->
-              <div class="col is-half">
+              <div class="col is-100">
                 <span>
                   {{ item.rollNo }}
                 </span>
               </div>
               <!-- Answer sheet image -->
-              <div class="col">
+              <div class="col is-200">
                 <a
                   @click="selectRow(index)"
                   v-if="item.imageFile"
                   class="custom-link"
                 >
-                  <i class="material-icons is-18">open_in_new</i>
+                  <i class="material-icons md-18">open_in_new</i>
                   <span v-if="item.isRollNoExtracted">View</span>
                   <span v-else>Update Roll No</span>
                 </a>
@@ -174,7 +174,7 @@
                   Image Source Not available
                 </span>
               </div>
-              <div class="col">
+              <div class="col is-size-7 custom-hidden">
                 <template v-for="answer in item.answers">
                   {{ answer.value }}
                 </template>
@@ -418,6 +418,13 @@ export default {
   }
 }
 
+.vue-recycle-scroller.scroll-container {
+  width: 100%;
+  height: calc(100vh - 200px);
+  border-bottom: 1px solid #dbdbdb;
+  overflow: auto;
+}
+
 .row {
   height: 24px !important;
   width: 100%;
@@ -432,29 +439,42 @@ export default {
   &.header {
     border-top-color: #dbdbdb;
     font-weight: bold;
-    // font-size: small;
   }
 
   .col {
     display: inline-block;
     padding: 0 0.5em;
-    min-width: 210px;
+    min-width: 25px;
 
-    &.is-third {
-      min-width: 70px;
+    &.is-25 {
+      min-width: 25px;
     }
 
-    &.is-half {
-      min-width: 140px;
+    &.is-50 {
+      min-width: 50px;
+    }
+
+    &.is-75 {
+      min-width: 75px;
+    }
+
+    &.is-100 {
+      min-width: 100px;
+    }
+
+    &.is-150 {
+      min-width: 150px;
+    }
+
+    &.is-200 {
+      min-width: 200px;
     }
   }
 }
 
-.vue-recycle-scroller.scroll-container {
-  width: 100%;
-  height: calc(100vh - 200px);
-  border-bottom: 1px solid #dbdbdb;
-  overflow: auto;
-  // font-size: small;
+@media only screen and (max-width: 1333px) {
+  .col.custom-hidden {
+    display: none;
+  }
 }
 </style>
