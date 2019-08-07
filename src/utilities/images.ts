@@ -12,12 +12,12 @@ import { dataPaths } from './dataPaths'
 
 const getSharpObjectFromSource = (src: string): Sharp => {
   // TODO: optimize image data
-  return sharp(src)
-    .raw()
-    .removeAlpha()
+  return sharp(src).raw()
+  // .removeAlpha()
+  // .greyscale()
   // .flatten()
   // .threshold(80)
-  .toColourspace('b-w')
+  // .toColourspace('b-w')
 }
 
 const convertImage = async (src: string): Promise<string> => {
@@ -128,4 +128,10 @@ const getRollNoFromImage = async (
   return rollNo
 }
 
-export { convertImage, getImagePaths, logImageData, getRollNoFromImage, getSharpObjectFromSource, }
+export {
+  convertImage,
+  getImagePaths,
+  logImageData,
+  getRollNoFromImage,
+  getSharpObjectFromSource,
+}

@@ -19,6 +19,10 @@ const config = {
       __dirname,
       '../src/utilities/processTaskWorker.ts'
     ),
+    trainTaskWorker: path.join(
+      __dirname,
+      '../src/utilities/trainTaskWorker.ts'
+    ),
   },
   output: {
     libraryTarget: 'commonjs2',
