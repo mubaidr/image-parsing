@@ -16,7 +16,7 @@ const processTask = async (
 
   for (let i = 0, imagesLength = images.length; i < imagesLength; i += 1) {
     const image = images[i]
-    const sharpImage = getSharpObjectFromSource(image)
+    const sharpImage = getSharpObjectFromSource(image).raw()
     const startTime = Date.now()
 
     const [rollNo, questionsData] = await Promise.all([
@@ -87,4 +87,3 @@ process.on('warning', warning => {
 })
 
 export { processTask }
-

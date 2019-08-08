@@ -4,27 +4,22 @@ import CompiledResult from './@classes/CompiledResult'
 import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
 import DesignData from './@interfaces/DesignData'
 import QuestionData from './@interfaces/QuestionData'
-
-// import { logImageData } from './images'
-// import { convertToBitArray } from './index'
+import { logImageData } from './images'
+import { convertToBitArray } from './index'
 
 const getQuestionsData = async (
   design: DesignData,
   img: Sharp,
   compiledResult?: CompiledResult
 ): Promise<QuestionData[]> => {
-  const scale = 0.5
-  const targetWidth = Math.floor(design.width * scale)
-  const targetHeight = Math.floor(design.height * scale)
-
-  // resize if image is larger than design
-  img.resize(targetWidth, targetHeight, {
-    fit: sharp.fit.inside,
-    kernel: sharp.kernel.nearest,
-  })
-
+  const { width } = await img.metadata()
+  const scale = width ? design.width / width : 1
   const extractedQuestionData: QuestionData[] = []
   const questions = Object.entries(design.questions)
+
+  img.resize(Math.floor(design.width * scale), null, {
+    kernel: sharp.kernel.nearest,
+  })
 
   for (
     let i = 0, questionsLength = questions.length;
@@ -34,19 +29,23 @@ const getQuestionsData = async (
     const [title, q] = questions[i]
     let titleLowerCase = title.toLowerCase()
 
-    img
-      .extract({
-        left: Math.floor(q.x1 * scale),
-        top: Math.floor(q.y1 * scale),
-        width: Math.ceil((q.x2 - q.x1) * scale),
-        height: Math.ceil((q.y2 - q.y1) * scale),
-      })
-      .toColourspace('b-w')
+    img.extract({
+      left: Math.floor(q.x * scale),
+      top: Math.floor(q.y * scale),
+      width: Math.ceil(q.width * scale),
+      height: Math.ceil(q.height * scale),
+    })
 
     // log image
-    // logImageData(img, title)
+    logImageData(img, title)
 
-    const { data } = await img.toBuffer({ resolveWithObject: true })
+    const { data, info } = await img.toBuffer({ resolveWithObject: true })
+    const bitData = convertToBitArray(
+      Array.prototype.slice.call(data, 0),
+      info.channels
+    )
+
+    console.log(data.length, bitData.length)
 
     if (compiledResult) {
       // for training purpose
@@ -54,14 +53,14 @@ const getQuestionsData = async (
 
       if (result[titleLowerCase].value !== QuestionOptionsEnum.MULTIPLE) {
         extractedQuestionData.push({
-          input: Array.prototype.slice.call(data, 0),
+          input: bitData,
           output: { [result[titleLowerCase].value]: 1 },
         })
       }
     } else {
       extractedQuestionData.push({
         title,
-        input: Array.prototype.slice.call(data, 0),
+        input: bitData,
       })
     }
   }

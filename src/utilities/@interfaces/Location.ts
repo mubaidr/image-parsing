@@ -1,8 +1,8 @@
 interface Location {
-  x1: number
-  x2: number
-  y1: number
-  y2: number
+  x: number
+  y: number
+  width: number
+  height: number
 }
 
 export default Location

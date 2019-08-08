@@ -12,7 +12,7 @@ import { cache } from './cache'
 import { dataPaths } from './dataPaths'
 
 const getSharpObjectFromSource = (src: string): Sharp => {
-  return sharp(src).raw()
+  return sharp(src).flatten()
 }
 
 const convertImage = async (src: string): Promise<string> => {
@@ -50,7 +50,7 @@ const logImageData = async (
   src: string | Sharp,
   name?: string
 ): Promise<void> => {
-  let img
+  let img: Sharp
 
   if (typeof src === 'string') {
     img = getSharpObjectFromSource(src)
@@ -75,20 +75,16 @@ const getRollNoFromImage = async (
   img: Sharp,
   isBarcode: boolean
 ): Promise<string | undefined> => {
-  const rollNumberCoordinates = designData.code
+  const codeLocation = designData.code
   const metadata = await img.metadata()
   const ratio = metadata.width ? metadata.width / designData.width : 1
-  const width = Math.ceil(
-    (rollNumberCoordinates.x2 - rollNumberCoordinates.x1) * ratio
-  )
-  const height = Math.ceil(
-    (rollNumberCoordinates.y2 - rollNumberCoordinates.y1) * ratio
-  )
+  const width = Math.ceil(codeLocation.width * ratio)
+  const height = Math.ceil(codeLocation.height * ratio)
 
   img
     .extract({
-      left: Math.floor(rollNumberCoordinates.x1 * ratio),
-      top: Math.floor(rollNumberCoordinates.y1 * ratio),
+      left: Math.floor(codeLocation.x * ratio),
+      top: Math.floor(codeLocation.y * ratio),
       width,
       height,
     })
