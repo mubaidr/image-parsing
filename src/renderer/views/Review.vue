@@ -57,145 +57,142 @@
 
     <br />
 
-    <!-- Data list -->
-    <transition mode="out-in" name="slide-up">
-      <!-- Show table when data is loaded -->
-      <div key="table" v-if="hasResults">
-        <!-- toolbar -->
-        <nav class="level is-mobile">
-          <!-- Left side -->
-          <div class="level-left">
-            <div class="level-item">
-              <div class="field">
-                <div class="select is-small">
-                  <select v-model="showAllResults">
-                    <option :value="true">Show all results</option>
-                    <option :value="false"
-                      >Show results with missing roll numbers</option
-                    >
-                  </select>
-                </div>
-              </div>
+    <!-- toolbar -->
+    <nav class="level is-mobile">
+      <!-- Left side -->
+      <div class="level-left">
+        <div class="level-item">
+          <div class="field">
+            <div class="select is-small">
+              <select v-model="showAllResults">
+                <option :value="true">Show all results</option>
+                <option :value="false"
+                  >Show results with missing roll numbers</option
+                >
+              </select>
             </div>
           </div>
-
-          <!-- Right side -->
-          <div class="level-right">
-            <div class="level-item">
-              <div class="field has-addons">
-                <p class="control">
-                  <button
-                    :disabled="!hasResults"
-                    @click="toggleSortOrder"
-                    class="button is-small"
-                  >
-                    <span>Sort</span>
-                    <i v-if="sortOrder === 'asc'" class="material-icons md-18"
-                      >arrow_drop_up</i
-                    >
-                    <i v-else class="material-icons md-18">arrow_drop_down</i>
-                  </button>
-                </p>
-                <p class="control">
-                  <input
-                    :disabled="!hasResults"
-                    v-model="filterQuery"
-                    class="input is-small"
-                    placeholder="Filter By Roll No."
-                    type="text"
-                  />
-                </p>
-              </div>
-            </div>
-          </div>
-        </nav>
-
-        <!-- Data display -->
-        <!-- Header -->
-        <div class="row header">
-          <div class="col">#</div>
-          <div class="col"></div>
-          <div class="col is-100">Roll No</div>
-          <div class="col is-200">Answer Sheet Image</div>
-          <div class="col custom-hidden">Answers</div>
-        </div>
-
-        <div class="scroll-parent">
-          <!-- Custom table view using recycler-->
-          <RecycleScroller
-            :items="filteredResults"
-            :item-size="24"
-            class="scroll-container"
-            key-field="id"
-          >
-            <template v-slot="{ item, index }">
-              <div class="row">
-                <!-- Row Index -->
-                <div class="col">
-                  <span>
-                    {{ index + 1 }}
-                  </span>
-                </div>
-                <!-- Status Icon -->
-                <div class="col">
-                  <i
-                    v-if="!item.rollNo"
-                    class="material-icons md-18 has-text-danger"
-                  >
-                    report_problem
-                  </i>
-                  <i
-                    v-else-if="!item.isRollNoExtracted"
-                    class="material-icons md-18 has-text-warning"
-                  >
-                    priority_high
-                  </i>
-                  <i v-else class="material-icons md-18 has-text-success">
-                    check
-                  </i>
-                </div>
-                <!-- Roll No -->
-                <div class="col is-100">
-                  <span>
-                    {{ item.rollNo }}
-                  </span>
-                </div>
-                <!-- Answer sheet image -->
-                <div class="col is-200">
-                  <a
-                    @click="selectRow(index)"
-                    v-if="item.imageFile"
-                    class="custom-link"
-                  >
-                    <i class="material-icons md-18">open_in_new</i>
-                    <span v-if="item.isRollNoExtracted">View</span>
-                    <span v-else>Update Roll No</span>
-                  </a>
-                  <span v-else>
-                    Not available
-                  </span>
-                </div>
-                <div class="col is-size-7 custom-hidden">
-                  <template v-for="answer in item.answers">
-                    {{ answer.value }}
-                  </template>
-                </div>
-              </div>
-            </template>
-          </RecycleScroller>
         </div>
       </div>
 
-      <!-- Show message when no data is loaded -->
-      <div key="message" v-else>
-        <article class="message is-light">
-          <div class="message-body">
-            <i class="material-icons">info</i>
-            <span>Please load a result file to review, save or export.</span>
+      <!-- Right side -->
+      <div class="level-right">
+        <div class="level-item">
+          <div class="field has-addons">
+            <p class="control">
+              <button
+                :disabled="!hasResults"
+                @click="toggleSortOrder"
+                class="button is-small"
+              >
+                <span>Sort</span>
+                <i v-if="sortOrder === 'asc'" class="material-icons md-18"
+                  >arrow_drop_up</i
+                >
+                <i v-else class="material-icons md-18">arrow_drop_down</i>
+              </button>
+            </p>
+            <p class="control">
+              <input
+                :disabled="!hasResults"
+                v-model="filterQuery"
+                class="input is-small"
+                placeholder="Filter By Roll No."
+                type="text"
+              />
+            </p>
           </div>
-        </article>
+        </div>
       </div>
-    </transition>
+    </nav>
+
+    <!-- Show table when data is loaded -->
+    <div key="table" v-if="hasResults">
+      <!-- Data display -->
+      <!-- Header -->
+      <div class="row header">
+        <div class="col">#</div>
+        <div class="col"></div>
+        <div class="col is-100">Roll No</div>
+        <div class="col is-200">Answer Sheet Image</div>
+        <div class="col custom-hidden">Answers</div>
+      </div>
+
+      <div class="scroll-parent">
+        <!-- Custom table view using recycler-->
+        <RecycleScroller
+          :items="filteredResults"
+          :item-size="24"
+          class="scroll-container"
+          key-field="id"
+        >
+          <template v-slot="{ item, index }">
+            <div class="row">
+              <!-- Row Index -->
+              <div class="col">
+                <span>
+                  {{ index + 1 }}
+                </span>
+              </div>
+              <!-- Status Icon -->
+              <div class="col">
+                <i
+                  v-if="!item.rollNo"
+                  class="material-icons md-18 has-text-danger"
+                >
+                  report_problem
+                </i>
+                <i
+                  v-else-if="!item.isRollNoExtracted"
+                  class="material-icons md-18 has-text-warning"
+                >
+                  priority_high
+                </i>
+                <i v-else class="material-icons md-18 has-text-success">
+                  check
+                </i>
+              </div>
+              <!-- Roll No -->
+              <div class="col is-100">
+                <span>
+                  {{ item.rollNo }}
+                </span>
+              </div>
+              <!-- Answer sheet image -->
+              <div class="col is-200">
+                <a
+                  @click="selectRow(index)"
+                  v-if="item.imageFile"
+                  class="custom-link"
+                >
+                  <i class="material-icons md-18">open_in_new</i>
+                  <span v-if="item.isRollNoExtracted">View</span>
+                  <span v-else>Update Roll No</span>
+                </a>
+                <span v-else>
+                  Not available
+                </span>
+              </div>
+              <div class="col is-size-7 custom-hidden">
+                <template v-for="answer in item.answers">
+                  {{ answer.value }}
+                </template>
+              </div>
+            </div>
+          </template>
+        </RecycleScroller>
+      </div>
+    </div>
+
+    <!-- Show message when no data is loaded -->
+    <div key="message" v-else>
+      <article class="message is-light">
+        <div class="message-body">
+          <i class="material-icons">info</i>
+          <span>Please load a result file to review, save or export.</span>
+        </div>
+      </article>
+    </div>
 
     <!-- Preview component -->
     <Transition mode="out-in" name="slide-up">

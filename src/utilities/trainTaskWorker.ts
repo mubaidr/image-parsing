@@ -23,7 +23,7 @@ async function start() {
   net.train(trainingData, {
     log: true,
     logPeriod: 10,
-    errorThresh: 0.0001,
+    errorThresh: 0.001,
   })
 
   // write trained network configuration to disk

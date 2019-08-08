@@ -12,7 +12,9 @@ import { cache } from './cache'
 import { dataPaths } from './dataPaths'
 
 const getSharpObjectFromSource = (src: string): Sharp => {
-  return sharp(src).flatten()
+  return sharp(src)
+    .flatten()
+    .median(1)
 }
 
 const convertImage = async (src: string): Promise<string> => {
@@ -81,14 +83,12 @@ const getRollNoFromImage = async (
   const width = Math.ceil(codeLocation.width * ratio)
   const height = Math.ceil(codeLocation.height * ratio)
 
-  img
-    .extract({
-      left: Math.floor(codeLocation.x * ratio),
-      top: Math.floor(codeLocation.y * ratio),
-      width,
-      height,
-    })
-    .blur()
+  img.extract({
+    left: Math.floor(codeLocation.x * ratio),
+    top: Math.floor(codeLocation.y * ratio),
+    width,
+    height,
+  })
 
   // log image
   // logImageData(img)

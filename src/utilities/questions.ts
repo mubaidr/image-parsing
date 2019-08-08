@@ -37,15 +37,13 @@ const getQuestionsData = async (
     })
 
     // log image
-    logImageData(img, title)
+    // logImageData(img, title)
 
     const { data, info } = await img.toBuffer({ resolveWithObject: true })
     const bitData = convertToBitArray(
       Array.prototype.slice.call(data, 0),
       info.channels
     )
-
-    console.log(data.length, bitData.length)
 
     if (compiledResult) {
       // for training purpose

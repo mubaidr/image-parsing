@@ -88,7 +88,7 @@ async function startMain() {
 
     compiler.watch(
       {
-        aggregateTimeout: 500,
+        aggregateTimeout: 250,
       },
       err => {
         if (err) console.error(err)
