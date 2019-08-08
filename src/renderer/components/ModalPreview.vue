@@ -9,10 +9,10 @@
 
     <div class="modal-card">
       <header class="modal-card-head">
-        <a @click="previous" class="button is-pulled-left is-default">
+        <a @click="previous" class="button is-pulled-left is-info">
           <i class="material-icons">skip_previous</i>
         </a>
-
+        &nbsp;&nbsp;&nbsp;
         <input
           ref="txt_roll_no"
           :class="{ 'is-danger': !row.rollNo }"
@@ -22,15 +22,17 @@
           placeholder="Input Roll Number"
           type="text"
         />
-
-        <a @click="next" class="button is-pulled-right is-default">
+        &nbsp;&nbsp;&nbsp;
+        <a @click="next" class="button is-pulled-right is-info">
           <i class="material-icons">skip_next</i>
         </a>
       </header>
 
       <section class="modal-card-body">
-        <!-- Preview -->
-        <img :src="imageSource" v-show="imageSource" />
+        <div class="has-text-centered">
+          <!-- Preview -->
+          <img :src="imageSource" v-show="imageSource" />
+        </div>
       </section>
     </div>
   </div>
@@ -105,5 +107,10 @@ export default Vue.extend({
   top: 0;
   right: 0;
   z-index: 99999;
+}
+
+img {
+  height: calc(100vh - 200px);
+  min-height: 600px;
 }
 </style>
