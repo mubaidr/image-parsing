@@ -3,9 +3,10 @@ import ProgressStateEnum from './@enums/ProgressStateEnum'
 import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
 import DesignData from './@interfaces/DesignData'
 import NNQuestionOutput from './@interfaces/NNQuestionOutput'
-import { getRollNoFromImage, getSharpObjectFromSource } from './images'
+import { getSharpObjectFromSource } from './images'
 import { getQuestionsNeuralNet } from './index'
 import { getQuestionsData } from './questions'
+import { getRollNoFromImage } from './sheetInfo'
 
 const processTask = async (
   designData: DesignData,
@@ -31,12 +32,13 @@ const processTask = async (
       j += 1
     ) {
       const { title, input } = questionsData[j]
-      const pre = neuralNet.run<number[], NNQuestionOutput>(input)
-      let value: string
 
       if (!title) {
         continue
       }
+
+      let value: string
+      const pre = neuralNet.run<number[], NNQuestionOutput>(input)
 
       if (pre[QuestionOptionsEnum.NONE] >= 0.95) {
         value = QuestionOptionsEnum.NONE
