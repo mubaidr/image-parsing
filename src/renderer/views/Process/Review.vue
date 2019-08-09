@@ -209,12 +209,12 @@
 </template>
 
 <script>
-import modalPreview from '../components/ModalPreview'
-import { saveFile, openFile } from '../../utilities/electron-dialog'
-import { exportJsonToExcel } from '../../utilities/excel'
-import { convertImage } from '../../utilities/images'
-import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
-import CompiledResult from '../../utilities/@classes/CompiledResult'
+import modalPreview from '../../components/ModalPreview'
+import { saveFile, openFile } from '../../../utilities/electron-dialog'
+import { exportJsonToExcel } from '../../../utilities/excel'
+import { convertImage } from '../../../utilities/images'
+import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
+import CompiledResult from '../../../utilities/@classes/CompiledResult'
 
 export default {
   name: 'ReviewResult',

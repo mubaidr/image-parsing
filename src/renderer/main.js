@@ -36,7 +36,11 @@ new Vue({
 
 // menu routes handler
 ipcRenderer.on('change-view', (event, data) => {
-  if (data.route) {
-    router.push(data.route)
+  const { route } = data
+
+  console.log(route)
+
+  if (route) {
+    router.push(route)
   }
 })

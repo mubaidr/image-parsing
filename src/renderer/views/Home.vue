@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="hero is-dark is-bold">
+    <section class="hero is-bold">
       <div class="hero-body">
         <br />
         <div class="block has-text-centered">
@@ -11,34 +11,43 @@
             />
           </figure>
         </div>
+
         <div class="content has-text-centered">
           <h1 class="title is-4">
             Image Parsing
           </h1>
           <p class="subtitle is-6">
-            Generate answeer sheets and extract results from the scanned answer
-            sheets.
+            A complete solution for Forms/MCQ based paper checking.
           </p>
-          <RouterLink class="button is-light" to="generate">
-            <i class="material-icons">print</i>
-            <span>Generate</span>
-          </RouterLink>
-          <RouterLink class="button is-light" to="extract">
-            <i class="material-icons">list</i>
-            <span>Extract</span>
-          </RouterLink>
-          <RouterLink class="button is-light" to="review">
-            <i class="material-icons">playlist_add_check</i>
-            <span>Review</span>
-          </RouterLink>
-          <RouterLink class="button is-light" to="compile">
-            <i class="material-icons">assessment</i>
-            <span>Compile</span>
-          </RouterLink>
-          <RouterLink class="button is-light" to="train">
-            <i class="material-icons">build</i>
-            <span>Train</span>
-          </RouterLink>
+
+          <hr />
+
+          <div class="buttons is-centered">
+            <RouterLink class="button is-dark" to="generate">
+              <i class="material-icons">print</i>
+              <span>Generate</span>
+            </RouterLink>
+            <RouterLink class="button is-dark" to="extract">
+              <i class="material-icons">list</i>
+              <span>Extract</span>
+            </RouterLink>
+            <RouterLink class="button is-dark" to="review">
+              <i class="material-icons">playlist_add_check</i>
+              <span>Review</span>
+            </RouterLink>
+            <RouterLink class="button is-dark" to="compile">
+              <i class="material-icons">assessment</i>
+              <span>Compile</span>
+            </RouterLink>
+            <RouterLink class="button is-dark" to="extract">
+              <i class="material-icons">list</i>
+              <span>Extract</span>
+            </RouterLink>
+            <RouterLink class="button is-dark" to="train">
+              <i class="material-icons">build</i>
+              <span>Train</span>
+            </RouterLink>
+          </div>
         </div>
       </div>
     </section>

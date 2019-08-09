@@ -68,9 +68,9 @@
 import { fork } from 'child_process'
 import path from 'path'
 
-import { openFile } from '../../utilities/electron-dialog'
-import ImageTypesEnum from '../../utilities/@enums/ImageTypesEnum'
-import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
+import { openFile } from '../../../utilities/electron-dialog'
+import ImageTypesEnum from '../../../utilities/@enums/ImageTypesEnum'
+import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
 
 export default {
   data() {

@@ -1,27 +1,34 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import About from '../views/About'
-import Compile from '../views/Compile'
-import Extract from '../views/Extract'
-import Generate from '../views/Generate'
-import Help from '../views/Help'
-import Home from '../views/Home'
-import Review from '../views/Review'
-import Train from '../views/Train'
+
+import Home from '../views/Home.vue'
+// generate
+import Generate from '../views/Generate.vue'
+import AnswerSheets from '../views/Generate/AnswerSheets.vue'
+import TestData from '../views/Generate/TestData.vue'
+// process
+import Process from '../views/Process.vue'
+import Extract from '../views/Process/Extract.vue'
+import Review from '../views/Process/Review.vue'
+// compile
+import Compile from '../views/Compile.vue'
+// utilities
+import Utilities from '../views/Utilities.vue'
+import ImageProcessing from '../views/Utilities/image-processing.vue'
+import TrainNN from '../views/Utilities/train-nn.vue'
+// help
+import Help from '../views/Help.vue'
+import Contact from '../views/Help/Contact.vue'
+import About from '../views/Help/About.vue'
 
 Vue.use(Router)
 
 const router = new Router({
   routes: [
     {
-      path: '/',
-      redirect: '/home',
-    },
-    {
       path: '/home',
       meta: {
         title: 'Home',
-        icon: 'fa-home',
       },
       component: Home,
     },
@@ -29,61 +36,100 @@ const router = new Router({
       path: '/generate',
       meta: {
         title: 'Generate',
-        icon: 'fa-file-alt',
       },
       component: Generate,
+      children: [
+        {
+          path: '/generate/answer-sheets',
+          meta: {
+            title: 'Generate Answer Sheets',
+          },
+          component: AnswerSheets,
+        },
+        {
+          path: '/generate/test-data',
+          meta: {
+            title: 'Generate Test Data',
+          },
+          component: TestData,
+        },
+      ],
     },
     {
       path: '/process',
-      redirect: '/extract',
-    },
-    {
-      path: '/extract',
       meta: {
-        title: 'Extract Results',
-        icon: 'fa-play',
+        title: 'Process',
       },
-      component: Extract,
-    },
-    {
-      path: '/review',
-      meta: {
-        title: 'Review Results',
-        icon: 'fa-play',
-      },
-      component: Review,
+      component: Process,
+      children: [
+        {
+          path: '/process/extract',
+          meta: {
+            title: 'Extract Results',
+          },
+          component: Extract,
+        },
+        {
+          path: '/process/review',
+          meta: {
+            title: 'Review Results',
+          },
+          component: Review,
+        },
+      ],
     },
     {
       path: '/compile',
       meta: {
         title: 'Compile',
-        icon: 'fa-tasks',
       },
       component: Compile,
     },
     {
-      path: '/train',
+      path: '/utilities',
       meta: {
-        title: 'Train',
-        icon: 'fa-vials',
+        title: 'Utilities',
       },
-      component: Train,
-    },
-    {
-      path: '/about',
-      meta: {
-        title: 'About',
-        icon: 'fa-info-circle',
-      },
-      component: About,
+      component: Utilities,
+      children: [
+        {
+          path: '/utilities/image-processing',
+          meta: {
+            title: 'Image Processing',
+          },
+          component: ImageProcessing,
+        },
+        {
+          path: '/utilities/train',
+          meta: {
+            title: 'Train',
+          },
+          component: TrainNN,
+        },
+      ],
     },
     {
       path: '/help',
       meta: {
         title: 'Help',
-        icon: 'fa-info-circle',
       },
       component: Help,
+      children: [
+        {
+          path: '/help/contact',
+          meta: {
+            title: 'Contact',
+          },
+          component: Contact,
+        },
+        {
+          path: '/help/about',
+          meta: {
+            title: 'About',
+          },
+          component: About,
+        },
+      ],
     },
     {
       path: '*',

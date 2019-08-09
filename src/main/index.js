@@ -152,9 +152,9 @@ const template = [
     submenu: [
       {
         label: 'Home',
-        accelerator: 'CommandOrControl+H',
+        // accelerator: 'CommandOrControl+H',
         click() {
-          sendMenuEvent({ route: '/' })
+          sendMenuEvent({ route: '/home' })
         },
       },
       { type: 'separator' },
@@ -169,9 +169,14 @@ const template = [
     submenu: [
       {
         label: 'Answer Sheets',
-        accelerator: 'CommandOrControl+G',
         click() {
-          sendMenuEvent({ route: '/generate' })
+          sendMenuEvent({ route: '/generate/answer-sheets' })
+        },
+      },
+      {
+        label: 'Test Data',
+        click() {
+          sendMenuEvent({ route: '/generate/test-data' })
         },
       },
     ],
@@ -181,16 +186,14 @@ const template = [
     submenu: [
       {
         label: 'Extract Result',
-        accelerator: 'CommandOrControl+E',
         click() {
-          sendMenuEvent({ route: '/extract' })
+          sendMenuEvent({ route: '/process/extract' })
         },
       },
       {
         label: 'Review Result',
-        accelerator: 'CommandOrControl+R',
         click() {
-          sendMenuEvent({ route: '/review' })
+          sendMenuEvent({ route: '/process/review' })
         },
       },
     ],
@@ -200,9 +203,25 @@ const template = [
     submenu: [
       {
         label: 'Compile Result',
-        accelerator: 'CommandOrControl+C',
         click() {
           sendMenuEvent({ route: '/compile' })
+        },
+      },
+    ],
+  },
+  {
+    label: 'Utilities',
+    submenu: [
+      {
+        label: 'Image Processing',
+        click() {
+          sendMenuEvent({ route: '/utilities/images-processing' })
+        },
+      },
+      {
+        label: 'Train',
+        click() {
+          sendMenuEvent({ route: '/utilities/train' })
         },
       },
     ],
@@ -211,25 +230,18 @@ const template = [
     role: 'help',
     submenu: [
       {
-        label: 'Train network for new design',
-        click() {
-          sendMenuEvent({ route: '/train' })
-        },
-      },
-      {
         label: 'Get Help',
         role: 'help',
         accelerator: 'F1',
         click() {
-          sendMenuEvent({ route: '/help' })
+          sendMenuEvent({ route: '/help/contact' })
         },
       },
       {
         label: 'About',
         role: 'about',
-        accelerator: 'CommandOrControl+A',
         click() {
-          sendMenuEvent({ route: '/about' })
+          sendMenuEvent({ route: '/help/about' })
         },
       },
     ],

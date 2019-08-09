@@ -72,12 +72,12 @@
 </template>
 
 <script>
-import { currentWindow } from '../../utilities/electron-utilities'
-import { openDirectory, saveFile } from '../../utilities/electron-dialog'
-import { exportJsonToExcel } from '../../utilities/excel'
-import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
-import * as processingModule from '../../utilities/process'
-import ProgressStateEnum from '../../utilities/@enums/ProgressStateEnum'
+import { currentWindow } from '../../../utilities/electron-utilities'
+import { openDirectory, saveFile } from '../../../utilities/electron-dialog'
+import { exportJsonToExcel } from '../../../utilities/excel'
+import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
+import * as processingModule from '../../../utilities/process'
+import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
 import prettyMs from 'pretty-ms'
 
 export default {
@@ -207,7 +207,7 @@ export default {
             class: 'has-text-white has-text-underlined',
             onClick: (e, toastObject) => {
               toastObject.goAway(0)
-              this.$router.push(`review?resultFilePath=${ destination }`)
+              this.$router.push(`/process/review?resultFilePath=${ destination }`)
             },
           },
         })

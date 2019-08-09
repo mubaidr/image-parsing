@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import SystemInformation from '../components/SystemInformation'
+import SystemInformation from '../../components/SystemInformation'
 
 export default {
   name: 'About',
