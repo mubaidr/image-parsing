@@ -9,9 +9,7 @@ import { cache } from './cache'
 import { dataPaths } from './dataPaths'
 
 const getSharpObjectFromSource = (src: string): Sharp => {
-  return sharp(src)
-    .flatten()
-    .median(1)
+  return sharp(src).flatten()
 }
 
 const convertImage = async (src: string): Promise<string> => {

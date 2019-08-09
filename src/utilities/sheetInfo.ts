@@ -2,8 +2,9 @@ import javascriptBarcodeReader from 'javascript-barcode-reader'
 import javascriptQRReader from 'jsqr'
 import { Sharp } from 'sharp'
 
-// import { logImageData } from './images'
 import DesignData from './@interfaces/DesignData'
+
+// import { logImageData } from './images'
 
 const getRollNoFromImage = async (
   designData: DesignData,
@@ -16,12 +17,14 @@ const getRollNoFromImage = async (
   const width = Math.ceil(codeLocation.width * ratio)
   const height = Math.ceil(codeLocation.height * ratio)
 
-  img.extract({
-    left: Math.floor(codeLocation.x * ratio),
-    top: Math.floor(codeLocation.y * ratio),
-    width,
-    height,
-  })
+  img
+    .extract({
+      left: Math.floor(codeLocation.x * ratio),
+      top: Math.floor(codeLocation.y * ratio),
+      width,
+      height,
+    })
+    .median(3)
 
   // log image
   // logImageData(img)

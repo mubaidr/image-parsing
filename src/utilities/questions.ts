@@ -1,4 +1,4 @@
-import sharp, { Sharp } from 'sharp'
+import { Sharp } from 'sharp'
 
 import CompiledResult from './@classes/CompiledResult'
 import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
@@ -13,13 +13,13 @@ const getQuestionsData = async (
   compiledResult?: CompiledResult
 ): Promise<QuestionData[]> => {
   const { width } = await img.metadata()
-  const scale = width ? design.width / width : 1
+  const scale = width && width > design.width ? design.width / width : 1
   const extractedQuestionData: QuestionData[] = []
   const questions = Object.entries(design.questions)
 
-  img.resize(Math.floor(design.width * scale), null, {
-    kernel: sharp.kernel.nearest,
-  })
+  if (scale !== 1) {
+    img.resize(Math.floor(design.width * scale))
+  }
 
   for (
     let i = 0, questionsLength = questions.length;

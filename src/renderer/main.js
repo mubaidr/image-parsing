@@ -38,9 +38,7 @@ new Vue({
 ipcRenderer.on('change-view', (event, data) => {
   const { route } = data
 
-  console.log(route)
-
-  if (route) {
+  if (route && route !== router.currentRoute.path) {
     router.push(route)
   }
 })

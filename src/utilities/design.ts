@@ -1,7 +1,7 @@
 import { parse } from 'fast-xml-parser'
 import { readFileSync } from 'fs'
 
-import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
+// import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
 import RegExpPatterns from './@enums/RegExpPatterns'
 import DesignData from './@interfaces/DesignData'
 import Location from './@interfaces/Location'
@@ -50,24 +50,39 @@ const getDesignData = (file: string): DesignData => {
     }
 
     x = x - rx + xTransform - 3
-    y = y - ry + yTransform - 3
+    y = y - ry + yTransform - 6
     width = width + rx + 6
     height = height + ry + 6
 
     if (PATTERN_OPTION.test(title)) {
-      const option: string = title.slice(-1)
+      // const option: string = title.slice(-1)
       const questionNumber: string = title.slice(0, -1)
 
       if (!questions[questionNumber]) {
-        questions[questionNumber] = { x: 0, y: 0, width: width, height: 0 }
+        questions[questionNumber] = {
+          x: svgWidth,
+          y: svgHeight,
+          width: 0,
+          height: 0,
+        }
       }
 
-      if (option === QuestionOptionsEnum.A) {
+      questions[questionNumber].width += width
+
+      if (questions[questionNumber].x > x) {
         questions[questionNumber].x = x
+      }
+
+      if (questions[questionNumber].y > y) {
         questions[questionNumber].y = y
+      }
+
+      if (questions[questionNumber].width < width) {
+        questions[questionNumber].width = width
+      }
+
+      if (questions[questionNumber].height < height) {
         questions[questionNumber].height = height
-      } else {
-        questions[questionNumber].width += width
       }
     } else if (PATTERN_BARCODE.test(title) || PATTERN_QRCODE.test(title)) {
       code = { x, y, width, height }
