@@ -135,7 +135,9 @@ const config = {
 if (isDevMode) {
   config.plugins.push(
     new webpack.HotModuleReplacementPlugin(),
-    new BundleAnalyzerPlugin()
+    new BundleAnalyzerPlugin({
+      openAnalyzer: false,
+    })
   )
 } else {
   config.plugins.push(

@@ -23,15 +23,15 @@
           <hr />
 
           <div class="buttons is-centered">
-            <RouterLink class="button is-dark" to="generate">
+            <RouterLink class="button is-dark" to="/generate/answer-sheets">
               <i class="material-icons">print</i>
               <span>Generate</span>
             </RouterLink>
-            <RouterLink class="button is-dark" to="extract">
+            <RouterLink class="button is-dark" to="/process/extract">
               <i class="material-icons">list</i>
               <span>Extract</span>
             </RouterLink>
-            <RouterLink class="button is-dark" to="review">
+            <RouterLink class="button is-dark" to="/process/review">
               <i class="material-icons">playlist_add_check</i>
               <span>Review</span>
             </RouterLink>
@@ -39,11 +39,11 @@
               <i class="material-icons">assessment</i>
               <span>Compile</span>
             </RouterLink>
-            <RouterLink class="button is-dark" to="extract">
-              <i class="material-icons">list</i>
-              <span>Extract</span>
+            <RouterLink class="button is-dark" to="/utilities/image-processing">
+              <i class="material-icons">view_list</i>
+              <span>Utilities</span>
             </RouterLink>
-            <RouterLink class="button is-dark" to="train">
+            <RouterLink class="button is-dark" to="/utilities/train">
               <i class="material-icons">build</i>
               <span>Train</span>
             </RouterLink>
