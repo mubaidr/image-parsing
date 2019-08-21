@@ -39,10 +39,6 @@
               <i class="material-icons">assessment</i>
               <span>Compile</span>
             </RouterLink>
-            <RouterLink class="button is-dark" to="/utilities/image-processing">
-              <i class="material-icons">view_list</i>
-              <span>Utilities</span>
-            </RouterLink>
             <RouterLink class="button is-dark" to="/utilities/train">
               <i class="material-icons">build</i>
               <span>Train</span>

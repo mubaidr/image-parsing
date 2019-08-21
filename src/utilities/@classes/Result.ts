@@ -1,7 +1,9 @@
 import uuid from 'uuid'
+
 import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
 import RegExpPattern from '../@enums/RegExpPatterns'
 import AnswerCollection from '../@interfaces/AnswerCollection'
+
 class Result {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
@@ -170,14 +172,14 @@ class Result {
     for (const prop in o) {
       const value = o[prop]
 
-      if (typeof value === 'string') {
-        o[prop] = value
-      } else {
+      if (typeof value === 'object') {
         for (const subProp in value) {
           o[subProp] = value[subProp].value
         }
 
         delete o[prop]
+      } else {
+        o[prop] = value
       }
     }
 

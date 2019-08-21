@@ -278,14 +278,14 @@ export default {
   created() {
     window.removeEventListener('keydown', null)
     window.addEventListener('keydown', this.handleKeyDown)
-  },
 
-  mounted() {
     const resultFilePath = this.$route.query.resultFilePath
-
     if (!resultFilePath) return
 
     this.resultFilePath = resultFilePath
+  },
+
+  mounted() {
     this.loadResult()
   },
 
@@ -398,6 +398,8 @@ export default {
     },
 
     loadResult() {
+      if(!this.resultFilePath) return
+
       this.compiledResult = CompiledResult.loadFromExcel(this.resultFilePath)
     },
   },

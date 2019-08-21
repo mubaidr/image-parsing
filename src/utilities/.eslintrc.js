@@ -34,5 +34,6 @@ module.exports = {
     'no-buffer-constructor': 2,
     '@typescript-eslint/no-parameter-properties': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
+    '@typescript-eslint/no-inferrable-types': 0,
   },
 }

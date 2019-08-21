@@ -14,7 +14,6 @@ import Review from '../views/Process/Review.vue'
 import Compile from '../views/Compile.vue'
 // utilities
 import Utilities from '../views/Utilities.vue'
-import ImageProcessing from '../views/Utilities/image-processing.vue'
 import TrainNN from '../views/Utilities/train-nn.vue'
 // help
 import Help from '../views/Help.vue'
@@ -92,13 +91,6 @@ const router = new Router({
       },
       component: Utilities,
       children: [
-        {
-          path: '/utilities/image-processing',
-          meta: {
-            title: 'Image Processing',
-          },
-          component: ImageProcessing,
-        },
         {
           path: '/utilities/train',
           meta: {

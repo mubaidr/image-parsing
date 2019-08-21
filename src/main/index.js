@@ -6,6 +6,7 @@ import * as vueDevtools from 'vue-devtools'
 import { productName } from '../../package.json'
 
 app.setName(productName)
+app.allowRendererProcessReuse = true
 
 // disable electron warning
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
@@ -212,12 +213,6 @@ const template = [
   {
     label: 'Utilities',
     submenu: [
-      {
-        label: 'Image Processing',
-        click() {
-          sendMenuEvent({ route: '/utilities/images-processing' })
-        },
-      },
       {
         label: 'Train',
         click() {
