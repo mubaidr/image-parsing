@@ -1,4 +1,4 @@
-import { BrowserWindow, FileFilter, OpenDialogOptions, remote } from 'electron'
+import { FileFilter, remote } from 'electron'
 
 import { store } from './store'
 
@@ -7,15 +7,11 @@ const { dialog, getCurrentWindow } = remote
 const openDirectory = async (
   filters?: FileFilter[]
 ): Promise<string | undefined> => {
-  // @ts-ignore
-  const dir = await dialog.showOpenDialog<BrowserWindow, OpenDialogOptions>(
-    getCurrentWindow(),
-    {
-      defaultPath: store.lastOpenDir(),
-      filters,
-      properties: ['openDirectory'],
-    }
-  )
+  const dir = await dialog.showOpenDialog(getCurrentWindow(), {
+    defaultPath: store.lastOpenDir(),
+    filters,
+    properties: ['openDirectory'],
+  })
 
   const dest = dir.filePaths ? dir.filePaths[0] : undefined
 

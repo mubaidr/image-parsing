@@ -43,10 +43,7 @@ const convertImage = async (src: string): Promise<string> => {
   return url
 }
 
-const logImageData = async (
-  src: string | Sharp,
-  name?: string
-): Promise<void> => {
+const logImageData = (src: string | Sharp, name?: string): void => {
   let img: Sharp
 
   if (typeof src === 'string') {

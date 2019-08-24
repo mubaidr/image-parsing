@@ -10,7 +10,7 @@ import { getQuestionsData } from './questions'
 async function start() {
   const designData = getDesignData(dataPaths.designBarcode)
   const sharpImage = getSharpObjectFromSource(dataPaths.keyImage).raw()
-  const compiledResult = await CompiledResult.loadFromExcel(dataPaths.key)
+  const compiledResult = CompiledResult.loadFromExcel(dataPaths.key)
 
   const trainingData = await getQuestionsData(
     designData,

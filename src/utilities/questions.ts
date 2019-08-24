@@ -27,7 +27,7 @@ const getQuestionsData = async (
     i += 1
   ) {
     const [title, q] = questions[i]
-    let titleLowerCase = title.toLowerCase()
+    const titleLowerCase = title.toLowerCase()
 
     img.extract({
       left: Math.floor(q.x * scale),

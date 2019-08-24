@@ -5,8 +5,7 @@ const newStore = new Store()
 
 const store = {
   // export store methods
-  get: newStore.get,
-  set: newStore.set,
+  ...newStore,
 
   // get last used file/ dir paths
   lastOpenDir: () => {

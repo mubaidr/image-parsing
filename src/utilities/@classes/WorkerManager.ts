@@ -65,7 +65,7 @@ class WorkerManager {
     return { totalImages: images.length, totalWorkers: totalWorkers }
   }
 
-  public async reset(): Promise<ChildProcess[]> {
+  public reset(): ChildProcess[] {
     this.stop()
     return this.create()
   }

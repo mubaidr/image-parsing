@@ -38,7 +38,8 @@ const getDesignData = (file: string): DesignData => {
 
     if (!rect) return
 
-    let { x, y, rx, ry, width, height } = rect
+    const { rx, ry } = rect
+    let { x, y, width, height } = rect
     let xTransform = 0
     let yTransform = 0
 

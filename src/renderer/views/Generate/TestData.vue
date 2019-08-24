@@ -96,7 +96,7 @@ import {
 } from '../../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../../utilities/excel'
 import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
-import * as processingModule from '../../../utilities/process'
+import * as generateModule from '../../../utilities/generateTestData'
 import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
 import prettyMs from 'pretty-ms'
 
@@ -107,7 +107,7 @@ export default {
     return {
       exportDirectory: 'D:\\Current\\image-parsing\\.tmp\\',
       resultFilePath:
-        'D:\\Current\\image-parsing\\__tests__\\test-data\\result.xlsx',
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\compiledResult.xlsx',
       perImageTime: 0,
       processedImages: 0,
       progressState: ProgressStateEnum.STOPPED,
@@ -156,14 +156,14 @@ export default {
   },
 
   mounted() {
-    processingModule.stop()
+    generateModule.stop()
   },
 
   methods: {
     startProcess() {
       this.progressState = ProgressStateEnum.RUNNING
 
-      processingModule
+      generateModule
         .start(this.callback, this.exportDirectory)
         .then(({ totalImages }) => {
           this.totalImages = totalImages
@@ -177,7 +177,7 @@ export default {
     },
 
     stopProcess() {
-      processingModule.stop()
+      generateModule.stop()
 
       this.perImageTime = 0
       this.processedImages = 0
@@ -228,7 +228,7 @@ export default {
             class: 'has-text-white has-text-underlined',
             onClick: (e, toastObject) => {
               toastObject.goAway(0)
-              this.$router.push(`/process/review?resultFilePath=${destination}`)
+              this.$router.push(`/process/review?resultFilePath=${ destination }`)
             },
           },
         })
