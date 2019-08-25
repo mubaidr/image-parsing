@@ -49,18 +49,14 @@
     <div class="buttons">
       <button
         :disabled="isRunning || !inputIsValid"
-        @click="startProcess"
+        @click="start"
         class="button is-primary"
       >
         <i class="material-icons">flash_on</i>
         <span>Process</span>
       </button>
 
-      <button
-        :disabled="!isRunning"
-        @click="stopProcess"
-        class="button is-danger"
-      >
+      <button :disabled="!isRunning" @click="stop" class="button is-danger">
         <i class="material-icons">stop</i>
         <span>Stop</span>
       </button>
@@ -96,12 +92,11 @@ import {
 } from '../../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../../utilities/excel'
 import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
-import * as generateTask from '../../../utilities/generateTestDataTask'
 import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
 import prettyMs from 'pretty-ms'
 
 export default {
-  name: 'ExtractResult',
+  name: 'GenerateTestData',
 
   data() {
     return {
@@ -155,29 +150,15 @@ export default {
     },
   },
 
-  mounted() {
-    generateTask.stop()
-  },
+  unmounted() {},
 
   methods: {
-    startProcess() {
+    start() {
       this.progressState = ProgressStateEnum.RUNNING
-
-      generateTask
-        .start(this.callback, this.exportDirectory)
-        .then(({ totalImages }) => {
-          this.totalImages = totalImages
-        })
-        .catch(err => {
-          this.$toasted.show(err, {
-            type: 'error',
-            icon: 'info',
-          })
-        })
     },
 
-    stopProcess() {
-      generateTask.stop()
+    stop() {
+      // generateTask.stop()
 
       this.perImageTime = 0
       this.processedImages = 0
@@ -193,7 +174,7 @@ export default {
           break
         case ProgressStateEnum.COMPLETED:
           currentWindow.setProgressBar(0)
-          this.stopProcess()
+          this.stop()
           this.exportData(m.compiledResult)
           break
         case ProgressStateEnum.ERROR:

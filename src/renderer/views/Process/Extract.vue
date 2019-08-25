@@ -6,13 +6,14 @@
     <h2 class="subtitle is-6">
       Process scanned images to generate result.
     </h2>
+
     <div class="field">
       <label class="label">Scanned images directory:</label>
       <div class="file has-name is-fullwidth">
         <label class="file-label">
           <button
             :disabled="isRunning"
-            @click="chooseImageDirectory"
+            @click="chooseimagesDirectory"
             class="file-input"
             name="resume"
           />
@@ -20,7 +21,7 @@
             <i class="material-icons">folder_open</i>
             <span class="file-label">Choose directory</span>
           </span>
-          <span class="file-name">{{ imageDirectory }}</span>
+          <span class="file-name">{{ imagesDirectory }}</span>
         </label>
       </div>
       <p class="help">
@@ -33,18 +34,14 @@
     <div class="buttons">
       <button
         :disabled="isRunning || !inputIsValid"
-        @click="startProcess"
+        @click="start"
         class="button is-primary"
       >
         <i class="material-icons">flash_on</i>
         <span>Process</span>
       </button>
 
-      <button
-        :disabled="!isRunning"
-        @click="stopProcess"
-        class="button is-danger"
-      >
+      <button :disabled="!isRunning" @click="stop" class="button is-danger">
         <i class="material-icons">stop</i>
         <span>Stop</span>
       </button>
@@ -76,27 +73,31 @@ import { currentWindow } from '../../../utilities/electron-utilities'
 import { openDirectory, saveFile } from '../../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../../utilities/excel'
 import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
-import * as extractTask from '../../../utilities/extractTask'
 import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
 import prettyMs from 'pretty-ms'
+import WorkerManager from '../../../utilities/@classes/WorkerManager'
+import WorkerTypesEnum from '../../../utilities/@enums/WorkerTypesEnum'
+
+let workerManager = new WorkerManager(WorkerTypesEnum.EXTRACT)
 
 export default {
   name: 'ExtractResult',
 
   data() {
     return {
-      imageDirectory:
+      imagesDirectory:
         'D:\\Current\\image-parsing\\__tests__\\test-data\\images-barcode\\',
       perImageTime: 0,
       processedImages: 0,
       progressState: ProgressStateEnum.STOPPED,
       totalImages: 0,
+      totalWorkers: 0,
     }
   },
 
   computed: {
     inputIsValid() {
-      return this.imageDirectory
+      return this.imagesDirectory
     },
 
     isRunning() {
@@ -134,18 +135,27 @@ export default {
     },
   },
 
-  mounted() {
-    extractTask.stop()
+  unmounted() {
+    workerManager.stop()
   },
 
   methods: {
-    startProcess() {
+    chooseimagesDirectory() {
+      openDirectory().then(dir => {
+        this.imagesDirectory = dir
+      })
+    },
+    start() {
       this.progressState = ProgressStateEnum.RUNNING
 
-      extractTask
-        .start(this.callback, this.imageDirectory)
-        .then(({ totalImages }) => {
+      workerManager
+        .process({
+          callback: this.callback,
+          imagesDirectory: this.imagesDirectory,
+        })
+        .then(({ totalWorkers, totalImages }) => {
           this.totalImages = totalImages
+          this.totalWorkers = totalWorkers
         })
         .catch(err => {
           this.$toasted.show(err, {
@@ -154,16 +164,15 @@ export default {
           })
         })
     },
-
-    stopProcess() {
-      extractTask.stop()
+    stop() {
+      workerManager.stop()
 
       this.perImageTime = 0
       this.processedImages = 0
       this.progressState = ProgressStateEnum.STOPPED
       this.totalImages = 0
+      this.totalWorkers = 0
     },
-
     callback(m) {
       switch (m.state) {
         case ProgressStateEnum.RUNNING:
@@ -172,7 +181,7 @@ export default {
           break
         case ProgressStateEnum.COMPLETED:
           currentWindow.setProgressBar(0)
-          this.stopProcess()
+          this.stop()
           this.exportData(m.compiledResult)
           break
         case ProgressStateEnum.ERROR:
@@ -185,7 +194,6 @@ export default {
 
       this.progressState = m.state
     },
-
     exportData(compiledResult) {
       saveFile([
         {
@@ -211,12 +219,6 @@ export default {
             },
           },
         })
-      })
-    },
-
-    chooseImageDirectory() {
-      openDirectory().then(dir => {
-        this.imageDirectory = dir
       })
     },
   },

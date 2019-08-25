@@ -8,7 +8,7 @@ import { getQuestionsNeuralNet } from '../index'
 import { getQuestionsData } from '../questions'
 import { getRollNoFromImage } from '../sheetInfo'
 
-const startTask = async (
+const start = async (
   designData: DesignData,
   images: string[]
 ): Promise<Result[] | undefined> => {
@@ -78,16 +78,16 @@ const startTask = async (
   }
 }
 
-function stopTask() {
+function stop() {
   process.exit(0)
 }
 
 // add message listner
 process.on('message', msg => {
   if (msg.stop) {
-    stopTask()
+    stop()
   } else {
-    startTask(msg.designData, msg.imagePaths)
+    start(msg.designData, msg.imagePaths)
   }
 })
 
@@ -103,4 +103,4 @@ process.on('warning', warning => {
   console.warn(warning)
 })
 
-export { startTask, stopTask }
+export { start, stop }

@@ -8,11 +8,42 @@ import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import WorkerTypesEnum from '../@enums/WorkerTypesEnum'
 import WorkerManagerInput from '../@interfaces/WorkerManagerInput'
 import WorkerManagerOutput from '../@interfaces/WorkerManagerOutput'
+import { dataPaths } from '../dataPaths'
 import { getDesignData } from '../design'
 import { getImagePaths } from '../images'
 import CompiledResult from './CompiledResult'
 
 const isDev = process.env.NODE_ENV === 'development'
+
+function getWorkerPath(type: WorkerTypesEnum): string {
+  let workerPath: string
+
+  switch (type) {
+    case WorkerTypesEnum.TRAIN:
+      workerPath = isDev
+        ? path.resolve('./dist/workers/trainTaskWorker.js')
+        : path.resolve(__dirname, './workers/trainTaskWorker.js')
+      break
+    case WorkerTypesEnum.GENERATE_ANSWER_SHEET:
+      workerPath = isDev
+        ? path.resolve('./dist/workers/generateAnswerSheetsTaskWorker.js')
+        : path.resolve(__dirname, './workers/generateAnswerSheetsTaskWorker.js')
+      break
+    case WorkerTypesEnum.GENERATE_TEST_DATA:
+      workerPath = isDev
+        ? path.resolve('./dist/workers/generateTestDataTaskWorker.js')
+        : path.resolve(__dirname, './workers/generateTestDataTaskWorker.js')
+      break
+    case WorkerTypesEnum.EXTRACT:
+    default:
+      workerPath = isDev
+        ? path.resolve('./dist/workers/extractTaskWorker.js')
+        : path.resolve(__dirname, './workers/extractTaskWorker.js')
+      break
+  }
+
+  return workerPath
+}
 
 class WorkerManager {
   private workerType: WorkerTypesEnum
@@ -23,33 +54,7 @@ class WorkerManager {
 
   public constructor(type: WorkerTypesEnum) {
     this.workerType = type
-
-    switch (type) {
-      case WorkerTypesEnum.TRAIN:
-        this.workerPath = isDev
-          ? path.resolve('./dist/workers/trainTaskWorker.js')
-          : path.resolve(__dirname, './workers/trainTaskWorker.js')
-        break
-      case WorkerTypesEnum.GENERATE_ANSWER_SHEET:
-        this.workerPath = isDev
-          ? path.resolve('./dist/workers/generateAnswerSheetsTaskWorker.js')
-          : path.resolve(
-              __dirname,
-              './workers/generateAnswerSheetsTaskWorker.js'
-            )
-        break
-      case WorkerTypesEnum.GENERATE_TEST_DATA:
-        this.workerPath = isDev
-          ? path.resolve('./dist/workers/generateTestDataTaskWorker.js')
-          : path.resolve(__dirname, './workers/generateTestDataTaskWorker.js')
-        break
-      case WorkerTypesEnum.EXTRACT:
-      default:
-        this.workerPath = isDev
-          ? path.resolve('./dist/workers/extractTaskWorker.js')
-          : path.resolve(__dirname, './workers/extractTaskWorker.js')
-        break
-    }
+    this.workerPath = getWorkerPath(type)
   }
 
   public create(num?: number) {
@@ -76,6 +81,8 @@ class WorkerManager {
     this.expectedOutputCount = 0
     this.workers.length = 0
     this.results.length = 0
+
+    return this
   }
 
   public getCount(): number {
@@ -129,6 +136,8 @@ class WorkerManager {
         electronLog.error(data.toString())
       })
     })
+
+    return this
   }
 
   public async process(
@@ -138,12 +147,19 @@ class WorkerManager {
     let totalImages: string[] = []
     let step = 0
 
-    if (!options.designPath) throw 'Invalid design path...'
-
-    const designData = getDesignData(options.designPath)
+    const designData = getDesignData(
+      options.designPath || dataPaths.designBarcode
+    )
 
     switch (this.workerType) {
       case WorkerTypesEnum.TRAIN:
+        this.create(1)
+          .addWorkerHandlers(options.callback)
+          .workers[0].send({
+            designData,
+            resultPath: options.resultPath,
+            keyPath: options.keyPath,
+          })
         break
       case WorkerTypesEnum.GENERATE_ANSWER_SHEET:
         break

@@ -2,15 +2,18 @@ import brain from 'brain.js'
 import fs from 'fs'
 
 import CompiledResult from '../@classes/CompiledResult'
+import DesignData from '../@interfaces/DesignData'
 import { dataPaths } from '../dataPaths'
-import { getDesignData } from '../design'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
 
-async function start(designPath: string, resultPath: string, keyPath: string) {
-  const designData = getDesignData(designPath)
-  const sharpImage = getSharpObjectFromSource(resultPath).raw()
-  const compiledResult = CompiledResult.loadFromExcel(keyPath)
+async function start(
+  designData: DesignData,
+  resultPath: string = dataPaths.result,
+  keyPath: string = dataPaths.keyImage
+) {
+  const sharpImage = getSharpObjectFromSource(keyPath).raw()
+  const compiledResult = CompiledResult.loadFromExcel(resultPath)
 
   const trainingData = await getQuestionsData(
     designData,
@@ -20,19 +23,28 @@ async function start(designPath: string, resultPath: string, keyPath: string) {
 
   const net = new brain.NeuralNetwork()
 
-  net.train(trainingData, {
+  const netOutput = net.train(trainingData, {
     log: true,
     logPeriod: 10,
     errorThresh: 0.001,
+    iterations: 100,
   })
 
-  // write trained network configuration to disk
-  fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
+  if (netOutput.error <= 0.001) {
+    // write trained network configuration to disk
+    fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
 
-  if (process && process.send) {
-    process.send({ completed: true }, () => {
-      process.exit(0)
-    })
+    if (process && process.send) {
+      process.send({ completed: true }, () => {
+        process.exit(0)
+      })
+    }
+  } else {
+    if (process && process.send) {
+      process.send({ error: true }, () => {
+        process.exit(0)
+      })
+    }
   }
 }
 
@@ -45,7 +57,7 @@ process.on('message', msg => {
   if (msg.stop) {
     stop()
   } else {
-    start(msg.designPath, msg.resultPath, msg.keyPath)
+    start(msg.designData, msg.resultPath, msg.keyPath)
   }
 })
 

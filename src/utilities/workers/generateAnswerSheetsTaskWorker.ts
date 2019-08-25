@@ -1,23 +1,23 @@
-async function startTask() {}
+async function start() {}
 
-async function stopTask() {
+async function stop() {
   process.exit(0)
 }
 
 process.on('message', e => {
   if (e.stop) {
-    stopTask()
+    stop()
   } else {
-    startTask()
+    start()
   }
 })
 
 // add message listner
 process.on('message', msg => {
   if (msg.stop) {
-    stopTask()
+    stop()
   } else {
-    startTask()
+    start()
   }
 })
 
@@ -33,4 +33,4 @@ process.on('warning', warning => {
   console.warn(warning)
 })
 
-export { startTask, stopTask }
+export { start, stop }
