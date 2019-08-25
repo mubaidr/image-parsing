@@ -17,13 +17,6 @@
       content="default-src 'self' file://*"
     />
     <% } %>
-
-    <!-- add prefetch links for modules -->
-    <% if (htmlWebpackPlugin.options.isDevMode) { %>
-    <link rel="prefetch" href="./dist/processTaskWorker.js" as="script" />
-    <% } else { %>
-    <link rel="prefetch" href="./processTaskWorker.js" as="script" />
-    <% } %>
   </head>
 
   <body>

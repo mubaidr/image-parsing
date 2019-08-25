@@ -1,28 +1,20 @@
 import WorkerManager from './@classes/WorkerManager'
-import ProgressStateEnum from './@enums/ProgressStateEnum'
-import { dataPaths } from './dataPaths'
-import { getDesignData } from './design'
-import { getImagePaths } from './images'
-import { processTask } from './processTaskWorker'
 
 let workerManager: WorkerManager
 
-const start = async (
+const startTask = async (
   callback: (data: object) => void,
-  path: string,
-  inProcess: boolean
-): Promise<{
-  totalImages: number
-  totalWorkers: number
-}> => {
+  imagesPath: string,
+  inProcess: boolean = false
+) => {
   const [designData, images] = await Promise.all([
     getDesignData(dataPaths.designBarcode),
     getImagePaths(path),
   ])
-  workerManager = new WorkerManager()
+  workerManager = new WorkerManager(WorkerTypesEnum.EXTRACT)
 
   if (inProcess) {
-    processTask(designData, images).then(results => {
+    startTask(designData, images).then(results => {
       callback({
         state: ProgressStateEnum.COMPLETED,
         results: results,
@@ -38,8 +30,8 @@ const start = async (
   }
 }
 
-const stop = () => {
+const stopTask = () => {
   if (workerManager) workerManager.reset()
 }
 
-export { start, stop }
+export { startTask, stopTask }

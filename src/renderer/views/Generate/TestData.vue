@@ -96,7 +96,7 @@ import {
 } from '../../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../../utilities/excel'
 import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
-import * as generateModule from '../../../utilities/generateTestData'
+import * as generateTask from '../../../utilities/generateTestDataTask'
 import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
 import prettyMs from 'pretty-ms'
 
@@ -156,14 +156,14 @@ export default {
   },
 
   mounted() {
-    generateModule.stop()
+    generateTask.stop()
   },
 
   methods: {
     startProcess() {
       this.progressState = ProgressStateEnum.RUNNING
 
-      generateModule
+      generateTask
         .start(this.callback, this.exportDirectory)
         .then(({ totalImages }) => {
           this.totalImages = totalImages
@@ -177,7 +177,7 @@ export default {
     },
 
     stopProcess() {
-      generateModule.stop()
+      generateTask.stop()
 
       this.perImageTime = 0
       this.processedImages = 0

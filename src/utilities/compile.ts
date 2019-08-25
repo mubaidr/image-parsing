@@ -4,7 +4,7 @@ import Result from './@classes/Result'
 import KeyNativeEnum from './@enums/KeyNativeEnum'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
-import { processTask } from './processTaskWorker'
+import { startTask } from './workers/extractTaskWorker'
 
 const readKey = async (src: string): Promise<Result[] | undefined> => {
   const ext = src.split('.').pop()
@@ -22,7 +22,7 @@ const readKey = async (src: string): Promise<Result[] | undefined> => {
     return results
   }
 
-  return processTask(getDesignData(dataPaths.design), [src])
+  return startTask(getDesignData(dataPaths.design), [src])
 }
 
 const compileResult = async (

@@ -5,25 +5,57 @@ import noOfCores from 'physical-cpu-count'
 
 import Result from '../@classes/Result'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
-import DesignData from '../@interfaces/DesignData'
+import WorkerTypesEnum from '../@enums/WorkerTypesEnum'
+import WorkerManagerInput from '../@interfaces/WorkerManagerInput'
+import WorkerManagerOutput from '../@interfaces/WorkerManagerOutput'
+import { getDesignData } from '../design'
+import { getImagePaths } from '../images'
 import CompiledResult from './CompiledResult'
 
 const isDev = process.env.NODE_ENV === 'development'
 
 class WorkerManager {
-  private imagesCount: number = 0
-  private results: Result[] = []
-  private workerPath: string = isDev
-    ? path.resolve('./dist/processTaskWorker.js')
-    : path.resolve(__dirname, './processTaskWorker.js')
+  private workerType: WorkerTypesEnum
+  private workerPath: string
+  private expectedOutputCount: number = 0
   private workers: ChildProcess[] = []
+  private results: Result[] = []
 
-  public constructor() {
-    this.create()
+  public constructor(type: WorkerTypesEnum) {
+    this.workerType = type
+
+    switch (type) {
+      case WorkerTypesEnum.TRAIN:
+        this.workerPath = isDev
+          ? path.resolve('./dist/workers/trainTaskWorker.js')
+          : path.resolve(__dirname, './workers/trainTaskWorker.js')
+        break
+      case WorkerTypesEnum.GENERATE_ANSWER_SHEET:
+        this.workerPath = isDev
+          ? path.resolve('./dist/workers/generateAnswerSheetsTaskWorker.js')
+          : path.resolve(
+              __dirname,
+              './workers/generateAnswerSheetsTaskWorker.js'
+            )
+        break
+      case WorkerTypesEnum.GENERATE_TEST_DATA:
+        this.workerPath = isDev
+          ? path.resolve('./dist/workers/generateTestDataTaskWorker.js')
+          : path.resolve(__dirname, './workers/generateTestDataTaskWorker.js')
+        break
+      case WorkerTypesEnum.EXTRACT:
+      default:
+        this.workerPath = isDev
+          ? path.resolve('./dist/workers/extractTaskWorker.js')
+          : path.resolve(__dirname, './workers/extractTaskWorker.js')
+        break
+    }
   }
 
-  public create(): ChildProcess[] {
-    for (let i = 0; i < noOfCores; i += 1) {
+  public create(num?: number) {
+    const count = num === undefined ? noOfCores : num
+
+    for (let i = 0; i < count; i += 1) {
       this.workers.push(
         childProcess.fork(this.workerPath, [], {
           silent: true,
@@ -31,43 +63,7 @@ class WorkerManager {
       )
     }
 
-    return this.workers
-  }
-
-  public getCount(): number {
-    return this.workers.length
-  }
-
-  public process(
-    designData: DesignData,
-    images: string[],
-    callback: Function
-  ): {
-    totalImages: number
-    totalWorkers: number
-  } {
-    const totalWorkers = Math.min(images.length, this.getCount())
-    const step = Math.floor(images.length / totalWorkers)
-
-    this.imagesCount = images.length
-    this.addWorkerHandlers(callback)
-
-    for (let i = 0; i < totalWorkers; i += 1) {
-      const startIndex = i * step
-      const endIndex = i === totalWorkers - 1 ? images.length : (i + 1) * step
-
-      this.workers[i].send({
-        designData: designData,
-        imagePaths: images.slice(startIndex, endIndex),
-      })
-    }
-
-    return { totalImages: images.length, totalWorkers: totalWorkers }
-  }
-
-  public reset(): ChildProcess[] {
-    this.stop()
-    return this.create()
+    return this
   }
 
   public stop() {
@@ -77,9 +73,13 @@ class WorkerManager {
       }
     }
 
-    this.imagesCount = 0
+    this.expectedOutputCount = 0
     this.workers.length = 0
     this.results.length = 0
+  }
+
+  public getCount(): number {
+    return this.workers.length
   }
 
   private addWorkerHandlers(callback: Function) {
@@ -88,7 +88,7 @@ class WorkerManager {
         if (data.state === ProgressStateEnum.COMPLETED) {
           this.results.push(...data.results)
 
-          if (this.results.length === this.imagesCount) {
+          if (this.results.length === this.expectedOutputCount) {
             const compiledResult = new CompiledResult()
 
             // repair prototype for objects
@@ -106,6 +106,17 @@ class WorkerManager {
         }
       })
 
+      worker.on('close', (a, b) => {
+        if (a) {
+          // TODO: track error state in parent
+          electronLog.info(
+            `child process exited with code: ${a} and signal ${b}`
+          )
+        } else {
+          electronLog.info('child process exited with code 0.')
+        }
+      })
+
       if (!isDev || !worker.stdout || !worker.stderr) {
         return
       }
@@ -117,18 +128,52 @@ class WorkerManager {
       worker.stderr.on('data', (data: Buffer) => {
         electronLog.error(data.toString())
       })
-
-      worker.on('close', (a, b) => {
-        if (a) {
-          // TODO: track error state in parent
-          electronLog.info(
-            `child process exited with code: ${a} and signal ${b}`
-          )
-        } else {
-          electronLog.info('child process exited with code 0.')
-        }
-      })
     })
+  }
+
+  public async process(
+    options: WorkerManagerInput
+  ): Promise<WorkerManagerOutput> {
+    let totalWorkers = 0
+    let totalImages: string[] = []
+    let step = 0
+
+    if (!options.designPath) throw 'Invalid design path...'
+
+    const designData = getDesignData(options.designPath)
+
+    switch (this.workerType) {
+      case WorkerTypesEnum.TRAIN:
+        break
+      case WorkerTypesEnum.GENERATE_ANSWER_SHEET:
+        break
+      case WorkerTypesEnum.GENERATE_TEST_DATA:
+        break
+      case WorkerTypesEnum.EXTRACT:
+      default:
+        if (!options.imagesDirectory) throw 'Invalid images directory...'
+
+        totalImages = await getImagePaths(options.imagesDirectory)
+        totalWorkers = Math.min(totalImages.length, noOfCores)
+        step = Math.floor(totalImages.length / totalWorkers)
+        this.expectedOutputCount = totalImages.length
+
+        this.create(totalWorkers).addWorkerHandlers(options.callback)
+
+        for (let i = 0; i < totalWorkers; i += 1) {
+          const startIndex = i * step
+          const endIndex =
+            i === totalWorkers - 1 ? totalImages.length : (i + 1) * step
+
+          this.workers[i].send({
+            designData: designData,
+            imagePaths: totalImages.slice(startIndex, endIndex),
+          })
+        }
+        break
+    }
+
+    return { totalWorkers: totalWorkers, totalImages: totalImages.length }
   }
 }
 

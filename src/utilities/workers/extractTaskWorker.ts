@@ -1,14 +1,14 @@
-import Result from './@classes/Result'
-import ProgressStateEnum from './@enums/ProgressStateEnum'
-import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
-import DesignData from './@interfaces/DesignData'
-import NNQuestionOutput from './@interfaces/NNQuestionOutput'
-import { getSharpObjectFromSource } from './images'
-import { getQuestionsNeuralNet } from './index'
-import { getQuestionsData } from './questions'
-import { getRollNoFromImage } from './sheetInfo'
+import Result from '../@classes/Result'
+import ProgressStateEnum from '../@enums/ProgressStateEnum'
+import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
+import DesignData from '../@interfaces/DesignData'
+import NNQuestionOutput from '../@interfaces/NNQuestionOutput'
+import { getSharpObjectFromSource } from '../images'
+import { getQuestionsNeuralNet } from '../index'
+import { getQuestionsData } from '../questions'
+import { getRollNoFromImage } from '../sheetInfo'
 
-const processTask = async (
+const startTask = async (
   designData: DesignData,
   images: string[]
 ): Promise<Result[] | undefined> => {
@@ -78,13 +78,29 @@ const processTask = async (
   }
 }
 
+function stopTask() {
+  process.exit(0)
+}
+
 // add message listner
-process.on('message', m => {
-  processTask(m.designData, m.imagePaths)
+process.on('message', msg => {
+  if (msg.stop) {
+    stopTask()
+  } else {
+    startTask(msg.designData, msg.imagePaths)
+  }
+})
+
+process.on('unhandledRejection', rejection => {
+  console.error(rejection)
+})
+
+process.on('uncaughtException', exception => {
+  console.error(exception)
 })
 
 process.on('warning', warning => {
-  console.error(warning)
+  console.warn(warning)
 })
 
-export { processTask }
+export { startTask, stopTask }

@@ -65,12 +65,10 @@
 </template>
 
 <script>
-import { fork } from 'child_process'
-import path from 'path'
-
 import { openFile } from '../../../utilities/electron-dialog'
 import ImageTypesEnum from '../../../utilities/@enums/ImageTypesEnum'
 import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
+import {start, stop} from '../../../utilities/trainTask'
 
 export default {
   data() {
@@ -100,44 +98,11 @@ export default {
 
   methods: {
     start() {
-      const workerPath =
-        process.env.NODE_ENV === 'development'
-          ? path.resolve('./dist/trainTaskWorker.js')
-          : path.resolve(__dirname, './trainTaskWorker.js')
 
-      this.worker = fork(workerPath, [], {
-        silent: true,
-      })
-
-      this.worker.send({}, () => {
-        this.running = true
-      })
-
-      this.worker.on('message', msg => {
-        if (msg.completed) {
-          this.running = false
-          this.logs.unshift('Completed!')
-        }
-      })
-
-      if (this.worker.stdout === null || this.worker.stderr === null) return
-
-      // logging
-      this.worker.stdout.on('data', data => {
-        this.logs.unshift(data.toString())
-      })
-
-      // error
-      this.worker.stderr.on('data', data => {
-        this.logs.unshift(data.toString())
-        this.running = false
-      })
     },
 
     stop() {
-      if (this.worker.connected) {
-        this.worker.kill()
-      }
+
     },
 
     chooseKeyImage() {

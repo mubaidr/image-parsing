@@ -104,7 +104,12 @@ const config = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      excludeChunks: ['processTaskWorker'],
+      excludeChunks: [
+        'extractTaskWorker',
+        'generateAnswerSheetsTaskWorker',
+        'generateTestDataTaskWorker',
+        'trainTaskWorker',
+      ],
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
       isDevMode,

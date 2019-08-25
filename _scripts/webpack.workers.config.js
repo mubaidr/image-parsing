@@ -15,18 +15,26 @@ const config = {
   mode: process.env.NODE_ENV,
   devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
-    processTaskWorker: path.join(
+    extractTaskWorker: path.join(
       __dirname,
-      '../src/utilities/processTaskWorker.ts'
+      '../src/utilities/workers/extractTaskWorker.ts'
+    ),
+    generateAnswerSheetsTaskWorker: path.join(
+      __dirname,
+      '../src/utilities/workers/generateAnswerSheetsTaskWorker.ts'
+    ),
+    generateTestDataTaskWorker: path.join(
+      __dirname,
+      '../src/utilities/workers/generateTestDataTaskWorker.ts'
     ),
     trainTaskWorker: path.join(
       __dirname,
-      '../src/utilities/trainTaskWorker.ts'
+      '../src/utilities/workers/trainTaskWorker.ts'
     ),
   },
   output: {
     libraryTarget: 'commonjs2',
-    path: path.join(__dirname, '../dist'),
+    path: path.join(__dirname, '../dist/workers/'),
     filename: '[name].js',
   },
   externals: externals,
@@ -48,7 +56,6 @@ const config = {
     __filename: isDevMode,
   },
   plugins: [
-    // new WriteFilePlugin(),
     new webpack.DefinePlugin({
       'process.env.PRODUCT_NAME': JSON.stringify(productName),
     }),

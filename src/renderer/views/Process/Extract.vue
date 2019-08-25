@@ -76,7 +76,7 @@ import { currentWindow } from '../../../utilities/electron-utilities'
 import { openDirectory, saveFile } from '../../../utilities/electron-dialog'
 import { exportJsonToExcel } from '../../../utilities/excel'
 import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
-import * as processingModule from '../../../utilities/process'
+import * as extractTask from '../../../utilities/extractTask'
 import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
 import prettyMs from 'pretty-ms'
 
@@ -135,14 +135,14 @@ export default {
   },
 
   mounted() {
-    processingModule.stop()
+    extractTask.stop()
   },
 
   methods: {
     startProcess() {
       this.progressState = ProgressStateEnum.RUNNING
 
-      processingModule
+      extractTask
         .start(this.callback, this.imageDirectory)
         .then(({ totalImages }) => {
           this.totalImages = totalImages
@@ -156,7 +156,7 @@ export default {
     },
 
     stopProcess() {
-      processingModule.stop()
+      extractTask.stop()
 
       this.perImageTime = 0
       this.processedImages = 0
