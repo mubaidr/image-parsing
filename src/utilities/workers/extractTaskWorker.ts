@@ -1,29 +1,31 @@
 import Result from '../@classes/Result'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
-import DesignData from '../@interfaces/DesignData'
 import NNQuestionOutput from '../@interfaces/NNQuestionOutput'
-import WorkerInput from '../@interfaces/WorkerInput'
+import { WorkerInputExtract } from '../@interfaces/WorkerInput'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsNeuralNet } from '../index'
 import { getQuestionsData } from '../questions'
 import { getRollNoFromImage } from '../sheetInfo'
 
 const start = async (
-  designData: DesignData,
-  imagePaths: string[]
+  msg: WorkerInputExtract
 ): Promise<Result[] | undefined> => {
   const neuralNet = getQuestionsNeuralNet()
   const results: Result[] = []
 
-  for (let i = 0, imagesLength = imagePaths.length; i < imagesLength; i += 1) {
-    const image = imagePaths[i]
+  for (
+    let i = 0, imagesLength = msg.imagePaths.length;
+    i < imagesLength;
+    i += 1
+  ) {
+    const image = msg.imagePaths[i]
     const sharpImage = getSharpObjectFromSource(image).raw()
     const startTime = Date.now()
 
     const [rollNo, questionsData] = await Promise.all([
-      getRollNoFromImage(designData, sharpImage, true),
-      getQuestionsData(designData, sharpImage.clone()),
+      getRollNoFromImage(msg.designData, sharpImage, true),
+      getQuestionsData(msg.designData, sharpImage.clone()),
     ])
     const result = new Result(rollNo, image)
 
@@ -84,14 +86,11 @@ function stop() {
 }
 
 // add message listner
-process.on('message', (msg: WorkerInput) => {
+process.on('message', (msg: WorkerInputExtract) => {
   if (msg.stop) {
     stop()
   } else {
-    if (!msg.designData) throw 'Invalid designData...'
-    if (!msg.imagePaths) throw 'Invalid imagePaths...'
-
-    start(msg.designData, msg.imagePaths)
+    start(msg)
   }
 })
 

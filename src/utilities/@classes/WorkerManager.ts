@@ -6,6 +6,7 @@ import noOfCores from 'physical-cpu-count'
 import Result from '../@classes/Result'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import WorkerTypesEnum from '../@enums/WorkerTypesEnum'
+import { WorkerInputTrain } from '../@interfaces/WorkerInput'
 import WorkerManagerInput from '../@interfaces/WorkerManagerInput'
 import WorkerManagerOutput from '../@interfaces/WorkerManagerOutput'
 import { dataPaths } from '../dataPaths'
@@ -140,25 +141,26 @@ class WorkerManager {
     return this
   }
 
-  public async process(
-    options: WorkerManagerInput
-  ): Promise<WorkerManagerOutput> {
-    let totalWorkers = 0
+  public async process({
+    callback,
+    designPath,
+    data,
+  }: WorkerManagerInput): Promise<WorkerManagerOutput> {
     let totalImages: string[] = []
+    let totalWorkers = 0
     let step = 0
 
-    const designData = getDesignData(
-      options.designPath || dataPaths.designBarcode
-    )
+    const designData = getDesignData(designPath || dataPaths.designBarcode)
 
     switch (this.workerType) {
       case WorkerTypesEnum.TRAIN:
+        // TODO: comapre type from WorkerInputType
         this.create(1)
-          .addWorkerHandlers(options.callback)
+          .addWorkerHandlers(callback)
           .workers[0].send({
             designData: designData,
-            resultPath: options.data.resultPath,
-            keyPath: options.data.keyPath,
+            resultPath: data.resultPath,
+            keyPath: data.keyPath,
           })
         break
       case WorkerTypesEnum.GENERATE_ANSWER_SHEET:
@@ -167,14 +169,14 @@ class WorkerManager {
         break
       case WorkerTypesEnum.EXTRACT:
       default:
-        if (!options.data.imagesDirectory) throw 'Invalid images directory...'
+        if (!data.imagesDirectory) throw 'Invalid images directory...'
 
-        totalImages = await getImagePaths(options.data.imagesDirectory)
+        totalImages = await getImagePaths(data.imagesDirectory)
         totalWorkers = Math.min(totalImages.length, noOfCores)
         step = Math.floor(totalImages.length / totalWorkers)
         this.expectedOutputCount = totalImages.length
 
-        this.create(totalWorkers).addWorkerHandlers(options.callback)
+        this.create(totalWorkers).addWorkerHandlers(callback)
 
         for (let i = 0; i < totalWorkers; i += 1) {
           const startIndex = i * step
