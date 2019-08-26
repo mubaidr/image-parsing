@@ -1,64 +1,25 @@
 import childProcess, { ChildProcess } from 'child_process'
 import electronLog from 'electron-log'
-import path from 'path'
 import noOfCores from 'physical-cpu-count'
 
 import Result from '../@classes/Result'
-import ProgressStateEnum from '../@enums/ProgressStateEnum'
-import WorkerTypesEnum from '../@enums/WorkerTypesEnum'
-import { WorkerInputExtract, WorkerInputTrain, WorkerInputGenerateAnswerSheets, WorkerInputGenerateTestData } from '../@interfaces/WorkerInput'
 import WorkerManagerInput from '../@interfaces/WorkerManagerInput'
 import WorkerManagerOutput from '../@interfaces/WorkerManagerOutput'
-import { dataPaths } from '../dataPaths'
-import { getDesignData } from '../design'
-import { getImagePaths } from '../images'
-import CompiledResult from './CompiledResult'
 
 const isDev = process.env.NODE_ENV === 'development'
 
-function getWorkerPath(type: WorkerTypesEnum): string {
-  let workerPath: string
-
-  switch (type) {
-    case WorkerTypesEnum.TRAIN:
-      workerPath = isDev
-        ? path.resolve('./dist/workers/trainTaskWorker.js')
-        : path.resolve(__dirname, './workers/trainTaskWorker.js')
-      break
-    case WorkerTypesEnum.GENERATE_ANSWER_SHEET:
-      workerPath = isDev
-        ? path.resolve('./dist/workers/generateAnswerSheetsTaskWorker.js')
-        : path.resolve(__dirname, './workers/generateAnswerSheetsTaskWorker.js')
-      break
-    case WorkerTypesEnum.GENERATE_TEST_DATA:
-      workerPath = isDev
-        ? path.resolve('./dist/workers/generateTestDataTaskWorker.js')
-        : path.resolve(__dirname, './workers/generateTestDataTaskWorker.js')
-      break
-    case WorkerTypesEnum.EXTRACT:
-    default:
-      workerPath = isDev
-        ? path.resolve('./dist/workers/extractTaskWorker.js')
-        : path.resolve(__dirname, './workers/extractTaskWorker.js')
-      break
-  }
-
-  return workerPath
-}
-
 class WorkerManager {
-  private workerType: WorkerTypesEnum
-  private workerPath: string
-  private expectedOutputCount: number = 0
-  private workers: ChildProcess[] = []
-  private results: Result[] = []
+  public workerPath: string
+  public expectedOutputCount: number
+  public workers: ChildProcess[]
 
-  public constructor(type: WorkerTypesEnum) {
-    this.workerType = type
-    this.workerPath = getWorkerPath(type)
+  public constructor(workerPath: string) {
+    this.workerPath = workerPath
+    this.expectedOutputCount = 0
+    this.workers = []
   }
 
-  public create(num?: number) {
+  public createWorkers(num?: number) {
     const count = num === undefined ? noOfCores : num
 
     for (let i = 0; i < count; i += 1) {
@@ -81,8 +42,6 @@ class WorkerManager {
 
     this.expectedOutputCount = 0
     this.workers.length = 0
-    this.results.length = 0
-
     return this
   }
 
@@ -90,28 +49,27 @@ class WorkerManager {
     return this.workers.length
   }
 
-  private addWorkerHandlers(callback: Function) {
+  public addWorkerHandlers(callback: Function) {
     this.workers.forEach(worker => {
       worker.on('message', (data: { state: string; results: Result[] }) => {
-        if (data.state === ProgressStateEnum.COMPLETED) {
-          this.results.push(...data.results)
+        console.log(data)
 
-          if (this.results.length === this.expectedOutputCount) {
-            const compiledResult = new CompiledResult()
-
-            // repair prototype for objects
-            this.results.forEach(result => {
-              compiledResult.addResults(Result.fromJson(result))
-            })
-
-            callback({
-              state: ProgressStateEnum.COMPLETED,
-              compiledResult: compiledResult,
-            })
-          }
-        } else {
-          callback(data)
-        }
+        // if (data.state === ProgressStateEnum.COMPLETED) {
+        //   this.results.push(...data.results)
+        //   if (this.results.length === this.expectedOutputCount) {
+        //     const compiledResult = new CompiledResult()
+        //     // repair prototype for objects
+        //     this.results.forEach(result => {
+        //       compiledResult.addResults(Result.fromJson(result))
+        //     })
+        //     callback({
+        //       state: ProgressStateEnum.COMPLETED,
+        //       compiledResult: compiledResult,
+        //     })
+        //   }
+        // } else {
+        //   callback(data)
+        // }
       })
 
       worker.on('close', (a, b) => {
@@ -141,52 +99,40 @@ class WorkerManager {
     return this
   }
 
-  public async process(
-    options: WorkerManagerInput
-  ): Promise<WorkerManagerOutput> {
-    let totalImages: string[] = []
-    let totalWorkers = 0
-    let step = 0
+  private processTrain(options: WorkerManagerInput): WorkerManagerOutput {
+    const { callback, data } = options
+    const { designData, resultPath, keyPath } = data
 
-    const designData = getDesignData(designPath || dataPaths.designBarcode)
+    if (!resultPath) throw 'Invalid resultPath...'
+    if (!keyPath) throw 'Invalid keyPath...'
 
-    switch (this.workerType) {
-      case WorkerTypesEnum.TRAIN:
-
-        break
-      case WorkerTypesEnum.GENERATE_ANSWER_SHEET:
-        break
-      case WorkerTypesEnum.GENERATE_TEST_DATA:
-        break
-      case WorkerTypesEnum.EXTRACT:
-      default:
-
-        break
-    }
-
-    return { totalWorkers: totalWorkers, totalImages: totalImages.length }
-  }
-
-  private processTrain(data: WorkerInputTrain) {
-    this.processTrain(data)
-    this.create(1)
+    this.createWorkers(1)
       .addWorkerHandlers(callback)
       .workers[0].send({
-        designData: designData,
-        resultPath: data.resultPath,
-        keyPath: data.keyPath,
+        designData,
+        resultPath,
+        keyPath,
       })
+
+    this.expectedOutputCount = 1
+
+    return { totalWorkers: 1 }
   }
 
-  private processExtract(data: WorkerInputExtract) {
-    if (!data.imagePaths) throw 'imagePaths...'
+  public async processExtract(
+    options: WorkerManagerInput
+  ): Promise<WorkerManagerOutput> {
+    const { callback, data } = options
+    const { designData, imagesDirectory } = data
 
-    let totalImages = await getImagePaths(data.imagesDirectory)
-    let totalWorkers = Math.min(totalImages.length, noOfCores)
-    let step = Math.floor(totalImages.length / totalWorkers)
+    if (!imagesDirectory) throw 'Invalid imagesDirectory...'
+
+    const totalImages = await getImagePaths(imagesDirectory)
+    const totalWorkers = Math.min(totalImages.length, noOfCores)
+    const step = Math.floor(totalImages.length / totalWorkers)
 
     this.expectedOutputCount = totalImages.length
-    this.create(totalWorkers).addWorkerHandlers(callback)
+    this.createWorkers(totalWorkers).addWorkerHandlers(callback)
 
     for (let i = 0; i < totalWorkers; i += 1) {
       const startIndex = i * step
@@ -194,18 +140,28 @@ class WorkerManager {
         i === totalWorkers - 1 ? totalImages.length : (i + 1) * step
 
       this.workers[i].send({
-        designData: designData,
+        designData,
         imagePaths: totalImages.slice(startIndex, endIndex),
       })
     }
+
+    return { totalWorkers: 1 }
   }
 
-  private processGenerateAnswerSheets(data: WorkerInputGenerateAnswerSheets) {
+  public processGenerateTestData(
+    options: WorkerManagerInput
+  ): WorkerManagerOutput {
+    console.log(options)
 
+    return { totalWorkers: 1 }
   }
 
-  private processGenerateAnswerSheets(data: WorkerInputGenerateTestData) {
+  public processGenerateAnswerSheets(
+    options: WorkerManagerInput
+  ): WorkerManagerOutput {
+    console.log(options)
 
+    return { totalWorkers: 1 }
   }
 }
 

@@ -75,10 +75,9 @@ import { exportJsonToExcel } from '../../../utilities/excel'
 import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
 import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
 import prettyMs from 'pretty-ms'
-import WorkerManager from '../../../utilities/@classes/WorkerManager'
-import WorkerTypesEnum from '../../../utilities/@enums/WorkerTypesEnum'
+import WorkerManagerExtract from '../../../utilities/@classes/WorkerManagerExtract'
 
-let workerManager = new WorkerManager(WorkerTypesEnum.EXTRACT)
+let workerManager = new WorkerManagerExtract()
 
 export default {
   name: 'ExtractResult',
@@ -158,6 +157,8 @@ export default {
           this.totalWorkers = totalWorkers
         })
         .catch(err => {
+          console.log(err)
+
           this.$toasted.show(err, {
             type: 'error',
             icon: 'info',
@@ -215,7 +216,7 @@ export default {
             class: 'has-text-white has-text-underlined',
             onClick: (e, toastObject) => {
               toastObject.goAway(0)
-              this.$router.push(`/process/review?resultFilePath=${destination}`)
+              this.$router.push(`/process/review?resultFilePath=${ destination }`)
             },
           },
         })

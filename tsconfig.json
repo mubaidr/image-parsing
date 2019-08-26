@@ -11,5 +11,5 @@
     "target": "esnext"
   },
   "include": ["./src"],
-  "exclude": ["node_modules", "./src/renderer/**/*", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

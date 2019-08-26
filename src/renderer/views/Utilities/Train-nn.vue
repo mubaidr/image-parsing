@@ -90,10 +90,9 @@
 import { openFile } from '../../../utilities/electron-dialog'
 import ImageTypesEnum from '../../../utilities/@enums/ImageTypesEnum'
 import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
-import WorkerManager from '../../../utilities/@classes/WorkerManager'
-import WorkerTypesEnum from '../../../utilities/@enums/WorkerTypesEnum'
+import WorkerManagerTrain from '../../../utilities/@classes/WorkerManagerTrain'
 
-let workerManager = new WorkerManager(WorkerTypesEnum.TRAIN)
+let workerManager = new WorkerManagerTrain()
 
 export default {
   data() {

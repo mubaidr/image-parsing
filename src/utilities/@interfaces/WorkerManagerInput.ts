@@ -1,17 +1,10 @@
-import {
-  WorkerInputExtract, WorkerInputGenerateAnswerSheets, WorkerInputGenerateTestData,
-  WorkerInputTrain,
-} from './WorkerInput'
+import WorkerInput from './WorkerInput'
 
 interface WorkerManagerInput {
   callback: (data: object) => void
   inProcess?: boolean
   designPath: string
-  data:
-    | WorkerInputExtract
-    | WorkerInputTrain
-    | WorkerInputGenerateAnswerSheets
-    | WorkerInputGenerateTestData
+  data: WorkerInput
 }
 
 export default WorkerManagerInput

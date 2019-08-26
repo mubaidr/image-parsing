@@ -15,21 +15,21 @@ const config = {
   mode: process.env.NODE_ENV,
   devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
-    extractTaskWorker: path.join(
+    workerExtract: path.join(
       __dirname,
-      '../src/utilities/workers/extractTaskWorker.ts'
+      '../src/utilities/workers/workerExtract.ts'
     ),
-    generateAnswerSheetsTaskWorker: path.join(
+    workerGenerateAnswerSheets: path.join(
       __dirname,
-      '../src/utilities/workers/generateAnswerSheetsTaskWorker.ts'
+      '../src/utilities/workers/workerGenerateAnswerSheets.ts'
     ),
-    generateTestDataTaskWorker: path.join(
+    workerGenerateTestData: path.join(
       __dirname,
-      '../src/utilities/workers/generateTestDataTaskWorker.ts'
+      '../src/utilities/workers/workerGenerateTestData.ts'
     ),
-    trainTaskWorker: path.join(
+    workerTrain: path.join(
       __dirname,
-      '../src/utilities/workers/trainTaskWorker.ts'
+      '../src/utilities/workers/workerTrain.ts'
     ),
   },
   output: {

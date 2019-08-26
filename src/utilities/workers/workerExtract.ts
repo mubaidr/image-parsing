@@ -2,15 +2,15 @@ import Result from '../@classes/Result'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
 import NNQuestionOutput from '../@interfaces/NNQuestionOutput'
-import { WorkerInputExtract } from '../@interfaces/WorkerInput'
+import WorkerInput from '../@interfaces/WorkerInput'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsNeuralNet } from '../index'
 import { getQuestionsData } from '../questions'
 import { getRollNoFromImage } from '../sheetInfo'
 
-const start = async (
-  msg: WorkerInputExtract
-): Promise<Result[] | undefined> => {
+// TODO add individual interface for each worker script
+
+const start = async (msg: WorkerInput): Promise<Result[] | undefined> => {
   const neuralNet = getQuestionsNeuralNet()
   const results: Result[] = []
 

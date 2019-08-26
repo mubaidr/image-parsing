@@ -1,8 +1,0 @@
-enum WorkerTypesEnum {
-  EXTRACT = 'EXTRACT',
-  TRAIN = 'TRAIN',
-  GENERATE_ANSWER_SHEET = 'GENERATE_ANSWER_SHEET',
-  GENERATE_TEST_DATA = 'GENERATE_TEST_DATA',
-}
-
-export default WorkerTypesEnum

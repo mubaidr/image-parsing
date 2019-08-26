@@ -4,7 +4,7 @@ import Result from './@classes/Result'
 import KeyNativeEnum from './@enums/KeyNativeEnum'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
-import * as extractTask from './workers/extractTaskWorker'
+import * as extractTask from './workers/workerExtract'
 
 const readKey = async (src: string): Promise<Result[] | undefined> => {
   const ext = src.split('.').pop()
