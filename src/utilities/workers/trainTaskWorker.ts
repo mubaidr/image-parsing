@@ -3,6 +3,7 @@ import fs from 'fs'
 
 import CompiledResult from '../@classes/CompiledResult'
 import DesignData from '../@interfaces/DesignData'
+import WorkerInput from '../@interfaces/WorkerInput'
 import { dataPaths } from '../dataPaths'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
@@ -53,10 +54,12 @@ function stop() {
 }
 
 // add message listner
-process.on('message', msg => {
+process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
+    if (!msg.designData) throw 'Invalid design data...'
+
     start(msg.designData, msg.resultPath, msg.keyPath)
   }
 })

@@ -74,7 +74,7 @@ class WorkerManager {
   public stop() {
     for (const worker of this.workers) {
       if (worker.connected) {
-        worker.kill()
+        worker.send({ stop: true })
       }
     }
 
@@ -156,9 +156,9 @@ class WorkerManager {
         this.create(1)
           .addWorkerHandlers(options.callback)
           .workers[0].send({
-            designData,
-            resultPath: options.resultPath,
-            keyPath: options.keyPath,
+            designData: designData,
+            resultPath: options.data.resultPath,
+            keyPath: options.data.keyPath,
           })
         break
       case WorkerTypesEnum.GENERATE_ANSWER_SHEET:
@@ -167,9 +167,9 @@ class WorkerManager {
         break
       case WorkerTypesEnum.EXTRACT:
       default:
-        if (!options.imagesDirectory) throw 'Invalid images directory...'
+        if (!options.data.imagesDirectory) throw 'Invalid images directory...'
 
-        totalImages = await getImagePaths(options.imagesDirectory)
+        totalImages = await getImagePaths(options.data.imagesDirectory)
         totalWorkers = Math.min(totalImages.length, noOfCores)
         step = Math.floor(totalImages.length / totalWorkers)
         this.expectedOutputCount = totalImages.length

@@ -1,10 +1,10 @@
+import WorkerInput from './WorkerInput'
+
 interface WorkerManagerInput {
   callback: (data: object) => void
   inProcess?: boolean
-  imagesDirectory?: string
-  designPath?: string
-  keyPath?: string
-  resultPath?: string
+  designPath: string
+  data: WorkerInput
 }
 
 export default WorkerManagerInput

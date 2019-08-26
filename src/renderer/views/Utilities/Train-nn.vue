@@ -133,9 +133,12 @@ export default {
     start() {
       workerManager
         .process({
-          designPath: this.designPath,
-          resultPath: this.resultPath,
-          keyPath: this.keyPath,
+          callback: this.callback,
+          data: {
+            designPath: this.designPath,
+            resultPath: this.resultPath,
+            keyPath: this.keyPath,
+          },
         })
         .catch(err => {
           this.$toasted.show(err, {
@@ -149,6 +152,10 @@ export default {
       workerManager.stop()
 
       this.isRunning = false
+    },
+
+    callback() {
+      console.log('yay')
     },
 
     chooseDesignPath() {

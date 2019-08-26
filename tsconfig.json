@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
     "allowJs": false,
     "checkJs": false,
     "esModuleInterop": true,
@@ -9,5 +10,6 @@
     "strict": true,
     "target": "esnext"
   },
-  "include": ["_scripts/**/*", "src/**/*"]
+  "include": ["./src"],
+  "exclude": ["node_modules", "./src/renderer/**/*", "**/*.spec.ts"]
 }

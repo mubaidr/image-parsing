@@ -151,7 +151,7 @@ export default {
       workerManager
         .process({
           callback: this.callback,
-          imagesDirectory: this.imagesDirectory,
+          data: { imagesDirectory: this.imagesDirectory },
         })
         .then(({ totalWorkers, totalImages }) => {
           this.totalImages = totalImages
@@ -215,7 +215,7 @@ export default {
             class: 'has-text-white has-text-underlined',
             onClick: (e, toastObject) => {
               toastObject.goAway(0)
-              this.$router.push(`/process/review?resultFilePath=${ destination }`)
+              this.$router.push(`/process/review?resultFilePath=${destination}`)
             },
           },
         })
