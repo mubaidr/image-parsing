@@ -6,7 +6,7 @@ import noOfCores from 'physical-cpu-count'
 import Result from '../@classes/Result'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import WorkerTypesEnum from '../@enums/WorkerTypesEnum'
-import { WorkerInputTrain } from '../@interfaces/WorkerInput'
+import { WorkerInputExtract, WorkerInputTrain, WorkerInputGenerateAnswerSheets, WorkerInputGenerateTestData } from '../@interfaces/WorkerInput'
 import WorkerManagerInput from '../@interfaces/WorkerManagerInput'
 import WorkerManagerOutput from '../@interfaces/WorkerManagerOutput'
 import { dataPaths } from '../dataPaths'
@@ -141,11 +141,9 @@ class WorkerManager {
     return this
   }
 
-  public async process({
-    callback,
-    designPath,
-    data,
-  }: WorkerManagerInput): Promise<WorkerManagerOutput> {
+  public async process(
+    options: WorkerManagerInput
+  ): Promise<WorkerManagerOutput> {
     let totalImages: string[] = []
     let totalWorkers = 0
     let step = 0
@@ -154,14 +152,7 @@ class WorkerManager {
 
     switch (this.workerType) {
       case WorkerTypesEnum.TRAIN:
-        // TODO: comapre type from WorkerInputType
-        this.create(1)
-          .addWorkerHandlers(callback)
-          .workers[0].send({
-            designData: designData,
-            resultPath: data.resultPath,
-            keyPath: data.keyPath,
-          })
+
         break
       case WorkerTypesEnum.GENERATE_ANSWER_SHEET:
         break
@@ -169,29 +160,52 @@ class WorkerManager {
         break
       case WorkerTypesEnum.EXTRACT:
       default:
-        if (!data.imagesDirectory) throw 'Invalid images directory...'
 
-        totalImages = await getImagePaths(data.imagesDirectory)
-        totalWorkers = Math.min(totalImages.length, noOfCores)
-        step = Math.floor(totalImages.length / totalWorkers)
-        this.expectedOutputCount = totalImages.length
-
-        this.create(totalWorkers).addWorkerHandlers(callback)
-
-        for (let i = 0; i < totalWorkers; i += 1) {
-          const startIndex = i * step
-          const endIndex =
-            i === totalWorkers - 1 ? totalImages.length : (i + 1) * step
-
-          this.workers[i].send({
-            designData: designData,
-            imagePaths: totalImages.slice(startIndex, endIndex),
-          })
-        }
         break
     }
 
     return { totalWorkers: totalWorkers, totalImages: totalImages.length }
+  }
+
+  private processTrain(data: WorkerInputTrain) {
+    this.processTrain(data)
+    this.create(1)
+      .addWorkerHandlers(callback)
+      .workers[0].send({
+        designData: designData,
+        resultPath: data.resultPath,
+        keyPath: data.keyPath,
+      })
+  }
+
+  private processExtract(data: WorkerInputExtract) {
+    if (!data.imagePaths) throw 'imagePaths...'
+
+    let totalImages = await getImagePaths(data.imagesDirectory)
+    let totalWorkers = Math.min(totalImages.length, noOfCores)
+    let step = Math.floor(totalImages.length / totalWorkers)
+
+    this.expectedOutputCount = totalImages.length
+    this.create(totalWorkers).addWorkerHandlers(callback)
+
+    for (let i = 0; i < totalWorkers; i += 1) {
+      const startIndex = i * step
+      const endIndex =
+        i === totalWorkers - 1 ? totalImages.length : (i + 1) * step
+
+      this.workers[i].send({
+        designData: designData,
+        imagePaths: totalImages.slice(startIndex, endIndex),
+      })
+    }
+  }
+
+  private processGenerateAnswerSheets(data: WorkerInputGenerateAnswerSheets) {
+
+  }
+
+  private processGenerateAnswerSheets(data: WorkerInputGenerateTestData) {
+
   }
 }
 
