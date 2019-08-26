@@ -1,7 +1,7 @@
 import { convertToBitArray } from '../index'
 import { imageDataToBinary } from './gpu'
 
-function test() {
+function test(): void {
   // random array 60 * 4 * 256 * 128
   const channels = 4
   const data = []

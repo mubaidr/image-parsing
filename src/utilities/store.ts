@@ -1,4 +1,5 @@
 import Store from 'electron-store'
+
 import { dataPaths } from './dataPaths'
 
 const newStore = new Store()
@@ -8,22 +9,22 @@ const store = {
   ...newStore,
 
   // get last used file/ dir paths
-  lastOpenDir: () => {
+  lastOpenDir: (): string => {
     const lastOpenDir = newStore.get('openDirectory')
 
     return typeof lastOpenDir === 'string' ? lastOpenDir : dataPaths.home
   },
-  lastSaveDir: () => {
+  lastSaveDir: (): string => {
     const lastOpenDir = newStore.get('saveDirectory')
 
     return typeof lastOpenDir === 'string' ? lastOpenDir : dataPaths.home
   },
-  lastOpenFile: () => {
+  lastOpenFile: (): string => {
     const lastOpenDir = newStore.get('openFile')
 
     return typeof lastOpenDir === 'string' ? lastOpenDir : dataPaths.home
   },
-  lastSaveFile: () => {
+  lastSaveFile: (): string => {
     const lastOpenDir = newStore.get('saveFile')
 
     return typeof lastOpenDir === 'string' ? lastOpenDir : dataPaths.home

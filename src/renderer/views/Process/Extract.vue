@@ -77,7 +77,7 @@ import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
 import prettyMs from 'pretty-ms'
 import WorkerManagerExtract from '../../../utilities/@classes/WorkerManagerExtract'
 
-let workerManager = new WorkerManagerExtract()
+const workerManager = new WorkerManagerExtract()
 
 export default {
   name: 'ExtractResult',

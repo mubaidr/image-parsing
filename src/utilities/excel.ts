@@ -38,11 +38,11 @@ const importExcelToJson = (src: string): Record<string, any>[] => {
   return arr
 }
 
-const exportJsonToExcel = (
+function exportJsonToExcel(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   compiledResult: CompiledResult | any[],
   destination: string
-) => {
+): void {
   const workbook = XLSX.utils.book_new()
   const rows =
     compiledResult instanceof CompiledResult
@@ -69,7 +69,7 @@ const exportJsonToExcel = (
   XLSX.writeFile(workbook, destination)
 }
 
-const exportHtmltoExcel = (htmlTable: string, destination: string) => {
+function exportHtmltoExcel(htmlTable: string, destination: string): void {
   const wb = XLSX.utils.table_to_book(htmlTable)
   XLSX.writeFile(wb, destination)
 }

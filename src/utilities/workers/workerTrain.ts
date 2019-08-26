@@ -12,7 +12,7 @@ async function start(
   designData: DesignData,
   resultPath: string = dataPaths.result,
   keyPath: string = dataPaths.keyImage
-) {
+): Promise<void> {
   const sharpImage = getSharpObjectFromSource(keyPath).raw()
   const compiledResult = CompiledResult.loadFromExcel(resultPath)
 
@@ -49,7 +49,7 @@ async function start(
   }
 }
 
-function stop() {
+function stop(): void {
   process.exit(0)
 }
 

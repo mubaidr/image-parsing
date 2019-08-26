@@ -21,7 +21,7 @@ class Cache {
     return t
   }
 
-  public reset() {
+  public reset(): void {
     this.list = {}
   }
 

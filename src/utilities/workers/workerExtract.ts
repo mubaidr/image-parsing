@@ -8,8 +8,6 @@ import { getQuestionsNeuralNet } from '../index'
 import { getQuestionsData } from '../questions'
 import { getRollNoFromImage } from '../sheetInfo'
 
-// TODO add individual interface for each worker script
-
 const start = async (msg: WorkerInput): Promise<Result[] | undefined> => {
   const neuralNet = getQuestionsNeuralNet()
   const results: Result[] = []
@@ -81,12 +79,12 @@ const start = async (msg: WorkerInput): Promise<Result[] | undefined> => {
   }
 }
 
-function stop() {
+function stop(): void {
   process.exit(0)
 }
 
 // add message listner
-process.on('message', (msg: WorkerInputExtract) => {
+process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {

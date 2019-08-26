@@ -3,8 +3,6 @@ import electronLog from 'electron-log'
 import noOfCores from 'physical-cpu-count'
 
 import Result from '../@classes/Result'
-import WorkerManagerInput from '../@interfaces/WorkerManagerInput'
-import WorkerManagerOutput from '../@interfaces/WorkerManagerOutput'
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -19,7 +17,7 @@ class WorkerManager {
     this.workers = []
   }
 
-  public createWorkers(num?: number) {
+  public createWorkers(num?: number): WorkerManager {
     const count = num === undefined ? noOfCores : num
 
     for (let i = 0; i < count; i += 1) {
@@ -33,7 +31,7 @@ class WorkerManager {
     return this
   }
 
-  public stop() {
+  public stop(): WorkerManager {
     for (const worker of this.workers) {
       if (worker.connected) {
         worker.send({ stop: true })
@@ -49,10 +47,10 @@ class WorkerManager {
     return this.workers.length
   }
 
-  public addWorkerHandlers(callback: Function) {
+  public addWorkerHandlers(callback: Function): WorkerManager {
     this.workers.forEach(worker => {
       worker.on('message', (data: { state: string; results: Result[] }) => {
-        console.log(data)
+        console.log(data, callback)
 
         // if (data.state === ProgressStateEnum.COMPLETED) {
         //   this.results.push(...data.results)
@@ -97,71 +95,6 @@ class WorkerManager {
     })
 
     return this
-  }
-
-  private processTrain(options: WorkerManagerInput): WorkerManagerOutput {
-    const { callback, data } = options
-    const { designData, resultPath, keyPath } = data
-
-    if (!resultPath) throw 'Invalid resultPath...'
-    if (!keyPath) throw 'Invalid keyPath...'
-
-    this.createWorkers(1)
-      .addWorkerHandlers(callback)
-      .workers[0].send({
-        designData,
-        resultPath,
-        keyPath,
-      })
-
-    this.expectedOutputCount = 1
-
-    return { totalWorkers: 1 }
-  }
-
-  public async processExtract(
-    options: WorkerManagerInput
-  ): Promise<WorkerManagerOutput> {
-    const { callback, data } = options
-    const { designData, imagesDirectory } = data
-
-    if (!imagesDirectory) throw 'Invalid imagesDirectory...'
-
-    const totalImages = await getImagePaths(imagesDirectory)
-    const totalWorkers = Math.min(totalImages.length, noOfCores)
-    const step = Math.floor(totalImages.length / totalWorkers)
-
-    this.expectedOutputCount = totalImages.length
-    this.createWorkers(totalWorkers).addWorkerHandlers(callback)
-
-    for (let i = 0; i < totalWorkers; i += 1) {
-      const startIndex = i * step
-      const endIndex =
-        i === totalWorkers - 1 ? totalImages.length : (i + 1) * step
-
-      this.workers[i].send({
-        designData,
-        imagePaths: totalImages.slice(startIndex, endIndex),
-      })
-    }
-
-    return { totalWorkers: 1 }
-  }
-
-  public processGenerateTestData(
-    options: WorkerManagerInput
-  ): WorkerManagerOutput {
-    console.log(options)
-
-    return { totalWorkers: 1 }
-  }
-
-  public processGenerateAnswerSheets(
-    options: WorkerManagerInput
-  ): WorkerManagerOutput {
-    console.log(options)
-
-    return { totalWorkers: 1 }
   }
 }
 

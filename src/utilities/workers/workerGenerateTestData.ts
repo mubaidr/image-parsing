@@ -1,6 +1,8 @@
-async function start() {}
+function start(): void {
+  console.log('start')
+}
 
-async function stop() {
+function stop(): void {
   process.exit(0)
 }
 

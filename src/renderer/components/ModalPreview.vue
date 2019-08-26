@@ -15,9 +15,9 @@
         &nbsp;&nbsp;&nbsp;
         <input
           ref="txt_roll_no"
+          v-model="row.rollNo"
           :class="{ 'is-danger': !row.rollNo }"
           :readonly="row.isRollNoExtracted"
-          v-model="row.rollNo"
           class="input has-text-centered is-uppercase has-text-weight-bold is-family-code"
           placeholder="Input Roll Number"
           type="text"
@@ -31,7 +31,7 @@
       <section class="modal-card-body">
         <div class="has-text-centered">
           <!-- Preview -->
-          <img :src="imageSource" v-show="imageSource" />
+          <img v-show="imageSource" :src="imageSource" />
         </div>
       </section>
     </div>

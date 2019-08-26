@@ -77,7 +77,7 @@
     <div class="block has-text-centered">
       <div class="block log">
         <ul>
-          <li :key="index" v-for="(log, index) in logs">
+          <li v-for="(log, index) in logs" :key="index">
             {{ log }}
           </li>
         </ul>

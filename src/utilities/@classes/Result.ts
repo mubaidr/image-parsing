@@ -8,24 +8,24 @@ class Result {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
 
-  private correctCount: number = 0
+  private correctCount = 0
   private id: string
-  private incorrectCount: number = 0
-  private isCompiled: boolean = false
-  private marks: number = 0
-  private skippedCount: number = 0
-  private totalMarks: number = 0
-  private unattemptedCount: number = 0
+  private incorrectCount = 0
+  private isCompiled = false
+  private marks = 0
+  private skippedCount = 0
+  private totalMarks = 0
+  private unattemptedCount = 0
 
   public answers: AnswerCollection = {}
 
   public imageFile: string | undefined
   public isRollNoExtracted: boolean
-  public post: string = ''
-  public questionPaperType: string = ''
+  public post = ''
+  public questionPaperType = ''
   public rollNo: string | undefined
-  public testCenter: string = ''
-  public testTime: string = ''
+  public testCenter = ''
+  public testTime = ''
 
   public constructor(rollNo?: string, imageFile?: string) {
     this.id = uuid()
@@ -158,9 +158,11 @@ class Result {
     )
   }
 
-  public setMarks(marks: number, negativeMarks: number) {
+  public setMarks(marks: number, negativeMarks: number): Result {
     this.marks = this.correctCount * marks - this.incorrectCount * negativeMarks
     this.totalMarks = (60 - this.skippedCount) * marks
+
+    return this
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

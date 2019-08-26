@@ -31,8 +31,8 @@
         <div class="level-item">
           <p class="control">
             <button
-              @click="saveResult"
               :disabled="!resultFilePath"
+              @click="saveResult"
               class="button is-dark"
             >
               <i class="material-icons md-18">save</i>
@@ -43,8 +43,8 @@
         <div class="level-item">
           <p class="control">
             <button
-              @click="exportResult"
               :disabled="!resultFilePath"
+              @click="exportResult"
               class="button is-success"
             >
               <i class="material-icons md-18">cloud_download</i>
@@ -94,8 +94,8 @@
             </p>
             <p class="control">
               <input
-                :disabled="!hasResults"
                 v-model="filterQuery"
+                :disabled="!hasResults"
                 class="input is-small"
                 placeholder="Filter By Roll No."
                 type="text"
@@ -161,8 +161,8 @@
               <!-- Answer sheet image -->
               <div class="col is-200">
                 <a
-                  @click="selectRow(index)"
                   v-if="item.imageFile"
+                  @click="selectRow(index)"
                   class="custom-link"
                 >
                   <i class="material-icons md-18">open_in_new</i>
@@ -197,12 +197,12 @@
     <!-- Preview component -->
     <Transition mode="out-in" name="slide-up">
       <modal-preview
+        v-if="selectedRow"
         :image-source="imageSource"
         :selected-row="selectedRow"
         @close-modal="unSelectRow"
         @next="selectNextRow"
         @previous="selectPreviousRow"
-        v-if="selectedRow"
       />
     </Transition>
   </div>
