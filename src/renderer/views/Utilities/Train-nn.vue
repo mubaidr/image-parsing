@@ -130,21 +130,17 @@ export default {
 
   methods: {
     start() {
-      workerManager
-        .process({
-          callback: this.callback,
-          data: {
-            designPath: this.designPath,
-            resultPath: this.resultPath,
-            keyPath: this.keyPath,
-          },
-        })
-        .catch(err => {
-          this.$toasted.show(err, {
-            type: 'error',
-            icon: 'info',
-          })
-        })
+      workerManager.process({
+        callbacks: {
+          onsuccess: this.onsuccess,
+          onprogress: this.onprogress,
+        },
+        data: {
+          designPath: this.designPath,
+          resultPath: this.resultPath,
+          keyPath: this.keyPath,
+        },
+      })
     },
 
     stop() {
@@ -153,8 +149,12 @@ export default {
       this.isRunning = false
     },
 
-    callback() {
-      console.log('yay')
+    onsuccess() {
+      console.log('onsuccess')
+    },
+
+    onprogress() {
+      console.log('onprogress')
     },
 
     chooseDesignPath() {

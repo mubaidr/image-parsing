@@ -4,6 +4,7 @@
     "url": "https://github.com/mubaidr/image-parsing/issues"
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "brain.js": "^1.6.1",
     "bulma-pro": "^0.1.8",
     "electron-log": "^3.0.7",
@@ -52,7 +53,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.2.0",
     "devtron": "^1.4.0",
-    "electron": "^6.0.4",
+    "electron": "^6.0.2",
     "electron-builder": "^21.2.0",
     "electron-debug": "^3.0.1",
     "eslint": "^6.2.2",

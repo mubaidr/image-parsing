@@ -24,6 +24,56 @@ class WorkerManagerExtract extends WorkerManager {
     this.results = []
   }
 
+  public addWorkerHandlers(callbacks: Callbacks): void {
+    this.workers.forEach(worker => {
+      worker.on(
+        'message',
+        (data: { state: ProgressStateEnum; results: Result[] }) => {
+          console.log(data, callbacks)
+
+          // if (data.state === ProgressStateEnum.COMPLETED) {
+          //   this.results.push(...data.results)
+          //   if (this.results.length === this.expectedOutputCount) {
+          //     const compiledResult = new CompiledResult()
+          //     // repair prototype for objects
+          //     this.results.forEach(result => {
+          //       compiledResult.addResults(Result.fromJson(result))
+          //     })
+          //     callback({
+          //       state: ProgressStateEnum.COMPLETED,
+          //       compiledResult: compiledResult,
+          //     })
+          //   }
+          // } else {
+          //   callback(data)
+          // }
+        }
+      )
+
+      worker.on('close', (a, b) => {
+        if (a) {
+          electronLog.info(
+            `child process exited with code: ${a} and signal ${b}`
+          )
+        } else {
+          electronLog.info('child process exited with code 0.')
+        }
+      })
+
+      if (!isDev || !worker.stdout || !worker.stderr) {
+        return
+      }
+
+      worker.stdout.on('data', (data: Buffer) => {
+        electronLog.log(data.toString())
+      })
+
+      worker.stderr.on('data', (data: Buffer) => {
+        electronLog.error(data.toString())
+      })
+    })
+  }
+
   public async process(
     options: WorkerManagerInput
   ): Promise<WorkerManagerOutput> {

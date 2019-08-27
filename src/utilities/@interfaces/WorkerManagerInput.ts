@@ -1,7 +1,8 @@
+import Callbacks from './Callbacks'
 import WorkerInput from './WorkerInput'
 
 interface WorkerManagerInput {
-  callback: (data: object) => void
+  callbacks: Callbacks
   inProcess?: boolean
   designPath: string
   data: WorkerInput

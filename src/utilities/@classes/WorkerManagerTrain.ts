@@ -1,5 +1,8 @@
+import electronLog from 'electron-log'
 import path from 'path'
 
+import ProgressStateEnum from '../@enums/ProgressStateEnum'
+import Callbacks from '../@interfaces/Callbacks'
 import WorkerManagerInput from '../@interfaces/WorkerManagerInput'
 import WorkerManagerOutput from '../@interfaces/WorkerManagerOutput'
 import { dataPaths } from '../dataPaths'
@@ -17,26 +20,62 @@ class WorkerManagerTrain extends WorkerManager {
     super(workerPath)
   }
 
+  public addWorkerHandlers(callbacks: Callbacks): void {
+    this.workers.forEach(worker => {
+      worker.on(
+        'message',
+        (message: { state: ProgressStateEnum; data: object }) => {
+          message.state === ProgressStateEnum.COMPLETED
+            ? callbacks.onsuccess(message.data)
+            : callbacks.onprogress(message.data)
+        }
+      )
+
+      worker.on('close', (a, b) => {
+        if (a) {
+          electronLog.info(
+            `child process exited with code: ${a} and signal ${b}`
+          )
+        } else {
+          electronLog.info('child process exited with code 0.')
+        }
+
+        if (callbacks.onclose) callbacks.onclose({ code: a, singal: b })
+      })
+
+      if (worker.stdout) {
+        worker.stdout.on('data', (data: Buffer) => {
+          electronLog.log(data.toString())
+        })
+      }
+
+      if (worker.stderr) {
+        worker.stderr.on('data', (data: Buffer) => {
+          electronLog.error(data.toString())
+        })
+      }
+    })
+  }
+
   public process(options: WorkerManagerInput): WorkerManagerOutput {
     options.data.designData = getDesignData(
       options.designPath || dataPaths.designBarcode
     )
 
-    const { callback, data } = options
+    const { callbacks, data } = options
     const { designData, resultPath, keyPath } = data
 
     if (!resultPath) throw 'Invalid resultPath...'
     if (!keyPath) throw 'Invalid keyPath...'
 
     this.createWorkers(1)
-      .addWorkerHandlers(callback)
-      .workers[0].send({
-        designData,
-        resultPath,
-        keyPath,
-      })
-
+    this.addWorkerHandlers(callbacks)
     this.expectedOutputCount = 1
+    this.workers[0].send({
+      designData,
+      resultPath,
+      keyPath,
+    })
 
     return { totalWorkers: 1 }
   }
