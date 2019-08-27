@@ -73,16 +73,6 @@
         </button>
       </div>
     </form>
-
-    <div class="block has-text-centered">
-      <div class="block log">
-        <ul>
-          <li v-for="(log, index) in logs" :key="index">
-            {{ log }}
-          </li>
-        </ul>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -116,30 +106,34 @@ export default {
     },
   },
 
-  watch: {
-    running(val) {
-      if (val) {
-        this.logs = []
-      }
-    },
-  },
-
   unmounted() {
     workerManager.stop()
   },
 
   methods: {
     start() {
+      this.isRunning = true
+
       workerManager.process({
         callbacks: {
-          onsuccess: () => {
-            console.log('onsuccess')
+          onsuccess: output => {
+            this.isRunning = false
+
+            this.$toasted.show(
+              `Successfully trained in ${output.iterations} iterations`,
+              {
+                type: 'success',
+                icon: 'info',
+              }
+            )
           },
-          onprogress: () => {
-            console.log('onprogress')
-          },
-          onerror: e => {
-            console.log(e)
+          onerror: error => {
+            this.isRunning = false
+
+            this.$toasted.show(error, {
+              type: 'error',
+              icon: 'info',
+            })
           },
         },
         data: {
@@ -192,8 +186,5 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.log {
-  font-size: smaller;
-}
+<style>
 </style>

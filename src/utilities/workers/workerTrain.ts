@@ -9,7 +9,9 @@ import { dataPaths } from '../dataPaths'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
 
-function sendMessage() {}
+function stop(): void {
+  process.exit(0)
+}
 
 async function start(
   designData: DesignData,
@@ -35,26 +37,17 @@ async function start(
   })
 
   if (netOutput.error <= 0.001) {
-    // write trained network configuration to disk
     fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
 
     if (process && process.send) {
-      process.send({ state: ProgressStateEnum.COMPLETED }, () => {
-        process.exit(0)
-      })
+      process.send(
+        { state: ProgressStateEnum.COMPLETED, data: netOutput },
+        stop
+      )
     }
   } else {
-    throw 'lol hogya'
-    // if (process && process.send) {
-    //   process.send({ error: true }, () => {
-    //     process.exit(0)
-    //   })
-    // }
+    throw 'Unable to train...'
   }
-}
-
-function stop(): void {
-  process.exit(0)
 }
 
 process.on('message', (msg: WorkerInput) => {
@@ -67,18 +60,6 @@ process.on('message', (msg: WorkerInput) => {
 
     start(msg.designData, msg.resultPath, msg.keyPath)
   }
-})
-
-process.on('unhandledRejection', rejection => {
-  console.error(rejection)
-})
-
-process.on('uncaughtException', exception => {
-  console.error(exception)
-})
-
-process.on('warning', warning => {
-  console.warn(warning)
 })
 
 export { start, stop }
