@@ -3,12 +3,12 @@ import noOfCores from 'physical-cpu-count'
 
 class WorkerManager {
   public workerPath: string
-  public expectedOutputCount: number
+  public receivedOutputCount: number
   public workers: ChildProcess[]
 
   public constructor(workerPath: string) {
     this.workerPath = workerPath
-    this.expectedOutputCount = 0
+    this.receivedOutputCount = 0
     this.workers = []
   }
 
@@ -33,7 +33,7 @@ class WorkerManager {
       }
     }
 
-    this.expectedOutputCount = 0
+    this.receivedOutputCount = 0
     this.workers.length = 0
     return this
   }

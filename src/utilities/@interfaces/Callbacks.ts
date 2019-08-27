@@ -5,6 +5,7 @@ interface Callbacks {
   onstart?: (data: object) => void
   onwarning?: (data: object) => void
   onclose?: (data: object) => void
+  onlog?: (data: object) => void
 }
 
 export default Callbacks

@@ -1,6 +1,8 @@
 import path from 'path'
 import noOfCores from 'physical-cpu-count'
 
+import ProgressStateEnum from '../@enums/ProgressStateEnum'
+import Callbacks from '../@interfaces/Callbacks'
 import WorkerManagerInput from '../@interfaces/WorkerManagerInput'
 import WorkerManagerOutput from '../@interfaces/WorkerManagerOutput'
 import { dataPaths } from '../dataPaths'
@@ -90,7 +92,7 @@ class WorkerManagerExtract extends WorkerManager {
     const totalWorkers = Math.min(totalImages.length, noOfCores)
     const step = Math.floor(totalImages.length / totalWorkers)
 
-    this.expectedOutputCount = totalImages.length
+    this.receivedOutputCount = totalImages.length
     this.createWorkers(totalWorkers).addWorkerHandlers(callback)
 
     for (let i = 0; i < totalWorkers; i += 1) {

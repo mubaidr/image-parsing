@@ -2,11 +2,14 @@ import brain from 'brain.js'
 import fs from 'fs'
 
 import CompiledResult from '../@classes/CompiledResult'
+import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import DesignData from '../@interfaces/DesignData'
 import WorkerInput from '../@interfaces/WorkerInput'
 import { dataPaths } from '../dataPaths'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
+
+function sendMessage() {}
 
 async function start(
   designData: DesignData,
@@ -36,16 +39,17 @@ async function start(
     fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
 
     if (process && process.send) {
-      process.send({ completed: true }, () => {
+      process.send({ state: ProgressStateEnum.COMPLETED }, () => {
         process.exit(0)
       })
     }
   } else {
-    if (process && process.send) {
-      process.send({ error: true }, () => {
-        process.exit(0)
-      })
-    }
+    throw 'lol hogya'
+    // if (process && process.send) {
+    //   process.send({ error: true }, () => {
+    //     process.exit(0)
+    //   })
+    // }
   }
 }
 
@@ -53,12 +57,13 @@ function stop(): void {
   process.exit(0)
 }
 
-// add message listner
 process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
     if (!msg.designData) throw 'Invalid design data...'
+    if (!msg.resultPath) throw 'Invalid resultPath...'
+    if (!msg.keyPath) throw 'Invalid keyPath...'
 
     start(msg.designData, msg.resultPath, msg.keyPath)
   }

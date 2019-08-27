@@ -25,9 +25,18 @@ class WorkerManagerTrain extends WorkerManager {
       worker.on(
         'message',
         (message: { state: ProgressStateEnum; data: object }) => {
-          message.state === ProgressStateEnum.COMPLETED
-            ? callbacks.onsuccess(message.data)
-            : callbacks.onprogress(message.data)
+          if (message.state === ProgressStateEnum.COMPLETED) {
+            // TODO: extra count
+            this.receivedOutputCount += 1
+          }
+
+          console.log(this.receivedOutputCount, this.getCount())
+
+          if (this.receivedOutputCount === this.getCount()) {
+            callbacks.onsuccess(message.data)
+          } else {
+            callbacks.onprogress(message.data)
+          }
         }
       )
 
@@ -40,18 +49,30 @@ class WorkerManagerTrain extends WorkerManager {
           electronLog.info('child process exited with code 0.')
         }
 
-        if (callbacks.onclose) callbacks.onclose({ code: a, singal: b })
+        if (callbacks.onclose) callbacks.onclose({ code: a || 0, singal: b })
       })
 
       if (worker.stdout) {
         worker.stdout.on('data', (data: Buffer) => {
           electronLog.log(data.toString())
+
+          if (callbacks.onlog) {
+            callbacks.onlog({
+              log: data.toString(),
+            })
+          }
         })
       }
 
       if (worker.stderr) {
         worker.stderr.on('data', (data: Buffer) => {
           electronLog.error(data.toString())
+
+          if (callbacks.onerror) {
+            callbacks.onerror({
+              log: data.toString(),
+            })
+          }
         })
       }
     })
@@ -65,12 +86,9 @@ class WorkerManagerTrain extends WorkerManager {
     const { callbacks, data } = options
     const { designData, resultPath, keyPath } = data
 
-    if (!resultPath) throw 'Invalid resultPath...'
-    if (!keyPath) throw 'Invalid keyPath...'
-
     this.createWorkers(1)
     this.addWorkerHandlers(callbacks)
-    this.expectedOutputCount = 1
+    this.receivedOutputCount = 1
     this.workers[0].send({
       designData,
       resultPath,

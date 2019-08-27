@@ -132,8 +132,15 @@ export default {
     start() {
       workerManager.process({
         callbacks: {
-          onsuccess: this.onsuccess,
-          onprogress: this.onprogress,
+          onsuccess: () => {
+            console.log('onsuccess')
+          },
+          onprogress: () => {
+            console.log('onprogress')
+          },
+          onerror: e => {
+            console.log(e)
+          },
         },
         data: {
           designPath: this.designPath,
@@ -147,14 +154,6 @@ export default {
       workerManager.stop()
 
       this.isRunning = false
-    },
-
-    onsuccess() {
-      console.log('onsuccess')
-    },
-
-    onprogress() {
-      console.log('onprogress')
     },
 
     chooseDesignPath() {
