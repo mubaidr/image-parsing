@@ -31,7 +31,7 @@ const convertImage = async (src: string): Promise<string> => {
   }
 
   // generate random tmp url
-  const url = path.join(dataPaths.tmp, `${ uuid() }.jpg`)
+  const url = path.join(dataPaths.tmp, `${uuid()}.jpg`)
   cache.set(src, url)
 
   // save file for preview
@@ -52,14 +52,16 @@ const logImageData = (src: string | Sharp, name?: string): void => {
     img = src.clone()
   }
 
-  img.jpeg().toFile(path.join(dataPaths.tmp, `${ name || uuid() }.jpg`))
+  img.jpeg().toFile(path.join(dataPaths.tmp, `${name || uuid()}.jpg`))
 }
 
 const getImagePaths = async (dir: string): Promise<string[]> => {
   const loc = dir.replace(/\\/gi, '/')
   const exts = Object.keys(ImageTypesEnum)
+  const glob = `${loc}/*.{${exts}}`.replace('//', '/')
 
-  return fastGlob(`${ loc }/*.{${ exts }}`, {
+  return fastGlob(glob, {
+    absolute: true,
     onlyFiles: true,
   })
 }

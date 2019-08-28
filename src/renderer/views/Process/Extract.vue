@@ -147,23 +147,22 @@ export default {
     start() {
       this.progressState = ProgressStateEnum.RUNNING
 
-      workerManager
-        .process({
-          callback: this.callback,
-          data: { imagesDirectory: this.imagesDirectory },
-        })
-        .then(({ totalWorkers, totalImages }) => {
-          this.totalImages = totalImages
-          this.totalWorkers = totalWorkers
-        })
-        .catch(err => {
-          console.log(err)
+      workerManager.process({
+        callbacks: {
+          onsuccess: data => {
+            this.progressState = ProgressStateEnum.COMPLETED
 
-          this.$toasted.show(err, {
-            type: 'error',
-            icon: 'info',
-          })
-        })
+            console.info(data)
+          },
+          onprogress: data => {
+            console.info(data)
+          },
+          onerror: err => {
+            console.error(err)
+          },
+        },
+        data: { imagesDirectory: this.imagesDirectory },
+      })
     },
     stop() {
       workerManager.stop()
@@ -216,7 +215,7 @@ export default {
             class: 'has-text-white has-text-underlined',
             onClick: (e, toastObject) => {
               toastObject.goAway(0)
-              this.$router.push(`/process/review?resultFilePath=${ destination }`)
+              this.$router.push(`/process/review?resultFilePath=${destination}`)
             },
           },
         })

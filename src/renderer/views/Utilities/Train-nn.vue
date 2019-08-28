@@ -81,6 +81,7 @@ import { openFile } from '../../../utilities/electron-dialog'
 import ImageTypesEnum from '../../../utilities/@enums/ImageTypesEnum'
 import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
 import WorkerManagerTrain from '../../../utilities/@classes/WorkerManagerTrain'
+import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
 
 let workerManager = new WorkerManagerTrain()
 
@@ -92,11 +93,13 @@ export default {
       resultPath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.xlsx',
       keyPath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.jpg',
       logs: [],
-      isRunning: false,
+      progressState: ProgressStateEnum.STOPPED,
     }
   },
-
   computed: {
+    isRunning() {
+      return this.progressState === ProgressStateEnum.RUNNING
+    },
     inputIsValid() {
       return (
         this.designPath !== null &&
@@ -105,19 +108,17 @@ export default {
       )
     },
   },
-
   unmounted() {
     workerManager.stop()
   },
-
   methods: {
     start() {
-      this.isRunning = true
+      this.progressState === ProgressStateEnum.RUNNING
 
       workerManager.process({
         callbacks: {
           onsuccess: output => {
-            this.isRunning = false
+            this.progressState === ProgressStateEnum.STOPPED
 
             this.$toasted.show(
               `Successfully trained in ${output.iterations} iterations`,
@@ -128,7 +129,7 @@ export default {
             )
           },
           onerror: error => {
-            this.isRunning = false
+            this.progressState === ProgressStateEnum.STOPPED
 
             this.$toasted.show(error, {
               type: 'error',
@@ -143,13 +144,11 @@ export default {
         },
       })
     },
-
     stop() {
       workerManager.stop()
 
-      this.isRunning = false
+      this.progressState === ProgressStateEnum.STOPPED
     },
-
     chooseDesignPath() {
       openFile([
         {
@@ -160,7 +159,6 @@ export default {
         this.designPath = file
       })
     },
-
     chooseResultPath() {
       openFile([
         {
@@ -171,7 +169,6 @@ export default {
         this.resultPath = file
       })
     },
-
     choosekeyPath() {
       openFile([
         {

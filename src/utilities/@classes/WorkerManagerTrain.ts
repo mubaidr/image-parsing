@@ -29,7 +29,6 @@ class WorkerManagerTrain extends WorkerManager {
     this.createWorkers(totalWorkers)
     this.addWorkerHandlers(callbacks)
     this.receivedOutputCount = 0
-    this.expectedOutputCount = totalWorkers
 
     this.workers[0].send({
       designData,

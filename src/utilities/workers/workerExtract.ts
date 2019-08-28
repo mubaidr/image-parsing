@@ -1,6 +1,7 @@
 import Result from '../@classes/Result'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
+import DesignData from '../@interfaces/DesignData'
 import NNQuestionOutput from '../@interfaces/NNQuestionOutput'
 import WorkerInput from '../@interfaces/WorkerInput'
 import { getSharpObjectFromSource } from '../images'
@@ -8,22 +9,24 @@ import { getQuestionsNeuralNet } from '../index'
 import { getQuestionsData } from '../questions'
 import { getRollNoFromImage } from '../sheetInfo'
 
-const start = async (msg: WorkerInput): Promise<Result[] | undefined> => {
+function stop(): void {
+  process.exit(0)
+}
+
+const start = async (
+  designData: DesignData,
+  imagePaths: string[]
+): Promise<void> => {
   const neuralNet = getQuestionsNeuralNet()
   const results: Result[] = []
 
-  for (
-    let i = 0, imagesLength = msg.imagePaths.length;
-    i < imagesLength;
-    i += 1
-  ) {
-    const image = msg.imagePaths[i]
+  for (let i = 0, imagesLength = imagePaths.length; i < imagesLength; i += 1) {
+    const image = imagePaths[i]
     const sharpImage = getSharpObjectFromSource(image).raw()
-    const startTime = Date.now()
 
     const [rollNo, questionsData] = await Promise.all([
-      getRollNoFromImage(msg.designData, sharpImage, true),
-      getQuestionsData(msg.designData, sharpImage.clone()),
+      getRollNoFromImage(designData, sharpImage, true),
+      getQuestionsData(designData, sharpImage.clone()),
     ])
     const result = new Result(rollNo, image)
 
@@ -34,12 +37,10 @@ const start = async (msg: WorkerInput): Promise<Result[] | undefined> => {
     ) {
       const { title, input } = questionsData[j]
 
-      if (!title) {
-        continue
-      }
+      if (!title) continue
 
-      let value: string
       const pre = neuralNet.run<number[], NNQuestionOutput>(input)
+      let value: string
 
       if (pre[QuestionOptionsEnum.NONE] >= 0.95) {
         value = QuestionOptionsEnum.NONE
@@ -62,46 +63,34 @@ const start = async (msg: WorkerInput): Promise<Result[] | undefined> => {
     // report progress status
     if (process && process.send) {
       process.send({
-        state: ProgressStateEnum.RUNNING,
-        time: Date.now() - startTime,
+        state: ProgressStateEnum.PROGRESS,
       })
     }
   }
 
-  // report completed status & exit process
+  // report progress status
   if (process && process.send) {
-    process.send({
-      state: ProgressStateEnum.COMPLETED,
-      results: results,
-    })
-  } else {
-    return results
+    process.send(
+      {
+        state: ProgressStateEnum.COMPLETED,
+        data: results,
+      },
+      stop
+    )
   }
+
+  stop()
 }
 
-function stop(): void {
-  process.exit(0)
-}
-
-// add message listner
 process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
-    start(msg)
+    if (!msg.designData) throw 'Invalid design data...'
+    if (!msg.imagePaths) throw 'Invalid imagesDirectory...'
+
+    start(msg.designData, msg.imagePaths)
   }
-})
-
-process.on('unhandledRejection', rejection => {
-  console.error(rejection)
-})
-
-process.on('uncaughtException', exception => {
-  console.error(exception)
-})
-
-process.on('warning', warning => {
-  console.warn(warning)
 })
 
 export { start, stop }
