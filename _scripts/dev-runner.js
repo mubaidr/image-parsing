@@ -88,7 +88,7 @@ async function startMain() {
 
     compiler.watch(
       {
-        aggregateTimeout: 250,
+        aggregateTimeout: 500,
       },
       err => {
         if (err) console.error(err)
@@ -123,6 +123,7 @@ async function startRenderer() {
       noInfo: true,
       overlay: true,
       clientLogLevel: 'error',
+      reload: true,
       before(app, ctx) {
         app.use(hotMiddleware)
 

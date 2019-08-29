@@ -19,6 +19,7 @@ const start = async (
 ): Promise<void> => {
   const neuralNet = getQuestionsNeuralNet()
   const results: Result[] = []
+  let lastTimeSnapshot = Date.now()
 
   for (let i = 0, imagesLength = imagePaths.length; i < imagesLength; i += 1) {
     const image = imagePaths[i]
@@ -62,8 +63,12 @@ const start = async (
 
     // report progress status
     if (process && process.send) {
+      const _timeElapsed = Date.now() - lastTimeSnapshot
+      lastTimeSnapshot = Date.now()
+
       process.send({
         state: ProgressStateEnum.PROGRESS,
+        timeElapsed: _timeElapsed,
       })
     }
   }
@@ -78,8 +83,6 @@ const start = async (
       stop
     )
   }
-
-  stop()
 }
 
 process.on('message', (msg: WorkerInput) => {
@@ -92,5 +95,9 @@ process.on('message', (msg: WorkerInput) => {
     start(msg.designData, msg.imagePaths)
   }
 })
+
+process.on('unhandledRejection', e => console.error(e))
+process.on('uncaughtException', e => console.error(e))
+process.on('warning', e => console.warn(e))
 
 export { start, stop }

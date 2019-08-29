@@ -4,14 +4,13 @@ import noOfCores from 'physical-cpu-count'
 
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import Callbacks from '../@interfaces/Callbacks'
-import CompiledResult from './CompiledResult'
 
 class WorkerManager {
+  private _data: object[] = []
+
   public workerPath: string
   public receivedOutputCount: number
   public workers: ChildProcess[]
-
-  //TODO: measure time for each progress message
 
   public constructor(workerPath: string) {
     this.workerPath = workerPath
@@ -27,6 +26,7 @@ class WorkerManager {
     for (let i = 0; i < count; i += 1) {
       this.workers.push(
         childProcess.fork(this.workerPath, [], {
+          detached: true,
           silent: true,
         })
       )
@@ -56,36 +56,80 @@ class WorkerManager {
         'message',
         (message: {
           state: ProgressStateEnum
-          data: object | CompiledResult
+          data?: object | object[]
+          timeElapsed?: number
         }) => {
           if (message.state === ProgressStateEnum.PROGRESS) {
-            // TODO: pass progress information time, count, total count
-            callbacks.onprogress({})
+            callbacks.onprogress({
+              timeElapsed: message.timeElapsed,
+            })
           }
 
           if (message.state === ProgressStateEnum.COMPLETED) {
             this.receivedOutputCount += 1
+
+            if (message.data) {
+              console.log(
+                message.data instanceof Array,
+                typeof message.data,
+                length in message.data
+              )
+
+              this._data.push()
+            }
           }
 
           if (this.receivedOutputCount === this.getCount()) {
-            // TODO: pass actual data
-            callbacks.onsuccess(message.data)
+            callbacks.onsuccess({
+              data: this._data,
+            })
           }
         }
       )
 
+      worker.on('disconnect', () => {
+        electronLog.log('worker disconnect')
+      })
+
+      worker.on('exit', (code, signal) => {
+        if (code) {
+          electronLog.info(
+            `worker exited with code: ${code} and signal ${signal}`
+          )
+
+          callbacks.onerror({
+            code,
+            signal,
+          })
+        } else {
+          electronLog.info('worker exited with code 0.')
+        }
+
+        if (callbacks.onexit) {
+          callbacks.onexit({ code: code || 0, signal: signal })
+        }
+      })
+
       worker.on('close', (code, signal) => {
         if (code) {
           electronLog.info(
-            `process exited with code: ${code} and signal ${signal}`
+            `worker closed with code: ${code} and signal ${signal}`
           )
+
+          callbacks.onerror({
+            code,
+            signal,
+          })
         } else {
-          electronLog.info('process exited with code 0.')
+          electronLog.info('worker closed with code 0.')
         }
 
-        if (callbacks.onclose)
+        if (callbacks.onclose) {
           callbacks.onclose({ code: code || 0, signal: signal })
+        }
       })
+
+      worker.on('error', err => electronLog.error(err))
 
       if (worker.stdout) {
         worker.stdout.on('data', (data: Buffer) => {
