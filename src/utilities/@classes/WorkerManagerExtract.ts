@@ -35,7 +35,6 @@ class WorkerManagerExtract extends WorkerManager {
     const totalWorkers = Math.min(totalImages.length, noOfCores)
     const step = Math.floor(totalImages.length / totalWorkers)
 
-    this.receivedOutputCount = 0
     this.createWorkers(totalWorkers)
     this.addWorkerHandlers(callbacks)
 

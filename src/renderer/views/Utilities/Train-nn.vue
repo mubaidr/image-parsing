@@ -117,11 +117,11 @@ export default {
 
       workerManager.process({
         callbacks: {
-          onsuccess: output => {
+          onsuccess: msg => {
             this.progressState === ProgressStateEnum.STOPPED
 
             this.$toasted.show(
-              `Successfully trained in ${output.iterations} iterations`,
+              `Successfully trained in ${msg.data.iterations} iterations`,
               {
                 type: 'success',
                 icon: 'info',
