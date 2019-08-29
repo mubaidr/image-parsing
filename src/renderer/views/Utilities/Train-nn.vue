@@ -125,7 +125,7 @@ export default {
               {
                 type: 'success',
                 icon: 'info',
-              }
+              },
             )
           },
           onerror: error => {
@@ -183,5 +183,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

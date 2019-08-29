@@ -6,8 +6,7 @@ import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import Callbacks from '../@interfaces/Callbacks'
 
 class WorkerManager {
-  private _data: object[] = []
-
+  private data: object[] = []
   public workerPath: string
   public receivedOutputCount: number
   public workers: ChildProcess[]
@@ -24,23 +23,26 @@ class WorkerManager {
     this.stop()
 
     for (let i = 0; i < count; i += 1) {
-      this.workers.push(
-        childProcess.fork(this.workerPath, [], {
-          detached: true,
-          silent: true,
-        })
-      )
+      const worker = childProcess.fork(this.workerPath, [], {
+        detached: true,
+        silent: true,
+      })
+
+      this.workers.push(worker)
     }
 
     return this
   }
 
   public stop(): WorkerManager {
-    for (const worker of this.workers) {
-      worker.kill()
-    }
+    this.workers.forEach(worker => {
+      worker.disconnect()
+      worker.unref()
+      worker.kill('SIGKILL')
+    })
 
     this.receivedOutputCount = 0
+    this.data.length = 0
     this.workers.length = 0
 
     return this
@@ -63,28 +65,26 @@ class WorkerManager {
             callbacks.onprogress({
               timeElapsed: message.timeElapsed,
             })
-          }
-
-          if (message.state === ProgressStateEnum.COMPLETED) {
+          } else if (message.state === ProgressStateEnum.COMPLETED) {
             this.receivedOutputCount += 1
 
             if (message.data) {
-              console.log(
-                message.data instanceof Array,
-                typeof message.data,
-                length in message.data
-              )
+              message.data instanceof Array
+                ? this.data.push(...message.data)
+                : this.data.push(message.data)
+            }
 
-              this._data.push()
+            if (this.receivedOutputCount === this.getCount()) {
+              //TODO: convert to appropriate data format
+
+              callbacks.onsuccess({
+                data: [...this.data],
+              })
+
+              this.stop()
             }
           }
-
-          if (this.receivedOutputCount === this.getCount()) {
-            callbacks.onsuccess({
-              data: this._data,
-            })
-          }
-        }
+        },
       )
 
       worker.on('disconnect', () => {
@@ -92,44 +92,42 @@ class WorkerManager {
       })
 
       worker.on('exit', (code, signal) => {
-        if (code) {
-          electronLog.info(
-            `worker exited with code: ${code} and signal ${signal}`
-          )
+        electronLog.info(
+          `worker exited with code: ${code} and signal ${signal}`,
+        )
 
+        if (code) {
           callbacks.onerror({
+            error: new Error('worker exit unexpectedly'),
             code,
             signal,
           })
-        } else {
-          electronLog.info('worker exited with code 0.')
-        }
-
-        if (callbacks.onexit) {
+        } else if (callbacks.onexit) {
           callbacks.onexit({ code: code || 0, signal: signal })
         }
       })
 
       worker.on('close', (code, signal) => {
-        if (code) {
-          electronLog.info(
-            `worker closed with code: ${code} and signal ${signal}`
-          )
+        electronLog.info(
+          `worker closed with code: ${code} and signal ${signal}`,
+        )
 
+        if (code) {
           callbacks.onerror({
+            error: new Error('worker exit unexpectedly'),
             code,
             signal,
           })
-        } else {
-          electronLog.info('worker closed with code 0.')
-        }
-
-        if (callbacks.onclose) {
+        } else if (callbacks.onclose) {
           callbacks.onclose({ code: code || 0, signal: signal })
         }
       })
 
-      worker.on('error', err => electronLog.error(err))
+      worker.on('error', err => {
+        callbacks.onerror({
+          error: err,
+        })
+      })
 
       if (worker.stdout) {
         worker.stdout.on('data', (data: Buffer) => {
@@ -147,11 +145,9 @@ class WorkerManager {
         worker.stderr.on('data', (data: Buffer) => {
           electronLog.error(data.toString())
 
-          if (callbacks.onerror) {
-            callbacks.onerror({
-              data: data.toString(),
-            })
-          }
+          callbacks.onerror({
+            error: data.toString(),
+          })
         })
       }
     })

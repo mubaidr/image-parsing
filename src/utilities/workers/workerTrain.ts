@@ -16,7 +16,7 @@ function stop(): void {
 async function start(
   designData: DesignData,
   resultPath: string = dataPaths.result,
-  keyPath: string = dataPaths.keyImage
+  keyPath: string = dataPaths.keyImage,
 ): Promise<void> {
   const sharpImage = getSharpObjectFromSource(keyPath).raw()
   const compiledResult = CompiledResult.loadFromExcel(resultPath)
@@ -24,7 +24,7 @@ async function start(
   const trainingData = await getQuestionsData(
     designData,
     sharpImage,
-    compiledResult
+    compiledResult,
   )
 
   const net = new brain.NeuralNetwork()
@@ -42,7 +42,7 @@ async function start(
     if (process && process.send) {
       process.send(
         { state: ProgressStateEnum.COMPLETED, data: netOutput },
-        stop
+        stop,
       )
     }
   } else {

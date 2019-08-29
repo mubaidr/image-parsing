@@ -267,7 +267,7 @@ function setMenu() {
       {
         label: 'Speech',
         submenu: [{ role: 'startspeaking' }, { role: 'stopspeaking' }],
-      }
+      },
     )
 
     // Window menu

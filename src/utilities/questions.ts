@@ -10,7 +10,7 @@ import { convertToBitArray } from './index'
 const getQuestionsData = async (
   design: DesignData,
   img: Sharp,
-  compiledResult?: CompiledResult
+  compiledResult?: CompiledResult,
 ): Promise<QuestionData[]> => {
   const { width } = await img.metadata()
   const scale = width && width > design.width ? design.width / width : 1
@@ -42,7 +42,7 @@ const getQuestionsData = async (
     const { data, info } = await img.toBuffer({ resolveWithObject: true })
     const bitData = convertToBitArray(
       Array.prototype.slice.call(data, 0),
-      info.channels
+      info.channels,
     )
 
     if (compiledResult) {

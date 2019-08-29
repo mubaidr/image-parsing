@@ -17,19 +17,19 @@ const config = {
   entry: {
     workerExtract: path.join(
       __dirname,
-      '../src/utilities/workers/workerExtract.ts'
+      '../src/utilities/workers/workerExtract.ts',
     ),
     workerGenerateAnswerSheets: path.join(
       __dirname,
-      '../src/utilities/workers/workerGenerateAnswerSheets.ts'
+      '../src/utilities/workers/workerGenerateAnswerSheets.ts',
     ),
     workerGenerateTestData: path.join(
       __dirname,
-      '../src/utilities/workers/workerGenerateTestData.ts'
+      '../src/utilities/workers/workerGenerateTestData.ts',
     ),
     workerTrain: path.join(
       __dirname,
-      '../src/utilities/workers/workerTrain.ts'
+      '../src/utilities/workers/workerTrain.ts',
     ),
   },
   output: {

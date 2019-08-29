@@ -142,13 +142,13 @@ if (isDevMode) {
     new webpack.HotModuleReplacementPlugin(),
     new BundleAnalyzerPlugin({
       openAnalyzer: false,
-    })
+    }),
   )
 } else {
   config.plugins.push(
     new MiniCssExtractPlugin({
       filename: '[name].css',
-    })
+    }),
   )
 
   config.optimization = {

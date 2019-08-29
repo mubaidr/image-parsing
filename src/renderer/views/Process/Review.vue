@@ -398,7 +398,7 @@ export default {
     },
 
     loadResult() {
-      if(!this.resultFilePath) return
+      if (!this.resultFilePath) return
 
       this.compiledResult = CompiledResult.loadFromExcel(this.resultFilePath)
     },

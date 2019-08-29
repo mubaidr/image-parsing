@@ -41,7 +41,7 @@ const importExcelToJson = (src: string): Record<string, any>[] => {
 function exportJsonToExcel(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   compiledResult: CompiledResult | any[],
-  destination: string
+  destination: string,
 ): void {
   const workbook = XLSX.utils.book_new()
   const rows =

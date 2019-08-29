@@ -209,7 +209,7 @@ export default {
             class: 'has-text-white has-text-underlined',
             onClick: (e, toastObject) => {
               toastObject.goAway(0)
-              this.$router.push(`/process/review?resultFilePath=${ destination }`)
+              this.$router.push(`/process/review?resultFilePath=${destination}`)
             },
           },
         })

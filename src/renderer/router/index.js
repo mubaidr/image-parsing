@@ -134,7 +134,7 @@ router.afterEach(to => {
   document.title =
     to.path === '/home'
       ? process.env.PRODUCT_NAME
-      : `${ to.meta.title } - ${ process.env.PRODUCT_NAME }`
+      : `${to.meta.title} - ${process.env.PRODUCT_NAME}`
 })
 
 export default router

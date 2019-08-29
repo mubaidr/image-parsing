@@ -29,7 +29,7 @@ const compileResult = async (
   resultPath: string,
   keyPath: string,
   marks: number,
-  negativeMarks: number
+  negativeMarks: number,
 ): Promise<CompiledResult> => {
   const keys = await readKey(keyPath)
 

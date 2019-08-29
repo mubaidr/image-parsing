@@ -153,7 +153,7 @@ export default {
           this.resultFilePath,
           this.keyFilePath,
           this.correctMarks,
-          this.incorrectMarks
+          this.incorrectMarks,
         ),
       ]).then(([destination, results]) => {
         if (!destination) return

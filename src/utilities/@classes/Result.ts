@@ -168,7 +168,7 @@ class Result {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJson(): Record<string, any> {
     const o: { [key: string]: string | AnswerCollection } = JSON.parse(
-      JSON.stringify(this)
+      JSON.stringify(this),
     )
 
     for (const prop in o) {

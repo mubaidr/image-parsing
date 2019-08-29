@@ -92,7 +92,7 @@ async function startMain() {
       },
       err => {
         if (err) console.error(err)
-      }
+      },
     )
   })
 }
@@ -110,6 +110,7 @@ async function startRenderer() {
       log: false,
       noInfo: true,
       quiet: true,
+      reload: true,
     })
 
     compiler.hooks.afterEmit.tap('afterEmit', () => {
@@ -123,7 +124,6 @@ async function startRenderer() {
       noInfo: true,
       overlay: true,
       clientLogLevel: 'error',
-      reload: true,
       before(app, ctx) {
         app.use(hotMiddleware)
 

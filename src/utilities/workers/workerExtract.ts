@@ -15,15 +15,15 @@ function stop(): void {
 
 const start = async (
   designData: DesignData,
-  imagePaths: string[]
+  imagePaths: string[],
 ): Promise<void> => {
   const neuralNet = getQuestionsNeuralNet()
   const results: Result[] = []
-  let lastTimeSnapshot = Date.now()
 
   for (let i = 0, imagesLength = imagePaths.length; i < imagesLength; i += 1) {
     const image = imagePaths[i]
     const sharpImage = getSharpObjectFromSource(image).raw()
+    const lastTimeSnapshot = Date.now()
 
     const [rollNo, questionsData] = await Promise.all([
       getRollNoFromImage(designData, sharpImage, true),
@@ -63,25 +63,19 @@ const start = async (
 
     // report progress status
     if (process && process.send) {
-      const _timeElapsed = Date.now() - lastTimeSnapshot
-      lastTimeSnapshot = Date.now()
-
       process.send({
         state: ProgressStateEnum.PROGRESS,
-        timeElapsed: _timeElapsed,
+        timeElapsed: Date.now() - lastTimeSnapshot,
       })
     }
   }
 
   // report progress status
   if (process && process.send) {
-    process.send(
-      {
-        state: ProgressStateEnum.COMPLETED,
-        data: results,
-      },
-      stop
-    )
+    process.send({
+      state: ProgressStateEnum.COMPLETED,
+      data: results,
+    })
   }
 }
 
