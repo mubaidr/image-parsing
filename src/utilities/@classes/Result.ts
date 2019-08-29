@@ -3,6 +3,7 @@ import uuid from 'uuid'
 import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
 import RegExpPattern from '../@enums/RegExpPatterns'
 import AnswerCollection from '../@interfaces/AnswerCollection'
+import ResultJson from '../@interfaces/ResultJson'
 
 class Result {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,7 +36,7 @@ class Result {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static fromJson(o: Record<string, string>): Result {
+  public static fromJson(o: ResultJson): Result {
     const answerRegExp = new RegExp(RegExpPattern.QUESTION)
     const result =
       typeof o.rollNo === 'string' ? new Result(o.rollNo) : new Result()
@@ -44,7 +45,11 @@ class Result {
       const value = o[key]
 
       if (answerRegExp.test(key)) {
-        result.addAnswer(key, value)
+        if (typeof value === 'string') {
+          result.addAnswer(key, value)
+        } else {
+          result.addAnswer(key, '?')
+        }
       } else {
         result[key] = value
       }

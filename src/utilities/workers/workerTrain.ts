@@ -40,10 +40,7 @@ async function start(
     fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
 
     if (process && process.send) {
-      process.send(
-        { state: ProgressStateEnum.COMPLETED, data: netOutput },
-        stop,
-      )
+      process.send({ state: ProgressStateEnum.COMPLETED, data: netOutput })
     }
   } else {
     throw 'Unable to train...'

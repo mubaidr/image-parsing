@@ -1,18 +1,19 @@
 import XLSX from 'xlsx'
 
 import CompiledResult from './@classes/CompiledResult'
+import ResultJson from './@interfaces/ResultJson'
 import { toCamelCase, toHeadingCase } from './string'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const importExcelToJson = (src: string): Record<string, any>[] => {
+const importExcelToJson = (src: string): ResultJson[] => {
   const workbook = XLSX.readFile(src)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const arr: Record<string, any>[] = []
+  const arr: ResultJson[] = []
 
   Object.values(workbook.Sheets).forEach(sheet => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rows: Record<string, any>[] = XLSX.utils.sheet_to_json(sheet, {
+    const rows: ResultJson[] = XLSX.utils.sheet_to_json(sheet, {
       blankrows: false,
       raw: true,
     })
@@ -39,8 +40,7 @@ const importExcelToJson = (src: string): Record<string, any>[] => {
 }
 
 function exportJsonToExcel(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  compiledResult: CompiledResult | any[],
+  compiledResult: CompiledResult | ResultJson[],
   destination: string,
 ): void {
   const workbook = XLSX.utils.book_new()

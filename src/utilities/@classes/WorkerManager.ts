@@ -4,17 +4,19 @@ import noOfCores from 'physical-cpu-count'
 
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import Callbacks from '../@interfaces/Callbacks'
+import ResultJson from '../@interfaces/ResultJson'
+import CompiledResult from './CompiledResult'
+import Result from './Result'
+import WorkerManagerExtract from './WorkerManagerExtract'
 
 class WorkerManager {
   private data: object[] = []
+  private results: ResultJson[] = []
+  public workers: ChildProcess[] = []
   public workerPath: string
-  public receivedOutputCount: number
-  public workers: ChildProcess[]
 
   public constructor(workerPath: string) {
     this.workerPath = workerPath
-    this.receivedOutputCount = 0
-    this.workers = []
   }
 
   public createWorkers(num?: number): WorkerManager {
@@ -41,8 +43,8 @@ class WorkerManager {
       worker.kill('SIGKILL')
     })
 
-    this.receivedOutputCount = 0
     this.data.length = 0
+    this.results.length = 0
     this.workers.length = 0
 
     return this
@@ -58,28 +60,43 @@ class WorkerManager {
         'message',
         (message: {
           state: ProgressStateEnum
-          data?: object | object[]
           timeElapsed?: number
+          data?: object
+          results?: ResultJson[]
         }) => {
           if (message.state === ProgressStateEnum.PROGRESS) {
+            // onprogress callback with measured time
             callbacks.onprogress({
               timeElapsed: message.timeElapsed,
             })
           } else if (message.state === ProgressStateEnum.COMPLETED) {
-            this.receivedOutputCount += 1
+            // insert data if any, otherwise insert empty to keep count
+            this.data.push(message.data || {})
 
-            if (message.data) {
-              message.data instanceof Array
-                ? this.data.push(...message.data)
-                : this.data.push(message.data)
+            // collect results if any
+            if (message.results) {
+              this.results.push(...message.results)
             }
 
-            if (this.receivedOutputCount === this.getCount()) {
-              //TODO: convert to appropriate data format
+            // if all workers have returned data
+            if (this.data.length === this.getCount()) {
+              // if extract worker we need to create compileResult object
+              if (this instanceof WorkerManagerExtract) {
+                const compiledResult = new CompiledResult()
 
-              callbacks.onsuccess({
-                data: [...this.data],
-              })
+                this.results.forEach(o => {
+                  compiledResult.addResults(Result.fromJson(o))
+                })
+
+                callbacks.onsuccess({
+                  data: compiledResult,
+                })
+              } else {
+                // return the only object or complete array
+                callbacks.onsuccess({
+                  data: this.data.length === 1 ? this.data[0] : this.data,
+                })
+              }
 
               this.stop()
             }

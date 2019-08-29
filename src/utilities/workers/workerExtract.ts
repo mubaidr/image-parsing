@@ -74,7 +74,7 @@ const start = async (
   if (process && process.send) {
     process.send({
       state: ProgressStateEnum.COMPLETED,
-      data: results,
+      results: results,
     })
   }
 }

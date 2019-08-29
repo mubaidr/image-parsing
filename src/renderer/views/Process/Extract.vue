@@ -50,7 +50,7 @@
     <Transition mode="out-in" name="slide-up">
       <div
         v-show="isRunning"
-        class="notification is-primary botton-centered-content"
+        class="notification is-primary bottom-centered-content"
       >
         <progress
           :value="progress"
@@ -90,7 +90,6 @@ export default {
       processedImages: 0,
       progressState: ProgressStateEnum.STOPPED,
       totalImages: 0,
-      totalWorkers: 0,
     }
   },
 
@@ -147,52 +146,37 @@ export default {
     start() {
       this.progressState = ProgressStateEnum.RUNNING
 
-      workerManager.process({
-        callbacks: {
-          onsuccess: data => {
-            this.progressState = ProgressStateEnum.COMPLETED
-
-            console.info(data)
+      workerManager
+        .process({
+          callbacks: {
+            onsuccess: msg => {
+              this.progressState = ProgressStateEnum.COMPLETED
+              this.exportData(msg.data)
+            },
+            onprogress: msg => {
+              this.perImageTime = msg.timeElapsed
+              this.processedImages += 1
+            },
+            onerror: msg => {
+              this.$toasted.show(msg.error, {
+                type: 'error',
+                icon: 'info',
+              })
+            },
           },
-          onprogress: data => {
-            console.info(data)
-          },
-          onerror: err => {
-            console.error(err)
-          },
-        },
-        data: { imagesDirectory: this.imagesDirectory },
-      })
+          data: { imagesDirectory: this.imagesDirectory },
+        })
+        .then(({ totalImages }) => {
+          this.totalImages = totalImages
+        })
     },
     stop() {
       workerManager.stop()
 
       this.perImageTime = 0
       this.processedImages = 0
-      this.progressState = ProgressStateEnum.STOPPED
       this.totalImages = 0
-      this.totalWorkers = 0
-    },
-    callback(m) {
-      switch (m.state) {
-        case ProgressStateEnum.RUNNING:
-          this.perImageTime = (this.perImageTime + m.time) / 2
-          this.processedImages += 1
-          break
-        case ProgressStateEnum.COMPLETED:
-          currentWindow.setProgressBar(0)
-          this.stop()
-          this.exportData(m.compiledResult)
-          break
-        case ProgressStateEnum.ERROR:
-          this.$toasted.show(m.error, {
-            type: 'error',
-            icon: 'info',
-          })
-          break
-      }
-
-      this.progressState = m.state
+      this.progressState = ProgressStateEnum.STOPPED
     },
     exportData(compiledResult) {
       saveFile([
@@ -226,7 +210,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.botton-centered-content {
+.bottom-centered-content {
   text-align: center;
   position: absolute;
   left: 0;
