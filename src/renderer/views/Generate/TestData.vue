@@ -17,9 +17,6 @@
           <span class="file-name">{{ resultFilePath }}</span>
         </label>
       </div>
-      <!-- <p class="help">
-          Choose the result file
-        </p> -->
     </div>
 
     <div class="field">
@@ -28,7 +25,7 @@
         <label class="file-label">
           <button
             :disabled="isRunning"
-            @click="chooseexportDirectory"
+            @click="chooseExportDirectory"
             class="file-input"
             name="resume"
           />
@@ -40,7 +37,7 @@
         </label>
       </div>
       <p class="help">
-        Choose the directory for generated files.
+        Choose the target directory for generated files.
       </p>
     </div>
 
@@ -85,15 +82,13 @@
 
 <script>
 import { currentWindow } from '../../../utilities/electron-utilities'
-import {
-  openDirectory,
-  saveFile,
-  openFile,
-} from '../../../utilities/electron-dialog'
-import { exportJsonToExcel } from '../../../utilities/excel'
+import { openDirectory, openFile } from '../../../utilities/electron-dialog'
 import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
 import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
 import prettyMs from 'pretty-ms'
+import WorkerManagerGenerateTestData from '../../../utilities/@classes/WorkerManagerGenerateTestData'
+
+const workerManager = new WorkerManagerGenerateTestData()
 
 export default {
   name: 'GenerateTestData',
@@ -153,70 +148,7 @@ export default {
   unmounted() {},
 
   methods: {
-    start() {
-      this.progressState = ProgressStateEnum.RUNNING
-    },
-
-    stop() {
-      // generateTask.stop()
-
-      this.perImageTime = 0
-      this.processedImages = 0
-      this.progressState = ProgressStateEnum.STOPPED
-      this.totalImages = 0
-    },
-
-    callback(m) {
-      switch (m.state) {
-        case ProgressStateEnum.RUNNING:
-          this.perImageTime = (this.perImageTime + m.time) / 2
-          this.processedImages += 1
-          break
-        case ProgressStateEnum.COMPLETED:
-          currentWindow.setProgressBar(0)
-          this.stop()
-          this.exportData(m.compiledResult)
-          break
-        case ProgressStateEnum.ERROR:
-          this.$toasted.show(m.error, {
-            type: 'error',
-            icon: 'info',
-          })
-          break
-      }
-
-      this.progressState = m.state
-    },
-
-    exportData(compiledResult) {
-      saveFile([
-        {
-          name: 'Excel File',
-          extensions: Object.keys(KeyNativeEnum).reverse(),
-        },
-      ]).then(destination => {
-        if (!destination) return
-
-        exportJsonToExcel(compiledResult, destination)
-
-        this.$toasted.show('Result exported successfully. ', {
-          icon: 'check_circle',
-          type: 'success',
-          duration: 5000,
-          keepOnHover: true,
-          action: {
-            text: 'Open for Review',
-            class: 'has-text-white has-text-underlined',
-            onClick: (e, toastObject) => {
-              toastObject.goAway(0)
-              this.$router.push(`/process/review?resultFilePath=${destination}`)
-            },
-          },
-        })
-      })
-    },
-
-    chooseexportDirectory() {
+    chooseExportDirectory() {
       openDirectory().then(dir => {
         this.exportDirectory = dir
       })
@@ -231,6 +163,40 @@ export default {
       ]).then(file => {
         this.resultFilePath = file
       })
+    },
+
+    start() {
+      this.progressState = ProgressStateEnum.RUNNING
+
+      workerManager.process({
+        callbacks: {
+          onsuccess: msg => {
+            this.progressState = ProgressStateEnum.COMPLETED
+
+            console.log(msg.data)
+          },
+          onprogress: msg => {
+            this.perImageTime = msg.timeElapsed
+            this.processedImages += 1
+          },
+          onerror: msg => {
+            this.$toasted.show(msg.error, {
+              type: 'error',
+              icon: 'info',
+            })
+          },
+        },
+        data: {},
+      })
+    },
+
+    stop() {
+      workerManager.stop()
+
+      this.perImageTime = 0
+      this.processedImages = 0
+      this.totalImages = 0
+      this.progressState = ProgressStateEnum.STOPPED
     },
   },
 }

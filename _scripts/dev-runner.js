@@ -46,9 +46,8 @@ async function restartElectron() {
 
   electronProcess = spawn(electron, [
     path.join(__dirname, '../dist/main.js'),
-    // '--enable-logging', Enable to show logs from all electron processes
-    remoteDebugging ? '--inspect=9222' : '',
-    remoteDebugging ? '--remote-debugging-port=9223' : '',
+    // '--enable-logging', // enables electron console window
+    remoteDebugging ? '--inspect=9222 --remote-debugging-port=9223' : '',
   ])
 
   electronProcess.on('exit', (code, signal) => {
@@ -85,16 +84,16 @@ async function startMain() {
         })
         break
     }
-
-    compiler.watch(
-      {
-        aggregateTimeout: 500,
-      },
-      err => {
-        if (err) console.error(err)
-      },
-    )
   })
+
+  webpackSetup.watch(
+    {
+      aggregateTimeout: 500,
+    },
+    err => {
+      if (err) console.error(err)
+    },
+  )
 }
 
 async function startRenderer() {

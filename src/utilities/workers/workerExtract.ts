@@ -16,7 +16,7 @@ function stop(): void {
 const start = async (
   designData: DesignData,
   imagePaths: string[],
-): Promise<void> => {
+): Promise<Result[]> => {
   const neuralNet = getQuestionsNeuralNet()
   const results: Result[] = []
 
@@ -77,6 +77,8 @@ const start = async (
       results: results,
     })
   }
+
+  return results
 }
 
 process.on('message', (msg: WorkerInput) => {

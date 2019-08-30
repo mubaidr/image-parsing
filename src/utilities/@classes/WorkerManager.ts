@@ -28,10 +28,6 @@ class WorkerManager {
       const worker = childProcess.fork(this.workerPath, [], {
         detached: true,
         silent: true,
-        env: {
-          ...process.env,
-          ELECTRON_RUN_AS_NODE: 'true',
-        },
       })
 
       this.workers.push(worker)
@@ -144,6 +140,8 @@ class WorkerManager {
       })
 
       worker.on('error', err => {
+        electronLog.error(err)
+
         callbacks.onerror({
           error: err,
         })

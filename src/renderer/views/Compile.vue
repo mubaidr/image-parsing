@@ -46,33 +46,25 @@
         </p> -->
       </div>
 
-      <div class="columns is-multiline is-mobile">
-        <div class="column is-2">
-          <div class="field">
-            <label class="label">Correct Marks</label>
-            <div class="control">
-              <input
-                v-model="correctMarks"
-                class="input"
-                placeholder="Marks earned for each correct answer"
-                type="number"
-              />
-            </div>
-          </div>
+      <div class="field is-grouped">
+        <div class="control">
+          <label class="label">Correct Marks</label>
+          <input
+            v-model="correctMarks"
+            class="input"
+            placeholder="Marks earned for each correct answer"
+            type="number"
+          />
         </div>
-        <div class="column is-2">
-          <div class="field">
-            <label class="label">Negative Marks</label>
-            <div class="control">
-              <input
-                v-model="incorrectMarks"
-                class="input"
-                placeholder="Marks deducted for each incorrect answer"
-                step="0.01"
-                type="number"
-              />
-            </div>
-          </div>
+        <div class="control">
+          <label class="label">Negative Marks</label>
+          <input
+            v-model="incorrectMarks"
+            class="input"
+            placeholder="Marks deducted for each incorrect answer"
+            step="0.01"
+            type="number"
+          />
         </div>
       </div>
 
