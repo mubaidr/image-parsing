@@ -4,7 +4,7 @@
       "@babel/env",
       {
         "targets": {
-          "chrome": "78",
+          "chrome": "76",
           "node": 12
         }
       }

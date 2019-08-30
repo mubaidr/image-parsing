@@ -28,6 +28,10 @@ class WorkerManager {
       const worker = childProcess.fork(this.workerPath, [], {
         detached: true,
         silent: true,
+        env: {
+          ...process.env,
+          ELECTRON_RUN_AS_NODE: 'true',
+        },
       })
 
       this.workers.push(worker)
@@ -38,7 +42,6 @@ class WorkerManager {
 
   public stop(): WorkerManager {
     this.workers.forEach(worker => {
-      worker.disconnect()
       worker.unref()
       worker.kill('SIGKILL')
     })
