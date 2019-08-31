@@ -14,9 +14,31 @@
             <i class="material-icons">list</i>
             <span class="file-label">Choose File</span>
           </span>
-          <span class="file-name">{{ resultFilePath }}</span>
+          <span class="file-name">{{ resultPath }}</span>
         </label>
       </div>
+    </div>
+
+    <div class="field">
+      <label class="label">Scanned images directory:</label>
+      <div class="file has-name is-fullwidth">
+        <label class="file-label">
+          <button
+            :disabled="isRunning"
+            @click="chooseimagesDirectory"
+            class="file-input"
+            name="resume"
+          />
+          <span class="file-cta">
+            <i class="material-icons">folder_open</i>
+            <span class="file-label">Choose directory</span>
+          </span>
+          <span class="file-name">{{ imagesDirectory }}</span>
+        </label>
+      </div>
+      <p class="help">
+        Choose the directory which contains scanned answer sheet files.
+      </p>
     </div>
 
     <div class="field">
@@ -95,9 +117,11 @@ export default {
 
   data() {
     return {
-      exportDirectory: 'D:\\Current\\image-parsing\\.tmp\\',
-      resultFilePath:
+      resultPath:
         'D:\\Current\\image-parsing\\__tests__\\test-data\\compiledResult.xlsx',
+      imagesDirectory:
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\images-barcode\\',
+      exportDirectory: 'D:\\Current\\image-parsing\\.tmp\\',
       perImageTime: 0,
       processedImages: 0,
       progressState: ProgressStateEnum.STOPPED,
@@ -107,7 +131,7 @@ export default {
 
   computed: {
     inputIsValid() {
-      return this.exportDirectory && this.resultFilePath
+      return this.resultPath && this.imagesDirectory && this.exportDirectory
     },
 
     isRunning() {
@@ -145,15 +169,11 @@ export default {
     },
   },
 
-  unmounted() {},
+  unmounted() {
+    workerManager.stop()
+  },
 
   methods: {
-    chooseExportDirectory() {
-      openDirectory().then(dir => {
-        this.exportDirectory = dir
-      })
-    },
-
     chooseResultFile() {
       openFile([
         {
@@ -161,7 +181,19 @@ export default {
           extensions: Object.keys(KeyNativeEnum),
         },
       ]).then(file => {
-        this.resultFilePath = file
+        this.resultPath = file
+      })
+    },
+
+    chooseimagesDirectory() {
+      openDirectory().then(dir => {
+        this.imagesDirectory = dir
+      })
+    },
+
+    chooseExportDirectory() {
+      openDirectory().then(dir => {
+        this.exportDirectory = dir
       })
     },
 
@@ -173,7 +205,7 @@ export default {
           onsuccess: msg => {
             this.progressState = ProgressStateEnum.COMPLETED
 
-            console.log('onsuccess',msg.data)
+            console.log('onsuccess', msg.data)
           },
           onprogress: msg => {
             this.perImageTime = msg.timeElapsed
@@ -186,7 +218,11 @@ export default {
             })
           },
         },
-        data: {},
+        data: {
+          imagesDirectory: this.imagesDirectory,
+          exportDirectory: this.exportDirectory,
+          resultPath: this.resultPath,
+        },
       })
     },
 

@@ -1,38 +1,33 @@
-function start(): void {
-  console.log('start')
-}
+import WorkerInput from '../@interfaces/WorkerInput'
 
 function stop(): void {
   process.exit(0)
 }
 
-process.on('message', e => {
-  if (e.stop) {
-    stop()
-  } else {
-    start()
-  }
-})
+const start = (
+  resultPath: string,
+  imagesDirectory: string,
+  exportDirectory: string,
+): void => {
+  console.log(resultPath, imagesDirectory, exportDirectory)
+}
 
-// add message listner
-process.on('message', msg => {
+process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
-    start()
+    const { resultPath, imagesDirectory, exportDirectory } = msg
+
+    if (!resultPath) throw 'Invalid resultPath...'
+    if (!imagesDirectory) throw 'Invalid imagesDirectory...'
+    if (!exportDirectory) throw 'Invalid exportDirectory...'
+
+    start(resultPath, imagesDirectory, exportDirectory)
   }
 })
 
-process.on('unhandledRejection', rejection => {
-  console.error(rejection)
-})
-
-process.on('uncaughtException', exception => {
-  console.error(exception)
-})
-
-process.on('warning', warning => {
-  console.warn(warning)
-})
+process.on('unhandledRejection', e => console.error(e))
+process.on('uncaughtException', e => console.error(e))
+process.on('warning', e => console.warn(e))
 
 export { start, stop }

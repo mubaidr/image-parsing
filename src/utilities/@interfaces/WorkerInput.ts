@@ -7,6 +7,7 @@ interface WorkerInput {
   resultPath?: string
   keyPath?: string
   imagesDirectory?: string
+  exportDirectory?: string
 }
 
 export default WorkerInput

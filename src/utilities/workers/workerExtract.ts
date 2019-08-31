@@ -85,10 +85,12 @@ process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
-    if (!msg.designData) throw 'Invalid design data...'
-    if (!msg.imagePaths) throw 'Invalid imagesDirectory...'
+    const { designData, imagePaths } = msg
 
-    start(msg.designData, msg.imagePaths)
+    if (!designData) throw 'Invalid design data...'
+    if (!imagePaths) throw 'Invalid imagesDirectory...'
+
+    start(designData, imagePaths)
   }
 })
 

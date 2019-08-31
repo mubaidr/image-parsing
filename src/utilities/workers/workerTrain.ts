@@ -51,11 +51,13 @@ process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
-    if (!msg.designData) throw 'Invalid design data...'
-    if (!msg.resultPath) throw 'Invalid resultPath...'
-    if (!msg.keyPath) throw 'Invalid keyPath...'
+    const { designData, resultPath, keyPath } = msg
 
-    start(msg.designData, msg.resultPath, msg.keyPath)
+    if (!designData) throw 'Invalid design data...'
+    if (!resultPath) throw 'Invalid resultPath...'
+    if (!keyPath) throw 'Invalid keyPath...'
+
+    start(designData, resultPath, keyPath)
   }
 })
 

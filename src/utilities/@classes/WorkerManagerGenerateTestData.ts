@@ -23,12 +23,19 @@ class WorkerManagerGenerateTestData extends WorkerManager {
     )
 
     const { callbacks, data } = options
-    const { designData, imagesDirectory, resultPath } = data
+    const { designData, resultPath, imagesDirectory, exportDirectory } = data
 
+    if (!resultPath) throw 'Invalid resultPath...'
     if (!imagesDirectory) throw 'Invalid imagesDirectory...'
-    if (!resultPath) throw 'Invalid imagesDirectory...'
+    if (!exportDirectory) throw 'Invalid exportDirectory...'
 
-    console.log(callbacks, designData, imagesDirectory, resultPath)
+    console.log(
+      callbacks,
+      designData,
+      resultPath,
+      imagesDirectory,
+      exportDirectory,
+    )
 
     return { totalWorkers: 0 }
   }

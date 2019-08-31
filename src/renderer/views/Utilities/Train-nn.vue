@@ -97,15 +97,16 @@ export default {
     }
   },
   computed: {
-    isRunning() {
-      return this.progressState === ProgressStateEnum.RUNNING
-    },
     inputIsValid() {
       return (
         this.designPath !== null &&
         this.resultPath !== null &&
         this.keyPath !== null
       )
+    },
+
+    isRunning() {
+      return this.progressState === ProgressStateEnum.RUNNING
     },
   },
   unmounted() {
