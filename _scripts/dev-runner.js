@@ -89,6 +89,7 @@ async function startMain() {
   webpackSetup.watch(
     {
       aggregateTimeout: 500,
+      ignored: ['node_modules', 'src/', '!src/main', '!src/utilities/workers'],
     },
     err => {
       if (err) console.error(err)

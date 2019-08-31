@@ -173,7 +173,7 @@ export default {
           onsuccess: msg => {
             this.progressState = ProgressStateEnum.COMPLETED
 
-            console.log(msg.data)
+            console.log('onsuccess',msg.data)
           },
           onprogress: msg => {
             this.perImageTime = msg.timeElapsed

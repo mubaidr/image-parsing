@@ -7,7 +7,6 @@ import Callbacks from '../@interfaces/Callbacks'
 import ResultJson from '../@interfaces/ResultJson'
 import CompiledResult from './CompiledResult'
 import Result from './Result'
-import WorkerManagerExtract from './WorkerManagerExtract'
 
 class WorkerManager {
   private data: object[] = []
@@ -80,7 +79,7 @@ class WorkerManager {
             // if all workers have returned data
             if (this.data.length === this.getCount()) {
               // if extract worker we need to create compileResult object
-              if (this instanceof WorkerManagerExtract) {
+              if (this.results.length > 0) {
                 const compiledResult = new CompiledResult()
 
                 this.results.forEach(o => {

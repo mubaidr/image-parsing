@@ -90,6 +90,7 @@ export default {
       processedImages: 0,
       progressState: ProgressStateEnum.STOPPED,
       totalImages: 0,
+      totalWorkers: 0,
     }
   },
 
@@ -107,7 +108,10 @@ export default {
     },
 
     remainingTime() {
-      const ms = (this.totalImages - this.processedImages) * this.perImageTime
+      const ms =
+        (this.totalImages - this.processedImages) *
+        ((this.perImageTime || 500) / (this.totalWorkers || 1))
+
       return ms === 0 ? 'calculating...' : prettyMs(ms)
     },
   },
@@ -152,6 +156,8 @@ export default {
             onsuccess: msg => {
               this.progressState = ProgressStateEnum.COMPLETED
               this.exportData(msg.data)
+
+              this.stop()
             },
             onprogress: msg => {
               this.perImageTime = msg.timeElapsed
@@ -166,8 +172,9 @@ export default {
           },
           data: { imagesDirectory: this.imagesDirectory },
         })
-        .then(({ totalImages }) => {
+        .then(({ totalImages, totalWorkers }) => {
           this.totalImages = totalImages
+          this.totalWorkers = totalWorkers
         })
     },
     stop() {

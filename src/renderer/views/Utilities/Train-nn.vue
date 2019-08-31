@@ -127,6 +127,8 @@ export default {
                 icon: 'info',
               },
             )
+
+            this.stop()
           },
           onerror: error => {
             this.progressState === ProgressStateEnum.STOPPED
