@@ -1,6 +1,7 @@
 import brain, { INeuralNetworkJSON } from 'brain.js'
 import fs from 'fs'
 
+import Result from './@classes/Result'
 import { dataPaths } from './dataPaths'
 
 const getQuestionsNeuralNet = (): brain.NeuralNetwork => {

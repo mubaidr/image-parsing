@@ -112,7 +112,7 @@ export default {
         (this.totalImages - this.processedImages) *
         ((this.perImageTime || 500) / (this.totalWorkers || 1))
 
-      return ms === 0 ? 'calculating...' : prettyMs(ms)
+      return ms === 0 ? '...' : prettyMs(ms)
     },
   },
 
@@ -217,16 +217,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.bottom-centered-content {
-  text-align: center;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-}
-
-.notification {
-  padding: 0;
-  padding-bottom: 1.5em;
-}
 </style>

@@ -10,7 +10,6 @@ class Result {
   [key: string]: any
 
   private correctCount = 0
-  private id: string
   private incorrectCount = 0
   private isCompiled = false
   private marks = 0
@@ -20,6 +19,7 @@ class Result {
 
   public answers: AnswerCollection = {}
 
+  public id: string
   public imageFile: string | undefined
   public isRollNoExtracted: boolean
   public post = ''

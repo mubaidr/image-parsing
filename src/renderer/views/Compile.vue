@@ -54,6 +54,9 @@
             class="input"
             placeholder="Marks earned for each correct answer"
             type="number"
+            min="1"
+            max="5"
+            step="1"
           />
         </div>
         <div class="control">
@@ -62,8 +65,10 @@
             v-model="incorrectMarks"
             class="input"
             placeholder="Marks deducted for each incorrect answer"
-            step="0.01"
             type="number"
+            min="1"
+            max="5"
+            step="1"
           />
         </div>
       </div>

@@ -1,5 +1,7 @@
 import path from 'path'
+import noOfCores from 'physical-cpu-count'
 
+import CompiledResult from '../@classes/CompiledResult'
 import WorkerManagerInput from '../@interfaces/WorkerManagerInput'
 import WorkerManagerOutput from '../@interfaces/WorkerManagerOutput'
 import { dataPaths } from '../dataPaths'
@@ -23,21 +25,41 @@ class WorkerManagerGenerateTestData extends WorkerManager {
     )
 
     const { callbacks, data } = options
-    const { designData, resultPath, imagesDirectory, exportDirectory } = data
+    const {
+      designData,
+      resultPath,
+      imagesDirectory,
+      exportDirectory,
+      percentOfFiles,
+    } = data
 
     if (!resultPath) throw 'Invalid resultPath...'
     if (!imagesDirectory) throw 'Invalid imagesDirectory...'
     if (!exportDirectory) throw 'Invalid exportDirectory...'
 
-    console.log(
-      callbacks,
-      designData,
-      resultPath,
-      imagesDirectory,
-      exportDirectory,
+    const results = CompiledResult.loadFromExcel(resultPath).getRandomResults(
+      percentOfFiles,
     )
 
-    return { totalWorkers: 0 }
+    const totalWorkers = Math.min(results.length, noOfCores)
+    const step = Math.floor(results.length / totalWorkers)
+
+    this.createWorkers(totalWorkers)
+    this.addWorkerHandlers(callbacks)
+
+    for (let i = 0; i < totalWorkers; i += 1) {
+      const startIndex = i * step
+      const endIndex = i === totalWorkers - 1 ? results.length : (i + 1) * step
+
+      this.workers[i].send({
+        designData,
+        results: results.slice(startIndex, endIndex),
+        imagesDirectory,
+        exportDirectory,
+      })
+    }
+
+    return { totalWorkers, totalImages: results.length }
   }
 }
 

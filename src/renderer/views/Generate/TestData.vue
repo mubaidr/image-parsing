@@ -63,6 +63,20 @@
       </p>
     </div>
 
+    <label class="label">No. of files to generate (%):</label>
+    <div class="field is-grouped">
+      <div class="control">
+        <input
+          v-model="percentOfFiles"
+          class="input"
+          placeholder="% Files to Generate"
+          type="number"
+          min="1"
+          max="100"
+        />
+      </div>
+    </div>
+
     <br />
 
     <div class="buttons">
@@ -82,10 +96,7 @@
     </div>
 
     <Transition mode="out-in" name="slide-up">
-      <div
-        v-show="isRunning"
-        class="notification is-primary botton-centered-content"
-      >
+      <div v-show="isRunning" class="notification is-dark">
         <progress
           :value="progress"
           max="100"
@@ -94,7 +105,7 @@
           {{ progress }}
         </progress>
         <div>
-          <p>Files Processed: {{ processedImages }} / {{ totalImages }}</p>
+          <p>Files Generated: {{ processedImages }} / {{ totalImages }}</p>
           <p>Estimated Time Remaining: {{ remainingTime }}</p>
         </div>
       </div>
@@ -118,10 +129,11 @@ export default {
   data() {
     return {
       resultPath:
-        'D:\\Current\\image-parsing\\__tests__\\test-data\\compiledResult.xlsx',
+        'D:\\Current\\image-parsing\\__tests__\\test-data\\resultCompiled.xlsx',
       imagesDirectory:
         'D:\\Current\\image-parsing\\__tests__\\test-data\\images-barcode\\',
       exportDirectory: 'D:\\Current\\image-parsing\\.tmp\\',
+      percentOfFiles: 5,
       perImageTime: 0,
       processedImages: 0,
       progressState: ProgressStateEnum.STOPPED,
@@ -131,7 +143,12 @@ export default {
 
   computed: {
     inputIsValid() {
-      return this.resultPath && this.imagesDirectory && this.exportDirectory
+      return (
+        this.resultPath &&
+        this.imagesDirectory &&
+        this.exportDirectory &&
+        this.percentOfFiles > 0
+      )
     },
 
     isRunning() {
@@ -144,7 +161,7 @@ export default {
 
     remainingTime() {
       const ms = (this.totalImages - this.processedImages) * this.perImageTime
-      return ms === 0 ? 'calculating...' : prettyMs(ms)
+      return ms === 0 ? '...' : prettyMs(ms)
     },
   },
 
@@ -222,6 +239,7 @@ export default {
           imagesDirectory: this.imagesDirectory,
           exportDirectory: this.exportDirectory,
           resultPath: this.resultPath,
+          percentOfFiles: this.percentOfFiles,
         },
       })
     },
@@ -239,16 +257,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.botton-centered-content {
-  text-align: center;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-}
-
-.notification {
-  padding: 0;
-  padding-bottom: 1.5em;
-}
 </style>

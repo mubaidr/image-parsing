@@ -1,13 +1,16 @@
+import Result from '../@classes/Result'
 import DesignData from './DesignData'
 
 interface WorkerInput {
-  stop?: boolean
   designData: DesignData
-  imagePaths?: string[]
-  resultPath?: string
-  keyPath?: string
-  imagesDirectory?: string
   exportDirectory?: string
+  imagePaths?: string[]
+  imagesDirectory?: string
+  keyPath?: string
+  percentOfFiles?: number
+  resultPath?: string
+  results?: Result[]
+  stop?: boolean
 }
 
 export default WorkerInput

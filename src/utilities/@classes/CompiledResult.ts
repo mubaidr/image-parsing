@@ -156,6 +156,26 @@ class CompiledResult {
 
     return this
   }
+
+  public getRandomResults(percent: number | undefined): Result[] {
+    const resultCount = this.getResultCount()
+    const count = Math.max(Math.floor(((percent || 5) * resultCount) / 100), 1)
+    const ids: string[] = []
+    const results: Result[] = []
+
+    for (let i = 0; i < count; ) {
+      const index = Math.floor(Math.random() * resultCount)
+      const result = this.results[index]
+
+      if (ids.includes(result.id)) continue
+
+      results.push(this.results[index])
+      ids.push(result.id)
+      i += 1
+    }
+
+    return results
+  }
 }
 
 export default CompiledResult

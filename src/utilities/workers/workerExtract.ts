@@ -1,7 +1,6 @@
 import Result from '../@classes/Result'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
-import DesignData from '../@interfaces/DesignData'
 import NNQuestionOutput from '../@interfaces/NNQuestionOutput'
 import WorkerInput from '../@interfaces/WorkerInput'
 import { getSharpObjectFromSource } from '../images'
@@ -13,10 +12,12 @@ function stop(): void {
   process.exit(0)
 }
 
-const start = async (
-  designData: DesignData,
-  imagePaths: string[],
-): Promise<Result[]> => {
+async function start(msg: WorkerInput): Promise<Result[]> {
+  const { designData, imagePaths } = msg
+
+  if (!designData) throw 'Invalid design data...'
+  if (!imagePaths) throw 'Invalid imagesDirectory...'
+
   const neuralNet = getQuestionsNeuralNet()
   const results: Result[] = []
 
@@ -85,12 +86,7 @@ process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
-    const { designData, imagePaths } = msg
-
-    if (!designData) throw 'Invalid design data...'
-    if (!imagePaths) throw 'Invalid imagesDirectory...'
-
-    start(designData, imagePaths)
+    start(msg)
   }
 })
 

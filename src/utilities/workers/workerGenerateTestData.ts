@@ -1,28 +1,37 @@
+import Sharp from 'sharp'
+
 import WorkerInput from '../@interfaces/WorkerInput'
 
 function stop(): void {
   process.exit(0)
 }
 
-const start = (
-  resultPath: string,
-  imagesDirectory: string,
-  exportDirectory: string,
-): void => {
-  console.log(resultPath, imagesDirectory, exportDirectory)
+function start(msg: WorkerInput): void {
+  const { designData, results, imagesDirectory, exportDirectory } = msg
+
+  if (!designData) throw 'Invalid results...'
+  if (!results) throw 'Invalid results...'
+  if (!imagesDirectory) throw 'Invalid imagesDirectory...'
+  if (!exportDirectory) throw 'Invalid exportDirectory...'
+
+  console.log(designData, results, imagesDirectory, exportDirectory)
+
+  // TODO: generate svg with all text info
+  // Overlay image with generated svg
+  // export to provided path with roll-no in the name
+
+  const img = Sharp(
+    'D:\\current\\image-parsing\\__tests__\\test-data\\images-barcode\\10023.jpg',
+  )
+
+  img.toFile('D:\\current\\image-parsing\\.tmp\\image-with-text.jpg')
 }
 
 process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
-    const { resultPath, imagesDirectory, exportDirectory } = msg
-
-    if (!resultPath) throw 'Invalid resultPath...'
-    if (!imagesDirectory) throw 'Invalid imagesDirectory...'
-    if (!exportDirectory) throw 'Invalid exportDirectory...'
-
-    start(resultPath, imagesDirectory, exportDirectory)
+    start(msg)
   }
 })
 

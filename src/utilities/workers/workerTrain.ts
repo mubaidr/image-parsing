@@ -3,7 +3,6 @@ import fs from 'fs'
 
 import CompiledResult from '../@classes/CompiledResult'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
-import DesignData from '../@interfaces/DesignData'
 import WorkerInput from '../@interfaces/WorkerInput'
 import { dataPaths } from '../dataPaths'
 import { getSharpObjectFromSource } from '../images'
@@ -13,11 +12,13 @@ function stop(): void {
   process.exit(0)
 }
 
-async function start(
-  designData: DesignData,
-  resultPath: string = dataPaths.result,
-  keyPath: string = dataPaths.keyImage,
-): Promise<void> {
+async function start(msg: WorkerInput): Promise<void> {
+  const { designData, resultPath, keyPath } = msg
+
+  if (!designData) throw 'Invalid design data...'
+  if (!resultPath) throw 'Invalid resultPath...'
+  if (!keyPath) throw 'Invalid keyPath...'
+
   const sharpImage = getSharpObjectFromSource(keyPath).raw()
   const compiledResult = CompiledResult.loadFromExcel(resultPath)
 
@@ -51,13 +52,7 @@ process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
-    const { designData, resultPath, keyPath } = msg
-
-    if (!designData) throw 'Invalid design data...'
-    if (!resultPath) throw 'Invalid resultPath...'
-    if (!keyPath) throw 'Invalid keyPath...'
-
-    start(designData, resultPath, keyPath)
+    start(msg)
   }
 })
 
