@@ -1,10 +1,9 @@
+import AnswerCollection from './AnswerCollection'
+
 interface ResultJson {
   [key: string]: string | object | undefined
 
-  answers: {
-    [key: string]: string | object
-    value: string
-  }
+  answers: AnswerCollection
 }
 
 export default ResultJson

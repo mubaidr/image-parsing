@@ -177,6 +177,7 @@ export default {
           this.totalWorkers = totalWorkers
         })
     },
+
     stop() {
       workerManager.stop()
 
@@ -185,6 +186,7 @@ export default {
       this.totalImages = 0
       this.progressState = ProgressStateEnum.STOPPED
     },
+
     exportData(compiledResult) {
       saveFile([
         {

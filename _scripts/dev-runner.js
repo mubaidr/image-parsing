@@ -44,6 +44,7 @@ async function restartElectron() {
   const { pid } = electronProcess || {}
   await killElectron(pid)
 
+  // eslint-disable-next-line require-atomic-updates
   electronProcess = spawn(electron, [
     path.join(__dirname, '../dist/main.js'),
     // '--enable-logging', // enables electron console window

@@ -56,7 +56,7 @@ const logImageData = (src: string | Sharp, name?: string): void => {
 }
 
 const getImagePaths = async (dir: string): Promise<string[]> => {
-  const loc = dir.replace(/\\/gi, '/')
+  const loc = dir.replace(/\\/g, '/')
   const exts = Object.keys(ImageTypesEnum)
   const glob = `${loc}/*.{${exts}}`.replace('//', '/')
 

@@ -9,16 +9,7 @@
 </template>
 
 <script>
-// import SystemInformation from '../components/SystemInformation'
-
-export default {
-  name: 'About',
-  // components: { SystemInformation },
-}
+export default {}
 </script>
 
-<style>
-.block.has-text-centered figure {
-  margin: 0 auto;
-}
-</style>
+<style></style>

@@ -10,7 +10,10 @@ interface WorkerInput {
   percentOfFiles?: number
   resultPath?: string
   results?: Result[]
+  keys?: Result[]
   stop?: boolean
+  correctMarks?: number
+  incorrectMarks?: number
 }
 
 export default WorkerInput

@@ -96,6 +96,7 @@ export default {
       progressState: ProgressStateEnum.STOPPED,
     }
   },
+
   computed: {
     inputIsValid() {
       return (
@@ -109,9 +110,11 @@ export default {
       return this.progressState === ProgressStateEnum.RUNNING
     },
   },
+
   unmounted() {
     workerManager.stop()
   },
+
   methods: {
     start() {
       this.progressState === ProgressStateEnum.RUNNING
@@ -131,10 +134,10 @@ export default {
 
             this.stop()
           },
-          onerror: error => {
+          onerror: msg => {
             this.progressState === ProgressStateEnum.STOPPED
 
-            this.$toasted.show(error, {
+            this.$toasted.show(msg.error, {
               type: 'error',
               icon: 'info',
             })
@@ -147,11 +150,13 @@ export default {
         },
       })
     },
+
     stop() {
       workerManager.stop()
 
       this.progressState === ProgressStateEnum.STOPPED
     },
+
     chooseDesignPath() {
       openFile([
         {
@@ -162,6 +167,7 @@ export default {
         this.designPath = file
       })
     },
+
     chooseResultPath() {
       openFile([
         {
@@ -172,6 +178,7 @@ export default {
         this.resultPath = file
       })
     },
+
     choosekeyPath() {
       openFile([
         {

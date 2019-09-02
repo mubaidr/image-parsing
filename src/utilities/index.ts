@@ -2,7 +2,11 @@ import brain, { INeuralNetworkJSON } from 'brain.js'
 import fs from 'fs'
 
 import Result from './@classes/Result'
+import KeyNativeEnum from './@enums/KeyNativeEnum'
 import { dataPaths } from './dataPaths'
+import { getDesignData } from './design'
+import { importExcelToJson } from './excel'
+import * as extractTask from './workers/workerExtract'
 
 const getQuestionsNeuralNet = (): brain.NeuralNetwork => {
   const text = fs.readFileSync(dataPaths.questionsModel).toString()
@@ -44,4 +48,28 @@ const convertToBitArray = (data: number[], channels: number): number[] => {
   return binaryData
 }
 
-export { convertToBitArray, getQuestionsNeuralNet }
+const readKey = async (src: string): Promise<Result[] | undefined> => {
+  const ext = src.split('.').pop()
+
+  if (ext === undefined) throw 'Invalid path specified'
+
+  if (ext in KeyNativeEnum) {
+    const rows = importExcelToJson(src)
+    const results: Result[] = []
+
+    for (let i = 0, len = rows.length; i < len; i += 1) {
+      results.push(Result.fromJson(rows[i]))
+    }
+
+    return results
+  }
+
+  const designData = getDesignData(dataPaths.designBarcode)
+
+  return extractTask.start({
+    designData,
+    imagePaths: [src],
+  })
+}
+
+export { convertToBitArray, getQuestionsNeuralNet, readKey }

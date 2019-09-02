@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const fsGlob = require('fast-glob')
 
 const {
   dependencies,
@@ -10,28 +11,28 @@ const {
 const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
 
+const rootPath = path
+  .join(__dirname, '../src/utilities/workers/', '*.ts')
+  .replace(/\\/g, '/')
+
+const entries = {}
+
+fsGlob
+  .sync(rootPath, {
+    absolute: true,
+    onlyFiles: true,
+  })
+  .forEach(workerPath => {
+    const split = workerPath.split('/')
+
+    entries[split[split.length - 1].split('.')[0]] = workerPath
+  })
+
 const config = {
   name: 'workers',
   mode: process.env.NODE_ENV,
   devtool: isDevMode ? 'eval-source-map' : false,
-  entry: {
-    workerExtract: path.join(
-      __dirname,
-      '../src/utilities/workers/workerExtract.ts',
-    ),
-    workerGenerateAnswerSheets: path.join(
-      __dirname,
-      '../src/utilities/workers/workerGenerateAnswerSheets.ts',
-    ),
-    workerGenerateTestData: path.join(
-      __dirname,
-      '../src/utilities/workers/workerGenerateTestData.ts',
-    ),
-    workerTrain: path.join(
-      __dirname,
-      '../src/utilities/workers/workerTrain.ts',
-    ),
-  },
+  entry: entries,
   output: {
     libraryTarget: 'commonjs2',
     path: path.join(__dirname, '../dist/workers/'),

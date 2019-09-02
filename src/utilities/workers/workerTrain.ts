@@ -15,7 +15,7 @@ function stop(): void {
 async function start(msg: WorkerInput): Promise<void> {
   const { designData, resultPath, keyPath } = msg
 
-  if (!designData) throw 'Invalid design data...'
+  if (!designData) throw 'Invalid designData...'
   if (!resultPath) throw 'Invalid resultPath...'
   if (!keyPath) throw 'Invalid keyPath...'
 

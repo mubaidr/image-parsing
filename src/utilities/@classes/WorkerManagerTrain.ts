@@ -27,7 +27,7 @@ class WorkerManagerTrain extends WorkerManager {
     const totalWorkers = 1
 
     if (!resultPath) throw 'Invalid resultPath...'
-    if (!keyPath) throw 'Invalid imagesDirectory...'
+    if (!keyPath) throw 'Invalid keyPath...'
 
     this.createWorkers(totalWorkers)
     this.addWorkerHandlers(callbacks)
