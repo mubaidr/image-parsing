@@ -49,7 +49,7 @@ class WorkerManagerExtract extends WorkerManager {
       })
     }
 
-    return { totalWorkers, totalImages: totalImages.length }
+    return { totalWorkers, totalOutput: totalImages.length }
   }
 }
 

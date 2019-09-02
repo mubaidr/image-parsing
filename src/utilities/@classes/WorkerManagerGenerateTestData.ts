@@ -59,7 +59,7 @@ class WorkerManagerGenerateTestData extends WorkerManager {
       })
     }
 
-    return { totalWorkers, totalImages: results.length }
+    return { totalWorkers, totalOutput: results.length }
   }
 }
 

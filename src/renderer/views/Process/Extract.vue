@@ -172,8 +172,8 @@ export default {
           },
           data: { imagesDirectory: this.imagesDirectory },
         })
-        .then(({ totalImages, totalWorkers }) => {
-          this.totalImages = totalImages
+        .then(({ totalOutput, totalWorkers }) => {
+          this.totalImages = totalOutput
           this.totalWorkers = totalWorkers
         })
     },

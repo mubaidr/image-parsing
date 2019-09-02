@@ -36,7 +36,7 @@ class Result {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static fromJson(o: ResultJson): Result {
+  public static fromJson(o: any): Result {
     const answerRegExp = new RegExp(RegExpPattern.QUESTION)
     const result =
       typeof o.rollNo === 'string' ? new Result(o.rollNo) : new Result()
@@ -147,7 +147,9 @@ class Result {
   }
 
   public isKey(): boolean {
-    return this.rollNo === 'key'
+    return (
+      this.rollNo !== undefined && this.rollNo.trim().toLowerCase() === 'key'
+    )
   }
 
   public isResult(): boolean {

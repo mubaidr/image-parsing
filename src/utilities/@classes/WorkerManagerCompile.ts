@@ -50,7 +50,10 @@ class WorkerManagerTrain extends WorkerManager {
       })
     }
 
-    return { totalWorkers }
+    return {
+      totalWorkers,
+      totalOutput: results.length + (keys ? keys.length : 0),
+    }
   }
 }
 

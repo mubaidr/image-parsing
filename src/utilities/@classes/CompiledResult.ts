@@ -80,6 +80,17 @@ class CompiledResult {
     return this
   }
 
+  public add(obj: Result): CompiledResult {
+    if (obj.isKey()) {
+      //TODO: check by id before inserting each
+      this.keys.push(obj)
+    } else {
+      this.results.push(obj)
+    }
+
+    return this
+  }
+
   public addKeys(key: Result | Result[]): CompiledResult {
     if (key instanceof Result) {
       this.keys.push(key)
@@ -141,6 +152,10 @@ class CompiledResult {
 
   public getResults(): Result[] {
     return this.results
+  }
+
+  public getKeysAndResults(): Result[] {
+    return [...this.results, ...this.keys]
   }
 
   public reverseResults(): CompiledResult {

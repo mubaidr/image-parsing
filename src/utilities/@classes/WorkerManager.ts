@@ -3,14 +3,14 @@ import electronLog from 'electron-log'
 import noOfCores from 'physical-cpu-count'
 
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
+import WorkerTypes from '../@enums/WorkerTypes'
 import Callbacks from '../@interfaces/Callbacks'
-import ResultJson from '../@interfaces/ResultJson'
 import CompiledResult from './CompiledResult'
 import Result from './Result'
 
 class WorkerManager {
+  private completed = 0
   private data: object[] = []
-  private results: ResultJson[] = []
   public workers: ChildProcess[] = []
   public workerPath: string
 
@@ -41,14 +41,14 @@ class WorkerManager {
       worker.kill('SIGKILL')
     })
 
+    this.completed = 0
     this.data.length = 0
-    this.results.length = 0
     this.workers.length = 0
 
     return this
   }
 
-  public getCount(): number {
+  public getWorkerCount(): number {
     return this.workers.length
   }
 
@@ -58,46 +58,43 @@ class WorkerManager {
         'message',
         (message: {
           state: ProgressStateEnum
-          timeElapsed?: number
-          data?: object
-          results?: ResultJson[]
+          timeElapsed: number
+          workerType: WorkerTypes
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          data: any[]
         }) => {
-          if (message.state === ProgressStateEnum.PROGRESS) {
-            // onprogress callback with measured time
-            callbacks.onprogress({
-              timeElapsed: message.timeElapsed,
-            })
-          } else if (message.state === ProgressStateEnum.COMPLETED) {
-            // insert data if any, otherwise insert empty to keep count
-            this.data.push(message.data || {})
+          const { state, timeElapsed, workerType, data } = message
 
-            // collect results if any
-            if (message.results) {
-              this.results.push(...message.results)
+          if (state === ProgressStateEnum.PROGRESS) {
+            return callbacks.onprogress({ timeElapsed })
+          }
+
+          if (state === ProgressStateEnum.COMPLETED) {
+            this.completed += 1
+
+            if (data) this.data.push(...data)
+            if (this.completed !== this.getWorkerCount()) return
+
+            if (
+              workerType === WorkerTypes.EXTRACT ||
+              workerType === WorkerTypes.COMPILE
+            ) {
+              const compiledResult = new CompiledResult()
+
+              this.data.forEach(o => {
+                compiledResult.add(Result.fromJson(o))
+              })
+
+              callbacks.onsuccess({
+                data: compiledResult,
+              })
+            } else {
+              callbacks.onsuccess({
+                data: this.data,
+              })
             }
 
-            // if all workers have returned data
-            if (this.data.length === this.getCount()) {
-              // if extract worker we need to create compileResult object
-              if (this.results.length > 0) {
-                const compiledResult = new CompiledResult()
-
-                this.results.forEach(o => {
-                  compiledResult.addResults(Result.fromJson(o))
-                })
-
-                callbacks.onsuccess({
-                  data: compiledResult,
-                })
-              } else {
-                // return the only object or complete array
-                callbacks.onsuccess({
-                  data: this.data.length === 1 ? this.data[0] : this.data,
-                })
-              }
-
-              this.stop()
-            }
+            this.stop()
           }
         },
       )

@@ -3,6 +3,7 @@ import fs from 'fs'
 
 import CompiledResult from '../@classes/CompiledResult'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
+import WorkerTypes from '../@enums/WorkerTypes'
 import WorkerInput from '../@interfaces/WorkerInput'
 import { dataPaths } from '../dataPaths'
 import { getSharpObjectFromSource } from '../images'
@@ -41,7 +42,11 @@ async function start(msg: WorkerInput): Promise<void> {
     fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
 
     if (process && process.send) {
-      process.send({ state: ProgressStateEnum.COMPLETED, data: netOutput })
+      process.send({
+        state: ProgressStateEnum.COMPLETED,
+        workerType: WorkerTypes.COMPILE,
+        data: netOutput,
+      })
     }
   } else {
     throw 'Unable to train...'

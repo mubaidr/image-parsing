@@ -1,6 +1,6 @@
 interface WorkerManagerOutput {
   totalWorkers: number
-  totalImages?: number
+  totalOutput?: number
 }
 
 export default WorkerManagerOutput

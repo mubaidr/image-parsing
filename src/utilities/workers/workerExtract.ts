@@ -1,6 +1,7 @@
 import Result from '../@classes/Result'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
+import WorkerTypes from '../@enums/WorkerTypes'
 import NNQuestionOutput from '../@interfaces/NNQuestionOutput'
 import WorkerInput from '../@interfaces/WorkerInput'
 import { getSharpObjectFromSource } from '../images'
@@ -75,7 +76,8 @@ async function start(msg: WorkerInput): Promise<Result[]> {
   if (process && process.send) {
     process.send({
       state: ProgressStateEnum.COMPLETED,
-      results: results,
+      workerType: WorkerTypes.EXTRACT,
+      data: results,
     })
   }
 

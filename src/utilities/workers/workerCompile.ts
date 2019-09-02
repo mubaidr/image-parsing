@@ -1,6 +1,7 @@
 import CompiledResult from '../@classes/CompiledResult'
 import Result from '../@classes/Result'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
+import WorkerTypes from '../@enums/WorkerTypes'
 import WorkerInput from '../@interfaces/WorkerInput'
 
 function stop(): void {
@@ -29,7 +30,8 @@ function start(msg: WorkerInput): void {
   if (process && process.send) {
     process.send({
       state: ProgressStateEnum.COMPLETED,
-      compiledResult: compiledResult,
+      workerType: WorkerTypes.COMPILE,
+      data: compiledResult.getKeysAndResults(),
     })
   }
 }
