@@ -13,7 +13,7 @@ const isDevMode = process.env.NODE_ENV === 'development'
 const config = {
   name: 'main',
   mode: process.env.NODE_ENV,
-  devtool: isDevMode ? 'eval-source-map' : false,
+  devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
     main: path.join(__dirname, '../src/main/index.js'),
   },

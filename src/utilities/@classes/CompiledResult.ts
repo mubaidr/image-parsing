@@ -82,8 +82,12 @@ class CompiledResult {
 
   public add(obj: Result): CompiledResult {
     if (obj.isKey()) {
-      //TODO: check by id before inserting each
-      this.keys.push(obj)
+      const notAdded =
+        this.keys.findIndex(key => {
+          return key.id === obj.id
+        }) === -1
+
+      if (notAdded) this.keys.push(obj)
     } else {
       this.results.push(obj)
     }

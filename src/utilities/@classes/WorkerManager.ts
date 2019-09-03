@@ -25,8 +25,8 @@ class WorkerManager {
 
     for (let i = 0; i < count; i += 1) {
       const worker = childProcess.fork(this.workerPath, [], {
-        detached: true,
         silent: true,
+        stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
       })
 
       this.workers.push(worker)
@@ -37,8 +37,8 @@ class WorkerManager {
 
   public stop(): WorkerManager {
     this.workers.forEach(worker => {
-      worker.unref()
       worker.kill('SIGKILL')
+      worker.unref()
     })
 
     this.completed = 0

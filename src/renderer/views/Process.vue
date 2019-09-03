@@ -1,9 +1,7 @@
 <template>
   <div>
     <Transition mode="out-in" name="slide-up">
-      <keep-alive>
-        <RouterView />
-      </keep-alive>
+      <RouterView />
     </Transition>
   </div>
 </template>

@@ -31,7 +31,7 @@ fsGlob
 const config = {
   name: 'workers',
   mode: process.env.NODE_ENV,
-  devtool: isDevMode ? 'eval-source-map' : false,
+  devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: entries,
   output: {
     libraryTarget: 'commonjs2',
