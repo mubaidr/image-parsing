@@ -1,4 +1,4 @@
-import { convertToBitArray } from '../index'
+import { convertToBitArray } from '../src/utilities/index'
 import { imageDataToBinary } from './gpu'
 
 function test(): void {

@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       imagesDirectory:
-        'D:\\Current\\image-parsing\\__tests__\\test-data\\images-barcode\\',
+        'D:\\Current\\image-parsing\\__tests__\\_test_data\\images-barcode\\',
       perImageTime: 0,
       processedImages: 0,
       progressState: ProgressStateEnum.STOPPED,

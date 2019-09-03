@@ -177,7 +177,7 @@ const template = [
       {
         label: 'Test Data',
         click() {
-          sendMenuEvent({ route: '/generate/test-data' })
+          sendMenuEvent({ route: '/generate/_test_data' })
         },
       },
     ],

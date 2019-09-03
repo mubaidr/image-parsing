@@ -3,7 +3,6 @@ import uuid from 'uuid'
 import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
 import RegExpPattern from '../@enums/RegExpPatterns'
 import AnswerCollection from '../@interfaces/AnswerCollection'
-import ResultJson from '../@interfaces/ResultJson'
 
 class Result {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

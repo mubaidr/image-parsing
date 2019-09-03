@@ -8,7 +8,7 @@ describe('data-paths', () => {
     expect(paths.main).toBe(path.resolve('src/main'))
     expect(paths.renderer).toBe(path.resolve('src/renderer'))
     expect(paths.trainingData).toBe(path.resolve('src/data/training-data.json'))
-    expect(paths.testData).toBe(path.resolve('__tests__/test-data'))
+    expect(paths.testData).toBe(path.resolve('__tests__/_test_data'))
     expect(paths.utiltities).toBe(path.resolve('src/utilities'))
     expect(paths.src).toBe(path.resolve('src'))
   })

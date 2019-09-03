@@ -89,9 +89,9 @@ export default {
   data() {
     return {
       designPath:
-        'D:\\Current\\image-parsing\\__tests__\\test-data\\design.svg',
-      resultPath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.xlsx',
-      keyPath: 'D:\\Current\\image-parsing\\__tests__\\test-data\\key.jpg',
+        'D:\\Current\\image-parsing\\__tests__\\_test_data\\design.svg',
+      resultPath: 'D:\\Current\\image-parsing\\__tests__\\_test_data\\key.xlsx',
+      keyPath: 'D:\\Current\\image-parsing\\__tests__\\_test_data\\key.jpg',
       logs: [],
       progressState: ProgressStateEnum.STOPPED,
     }

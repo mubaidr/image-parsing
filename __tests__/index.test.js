@@ -38,18 +38,6 @@ describe('Utlities should work as expectd', () => {
     expect(neuralNet).toBeInstanceOf(brain.NeuralNetwork)
   })
 
-  test('getDesignData', async () => {
-    const designData = await utilities.getDesignData(
-      path.join(dataPaths.testData, 'design.svg'),
-    )
-
-    expect(designData).toBeInstanceOf(Object)
-    expect(designData.rollNo).toBeInstanceOf(Object)
-    expect(designData.questions).toBeInstanceOf(Object)
-    expect(Object.keys(designData.questions).length).toBe(60)
-    expect(designData.width * designData.height).toBeDefined()
-  })
-
   test('readCsvToJson', () => {
     const output = utilities.CSVToJSON(
       path.join(dataPaths.testData, 'result.csv'),

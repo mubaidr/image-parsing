@@ -46,7 +46,7 @@ const router = new Router({
           component: AnswerSheets,
         },
         {
-          path: '/generate/test-data',
+          path: '/generate/_test_data',
           meta: {
             title: 'Generate Test Data',
           },
