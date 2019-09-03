@@ -1,5 +1,5 @@
 module.exports = {
-  bail: 1,
+  // bail: 1,
   automock: false,
   collectCoverage: true,
   // collectCoverageFrom: ['src/utilities/**/*.js', '!src/utilities/tmp/'],
