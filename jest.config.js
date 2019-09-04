@@ -1,8 +1,12 @@
 module.exports = {
-  // bail: 1,
   automock: false,
   collectCoverage: true,
-  // collectCoverageFrom: ['src/utilities/**/*.js', '!src/utilities/tmp/'],
+  collectCoverageFrom: [
+    'src/utilities/**/*.ts',
+    '!**/@declarations/**',
+    '!**/@enums/**',
+    '!**/@interfaces/**',
+  ],
   // coverageDirectory: 'coverage',
   // verbose: false,
   testPathIgnorePatterns: ['/node_modules/', '.eslintrc.js'],

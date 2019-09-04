@@ -106,9 +106,9 @@
     "postinstall": "",
     "prettier": "prettier --write \"{src,_scripts}/**/*.{js,ts,vue}\"",
     "release": "build",
-    "test": "jest --passWithNoTests --runInBand",
+    "test": "jest",
     "test-code": "nodemon --inspect src/utilities/_test/index.ts",
-    "test:watch": "jest --watch --passWithNoTests --runInBand --onlyChanged",
+    "test:watch": "jest --watch",
     "typesync": "typesync --ignoredeps=dev"
   },
   "version": "0.0.1"
