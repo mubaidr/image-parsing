@@ -18,7 +18,7 @@ describe('getQuestionsData', () => {
   })
 
   test('should return json for training data', async () => {
-    const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
+    const compiledResult = CompiledResult.loadFromExcel(dataPaths.key)
     const design = getDesignData(dataPaths.designBarcode)
     const sharpImg = getSharpObjectFromSource(dataPaths.keyImage)
     const qd = await getQuestionsData(design, sharpImg, compiledResult)
