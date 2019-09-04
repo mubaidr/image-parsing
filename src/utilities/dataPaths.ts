@@ -1,7 +1,8 @@
 import os from 'os'
 import path from 'path'
 
-const isDev: boolean = process.env.NODE_ENV === 'development'
+const isDev: boolean =
+  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
 
 const tmp: string = isDev ? path.resolve('.tmp') : os.tmpdir()
 const home: string = path.join(os.homedir(), 'desktop')

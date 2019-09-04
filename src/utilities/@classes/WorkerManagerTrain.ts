@@ -6,7 +6,8 @@ import { dataPaths } from '../dataPaths'
 import { getDesignData } from '../design'
 import WorkerManager from './WorkerManager'
 
-const isDev = process.env.NODE_ENV === 'development'
+const isDev =
+  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
 
 class WorkerManagerTrain extends WorkerManager {
   constructor() {

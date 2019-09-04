@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/mubaidr/image-parsing.svg)](https://travis-ci.org/mubaidr/image-parsing)
 [![Build status](https://ci.appveyor.com/api/projects/status/ghd4n4ehbc955qi0?svg=true)](https://ci.appveyor.com/project/mubaidr/image-parsing)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/091d57f32cdc4c5c946a1fb463bd2ea6)](https://www.codacy.com/app/mubaidr/image-parsing)
 
 <img src="https://raw.githubusercontent.com/mubaidr/image-parsing/master/_icons/128icontype11.png" align="center">
 

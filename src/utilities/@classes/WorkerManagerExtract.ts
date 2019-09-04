@@ -8,7 +8,8 @@ import { getDesignData } from '../design'
 import { getImagePaths } from '../images'
 import WorkerManager from './WorkerManager'
 
-const isDev = process.env.NODE_ENV === 'development'
+const isDev =
+  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
 
 class WorkerManagerExtract extends WorkerManager {
   constructor() {
