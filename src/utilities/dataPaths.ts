@@ -16,6 +16,7 @@ const dataPaths = {
   keyImage: path.resolve('_test_data', 'key.jpg'),
   questionsModel: path.resolve('src/data/questions-model.json'),
   result: path.resolve('_test_data', 'result.xlsx'),
+  resultCompiled: path.resolve('_test_data', 'resultCompiled.xlsx'),
   root: path.resolve('.'),
   temp: tmp,
   tmp,

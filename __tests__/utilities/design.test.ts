@@ -3,7 +3,7 @@ import { getDesignData } from '../../src/utilities/design'
 
 describe('getDesignData', () => {
   test('should be defined', () => {
-    expect(getDesignData).toBeDefined()
+    expect(getDesignData).toBeInstanceOf(Function)
   })
 
   test('works', () => {

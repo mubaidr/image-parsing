@@ -4,16 +4,26 @@ module.exports = {
     es6: true,
     jest: true,
     'jest/globals': true,
+    browser: true,
   },
+
+  parser: '@typescript-eslint/parser',
 
   parserOptions: {
     ecmaVersion: 2019,
     sourceType: 'module',
   },
 
-  extends: ['eslint:recommended', 'plugin:jest/recommended', 'prettier'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+    // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'prettier',
+    'prettier/@typescript-eslint',
+  ],
 
-  plugins: ['jest'],
+  plugins: ['jest', '@typescript-eslint'],
 
   rules: {},
 }

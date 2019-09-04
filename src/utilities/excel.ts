@@ -69,7 +69,7 @@ function exportJsonToExcel(
   XLSX.writeFile(workbook, destination)
 }
 
-function exportHtmltoExcel(htmlTable: string, destination: string): void {
+function exportHtmltoExcel(htmlTable: Element, destination: string): void {
   const wb = XLSX.utils.table_to_book(htmlTable)
   XLSX.writeFile(wb, destination)
 }
