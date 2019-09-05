@@ -16,6 +16,8 @@ class WorkerManagerCompile extends WorkerManager {
       ? path.resolve('./dist/workers/workerCompile.js')
       : path.resolve(__dirname, './workers/workerCompile.js')
 
+    //TODO: compilte for jest tests
+
     super(workerPath)
   }
 
