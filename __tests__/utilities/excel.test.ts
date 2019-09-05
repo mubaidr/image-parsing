@@ -55,6 +55,8 @@ describe('exportHtmltoExcel', () => {
 
     exportHtmltoExcel(table, target)
     expect(fs.existsSync(target)).toBeTruthy()
+
+    fs.unlinkSync(target)
   })
 })
 
@@ -71,6 +73,8 @@ describe('exportJsonToExcel', () => {
 
     exportJsonToExcel(compiledResult, target)
     expect(fs.existsSync(target)).toBeTruthy()
+
+    fs.unlinkSync(target)
   })
 })
 

@@ -31,13 +31,13 @@ describe('getQuestionsNeuralNet', () => {
 
 describe('readKey', () => {
   test('should read excel keys', async () => {
-    let results = await readKey(dataPaths.key)
+    const results = await readKey(dataPaths.key)
     expect(results.length).toBeGreaterThanOrEqual(1)
     expect(results[0]).toBeInstanceOf(Result)
   })
 
   test('should read image keys', async () => {
-    let results = await readKey(dataPaths.keyImage)
+    const results = await readKey(dataPaths.keyImage)
     expect(results.length).toBeGreaterThanOrEqual(1)
     expect(results[0]).toBeInstanceOf(Result)
   })

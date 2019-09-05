@@ -27,6 +27,7 @@ describe('getImagePaths', () => {
   test('defined', () => {
     expect(getImagePaths).toBeInstanceOf(Function)
   })
+
   test('works', async () => {
     const paths = [
       'D:/Current/image-parsing/_test_data/images-barcode/10023.jpg',
@@ -46,6 +47,7 @@ describe('getSharpObjectFromSource', () => {
   test('defined', () => {
     expect(getSharpObjectFromSource).toBeInstanceOf(Function)
   })
+
   test('works', () => {
     expect(getSharpObjectFromSource(dataPaths.keyImage)).toBeInstanceOf(Sharp)
   })
@@ -55,16 +57,20 @@ describe('logImageData', () => {
   test('defined', () => {
     expect(logImageData).toBeInstanceOf(Function)
   })
+
   test('works', () => {
     const name = 'jest-test-img'
+    const target = path.join(dataPaths.tmp, `${name}.jpg`)
     const sharpImg = getSharpObjectFromSource(dataPaths.keyImage)
 
     logImageData(sharpImg, name)
 
-    expect(fs.existsSync(path.join(dataPaths.tmp, `${name}.jpg`))).toBeTruthy()
+    expect(fs.existsSync(target)).toBeTruthy()
 
     logImageData(dataPaths.keyImage, name)
 
-    expect(fs.existsSync(path.join(dataPaths.tmp, `${name}.jpg`))).toBeTruthy()
+    expect(fs.existsSync(target)).toBeTruthy()
+
+    fs.unlinkSync(target)
   })
 })

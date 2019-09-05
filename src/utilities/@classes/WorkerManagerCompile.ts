@@ -10,7 +10,7 @@ import WorkerManager from './WorkerManager'
 const isDev =
   process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
 
-class WorkerManagerTrain extends WorkerManager {
+class WorkerManagerCompile extends WorkerManager {
   constructor() {
     const workerPath = isDev
       ? path.resolve('./dist/workers/workerCompile.js')
@@ -58,4 +58,4 @@ class WorkerManagerTrain extends WorkerManager {
   }
 }
 
-export default WorkerManagerTrain
+export default WorkerManagerCompile

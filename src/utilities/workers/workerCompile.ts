@@ -29,6 +29,13 @@ function start(msg: WorkerInput): void {
   // report progress status
   if (process && process.send) {
     process.send({
+      state: ProgressStateEnum.PROGRESS,
+    })
+  }
+
+  // report progress status
+  if (process && process.send) {
+    process.send({
       state: ProgressStateEnum.COMPLETED,
       workerType: WorkerTypes.COMPILE,
       data: compiledResult.getKeysAndResults(),
