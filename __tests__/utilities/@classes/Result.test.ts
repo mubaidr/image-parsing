@@ -65,9 +65,11 @@ describe('Result', () => {
   test('should compile', async () => {
     const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
     const result = compiledResult.getResults()[0]
-    const key = await readKey(dataPaths.key)
+    const keys = await readKey(dataPaths.key)
 
-    result.compile(key[0], 3, 1)
+    if (!keys) return
+
+    result.compile(keys[0], 3, 1)
 
     expect(result.getTotalMarks()).toBeGreaterThan(0)
 
@@ -85,36 +87,45 @@ describe('Result', () => {
     const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
     const result = compiledResult.getResults()[0]
     const keys = await readKey(dataPaths.key)
-    const key = keys[0]
 
     expect(result.isKey()).toBeFalsy()
     expect(result.isResult()).toBeTruthy()
-    expect(key.isKey()).toBeTruthy()
-    expect(key.isResult()).toBeFalsy()
+
+    if (keys) {
+      const key = keys[0]
+      expect(key.isKey()).toBeTruthy()
+      expect(key.isResult()).toBeFalsy()
+    }
   })
 
   test('should be able to match key with result', async () => {
     const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
     const result = compiledResult.getResults()[0]
     const keys = await readKey(dataPaths.key)
-    const key = keys[0]
 
-    expect(result.matchWithKey(key)).toBeTruthy()
+    if (keys) {
+      const key = keys[0]
 
-    key.post = '9999'
+      expect(result.matchWithKey(key)).toBeTruthy()
 
-    expect(result.matchWithKey(key)).toBeFalsy()
+      key.post = '9999'
+
+      expect(result.matchWithKey(key)).toBeFalsy()
+    }
   })
 
   test('should be able to calculate marks for compiled result', async () => {
     const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
     const result = compiledResult.getResults()[0]
     const keys = await readKey(dataPaths.key)
-    const key = keys[0]
 
-    result.compile(key).setMarks(3, 1)
+    if (keys) {
+      const key = keys[0]
 
-    expect(result.getTotalMarks()).not.toBe(0)
+      result.compile(key).setMarks(3, 1)
+
+      expect(result.getTotalMarks()).not.toBe(0)
+    }
   })
 
   test('should be able to export to json object', async () => {
