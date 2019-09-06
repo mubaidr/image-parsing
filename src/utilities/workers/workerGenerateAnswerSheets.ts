@@ -23,16 +23,8 @@ process.on('message', msg => {
   }
 })
 
-process.on('unhandledRejection', rejection => {
-  console.error(rejection)
-})
-
-process.on('uncaughtException', exception => {
-  console.error(exception)
-})
-
-process.on('warning', warning => {
-  console.warn(warning)
-})
+process.on('unhandledRejection', e => console.error(e))
+process.on('uncaughtException', e => console.error(e))
+process.on('warning', e => console.warn(e))
 
 export { start, stop }

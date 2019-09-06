@@ -61,4 +61,8 @@ process.on('message', (msg: WorkerInput) => {
   }
 })
 
+process.on('unhandledRejection', e => console.error(e))
+process.on('uncaughtException', e => console.error(e))
+process.on('warning', e => console.warn(e))
+
 export { start, stop }

@@ -13,19 +13,21 @@ module.exports = {
     parser: 'babel-eslint',
     ecmaVersion: 2019,
     sourceType: 'module',
-    // project: './tsconfig.json',
+    project: './tsconfig.json',
   },
 
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
-    // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'prettier',
     'prettier/@typescript-eslint',
   ],
 
   plugins: ['jest', '@typescript-eslint'],
 
-  rules: {},
+  rules: {
+    '@typescript-eslint/unbound-method': 0,
+  },
 }

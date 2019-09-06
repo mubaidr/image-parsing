@@ -1,16 +1,21 @@
 {
   "compilerOptions": {
     "allowJs": false,
-    "baseUrl": "./src",
+    "rootDir": ".",
+    "baseUrl": ".",
     "checkJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "noEmit": true,
+    // "paths": {
+    //   "@utilities/*": ["src/utilities/*"]
+    // },
     "resolveJsonModule": true,
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "noImplicitAny": false
   },
-  "exclude": ["node_modules", "_test_scripts", "__tests__", "_scripts"],
-  "include": ["src/**/*"]
+  "exclude": ["node_modules", "_test_scripts", "_scripts"],
+  "include": ["src/**/*", "__tests__/**/*"]
 }

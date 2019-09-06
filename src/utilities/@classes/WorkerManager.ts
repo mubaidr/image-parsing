@@ -1,5 +1,4 @@
 import childProcess, { ChildProcess } from 'child_process'
-import electronLog from 'electron-log'
 import noOfCores from 'physical-cpu-count'
 
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
@@ -100,44 +99,40 @@ class WorkerManager {
       )
 
       worker.on('disconnect', () => {
-        electronLog.log('worker disconnect')
+        if (callbacks.ondisconnect) {
+          callbacks.ondisconnect({})
+        }
       })
 
       worker.on('exit', (code, signal) => {
-        electronLog.info(
-          `worker exited with code: ${code} and signal ${signal}`,
-        )
-
         if (code) {
-          callbacks.onerror({
+          return callbacks.onerror({
             error: new Error('worker exit unexpectedly'),
             code,
             signal,
           })
-        } else if (callbacks.onexit) {
+        }
+
+        if (callbacks.onexit) {
           callbacks.onexit({ code: code || 0, signal: signal })
         }
       })
 
       worker.on('close', (code, signal) => {
-        electronLog.info(
-          `worker closed with code: ${code} and signal ${signal}`,
-        )
-
         if (code) {
-          callbacks.onerror({
+          return callbacks.onerror({
             error: new Error('worker exit unexpectedly'),
             code,
             signal,
           })
-        } else if (callbacks.onclose) {
+        }
+
+        if (callbacks.onclose) {
           callbacks.onclose({ code: code || 0, signal: signal })
         }
       })
 
       worker.on('error', err => {
-        electronLog.error(err)
-
         callbacks.onerror({
           error: err,
         })
@@ -145,8 +140,6 @@ class WorkerManager {
 
       if (worker.stdout) {
         worker.stdout.on('data', (data: Buffer) => {
-          electronLog.log(data.toString())
-
           if (callbacks.onlog) {
             callbacks.onlog({
               data: data.toString(),
@@ -157,8 +150,6 @@ class WorkerManager {
 
       if (worker.stderr) {
         worker.stderr.on('data', (data: Buffer) => {
-          electronLog.error(data.toString())
-
           callbacks.onerror({
             error: data.toString(),
           })

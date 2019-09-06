@@ -7,6 +7,7 @@ interface Callbacks {
   onclose?: (data: object) => void
   onexit?: (data: object) => void
   onlog?: (data: object) => void
+  ondisconnect?: (data: object) => void
 }
 
 export default Callbacks
