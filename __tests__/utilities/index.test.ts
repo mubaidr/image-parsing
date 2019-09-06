@@ -32,12 +32,16 @@ describe('getQuestionsNeuralNet', () => {
 describe('readKey', () => {
   test('should read excel keys', async () => {
     const results = await readKey(dataPaths.key)
+    if (!results) return
+
     expect(results.length).toBeGreaterThanOrEqual(1)
     expect(results[0]).toBeInstanceOf(Result)
   })
 
   test('should read image keys', async () => {
     const results = await readKey(dataPaths.keyImage)
+    if (!results) return
+
     expect(results.length).toBeGreaterThanOrEqual(1)
     expect(results[0]).toBeInstanceOf(Result)
   })

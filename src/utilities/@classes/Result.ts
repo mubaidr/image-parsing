@@ -5,7 +5,6 @@ import RegExpPattern from '../@enums/RegExpPatterns'
 import AnswerCollection from '../@interfaces/AnswerCollection'
 
 class Result {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
 
   private correctCount = 0
@@ -34,7 +33,6 @@ class Result {
     this.isRollNoExtracted = !!rollNo
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fromJson(o: any): Result {
     const answerRegExp = new RegExp(RegExpPattern.QUESTION)
     const result =
@@ -171,7 +169,6 @@ class Result {
     return this
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJson(): Record<string, any> {
     const o: { [key: string]: string | AnswerCollection } = JSON.parse(
       JSON.stringify(this),

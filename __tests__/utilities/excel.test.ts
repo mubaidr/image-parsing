@@ -53,6 +53,8 @@ describe('exportHtmltoExcel', () => {
     const table = document.getElementById('customers')
     const target = path.resolve(dataPaths.tmp, Date.now().toString() + '.xlsx')
 
+    if (!table) return
+
     exportHtmltoExcel(table, target)
     expect(fs.existsSync(target)).toBeTruthy()
 

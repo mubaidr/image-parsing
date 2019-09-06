@@ -1,14 +1,19 @@
+import childProcess from 'child_process'
 import treeKill from 'tree-kill'
 
 import WorkerManagerCompile from '../../../src/utilities/@classes/WorkerManagerCompile'
 import { dataPaths } from '../../../src/utilities/dataPaths'
 import { getDesignData } from '../../../src/utilities/design'
 
-const wm = new WorkerManagerCompile()
-
 afterEach(() => {})
 
+beforeAll(() => {
+  childProcess.execSync('npm run pack:workers')
+})
+
 describe('WorkerManagerCompile', () => {
+  const wm = new WorkerManagerCompile()
+
   test('should initiate successfuly', async () => {
     expect.assertions(6)
 

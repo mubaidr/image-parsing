@@ -59,7 +59,6 @@ class WorkerManager {
           state: ProgressStateEnum
           timeElapsed: number
           workerType: WorkerTypes
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data: any[]
         }) => {
           const { state, timeElapsed, workerType, data } = message

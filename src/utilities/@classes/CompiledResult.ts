@@ -13,9 +13,7 @@ class CompiledResult {
     this.id = uuid()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static export(compiledResult: CompiledResult): any[] {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const obj: any[] = []
 
     compiledResult
@@ -29,7 +27,6 @@ class CompiledResult {
   }
 
   public static loadFromExcel(src: string): CompiledResult {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const rows: any[] = importExcelToJson(src)
     const compiledResult = new CompiledResult()
 
@@ -62,7 +59,6 @@ class CompiledResult {
   }
 
   public addFromExcel(src: string): CompiledResult {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const rows: any[] = importExcelToJson(src)
 
     rows.forEach(row => {
@@ -128,9 +124,7 @@ class CompiledResult {
     return this
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public export(): any[] {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const obj: any[] = []
 
     this.sortResults()

@@ -27,8 +27,5 @@ module.exports = {
 
   plugins: ['jest', '@typescript-eslint'],
 
-  rules: {
-    '@typescript-eslint/require-await': 0,
-    '@typescript-eslint/unbound-method': 0,
-  },
+  rules: {},
 }

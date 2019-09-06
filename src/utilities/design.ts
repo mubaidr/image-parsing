@@ -32,7 +32,6 @@ const getDesignData = (file: string): DesignData => {
   const questions: QuestionsLocations = {}
   let code: Location = { x: 0, y: 0, width: 0, height: 0 }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   svg.g.forEach((group: any) => {
     const { title, transform, rect } = group
 

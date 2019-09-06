@@ -109,7 +109,7 @@
     "postinstall": "",
     "prettier": "prettier --write \"{src,_scripts}/**/*.{js,ts,vue}\"",
     "release": "build",
-    "test": "jest",
+    "test": "jest --collect-coverage",
     "test-code": "nodemon --inspect src/utilities/_test/index.ts",
     "test:watch": "jest --watch",
     "typesync": "typesync --ignoredeps=dev"

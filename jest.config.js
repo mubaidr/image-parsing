@@ -1,6 +1,6 @@
 module.exports = {
   automock: false,
-  collectCoverage: true,
+  collectCoverage: false,
   collectCoverageFrom: [
     'src/utilities/**/*.ts',
     '!**/@declarations/**',
