@@ -32,7 +32,13 @@ async function start(msg: WorkerInput): Promise<void> {
   const net = new brain.NeuralNetwork()
 
   const netOutput = net.train(trainingData, {
-    log: true,
+    log: () => {
+      if (process && process.send) {
+        process.send({
+          state: ProgressStateEnum.PROGRESS,
+        })
+      }
+    },
     logPeriod: 10,
     errorThresh: 0.001,
     iterations: 100,

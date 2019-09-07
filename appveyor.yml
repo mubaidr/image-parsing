@@ -1,4 +1,4 @@
-image: Visual Studio 2017
+image: Visual Studio 2019
 
 platform:
   - x64
@@ -17,4 +17,5 @@ install:
 build_script:
   - npm run build
 
-test: off
+test:
+  - npm run test

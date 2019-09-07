@@ -1,20 +1,15 @@
 {
   "compilerOptions": {
     "allowJs": false,
-    "rootDir": ".",
-    "baseUrl": ".",
     "checkJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
-    "noEmit": true,
-    // "paths": {
-    //   "@utilities/*": ["src/utilities/*"]
-    // },
+    "noImplicitAny": false,
     "resolveJsonModule": true,
+    "sourceMap": true,
     "strict": true,
-    "target": "esnext",
-    "noImplicitAny": false
+    "target": "es2019"
   },
   "exclude": ["node_modules", "_test_scripts", "_scripts"],
   "include": ["src/**/*", "__tests__/**/*"]

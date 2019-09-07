@@ -1,6 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
 const fsGlob = require('fast-glob')
+const TerserJSPlugin = require('terser-webpack-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const {
   dependencies,
@@ -42,13 +44,24 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.(j|t)s$/,
-        use: 'babel-loader',
+        test: /\.js(x?)$/,
         exclude: /node_modules/,
+        loader: 'babel-loader',
+      },
+      {
+        test: /\.ts(x?)$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
       },
       {
         test: /\.node$/,
-        use: 'node-loader',
+        loader: 'node-loader',
       },
     ],
   },
@@ -59,6 +72,9 @@ const config = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.PRODUCT_NAME': JSON.stringify(productName),
+    }),
+    new ForkTsCheckerWebpackPlugin({
+      eslint: true,
     }),
   ],
   resolve: {
@@ -71,11 +87,10 @@ const config = {
   target: 'node',
 }
 
-/**
- * Adjust rendererConfig for production settings
- */
-if (isDevMode) {
-  // any dev only config
+if (!isDevMode) {
+  config.optimization = {
+    minimizer: [new TerserJSPlugin({})],
+  }
 }
 
 module.exports = config

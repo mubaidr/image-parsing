@@ -5,10 +5,8 @@ import WorkerManagerCompile from '../../../src/utilities/@classes/WorkerManagerC
 import { dataPaths } from '../../../src/utilities/dataPaths'
 import { getDesignData } from '../../../src/utilities/design'
 
-afterEach(() => {})
-
 beforeAll(() => {
-  childProcess.execSync('npm run pack:workers')
+  childProcess.execSync('node _scripts/dev-runner-worker.js compile')
 })
 
 describe('WorkerManagerCompile', () => {

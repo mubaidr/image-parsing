@@ -7,6 +7,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const TerserJSPlugin = require('terser-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const { productName } = require('../package.json')
 
@@ -28,9 +29,21 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.(j|t)s$/,
-        use: 'babel-loader',
+        test: /\.js(x?)$/,
         exclude: /node_modules/,
+        use: 'babel-loader',
+      },
+      {
+        test: /\.ts(x?)$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              appendTsSuffixTo: [/\.vue$/],
+              transpileOnly: true,
+            },
+          },
+        ],
       },
       {
         test: /\.node$/,
@@ -121,6 +134,9 @@ const config = {
     new VueLoaderPlugin(),
     new webpack.DefinePlugin({
       'process.env.PRODUCT_NAME': JSON.stringify(productName),
+    }),
+    new ForkTsCheckerWebpackPlugin({
+      eslint: true,
     }),
   ],
   resolve: {

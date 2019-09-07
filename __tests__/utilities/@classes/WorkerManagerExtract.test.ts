@@ -5,10 +5,8 @@ import WorkerManagerExtract from '../../../src/utilities/@classes/WorkerManagerE
 import { dataPaths } from '../../../src/utilities/dataPaths'
 import { getDesignData } from '../../../src/utilities/design'
 
-afterEach(() => {})
-
 beforeAll(() => {
-  childProcess.execSync('npm run pack:workers')
+  childProcess.execSync('node _scripts/dev-runner-worker.js extract')
 })
 
 describe('WorkerManagerExtract', () => {
@@ -39,10 +37,7 @@ describe('WorkerManagerExtract', () => {
         designPath: dataPaths.designBarcode,
         data: {
           designData,
-          resultPath: dataPaths.result,
-          keyPath: dataPaths.key,
-          correctMarks: 3,
-          incorrectMarks: 1,
+          imagesDirectory: dataPaths.imagesBarcode,
         },
         callbacks: {
           onsuccess,

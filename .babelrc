@@ -1,19 +1,17 @@
 {
+  "plugins": [
+    "@babel/proposal-object-rest-spread",
+    "@babel/plugin-proposal-class-properties"
+  ],
   "presets": [
     [
       "@babel/env",
       {
         "targets": {
           "chrome": "76",
-          "node": 12
+          "node": "12.4.0"
         }
       }
-    ],
-    "@babel/typescript"
-  ],
-
-  "plugins": [
-    "@babel/proposal-object-rest-spread",
-    "@babel/plugin-proposal-class-properties"
+    ]
   ]
 }
