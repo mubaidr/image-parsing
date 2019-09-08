@@ -41,7 +41,7 @@ class WorkerManagerTrain extends WorkerManager {
       keyPath,
     })
 
-    return { totalWorkers }
+    return { totalWorkers, totalOutput: totalWorkers }
   }
 }
 

@@ -41,7 +41,7 @@ script:
         -v ~/.cache/electron-builder:/root/.cache/electron-builder \
         electronuserland/builder:wine
     fi
-  - npm run test
+  - npm run build
 
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine

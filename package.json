@@ -104,7 +104,7 @@
     "dev": "run-s install-native-dep-electron dev-runner",
     "dev-runner": "node _scripts/dev-runner.js",
     "install-native-dep": "npm rebuild",
-    "install-native-dep-electron-electron": "electron-builder install-app-deps",
+    "install-native-dep-electron": "electron-builder install-app-deps",
     "jest": "jest --collect-coverage",
     "jest:watch": "jest --watch",
     "lint": "eslint --fix --ext .js,.ts,.vue src",
@@ -115,9 +115,9 @@
     "postinstall": "",
     "prettier": "prettier --write \"{src,_scripts}/**/*.{js,ts,vue}\"",
     "release": "build",
-    "test": "run-s install-native-dep jest",
+    "test": "run-s install-native-dep pack:workers jest",
     "test-code": "nodemon src/utilities/_test/index.ts",
-    "test:watch": "run-s install-native-dep jest:watch",
+    "test:watch": "run-s install-native-dep pack:workers jest:watch",
     "typesync": "typesync --ignoredeps=dev"
   },
   "version": "0.0.1"

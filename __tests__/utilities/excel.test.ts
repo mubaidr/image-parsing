@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import fs from 'fs'
 import path from 'path'
 
@@ -88,6 +92,6 @@ describe('importExcelToJson', () => {
   test('works', () => {
     const json = importExcelToJson(dataPaths.result)
 
-    expect(json).toBeDefined()
+    expect(json).toMatchSnapshot()
   })
 })

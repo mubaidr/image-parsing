@@ -17,5 +17,4 @@ install:
 build_script:
   - npm run build
 
-test:
-  - npm run test
+test: 'off'

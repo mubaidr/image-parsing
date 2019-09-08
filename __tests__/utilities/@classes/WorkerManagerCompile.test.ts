@@ -21,14 +21,14 @@ describe('WorkerManagerCompile', () => {
       const onerror = jest.fn()
       const onprogress = jest.fn()
       const onsuccess = jest.fn(() => {
-        wm.workers.forEach(worker => {
-          treeKill(worker.pid)
-        })
-
         expect(wm.getWorkerCount()).toBeGreaterThanOrEqual(1)
         expect(onerror).toHaveBeenCalledTimes(0)
         expect(onprogress).toHaveBeenCalled()
         expect(onsuccess).toHaveBeenCalledTimes(1)
+
+        wm.workers.forEach(worker => {
+          treeKill(worker.pid)
+        })
 
         resolve()
       })

@@ -9,14 +9,6 @@ describe('getDesignData', () => {
   test('works', () => {
     const designData = getDesignData(dataPaths.designBarcode)
 
-    Object.values(designData).forEach(value => {
-      expect(value).toBeDefined()
-
-      if (typeof value === 'object') {
-        Object.values(value).forEach(innerValue => {
-          expect(innerValue).toBeDefined()
-        })
-      }
-    })
+    expect(designData).toMatchSnapshot()
   })
 })

@@ -1,4 +1,8 @@
-import Result from '../../src/utilities/@classes/Result'
+/**
+ * @jest-environment @zeromake/jest-environment-jsdom-with-canvas
+ */
+
+// import Result from '../../src/utilities/@classes/Result'
 import { dataPaths } from '../../src/utilities/dataPaths'
 import { getSharpObjectFromSource } from '../../src/utilities/images'
 import { convertToBitArray, getQuestionsNeuralNet, readKey } from '../../src/utilities/index'
@@ -14,7 +18,7 @@ describe('convertToBitArray', () => {
     )
 
     expect(bitData.length).toBeGreaterThan(0)
-    expect(typeof bitData[0]).toBe('number')
+    expect(bitData).toMatchSnapshot()
   })
 })
 
@@ -25,7 +29,7 @@ describe('getQuestionsNeuralNet', () => {
 
   test('should return neural network json', async () => {
     const nnJson = getQuestionsNeuralNet()
-    expect(nnJson).toBeDefined()
+    expect(nnJson).toMatchSnapshot()
   })
 })
 
@@ -35,7 +39,10 @@ describe('readKey', () => {
     if (!results) return
 
     expect(results.length).toBeGreaterThanOrEqual(1)
-    expect(results[0]).toBeInstanceOf(Result)
+
+    results.forEach(result => {
+      expect(result).toMatchSnapshot({ id: expect.any(String) })
+    })
   })
 
   test('should read image keys', async () => {
@@ -43,6 +50,8 @@ describe('readKey', () => {
     if (!results) return
 
     expect(results.length).toBeGreaterThanOrEqual(1)
-    expect(results[0]).toBeInstanceOf(Result)
+    results.forEach(result => {
+      expect(result).toMatchSnapshot({ id: expect.any(String) })
+    })
   })
 })

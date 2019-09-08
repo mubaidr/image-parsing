@@ -29,33 +29,31 @@ async function start(msg: WorkerInput): Promise<void> {
     compiledResult,
   )
 
+  if (process && process.send) {
+    process.send({
+      state: ProgressStateEnum.PROGRESS,
+    })
+  }
+
   const net = new brain.NeuralNetwork()
 
   const netOutput = net.train(trainingData, {
-    log: () => {
-      if (process && process.send) {
-        process.send({
-          state: ProgressStateEnum.PROGRESS,
-        })
-      }
-    },
+    log: false,
     logPeriod: 10,
     errorThresh: 0.001,
     iterations: 100,
   })
 
-  if (netOutput.error <= 0.001) {
-    fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
+  // if (netOutput.error > 0.001) throw 'Unable to train...'
 
-    if (process && process.send) {
-      process.send({
-        state: ProgressStateEnum.COMPLETED,
-        workerType: WorkerTypes.COMPILE,
-        data: netOutput,
-      })
-    }
-  } else {
-    throw 'Unable to train...'
+  fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
+
+  if (process && process.send) {
+    process.send({
+      state: ProgressStateEnum.COMPLETED,
+      workerType: WorkerTypes.TRAIN,
+      data: netOutput,
+    })
   }
 }
 

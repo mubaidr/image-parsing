@@ -50,6 +50,8 @@ describe('Result', () => {
 
     const result = Result.fromJson(o)
 
+    expect(result).toMatchSnapshot()
+
     expect(result.id).toBeDefined()
     expect(result.rollNo).toBe(o.rollNo)
     expect(result.imageFile).toBe(o.imageFile)
@@ -134,12 +136,6 @@ describe('Result', () => {
 
     const o = result.toJson()
 
-    expect(o.id).toBeDefined()
-    expect(o.rollNo).toBeDefined()
-    expect(o.imageFile).toBeDefined()
-
-    expect(o['q1']).toBeDefined()
-    expect(o['q2']).toBeDefined()
-    expect(o['q3']).toBeDefined()
+    expect(o).toMatchSnapshot()
   })
 })

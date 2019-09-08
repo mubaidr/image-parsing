@@ -133,8 +133,7 @@ describe('CompiledResult', () => {
     )
 
     const d = compiledResult.export()
-
-    expect(d.length).toBeGreaterThanOrEqual(3)
+    expect(d).toMatchSnapshot()
   })
 
   test('should be able to export as obj array from static method', async () => {
@@ -143,8 +142,7 @@ describe('CompiledResult', () => {
     )
 
     const d = CompiledResult.export(compiledResult)
-
-    expect(d.length).toBeGreaterThanOrEqual(3)
+    expect(d).toMatchSnapshot()
   })
 
   test('should be able to compile results', async () => {

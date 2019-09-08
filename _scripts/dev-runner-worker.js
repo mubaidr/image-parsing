@@ -29,7 +29,7 @@ fsGlob
     const fileName = split[split.length - 1].split('.')[0]
 
     workers.forEach(worker => {
-      if (fileName.toLowerCase().indexOf(worker.toLowerCase())) {
+      if (fileName.toLowerCase().indexOf(worker.toLowerCase()) !== -1) {
         entry[fileName] = workerPath
       }
     })
@@ -59,7 +59,7 @@ const config = {
           {
             loader: 'ts-loader',
             options: {
-              // transpileOnly: true,
+              transpileOnly: true,
             },
           },
         ],
@@ -80,7 +80,7 @@ const config = {
     }),
   ],
   resolve: {
-    extensions: ['.ts', '.js', '.json'],
+    extensions: ['.ts', '.js', '.json', '.node'],
   },
   target: 'node',
 }
