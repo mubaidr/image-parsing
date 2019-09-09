@@ -66,10 +66,13 @@ const readKey = async (src: string): Promise<Result[] | undefined> => {
 
   const designData = getDesignData(dataPaths.designBarcode)
 
-  return extractTask.start({
-    designData,
-    imagePaths: [src],
-  })
+  return extractTask.start(
+    {
+      designData,
+      imagePaths: [src],
+    },
+    false,
+  )
 }
 
 export { convertToBitArray, getQuestionsNeuralNet, readKey }

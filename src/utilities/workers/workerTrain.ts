@@ -1,19 +1,25 @@
-import brain from 'brain.js'
+import brain, { INeuralNetworkState } from 'brain.js'
 import fs from 'fs'
 
 import CompiledResult from '../@classes/CompiledResult'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import WorkerTypes from '../@enums/WorkerTypes'
 import WorkerInput from '../@interfaces/WorkerInput'
+import WorkerOutput from '../@interfaces/WorkerOutput'
 import { dataPaths } from '../dataPaths'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
 
-function stop(): void {
-  process.exit(0)
+function sendMessage(obj: WorkerOutput): void {
+  if (process && process.send) {
+    process.send(obj)
+  }
 }
 
-async function start(msg: WorkerInput): Promise<void> {
+async function start(
+  msg: WorkerInput,
+  isChildProcess: boolean,
+): Promise<INeuralNetworkState | undefined> {
   const { designData, resultPath, keyPath } = msg
 
   if (!designData) throw 'Invalid designData...'
@@ -48,20 +54,26 @@ async function start(msg: WorkerInput): Promise<void> {
 
   fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
 
-  if (process && process.send) {
-    process.send({
+  if (isChildProcess) {
+    sendMessage({
       state: ProgressStateEnum.COMPLETED,
       workerType: WorkerTypes.TRAIN,
       data: netOutput,
     })
+  } else {
+    return netOutput
   }
+}
+
+function stop(): void {
+  process.exit(0)
 }
 
 process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
-    start(msg)
+    start(msg, true)
   }
 })
 
@@ -70,3 +82,4 @@ process.on('uncaughtException', e => console.error(e))
 process.on('warning', e => console.warn(e))
 
 export { start, stop }
+export default { start, stop }

@@ -1,3 +1,3 @@
-describe('cache', () => {
+describe('workerCompile', () => {
   test('should be defined', () => {})
 })

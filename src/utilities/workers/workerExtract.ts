@@ -4,16 +4,22 @@ import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
 import WorkerTypes from '../@enums/WorkerTypes'
 import NNQuestionOutput from '../@interfaces/NNQuestionOutput'
 import WorkerInput from '../@interfaces/WorkerInput'
+import WorkerOutput from '../@interfaces/WorkerOutput'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsNeuralNet } from '../index'
 import { getQuestionsData } from '../questions'
 import { getRollNoFromImage } from '../sheetInfo'
 
-function stop(): void {
-  process.exit(0)
+function sendMessage(obj: WorkerOutput): void {
+  if (process && process.send) {
+    process.send(obj)
+  }
 }
 
-async function start(msg: WorkerInput): Promise<Result[]> {
+async function start(
+  msg: WorkerInput,
+  isChildProcess: boolean,
+): Promise<Result[] | undefined> {
   const { designData, imagePaths } = msg
 
   if (!designData) throw 'Invalid design data...'
@@ -63,32 +69,34 @@ async function start(msg: WorkerInput): Promise<Result[]> {
 
     results.push(result)
 
-    // report progress status
-    if (process && process.send) {
-      process.send({
+    if (isChildProcess) {
+      sendMessage({
         state: ProgressStateEnum.PROGRESS,
         timeElapsed: Date.now() - lastTimeSnapshot,
       })
     }
   }
 
-  // report progress status
-  if (process && process.send) {
-    process.send({
+  if (isChildProcess) {
+    sendMessage({
       state: ProgressStateEnum.COMPLETED,
       workerType: WorkerTypes.EXTRACT,
       data: results,
     })
+  } else {
+    return results
   }
+}
 
-  return results
+function stop(): void {
+  process.exit(0)
 }
 
 process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
-    start(msg)
+    start(msg, true)
   }
 })
 
@@ -97,3 +105,4 @@ process.on('uncaughtException', e => console.error(e))
 process.on('warning', e => console.warn(e))
 
 export { start, stop }
+export default { start, stop }

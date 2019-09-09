@@ -7,7 +7,7 @@
     "brain.js": "^1.6.1",
     "bulma-pro": "^0.1.8",
     "electron-log": "^3.0.7",
-    "electron-store": "^4.0.0",
+    "electron-store": "^5.0.0",
     "fast-glob": "^3.0.4",
     "fast-xml-parser": "^3.12.20",
     "javascript-barcode-reader": "^0.4.18",

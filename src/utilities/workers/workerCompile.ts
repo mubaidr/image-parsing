@@ -3,12 +3,18 @@ import Result from '../@classes/Result'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import WorkerTypes from '../@enums/WorkerTypes'
 import WorkerInput from '../@interfaces/WorkerInput'
+import WorkerOutput from '../@interfaces/WorkerOutput'
 
-function stop(): void {
-  process.exit(0)
+function sendMessage(obj: WorkerOutput): void {
+  if (process && process.send) {
+    process.send(obj)
+  }
 }
 
-function start(msg: WorkerInput): void {
+function start(
+  msg: WorkerInput,
+  isChildProcess: boolean,
+): CompiledResult | undefined {
   const { results, keys, correctMarks, incorrectMarks } = msg
 
   if (!results) throw 'Invalid results...'
@@ -27,30 +33,30 @@ function start(msg: WorkerInput): void {
   compiledResult.compile(correctMarks, incorrectMarks)
 
   // report progress status
-  if (process && process.send) {
-    process.send(
-      {
-        state: ProgressStateEnum.PROGRESS,
-      },
-      () => {
-        // report completed status
-        if (process && process.send) {
-          process.send({
-            state: ProgressStateEnum.COMPLETED,
-            workerType: WorkerTypes.COMPILE,
-            data: compiledResult.getKeysAndResults(),
-          })
-        }
-      },
-    )
+  if (isChildProcess) {
+    sendMessage({
+      state: ProgressStateEnum.PROGRESS,
+    })
+
+    sendMessage({
+      state: ProgressStateEnum.COMPLETED,
+      workerType: WorkerTypes.COMPILE,
+      data: compiledResult.getKeysAndResults(),
+    })
+  } else {
+    return compiledResult
   }
+}
+
+function stop(): void {
+  process.exit(0)
 }
 
 process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
-    start(msg)
+    start(msg, true)
   }
 })
 
@@ -59,3 +65,4 @@ process.on('uncaughtException', e => console.error(e))
 process.on('warning', e => console.warn(e))
 
 export { start, stop }
+export default { start, stop }

@@ -1,12 +1,17 @@
 import Sharp from 'sharp'
 
+import ProgressStateEnum from '../@enums/ProgressStateEnum'
+import WorkerTypes from '../@enums/WorkerTypes'
 import WorkerInput from '../@interfaces/WorkerInput'
+import WorkerOutput from '../@interfaces/WorkerOutput'
 
-function stop(): void {
-  process.exit(0)
+function sendMessage(obj: WorkerOutput): void {
+  if (process && process.send) {
+    process.send(obj)
+  }
 }
 
-function start(msg: WorkerInput): void {
+function start(msg: WorkerInput, isChildProcess: boolean): undefined {
   const { designData, results, imagesDirectory, exportDirectory } = msg
 
   if (!designData) throw 'Invalid results...'
@@ -25,13 +30,26 @@ function start(msg: WorkerInput): void {
   )
 
   img.toFile('D:\\current\\image-parsing\\.tmp\\image-with-text.jpg')
+
+  if (isChildProcess) {
+    sendMessage({
+      state: ProgressStateEnum.COMPLETED,
+      workerType: WorkerTypes.GENERATE_TEST_DATA,
+    })
+  } else {
+    return undefined
+  }
+}
+
+function stop(): void {
+  process.exit(0)
 }
 
 process.on('message', (msg: WorkerInput) => {
   if (msg.stop) {
     stop()
   } else {
-    start(msg)
+    start(msg, true)
   }
 })
 
@@ -40,3 +58,4 @@ process.on('uncaughtException', e => console.error(e))
 process.on('warning', e => console.warn(e))
 
 export { start, stop }
+export default { start, stop }

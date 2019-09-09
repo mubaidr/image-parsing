@@ -1,13 +1,18 @@
 {
   "compilerOptions": {
     "allowJs": false,
+    "alwaysStrict": true,
+    "baseUrl": ".",
     "checkJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": true,
     "moduleResolution": "node",
     "noImplicitAny": false,
     "resolveJsonModule": true,
+    "rootDir": ".",
     "sourceMap": true,
+    "sourceRoot": ".",
     "strict": true,
     "target": "es2019"
   },

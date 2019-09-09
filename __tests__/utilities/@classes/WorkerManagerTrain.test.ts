@@ -7,11 +7,11 @@ import { getDesignData } from '../../../src/utilities/design'
 
 beforeAll(() => {
   childProcess.execSync('node _scripts/dev-runner-worker.js train')
-  // jest.setTimeout(30000)
+  jest.setTimeout(30000)
 })
 
 afterAll(() => {
-  // jest.setTimeout(5000)
+  jest.setTimeout(5000)
 })
 
 describe('WorkerManagerTrain', () => {

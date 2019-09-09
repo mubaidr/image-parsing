@@ -1,6 +1,9 @@
+import ProgressStateEnum from '../@enums/ProgressStateEnum'
+
 interface WorkerOutput {
-  type: string
-  data: {}
+  state: ProgressStateEnum
+  workerType?: string
+  data?: {}
 }
 
 export default WorkerOutput
