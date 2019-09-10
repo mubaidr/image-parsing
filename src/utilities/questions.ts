@@ -40,6 +40,9 @@ const getQuestionsData = async (
     // logImageData(img, title)
 
     const { data, info } = await img.toBuffer({ resolveWithObject: true })
+
+    // console.log(info)
+
     const bitData = convertToBitArray(
       Array.prototype.slice.call(data, 0),
       info.channels,

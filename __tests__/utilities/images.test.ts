@@ -67,6 +67,8 @@ describe('logImageData', () => {
 
     expect(fs.existsSync(target)).toBeTruthy()
 
+    fs.unlinkSync(target)
+
     logImageData(dataPaths.keyImage, name)
 
     expect(fs.existsSync(target)).toBeTruthy()

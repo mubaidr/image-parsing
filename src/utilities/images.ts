@@ -11,8 +11,7 @@ import { dataPaths } from './dataPaths'
 const getSharpObjectFromSource = (src: string): Sharp => {
   return sharp(src)
     .raw()
-    .ensureAlpha()
-  // .flatten()
+    .flatten()
 }
 
 const convertImage = async (src: string): Promise<string> => {

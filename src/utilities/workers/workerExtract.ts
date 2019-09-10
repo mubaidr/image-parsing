@@ -30,7 +30,7 @@ async function start(
 
   for (let i = 0, imagesLength = imagePaths.length; i < imagesLength; i += 1) {
     const image = imagePaths[i]
-    const sharpImage = getSharpObjectFromSource(image).raw()
+    const sharpImage = getSharpObjectFromSource(image)
     const lastTimeSnapshot = Date.now()
 
     const [rollNo, questionsData] = await Promise.all([
@@ -104,5 +104,4 @@ process.on('unhandledRejection', e => console.error(e))
 process.on('uncaughtException', e => console.error(e))
 process.on('warning', e => console.warn(e))
 
-export { start, stop }
 export default { start, stop }

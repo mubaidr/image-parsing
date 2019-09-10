@@ -6,7 +6,7 @@ import KeyNativeEnum from './@enums/KeyNativeEnum'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { importExcelToJson } from './excel'
-import * as extractTask from './workers/workerExtract'
+import extractTask from './workers/workerExtract'
 
 const getQuestionsNeuralNet = (): brain.NeuralNetwork => {
   const text = fs.readFileSync(dataPaths.questionsModel).toString()
@@ -65,14 +65,15 @@ const readKey = async (src: string): Promise<Result[] | undefined> => {
   }
 
   const designData = getDesignData(dataPaths.designBarcode)
-
-  return extractTask.start(
+  const keys = await extractTask.start(
     {
       designData,
       imagePaths: [src],
     },
     false,
   )
+
+  return keys
 }
 
 export { convertToBitArray, getQuestionsNeuralNet, readKey }

@@ -82,7 +82,7 @@ const config = {
       '@': path.join(__dirname, '../src/'),
       src: path.join(__dirname, '../src/'),
     },
-    extensions: ['.ts', '.js', '.json'],
+    extensions: ['.ts', '.js', '.json', '.node'],
   },
   target: 'node',
 }

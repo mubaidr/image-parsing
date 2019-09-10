@@ -18,9 +18,7 @@ class WorkerManagerTrain extends WorkerManager {
     super(workerPath)
   }
 
-  public async process(
-    options: WorkerManagerInput,
-  ): Promise<WorkerManagerOutput> {
+  public process(options: WorkerManagerInput): WorkerManagerOutput {
     options.data.designData = getDesignData(
       options.designPath || dataPaths.designBarcode,
     )

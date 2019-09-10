@@ -26,7 +26,7 @@ async function start(
   if (!resultPath) throw 'Invalid resultPath...'
   if (!keyPath) throw 'Invalid keyPath...'
 
-  const sharpImage = getSharpObjectFromSource(keyPath).raw()
+  const sharpImage = getSharpObjectFromSource(keyPath)
   const compiledResult = CompiledResult.loadFromExcel(resultPath)
 
   const trainingData = await getQuestionsData(
@@ -34,12 +34,6 @@ async function start(
     sharpImage,
     compiledResult,
   )
-
-  if (process && process.send) {
-    process.send({
-      state: ProgressStateEnum.PROGRESS,
-    })
-  }
 
   const net = new brain.NeuralNetwork()
 
@@ -50,9 +44,9 @@ async function start(
     iterations: 100,
   })
 
-  // if (netOutput.error > 0.001) throw 'Unable to train...'
-
-  fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
+  if (process.env.NODE_ENV !== 'test') {
+    fs.writeFileSync(dataPaths.questionsModel, JSON.stringify(net.toJSON()))
+  }
 
   if (isChildProcess) {
     sendMessage({
@@ -81,5 +75,4 @@ process.on('unhandledRejection', e => console.error(e))
 process.on('uncaughtException', e => console.error(e))
 process.on('warning', e => console.warn(e))
 
-export { start, stop }
 export default { start, stop }

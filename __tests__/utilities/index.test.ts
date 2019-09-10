@@ -2,7 +2,8 @@
  * @jest-environment @zeromake/jest-environment-jsdom-with-canvas
  */
 
-// import Result from '../../src/utilities/@classes/Result'
+import { NeuralNetwork } from 'brain.js'
+
 import { dataPaths } from '../../src/utilities/dataPaths'
 import { getSharpObjectFromSource } from '../../src/utilities/images'
 import { convertToBitArray, getQuestionsNeuralNet, readKey } from '../../src/utilities/index'
@@ -29,7 +30,7 @@ describe('getQuestionsNeuralNet', () => {
 
   test('should return neural network json', async () => {
     const nnJson = getQuestionsNeuralNet()
-    expect(nnJson).toMatchSnapshot()
+    expect(nnJson).toBeInstanceOf(NeuralNetwork)
   })
 })
 

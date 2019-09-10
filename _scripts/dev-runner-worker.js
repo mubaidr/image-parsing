@@ -12,7 +12,6 @@ const {
   productName,
 } = require('../package.json')
 const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
-const isDevMode = process.env.NODE_ENV === 'development'
 const workers = process.argv
   .filter((item, index) => {
     return index > 1
@@ -37,8 +36,8 @@ fsGlob
 
 const config = {
   name: 'workers',
-  mode: 'none',
-  devtool: false,
+  mode: 'development',
+  devtool: 'cheap-module-eval-source-map',
   entry: entry,
   output: {
     libraryTarget: 'commonjs2',
@@ -71,8 +70,8 @@ const config = {
     ],
   },
   node: {
-    __dirname: isDevMode,
-    __filename: isDevMode,
+    __dirname: false,
+    __filename: false,
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -85,4 +84,6 @@ const config = {
   target: 'node',
 }
 
-webpack(config).run()
+webpack(config).run(err => {
+  if (err) console.error(err)
+})
