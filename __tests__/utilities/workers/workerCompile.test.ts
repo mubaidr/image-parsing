@@ -23,6 +23,7 @@ describe('workerCompile', () => {
 
     expect(result).toMatchSnapshot({
       id: expect.any(String),
+      imageFile: expect.anything(),
     })
   })
 })

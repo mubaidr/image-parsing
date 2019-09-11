@@ -26,6 +26,11 @@ async function start(
   if (!resultPath) throw 'Invalid resultPath...'
   if (!keyPath) throw 'Invalid keyPath...'
 
+  sendMessage({
+    state: ProgressStateEnum.ERROR,
+    data: msg,
+  })
+
   const sharpImage = getSharpObjectFromSource(keyPath)
   const compiledResult = CompiledResult.loadFromExcel(resultPath)
 

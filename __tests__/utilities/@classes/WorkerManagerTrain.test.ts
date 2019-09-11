@@ -1,5 +1,4 @@
 import childProcess from 'child_process'
-import treeKill from 'tree-kill'
 
 import WorkerManagerTrain from '../../../src/utilities/@classes/WorkerManagerTrain'
 import { dataPaths } from '../../../src/utilities/dataPaths'
@@ -18,7 +17,6 @@ describe('WorkerManagerTrain', () => {
   const wm = new WorkerManagerTrain()
 
   test('should initiate successfuly', async () => {
-    /*
     expect.assertions(5)
 
     return new Promise((resolve): void => {
@@ -31,31 +29,26 @@ describe('WorkerManagerTrain', () => {
         expect(onerror).toHaveBeenCalledTimes(0)
         expect(onsuccess).toHaveBeenCalledTimes(1)
 
-        wm.workers.forEach(worker => {
-          treeKill(worker.pid)
-        })
-
         resolve()
       })
 
-      wm.process({
+      const { totalWorkers, totalOutput } = wm.process({
         designPath: dataPaths.designBarcode,
         data: {
           designData,
           resultPath: dataPaths.result,
-          keyPath: dataPaths.key,
+          keyPath: dataPaths.keyImage,
         },
         callbacks: {
-          onsuccess,
-          onerror,
-          onprogress,
+          onsuccess: console.info,
+          onerror: console.error,
+          onprogress: console.info,
+          onlog: console.log,
         },
-      }).then(({ totalWorkers, totalOutput }) => {
-        expect(totalWorkers).toBe(1)
-        expect(totalOutput).toBe(1)
       })
-    })
 
-  */
+      expect(totalWorkers).toBe(1)
+      expect(totalOutput).toBe(1)
+    })
   })
 })

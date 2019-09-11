@@ -366,7 +366,7 @@ Object {
   },
   "correctCount": 0,
   "id": Any<String>,
-  "imageFile": "D:/current/image-parsing/_test_data/images-barcode/10023.jpg",
+  "imageFile": Anything,
   "incorrectCount": 0,
   "isCompiled": false,
   "isRollNoExtracted": true,

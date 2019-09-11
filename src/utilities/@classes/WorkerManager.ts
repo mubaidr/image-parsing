@@ -25,7 +25,6 @@ class WorkerManager {
     for (let i = 0; i < count; i += 1) {
       const worker = childProcess.fork(this.workerPath, [], {
         silent: true,
-        stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
       })
 
       this.workers.push(worker)
@@ -62,6 +61,8 @@ class WorkerManager {
           data: any[]
         }) => {
           const { state, timeElapsed, workerType, data } = message
+
+          console.log(message)
 
           if (state === ProgressStateEnum.PROGRESS) {
             return callbacks.onprogress({ timeElapsed })
@@ -135,6 +136,8 @@ class WorkerManager {
         callbacks.onerror({
           error: err,
         })
+
+        this.stop()
       })
 
       if (worker.stdout) {
@@ -152,6 +155,8 @@ class WorkerManager {
           callbacks.onerror({
             error: data.toString(),
           })
+
+          this.stop()
         })
       }
     })

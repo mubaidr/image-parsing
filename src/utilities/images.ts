@@ -45,8 +45,12 @@ const convertImage = async (src: string): Promise<string> => {
   return url
 }
 
-const logImageData = (src: string | Sharp, name?: string): void => {
+const logImageData = async (
+  src: string | Sharp,
+  name?: string,
+): Promise<string> => {
   let img: Sharp
+  const target = path.join(dataPaths.tmp, `${name || uuid()}.jpg`)
 
   if (typeof src === 'string') {
     img = getSharpObjectFromSource(src)
@@ -54,7 +58,9 @@ const logImageData = (src: string | Sharp, name?: string): void => {
     img = src.clone()
   }
 
-  img.jpeg().toFile(path.join(dataPaths.tmp, `${name || uuid()}.jpg`))
+  await img.jpeg().toFile(target)
+
+  return target
 }
 
 const getImagePaths = async (dir: string): Promise<string[]> => {

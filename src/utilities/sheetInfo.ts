@@ -29,7 +29,7 @@ const getRollNoFromImage = async (
   // log image
   // logImageData(img)
 
-  const data = await img.toBuffer()
+  const data = await img.ensureAlpha().toBuffer()
   let rollNo: string | undefined
 
   try {

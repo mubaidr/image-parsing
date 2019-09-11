@@ -11,7 +11,14 @@ import { convertToBitArray, getQuestionsNeuralNet, readKey } from '../../src/uti
 describe('convertToBitArray', () => {
   test('should be able to convert to bit data array', async () => {
     const sharpImg = getSharpObjectFromSource(dataPaths.keyImage)
-    const { data, info } = await sharpImg.toBuffer({ resolveWithObject: true })
+    const { data, info } = await sharpImg
+      .extract({
+        left: 0,
+        top: 0,
+        width: 100,
+        height: 100,
+      })
+      .toBuffer({ resolveWithObject: true })
 
     const bitData = convertToBitArray(
       Array.prototype.slice.call(data, 0),
@@ -40,9 +47,9 @@ describe('readKey', () => {
     if (!results) return
 
     expect(results.length).toBeGreaterThanOrEqual(1)
-
-    results.forEach(result => {
-      expect(result).toMatchSnapshot({ id: expect.any(String) })
+    expect(results[0]).toMatchSnapshot({
+      id: expect.any(String),
+      // imageFile: expect.any(String) || undefined,
     })
   })
 
@@ -50,9 +57,10 @@ describe('readKey', () => {
     const results = await readKey(dataPaths.keyImage)
     if (!results) return
 
-    expect(results.length).toBeGreaterThanOrEqual(1)
-    results.forEach(result => {
-      expect(result).toMatchSnapshot({ id: expect.any(String) })
+    expect(results.length).toBe(1)
+    expect(results[0]).toMatchSnapshot({
+      id: expect.any(String),
+      imageFile: expect.anything(),
     })
   })
 })

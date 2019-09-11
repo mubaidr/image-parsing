@@ -1,5 +1,4 @@
 import childProcess from 'child_process'
-import treeKill from 'tree-kill'
 
 import WorkerManagerExtract from '../../../src/utilities/@classes/WorkerManagerExtract'
 import { dataPaths } from '../../../src/utilities/dataPaths'
@@ -30,10 +29,6 @@ describe('WorkerManagerExtract', () => {
         expect(onerror).toHaveBeenCalledTimes(0)
         expect(onprogress).toHaveBeenCalled()
         expect(onsuccess).toHaveBeenCalledTimes(1)
-
-        wm.workers.forEach(worker => {
-          treeKill(worker.pid)
-        })
 
         resolve()
       })

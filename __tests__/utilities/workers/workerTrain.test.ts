@@ -1,5 +1,3 @@
-import { existsSync } from 'fs'
-
 import { dataPaths } from '../../../src/utilities/dataPaths'
 import { getDesignData } from '../../../src/utilities/design'
 import workerTrain from '../../../src/utilities/workers/workerTrain'
@@ -21,7 +19,6 @@ describe('workerTrain', () => {
 
     if (nnState) {
       expect(nnState.error).toBeLessThanOrEqual(0.001)
-      expect(existsSync(dataPaths.questionsModel)).toBeTruthy()
     }
   })
 })

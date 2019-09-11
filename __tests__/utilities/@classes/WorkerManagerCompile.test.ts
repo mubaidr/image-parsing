@@ -1,5 +1,4 @@
 import childProcess from 'child_process'
-import treeKill from 'tree-kill'
 
 import WorkerManagerCompile from '../../../src/utilities/@classes/WorkerManagerCompile'
 import { dataPaths } from '../../../src/utilities/dataPaths'
@@ -31,10 +30,6 @@ describe('WorkerManagerCompile', () => {
         expect(onprogress).toHaveBeenCalled()
         expect(onsuccess).toHaveBeenCalledTimes(1)
 
-        wm.workers.forEach(worker => {
-          treeKill(worker.pid)
-        })
-
         resolve()
       })
 
@@ -51,6 +46,7 @@ describe('WorkerManagerCompile', () => {
           onsuccess,
           onerror,
           onprogress,
+          onlog: console.log,
         },
       }).then(({ totalWorkers, totalOutput }) => {
         expect(totalWorkers).toBeGreaterThanOrEqual(1)
