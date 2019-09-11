@@ -22,15 +22,18 @@ describe('WorkerManagerTrain', () => {
     return new Promise((resolve): void => {
       const designData = getDesignData(dataPaths.designBarcode)
 
-      // const onerror = jest.fn()
-      // const onprogress = jest.fn()
-      // const onsuccess = jest.fn(() => {
-      //   expect(wm.getWorkerCount()).toBeGreaterThanOrEqual(1)
-      //   expect(onerror).toHaveBeenCalledTimes(0)
-      //   expect(onsuccess).toHaveBeenCalledTimes(1)
+      const onerror = jest.fn(err => {
+        fail(err)
+        wm.stop()
+      })
+      const onprogress = jest.fn()
+      const onsuccess = jest.fn(() => {
+        expect(wm.getWorkerCount()).toBeGreaterThanOrEqual(1)
+        expect(onprogress).not.toHaveBeenCalled()
+        expect(onsuccess).toHaveBeenCalledTimes(1)
 
-      //   resolve()
-      // })
+        resolve()
+      })
 
       const { totalWorkers, totalOutput } = wm.process({
         designPath: dataPaths.designBarcode,
@@ -40,11 +43,9 @@ describe('WorkerManagerTrain', () => {
           keyPath: dataPaths.keyImage,
         },
         callbacks: {
-          onsuccess: console.info,
-          onerror: (data): void => {
-            console.error(data)
-          },
-          onprogress: console.info,
+          onsuccess,
+          onprogress,
+          onerror,
         },
       })
 

@@ -17,16 +17,18 @@ describe('WorkerManagerCompile', () => {
   const wm = new WorkerManagerCompile()
 
   test('should initiate successfuly', async () => {
-    expect.assertions(6)
+    expect.assertions(5)
 
     return new Promise((resolve): void => {
       const designData = getDesignData(dataPaths.designBarcode)
 
-      const onerror = jest.fn()
+      const onerror = jest.fn(err => {
+        fail(err)
+        wm.stop()
+      })
       const onprogress = jest.fn()
       const onsuccess = jest.fn(() => {
         expect(wm.getWorkerCount()).toBeGreaterThanOrEqual(1)
-        expect(onerror).toHaveBeenCalledTimes(0)
         expect(onprogress).toHaveBeenCalled()
         expect(onsuccess).toHaveBeenCalledTimes(1)
 
@@ -46,7 +48,6 @@ describe('WorkerManagerCompile', () => {
           onsuccess,
           onerror,
           onprogress,
-          onlog: console.log,
         },
       }).then(({ totalWorkers, totalOutput }) => {
         expect(totalWorkers).toBeGreaterThanOrEqual(1)

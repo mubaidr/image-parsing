@@ -7,9 +7,6 @@ import Callbacks from '../@interfaces/Callbacks'
 import CompiledResult from './CompiledResult'
 import Result from './Result'
 
-const isDev =
-  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
-
 class WorkerManager {
   private completed = 0
   private data: object[] = []
@@ -106,12 +103,15 @@ class WorkerManager {
       )
 
       worker.on('exit', (code, signal) => {
-        if (callbacks.onexit) callbacks.onexit(null)
-
-        if (isDev)
+        if (process.env.NODE_ENV === 'development') {
           console.info(
             `child_process exited. code: ${code || 0}, signal: ${signal}`,
           )
+        }
+
+        if (callbacks.onexit) callbacks.onexit(null)
+
+        this.stop()
       })
 
       worker.on('error', err => {
