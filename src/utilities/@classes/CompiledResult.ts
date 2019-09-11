@@ -112,8 +112,8 @@ class CompiledResult {
   }
 
   public compile(marks?: number, negativeMarks?: number): CompiledResult {
-    if (this.keys.length === 0) throw 'Keys not loaded'
-    if (this.results.length === 0) throw 'Results not loaded'
+    if (this.keys.length === 0) throw new Error('Keys not loaded')
+    if (this.results.length === 0) throw new Error('Results not loaded')
 
     for (let i = 0; i < this.keys.length; i += 1) {
       for (let j = 0; j < this.results.length; j += 1) {

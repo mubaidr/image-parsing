@@ -14,10 +14,10 @@ function sendMessage(obj: WorkerOutput): void {
 function start(msg: WorkerInput, isChildProcess: boolean): undefined {
   const { designData, results, imagesDirectory, exportDirectory } = msg
 
-  if (!designData) throw 'Invalid results...'
-  if (!results) throw 'Invalid results...'
-  if (!imagesDirectory) throw 'Invalid imagesDirectory...'
-  if (!exportDirectory) throw 'Invalid exportDirectory...'
+  if (!designData) throw new Error('Invalid results...')
+  if (!results) throw new Error('Invalid results...')
+  if (!imagesDirectory) throw new Error('Invalid imagesDirectory...')
+  if (!exportDirectory) throw new Error('Invalid exportDirectory...')
 
   console.log(designData, results, imagesDirectory, exportDirectory)
 
@@ -53,8 +53,20 @@ process.on('message', (msg: WorkerInput) => {
   }
 })
 
-process.on('unhandledRejection', e => console.error(e))
-process.on('uncaughtException', e => console.error(e))
-process.on('warning', e => console.warn(e))
+process.on('unhandledRejection', (error, promise) => {
+  console.error(error, promise)
+
+  stop()
+})
+
+process.on('uncaughtException', error => {
+  console.error(error)
+
+  stop()
+})
+
+process.on('warning', warning => {
+  console.warn(warning)
+})
 
 export default { start, stop }

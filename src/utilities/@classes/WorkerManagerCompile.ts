@@ -25,10 +25,10 @@ class WorkerManagerCompile extends WorkerManager {
     const { callbacks, data } = options
     const { resultPath, keyPath, correctMarks, incorrectMarks } = data
 
-    if (!resultPath) throw 'Invalid resultPath...'
-    if (!keyPath) throw 'Invalid keyPath...'
-    if (!correctMarks) throw 'Invalid correctMarks...'
-    if (!incorrectMarks) throw 'Invalid incorrectMarks...'
+    if (!resultPath) throw new Error('Invalid resultPath...')
+    if (!keyPath) throw new Error('Invalid keyPath...')
+    if (!correctMarks) throw new Error('Invalid correctMarks...')
+    if (!incorrectMarks) throw new Error('Invalid incorrectMarks...')
 
     const results = CompiledResult.loadFromExcel(resultPath).getResults()
     const keys = await readKey(keyPath)

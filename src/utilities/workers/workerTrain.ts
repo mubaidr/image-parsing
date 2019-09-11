@@ -22,14 +22,9 @@ async function start(
 ): Promise<INeuralNetworkState | undefined> {
   const { designData, resultPath, keyPath } = msg
 
-  if (!designData) throw 'Invalid designData...'
-  if (!resultPath) throw 'Invalid resultPath...'
-  if (!keyPath) throw 'Invalid keyPath...'
-
-  sendMessage({
-    state: ProgressStateEnum.ERROR,
-    data: msg,
-  })
+  if (!designData) throw new Error('Invalid designData...')
+  if (!resultPath) throw new Error('Invalid resultPath...')
+  if (!keyPath) throw new Error('Invalid keyPath...')
 
   const sharpImage = getSharpObjectFromSource(keyPath)
   const compiledResult = CompiledResult.loadFromExcel(resultPath)
@@ -76,8 +71,20 @@ process.on('message', (msg: WorkerInput) => {
   }
 })
 
-process.on('unhandledRejection', e => console.error(e))
-process.on('uncaughtException', e => console.error(e))
-process.on('warning', e => console.warn(e))
+process.on('unhandledRejection', (error, promise) => {
+  console.error(error, promise)
+
+  stop()
+})
+
+process.on('uncaughtException', error => {
+  console.error(error)
+
+  stop()
+})
+
+process.on('warning', warning => {
+  console.warn(warning)
+})
 
 export default { start, stop }

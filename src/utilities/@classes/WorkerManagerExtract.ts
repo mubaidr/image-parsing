@@ -30,7 +30,7 @@ class WorkerManagerExtract extends WorkerManager {
     const { callbacks, data } = options
     const { designData, imagesDirectory } = data
 
-    if (!imagesDirectory) throw 'Invalid imagesDirectory...'
+    if (!imagesDirectory) throw new Error('Invalid imagesDirectory...')
 
     const totalImages = await getImagePaths(imagesDirectory)
     const totalWorkers = Math.min(totalImages.length, noOfCores)

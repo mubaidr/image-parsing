@@ -6,7 +6,7 @@ import { getDesignData } from '../../../src/utilities/design'
 
 beforeAll(() => {
   childProcess.execSync('node _scripts/dev-runner-worker.js extract')
-  jest.setTimeout(30000)
+  jest.setTimeout(15000)
 })
 
 afterAll(() => {

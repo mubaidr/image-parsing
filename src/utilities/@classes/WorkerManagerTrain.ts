@@ -27,8 +27,8 @@ class WorkerManagerTrain extends WorkerManager {
     const { designData, resultPath, keyPath } = data
     const totalWorkers = 1
 
-    if (!resultPath) throw 'Invalid resultPath...'
-    if (!keyPath) throw 'Invalid keyPath...'
+    if (!resultPath) throw new Error('Invalid resultPath...')
+    if (!keyPath) throw new Error('Invalid keyPath...')
 
     this.createWorkers(totalWorkers)
     this.addWorkerHandlers(callbacks)

@@ -17,8 +17,8 @@ function start(
 ): CompiledResult | undefined {
   const { results, keys, correctMarks, incorrectMarks } = msg
 
-  if (!results) throw 'Invalid results...'
-  if (!keys) throw 'Invalid keys...'
+  if (!results) throw new Error('Invalid results...')
+  if (!keys) throw new Error('Invalid keys...')
 
   const compiledResult = new CompiledResult()
 
@@ -60,8 +60,20 @@ process.on('message', (msg: WorkerInput) => {
   }
 })
 
-process.on('unhandledRejection', e => console.error(e))
-process.on('uncaughtException', e => console.error(e))
-process.on('warning', e => console.warn(e))
+process.on('unhandledRejection', (error, promise) => {
+  console.error(error, promise)
+
+  stop()
+})
+
+process.on('uncaughtException', error => {
+  console.error(error)
+
+  stop()
+})
+
+process.on('warning', warning => {
+  console.warn(warning)
+})
 
 export default { start, stop }

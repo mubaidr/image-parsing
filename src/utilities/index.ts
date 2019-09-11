@@ -51,7 +51,7 @@ const convertToBitArray = (data: number[], channels: number): number[] => {
 const readKey = async (src: string): Promise<Result[] | undefined> => {
   const ext = src.split('.').pop()
 
-  if (ext === undefined) throw 'Invalid path specified'
+  if (ext === undefined) throw new Error('Invalid path specified')
 
   if (ext in KeyNativeEnum) {
     const rows = importExcelToJson(src)

@@ -1,13 +1,9 @@
 interface Callbacks {
-  onprogress: (data: object) => void
-  onsuccess: (data: object) => void
-  onerror: (data: object) => void
-  onstart?: (data: object) => void
-  onwarning?: (data: object) => void
-  onclose?: (data: object) => void
-  onexit?: (data: object) => void
-  onlog?: (data: object) => void
-  ondisconnect?: (data: object) => void
+  onprogress: (data: any) => void
+  onsuccess: (data: any) => void
+  onerror: (data: any) => void
+  onstart?: (data: any) => void
+  onexit?: (data: any) => void
 }
 
 export default Callbacks

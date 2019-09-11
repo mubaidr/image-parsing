@@ -6,7 +6,7 @@ import { getDesignData } from '../../../src/utilities/design'
 
 beforeAll(() => {
   childProcess.execSync('node _scripts/dev-runner-worker.js train')
-  jest.setTimeout(30000)
+  jest.setTimeout(15000)
 })
 
 afterAll(() => {
@@ -22,28 +22,29 @@ describe('WorkerManagerTrain', () => {
     return new Promise((resolve): void => {
       const designData = getDesignData(dataPaths.designBarcode)
 
-      const onerror = jest.fn()
-      const onprogress = jest.fn()
-      const onsuccess = jest.fn(() => {
-        expect(wm.getWorkerCount()).toBeGreaterThanOrEqual(1)
-        expect(onerror).toHaveBeenCalledTimes(0)
-        expect(onsuccess).toHaveBeenCalledTimes(1)
+      // const onerror = jest.fn()
+      // const onprogress = jest.fn()
+      // const onsuccess = jest.fn(() => {
+      //   expect(wm.getWorkerCount()).toBeGreaterThanOrEqual(1)
+      //   expect(onerror).toHaveBeenCalledTimes(0)
+      //   expect(onsuccess).toHaveBeenCalledTimes(1)
 
-        resolve()
-      })
+      //   resolve()
+      // })
 
       const { totalWorkers, totalOutput } = wm.process({
         designPath: dataPaths.designBarcode,
         data: {
           designData,
-          resultPath: dataPaths.result,
+          resultPath: dataPaths.key,
           keyPath: dataPaths.keyImage,
         },
         callbacks: {
           onsuccess: console.info,
-          onerror: console.error,
+          onerror: (data): void => {
+            console.error(data)
+          },
           onprogress: console.info,
-          onlog: console.log,
         },
       })
 

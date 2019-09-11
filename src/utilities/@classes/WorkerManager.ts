@@ -7,6 +7,9 @@ import Callbacks from '../@interfaces/Callbacks'
 import CompiledResult from './CompiledResult'
 import Result from './Result'
 
+const isDev =
+  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+
 class WorkerManager {
   private completed = 0
   private data: object[] = []
@@ -58,20 +61,24 @@ class WorkerManager {
           state: ProgressStateEnum
           timeElapsed: number
           workerType: WorkerTypes
-          data: any[]
+          data: any
         }) => {
           const { state, timeElapsed, workerType, data } = message
 
-          console.log(message)
-
           if (state === ProgressStateEnum.PROGRESS) {
-            return callbacks.onprogress({ timeElapsed })
+            callbacks.onprogress({ timeElapsed })
+
+            return
           }
 
           if (state === ProgressStateEnum.COMPLETED) {
             this.completed += 1
 
-            if (data) this.data.push(...data)
+            if (data) {
+              if (data.length) this.data.push(...data)
+              else this.data.push(data)
+            }
+
             if (this.completed !== this.getWorkerCount()) return
 
             if (
@@ -98,63 +105,30 @@ class WorkerManager {
         },
       )
 
-      worker.on('disconnect', () => {
-        if (callbacks.ondisconnect) {
-          callbacks.ondisconnect({})
-        }
-      })
-
       worker.on('exit', (code, signal) => {
-        if (code) {
-          return callbacks.onerror({
-            error: new Error('worker exit unexpectedly'),
-            code,
-            signal,
-          })
-        }
+        if (callbacks.onexit) callbacks.onexit(null)
 
-        if (callbacks.onexit) {
-          callbacks.onexit({ code: code || 0, signal: signal })
-        }
-      })
-
-      worker.on('close', (code, signal) => {
-        if (code) {
-          return callbacks.onerror({
-            error: new Error('worker exit unexpectedly'),
-            code,
-            signal,
-          })
-        }
-
-        if (callbacks.onclose) {
-          callbacks.onclose({ code: code || 0, signal: signal })
-        }
+        if (isDev)
+          console.info(
+            `child_process exited. code: ${code || 0}, signal: ${signal}`,
+          )
       })
 
       worker.on('error', err => {
-        callbacks.onerror({
-          error: err,
-        })
+        callbacks.onerror(err)
 
         this.stop()
       })
 
       if (worker.stdout) {
         worker.stdout.on('data', (data: Buffer) => {
-          if (callbacks.onlog) {
-            callbacks.onlog({
-              data: data.toString(),
-            })
-          }
+          console.log(data.toString())
         })
       }
 
       if (worker.stderr) {
         worker.stderr.on('data', (data: Buffer) => {
-          callbacks.onerror({
-            error: data.toString(),
-          })
+          callbacks.onerror(data.toString())
 
           this.stop()
         })

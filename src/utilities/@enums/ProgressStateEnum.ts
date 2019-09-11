@@ -4,6 +4,7 @@ enum ProgressStateEnum {
   PROGRESS = 'PROGRESS',
   COMPLETED = 'COMPLETED',
   ERROR = 'ERROR',
+  WARNING = 'WARNING',
 }
 
 export default ProgressStateEnum

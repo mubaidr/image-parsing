@@ -34,9 +34,9 @@ class WorkerManagerGenerateTestData extends WorkerManager {
       percentOfFiles,
     } = data
 
-    if (!resultPath) throw 'Invalid resultPath...'
-    if (!imagesDirectory) throw 'Invalid imagesDirectory...'
-    if (!exportDirectory) throw 'Invalid exportDirectory...'
+    if (!resultPath) throw new Error('Invalid resultPath...')
+    if (!imagesDirectory) throw new Error('Invalid imagesDirectory...')
+    if (!exportDirectory) throw new Error('Invalid exportDirectory...')
 
     const results = CompiledResult.loadFromExcel(resultPath).getRandomResults(
       percentOfFiles,
