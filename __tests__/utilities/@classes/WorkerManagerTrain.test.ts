@@ -14,17 +14,16 @@ afterAll(() => {
 })
 
 describe('WorkerManagerTrain', () => {
-  const wm = new WorkerManagerTrain()
-
   test('should initiate successfuly', async () => {
     expect.assertions(5)
 
     return new Promise((resolve): void => {
+      const wm = new WorkerManagerTrain()
       const designData = getDesignData(dataPaths.designBarcode)
 
       const onerror = jest.fn(err => {
-        fail(err)
         wm.stop()
+        fail(err)
       })
       const onprogress = jest.fn()
       const onsuccess = jest.fn(() => {

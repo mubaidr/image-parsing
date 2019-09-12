@@ -14,7 +14,7 @@ function sendMessage(obj: WorkerOutput): void {
 function start(msg: WorkerInput, isChildProcess: boolean): undefined {
   const { designData, results, imagesDirectory, exportDirectory } = msg
 
-  if (!designData) throw new Error('Invalid results...')
+  if (!designData) throw new Error('Invalid designData...')
   if (!results) throw new Error('Invalid results...')
   if (!imagesDirectory) throw new Error('Invalid imagesDirectory...')
   if (!exportDirectory) throw new Error('Invalid exportDirectory...')

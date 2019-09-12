@@ -117,12 +117,6 @@ const config = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      excludeChunks: [
-        'extractTaskWorker',
-        'generateAnswerSheetsTaskWorker',
-        'generateTestDataTaskWorker',
-        'trainTaskWorker',
-      ],
       filename: 'index.html',
       template: path.resolve(__dirname, '../src/index.ejs'),
       isDevMode,
@@ -134,9 +128,6 @@ const config = {
     new VueLoaderPlugin(),
     new webpack.DefinePlugin({
       'process.env.PRODUCT_NAME': JSON.stringify(productName),
-    }),
-    new ForkTsCheckerWebpackPlugin({
-      eslint: true,
     }),
   ],
   resolve: {
@@ -158,6 +149,9 @@ if (isDevMode) {
     new webpack.HotModuleReplacementPlugin(),
     new BundleAnalyzerPlugin({
       openAnalyzer: false,
+    }),
+    new ForkTsCheckerWebpackPlugin({
+      eslint: true,
     }),
   )
 } else {

@@ -64,6 +64,8 @@ const readKey = async (src: string): Promise<Result[] | undefined> => {
     return results
   }
 
+  console.log('yehn group is here.... !!!!')
+
   const designData = getDesignData(dataPaths.designBarcode)
   const keys = await extractTask.start(
     {

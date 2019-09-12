@@ -27,8 +27,8 @@ process.on('message', msg => {
   }
 })
 
-process.on('unhandledRejection', (error, promise) => {
-  console.error(error, promise)
+process.on('unhandledRejection', error => {
+  console.error(error)
 
   stop()
 })

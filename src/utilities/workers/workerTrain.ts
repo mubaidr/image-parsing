@@ -71,8 +71,8 @@ process.on('message', (msg: WorkerInput) => {
   }
 })
 
-process.on('unhandledRejection', (error, promise) => {
-  console.error(error, promise)
+process.on('unhandledRejection', error => {
+  console.error(error)
 
   stop()
 })

@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const TerserJSPlugin = require('terser-webpack-plugin')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const {
@@ -52,9 +53,6 @@ const config = {
     new webpack.DefinePlugin({
       'process.env.PRODUCT_NAME': JSON.stringify(productName),
     }),
-    new ForkTsCheckerWebpackPlugin({
-      eslint: true,
-    }),
   ],
   output: {
     filename: '[name].js',
@@ -71,7 +69,16 @@ const config = {
   target: 'electron-main',
 }
 
-if (!isDevMode) {
+if (isDevMode) {
+  config.plugins.push(
+    new BundleAnalyzerPlugin({
+      openAnalyzer: false,
+    }),
+    new ForkTsCheckerWebpackPlugin({
+      eslint: true,
+    }),
+  )
+} else {
   config.optimization = {
     minimizer: [new TerserJSPlugin({})],
   }

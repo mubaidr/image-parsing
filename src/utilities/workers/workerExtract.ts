@@ -22,8 +22,8 @@ async function start(
 ): Promise<Result[] | undefined> {
   const { designData, imagePaths } = msg
 
-  if (!designData) throw new Error('Invalid design data...')
-  if (!imagePaths) throw new Error('Invalid imagesDirectory...')
+  if (!designData) throw new Error('Invalid designData...')
+  if (!imagePaths) throw new Error('Invalid imagePaths...')
 
   const neuralNet = getQuestionsNeuralNet()
   const results: Result[] = []
@@ -100,8 +100,8 @@ process.on('message', (msg: WorkerInput) => {
   }
 })
 
-process.on('unhandledRejection', (error, promise) => {
-  console.error(error, promise)
+process.on('unhandledRejection', error => {
+  console.error(error)
 
   stop()
 })

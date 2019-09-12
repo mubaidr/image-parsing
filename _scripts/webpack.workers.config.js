@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const fsGlob = require('fast-glob')
 const TerserJSPlugin = require('terser-webpack-plugin')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const {
@@ -17,7 +18,7 @@ const rootPath = path
   .join(__dirname, '../src/utilities/workers/', '*.ts')
   .replace(/\\/g, '/')
 
-const entries = {}
+const entry = {}
 
 fsGlob
   .sync(rootPath, {
@@ -27,14 +28,14 @@ fsGlob
   .forEach(workerPath => {
     const split = workerPath.split('/')
 
-    entries[split[split.length - 1].split('.')[0]] = workerPath
+    entry[split[split.length - 1].split('.')[0]] = workerPath
   })
 
 const config = {
   name: 'workers',
   mode: process.env.NODE_ENV,
   devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
-  entry: entries,
+  entry: entry,
   output: {
     libraryTarget: 'commonjs2',
     path: path.join(__dirname, '../dist/workers/'),
@@ -73,9 +74,6 @@ const config = {
     new webpack.DefinePlugin({
       'process.env.PRODUCT_NAME': JSON.stringify(productName),
     }),
-    new ForkTsCheckerWebpackPlugin({
-      eslint: true,
-    }),
   ],
   resolve: {
     alias: {
@@ -87,7 +85,16 @@ const config = {
   target: 'node',
 }
 
-if (!isDevMode) {
+if (isDevMode) {
+  config.plugins.push(
+    new BundleAnalyzerPlugin({
+      openAnalyzer: false,
+    }),
+    new ForkTsCheckerWebpackPlugin({
+      eslint: true,
+    }),
+  )
+} else {
   config.optimization = {
     minimizer: [new TerserJSPlugin({})],
   }

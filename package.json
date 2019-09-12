@@ -116,9 +116,10 @@
     "prettier": "prettier --write \"{src,_scripts}/**/*.{js,ts,vue}\"",
     "release": "build",
     "test": "run-s install-native-dep pack:workers jest",
-    "test-code": "nodemon src/utilities/_test/index.ts",
     "test:watch": "run-s install-native-dep pack:workers jest:watch",
-    "typesync": "typesync --ignoredeps=dev"
+    "typesync": "typesync --ignoredeps=dev",
+    "webpack:analyze": "cross-env NODE_ENV=production webpack --config _scripts/webpack.workers.config.js  --profile --json > webpack-stats.json && whybundled webpack-stats.json"
   },
+  "sideEffects": false,
   "version": "0.0.1"
 }

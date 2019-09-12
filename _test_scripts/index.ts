@@ -18,7 +18,6 @@ async function start() {
       onsuccess: console.info,
       onerror: console.error,
       onprogress: console.info,
-      onlog: console.log,
     },
   })
 
