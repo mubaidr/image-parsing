@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const TerserJSPlugin = require('terser-webpack-plugin')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const {
@@ -71,9 +70,6 @@ const config = {
 
 if (isDevMode) {
   config.plugins.push(
-    new BundleAnalyzerPlugin({
-      openAnalyzer: false,
-    }),
     new ForkTsCheckerWebpackPlugin({
       eslint: true,
     }),
