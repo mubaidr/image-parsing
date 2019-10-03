@@ -4,9 +4,11 @@
 
 import { NeuralNetwork } from 'brain.js'
 
+import { convertToBitArray } from '../../src/utilities/convertToBitArray'
 import { dataPaths } from '../../src/utilities/dataPaths'
+import { getQuestionsNeuralNet } from '../../src/utilities/getQuestionsNeuralNet'
 import { getSharpObjectFromSource } from '../../src/utilities/images'
-import { convertToBitArray, getQuestionsNeuralNet, readKey } from '../../src/utilities/index'
+import { readKey } from '../../src/utilities/readKey'
 
 describe('convertToBitArray', () => {
   test('should be able to convert to bit data array', async () => {

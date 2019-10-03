@@ -3,7 +3,7 @@ import path from 'path'
 import CompiledResult from '../../../src/utilities/@classes/CompiledResult'
 import Result from '../../../src/utilities/@classes/Result'
 import { dataPaths } from '../../../src/utilities/dataPaths'
-import { readKey } from '../../../src/utilities/index'
+import { readKey } from '../../../src/utilities/readKey'
 
 describe('Result', () => {
   test('should be defined', () => {

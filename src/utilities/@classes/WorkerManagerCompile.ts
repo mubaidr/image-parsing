@@ -3,7 +3,7 @@ import noOfCores from 'physical-cpu-count'
 
 import WorkerManagerInput from '../@interfaces/WorkerManagerInput'
 import WorkerManagerOutput from '../@interfaces/WorkerManagerOutput'
-import { readKey } from '../index'
+import { readKey } from '../readKey'
 import CompiledResult from './CompiledResult'
 import WorkerManager from './WorkerManager'
 

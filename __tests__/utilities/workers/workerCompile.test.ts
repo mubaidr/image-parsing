@@ -1,4 +1,4 @@
-import { readKey } from '../../../src/utilities'
+import { readKey } from '../../../src/readKey'
 import CompiledResult from '../../../src/utilities/@classes/CompiledResult'
 import { dataPaths } from '../../../src/utilities/dataPaths'
 import { getDesignData } from '../../../src/utilities/design'

@@ -4,8 +4,7 @@ import CompiledResult from './@classes/CompiledResult'
 import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
 import DesignData from './@interfaces/DesignData'
 import QuestionData from './@interfaces/QuestionData'
-// import { logImageData } from './images'
-import { convertToBitArray } from './index'
+import { convertToBitArray } from './convertToBitArray'
 
 const getQuestionsData = async (
   design: DesignData,

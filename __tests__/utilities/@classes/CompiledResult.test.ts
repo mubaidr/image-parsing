@@ -1,6 +1,6 @@
 import CompiledResult from '../../../src/utilities/@classes/CompiledResult'
 import { dataPaths } from '../../../src/utilities/dataPaths'
-import { readKey } from '../../../src/utilities/index'
+import { readKey } from '../../../src/utilities/readKey'
 
 describe('CompiledResult', () => {
   test('should be defined', () => {
