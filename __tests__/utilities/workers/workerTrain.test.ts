@@ -17,8 +17,9 @@ describe('workerTrain', () => {
       false,
     )
 
-    if (nnState) {
-      expect(nnState.error).toBeLessThanOrEqual(0.001)
-    }
+    if (!nnState) return fail()
+
+    expect(nnState.error).toBeLessThanOrEqual(0.001)
+
   })
 })

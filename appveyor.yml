@@ -1,6 +1,9 @@
 image: Visual Studio 2019
 
+os: unstable
+
 platform:
+  - x86
   - x64
 
 cache:
@@ -17,4 +20,4 @@ install:
 build_script:
   - npm run build
 
-test: 'off'
+test: "off"

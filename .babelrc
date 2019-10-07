@@ -8,8 +8,8 @@
       "@babel/env",
       {
         "targets": {
-          "chrome": "76",
-          "node": "12.4.0"
+          "chrome": "78",
+          "node": "12.8.1"
         }
       }
     ]
