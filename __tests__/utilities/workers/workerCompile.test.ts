@@ -20,7 +20,6 @@ describe('workerCompile', () => {
     )
 
     const result = compiledResult ? compiledResult.getResults()[0] : {}
-
     expect(result).toMatchSnapshot({
       id: expect.any(String),
       imageFile: expect.anything(),

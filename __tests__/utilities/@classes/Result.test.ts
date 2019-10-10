@@ -134,6 +134,9 @@ describe('Result', () => {
     const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
     const result = compiledResult.getResults().reverse()[0]
 
+    expect(result.hasValidRollNo()).toBeTruthy()
+    expect(result.hasImageFile()).toBeTruthy()
+
     const o = result.toJson()
 
     expect(o).toMatchSnapshot()
