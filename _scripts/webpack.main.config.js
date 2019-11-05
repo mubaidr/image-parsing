@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const TerserJSPlugin = require('terser-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const {
   dependencies,
@@ -78,6 +79,15 @@ if (isDevMode) {
   config.optimization = {
     minimizer: [new TerserJSPlugin({})],
   }
+
+  config.plugins.push(
+    new CopyWebpackPlugin([
+      {
+        from: path.join(__dirname, '../src/data'),
+        to: path.join(__dirname, '../dist/data'),
+      },
+    ]),
+  )
 }
 
 module.exports = config
