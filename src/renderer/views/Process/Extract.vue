@@ -13,9 +13,9 @@
         <label class="file-label">
           <button
             :disabled="isRunning"
-            @click="chooseimagesDirectory"
             class="file-input"
             name="resume"
+            @click="chooseimagesDirectory"
           />
           <span class="file-cta">
             <i class="material-icons">folder_open</i>
@@ -34,14 +34,14 @@
     <div class="buttons">
       <button
         :disabled="isRunning || !inputIsValid"
-        @click="start"
         class="button is-primary"
+        @click="start"
       >
         <i class="material-icons">flash_on</i>
         <span>Process</span>
       </button>
 
-      <button :disabled="!isRunning" @click="stop" class="button is-danger">
+      <button :disabled="!isRunning" class="button is-danger" @click="stop">
         <i class="material-icons">stop</i>
         <span>Stop</span>
       </button>

@@ -1,3 +1,5 @@
 node_modules
-_test_scripts
 _test_data
+coverage
+dist
+build

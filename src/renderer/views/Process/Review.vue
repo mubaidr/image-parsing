@@ -9,9 +9,9 @@
             <div :title="resultFilePath" class="file has-name is-fullwidth">
               <label class="file-label">
                 <button
-                  @click="chooseResultFile"
                   class="file-input"
                   name="resume"
+                  @click="chooseResultFile"
                 />
                 <span class="file-cta">
                   <i class="material-icons">list</i>
@@ -32,8 +32,8 @@
           <p class="control">
             <button
               :disabled="!resultFilePath"
-              @click="saveResult"
               class="button is-dark"
+              @click="saveResult"
             >
               <i class="material-icons md-18">save</i>
               <span>Save</span>
@@ -44,8 +44,8 @@
           <p class="control">
             <button
               :disabled="!resultFilePath"
-              @click="exportResult"
               class="button is-success"
+              @click="exportResult"
             >
               <i class="material-icons md-18">cloud_download</i>
               <span>Export</span>
@@ -82,8 +82,8 @@
             <p class="control">
               <button
                 :disabled="!hasResults"
-                @click="toggleSortOrder"
                 class="button is-small"
+                @click="toggleSortOrder"
               >
                 <span>Sort</span>
                 <i v-if="sortOrder === 'asc'" class="material-icons md-18"
@@ -107,7 +107,7 @@
     </nav>
 
     <!-- Show table when data is loaded -->
-    <div key="table" v-if="hasResults">
+    <div v-if="hasResults" key="table">
       <!-- Data display -->
       <!-- Header -->
       <div class="row header">
@@ -162,8 +162,8 @@
               <div class="col is-200">
                 <a
                   v-if="item.imageFile"
-                  @click="selectRow(index)"
                   class="custom-link"
+                  @click="selectRow(index)"
                 >
                   <i class="material-icons md-18">open_in_new</i>
                   <span v-if="item.isRollNoExtracted">View</span>
@@ -185,7 +185,7 @@
     </div>
 
     <!-- Show message when no data is loaded -->
-    <div key="message" v-else>
+    <div v-else key="message">
       <article class="message is-light">
         <div class="message-body">
           <i class="material-icons">info</i>

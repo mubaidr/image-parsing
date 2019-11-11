@@ -1,15 +1,15 @@
 <template>
   <div class="modal is-active">
-    <div @click="closeModal" class="modal-background" />
+    <div class="modal-background" @click="closeModal" />
     <button
-      @click="closeModal"
       aria-label="close"
       class="delete is-large is-top-right"
+      @click="closeModal"
     />
 
     <div class="modal-card">
       <header class="modal-card-head">
-        <a @click="previous" class="button is-pulled-left is-info">
+        <a class="button is-pulled-left is-info" @click="previous">
           <i class="material-icons">skip_previous</i>
         </a>
         &nbsp;&nbsp;&nbsp;
@@ -23,7 +23,7 @@
           type="text"
         />
         &nbsp;&nbsp;&nbsp;
-        <a @click="next" class="button is-pulled-right is-info">
+        <a class="button is-pulled-right is-info" @click="next">
           <i class="material-icons">skip_next</i>
         </a>
       </header>

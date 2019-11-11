@@ -51,7 +51,7 @@ async function restartElectron() {
     remoteDebugging ? '--inspect=9222 --remote-debugging-port=9223' : '',
   ])
 
-  electronProcess.on('exit', (code, signal) => {
+  electronProcess.on('exit', () => {
     if (!manualRestart) process.exit(0)
   })
 }

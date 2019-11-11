@@ -39,6 +39,8 @@ async function start(
     ])
     const result = new Result(rollNo, image)
 
+    if (!questionsData) throw new Error('Unable to extract questions data...')
+
     for (
       let j = 0, questionsDataLength = questionsData.length;
       j < questionsDataLength;

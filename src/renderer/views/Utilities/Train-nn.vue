@@ -10,9 +10,9 @@
         <div class="file has-name is-fullwidth">
           <label class="file-label">
             <button
-              @click="chooseDesignPath"
               class="file-input"
               name="resume"
+              @click="chooseDesignPath"
             />
             <span class="file-cta">
               <i class="material-icons">list</i>
@@ -28,9 +28,9 @@
         <div class="file has-name is-fullwidth">
           <label class="file-label">
             <button
-              @click="chooseResultPath"
               class="file-input"
               name="resume"
+              @click="chooseResultPath"
             />
             <span class="file-cta">
               <i class="material-icons">list</i>
@@ -45,7 +45,7 @@
         <label class="label">Key File</label>
         <div class="file has-name is-fullwidth">
           <label class="file-label">
-            <button @click="choosekeyPath" class="file-input" name="resume" />
+            <button class="file-input" name="resume" @click="choosekeyPath" />
             <span class="file-cta">
               <i class="material-icons">insert_drive_file</i>
               <span class="file-label">Choose File</span>
@@ -60,14 +60,14 @@
       <div class="buttons">
         <button
           :disabled="!inputIsValid"
-          @click="start"
           class="button is-primary"
+          @click="start"
         >
           <i class="material-icons">play_arrow</i>
           <span>Train</span>
         </button>
 
-        <button :disabled="isRunning" @click="stop" class="button is-danger">
+        <button :disabled="isRunning" class="button is-danger" @click="stop">
           <i class="material-icons">stop</i>
           <span>Stop</span>
         </button>

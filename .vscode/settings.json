@@ -3,17 +3,20 @@
   "files.exclude": {
     "**/.tmp": true,
     "**/build": true,
-    "**/dist": true
+    "**/dist": true,
+    "coverage/**": true
   },
   "files.watcherExclude": {
     "**/.tmp/**": true,
     "**/build/**": true,
-    "**/dist/**": true
+    "**/dist/**": true,
+    "coverage/**": true
   },
   "search.exclude": {
     "**/.tmp": true,
     "**/build": true,
-    "**/dist": true
+    "**/dist": true,
+    "coverage/**": true
   },
   "todo.file.exclude": [
     "**/.!(todo|todos|task|tasks)/**",

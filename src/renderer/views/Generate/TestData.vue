@@ -9,7 +9,7 @@
       <label class="label">Result File</label>
       <div class="file has-name is-fullwidth">
         <label class="file-label">
-          <button @click="chooseResultFile" class="file-input" name="resume" />
+          <button class="file-input" name="resume" @click="chooseResultFile" />
           <span class="file-cta">
             <i class="material-icons">list</i>
             <span class="file-label">Choose File</span>
@@ -25,9 +25,9 @@
         <label class="file-label">
           <button
             :disabled="isRunning"
-            @click="chooseimagesDirectory"
             class="file-input"
             name="resume"
+            @click="chooseimagesDirectory"
           />
           <span class="file-cta">
             <i class="material-icons">folder_open</i>
@@ -47,9 +47,9 @@
         <label class="file-label">
           <button
             :disabled="isRunning"
-            @click="chooseExportDirectory"
             class="file-input"
             name="resume"
+            @click="chooseExportDirectory"
           />
           <span class="file-cta">
             <i class="material-icons">folder_open</i>
@@ -82,14 +82,14 @@
     <div class="buttons">
       <button
         :disabled="isRunning || !inputIsValid"
-        @click="start"
         class="button is-primary"
+        @click="start"
       >
         <i class="material-icons">flash_on</i>
         <span>Process</span>
       </button>
 
-      <button :disabled="!isRunning" @click="stop" class="button is-danger">
+      <button :disabled="!isRunning" class="button is-danger" @click="stop">
         <i class="material-icons">stop</i>
         <span>Stop</span>
       </button>
