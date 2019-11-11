@@ -1,3 +1,5 @@
+require('v8-compile-cache')
+
 import 'bulma-pro/bulma.sass'
 import { ipcRenderer } from 'electron'
 import 'material-design-icons/iconfont/material-icons.css'

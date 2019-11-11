@@ -1,3 +1,5 @@
+require('v8-compile-cache')
+
 import * as devtron from 'devtron'
 import { app, BrowserWindow, Menu, shell } from 'electron'
 import electronDebug from 'electron-debug'
