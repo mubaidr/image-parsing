@@ -22,7 +22,7 @@ class WorkerManagerGenerateTestData extends WorkerManager {
 
   public process(options: WorkerManagerInput): WorkerManagerOutput {
     options.data.designData = getDesignData(
-      options.designPath || dataPaths.designBarcode,
+      options.designPath || dataPaths.designBarcode
     )
 
     const { callbacks, data } = options
@@ -39,7 +39,7 @@ class WorkerManagerGenerateTestData extends WorkerManager {
     if (!exportDirectory) throw new Error('Invalid exportDirectory...')
 
     const results = CompiledResult.loadFromExcel(resultPath).getRandomResults(
-      percentOfFiles,
+      percentOfFiles
     )
 
     const totalWorkers = Math.min(results.length, noOfCores)

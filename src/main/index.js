@@ -1,4 +1,4 @@
-require('v8-compile-cache')
+// import('v8-compile-cache')
 
 import * as devtron from 'devtron'
 import { app, BrowserWindow, Menu, shell } from 'electron'
@@ -269,7 +269,7 @@ function setMenu() {
       {
         label: 'Speech',
         submenu: [{ role: 'startspeaking' }, { role: 'stopspeaking' }],
-      },
+      }
     )
 
     // Window menu

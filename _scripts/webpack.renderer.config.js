@@ -144,17 +144,16 @@ const config = {
  * Adjust rendererConfig for production settings
  */
 if (isDevMode) {
+  // dev only plugins
+  config.plugins.push(new webpack.HotModuleReplacementPlugin())
+} else {
   config.plugins.push(
-    new webpack.HotModuleReplacementPlugin(),
     new ForkTsCheckerWebpackPlugin({
       eslint: true,
     }),
-  )
-} else {
-  config.plugins.push(
     new MiniCssExtractPlugin({
       filename: '[name].css',
-    }),
+    })
   )
 
   config.optimization = {

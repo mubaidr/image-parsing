@@ -20,7 +20,7 @@ class WorkerManagerCompile extends WorkerManager {
   }
 
   public async process(
-    options: WorkerManagerInput,
+    options: WorkerManagerInput
   ): Promise<WorkerManagerOutput> {
     const { callbacks, data } = options
     const { resultPath, keyPath, correctMarks, incorrectMarks } = data

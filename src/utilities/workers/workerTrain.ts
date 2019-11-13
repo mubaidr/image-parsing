@@ -18,7 +18,7 @@ function sendMessage(obj: WorkerOutput): void {
 
 async function start(
   msg: WorkerInput,
-  isChildProcess: boolean,
+  isChildProcess: boolean
 ): Promise<INeuralNetworkState | undefined> {
   const { designData, resultPath, keyPath } = msg
 
@@ -32,7 +32,7 @@ async function start(
   const trainingData = await getQuestionsData(
     designData,
     sharpImage,
-    compiledResult,
+    compiledResult
   )
 
   const net = new brain.NeuralNetwork()

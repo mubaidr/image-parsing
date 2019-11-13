@@ -70,23 +70,23 @@ const config = {
 }
 
 if (isDevMode) {
-  config.plugins.push(
-    new ForkTsCheckerWebpackPlugin({
-      eslint: true,
-    }),
-  )
+  // dev only plugins
+  config.plugins.push()
 } else {
   config.optimization = {
     minimizer: [new TerserJSPlugin({})],
   }
 
   config.plugins.push(
+    new ForkTsCheckerWebpackPlugin({
+      eslint: true,
+    }),
     new CopyWebpackPlugin([
       {
         from: path.join(__dirname, '../src/data'),
         to: path.join(__dirname, '../dist/data'),
       },
-    ]),
+    ])
   )
 }
 

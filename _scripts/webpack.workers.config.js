@@ -85,12 +85,15 @@ const config = {
 }
 
 if (isDevMode) {
+  // dev only plugins
+  config.plugins.push()
+} else {
   config.plugins.push(
     new ForkTsCheckerWebpackPlugin({
       eslint: true,
-    }),
+    })
   )
-} else {
+
   config.optimization = {
     minimizer: [new TerserJSPlugin({})],
   }

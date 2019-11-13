@@ -20,7 +20,7 @@ class WorkerManagerTrain extends WorkerManager {
 
   public process(options: WorkerManagerInput): WorkerManagerOutput {
     options.data.designData = getDesignData(
-      options.designPath || dataPaths.designBarcode,
+      options.designPath || dataPaths.designBarcode
     )
 
     const { callbacks, data } = options

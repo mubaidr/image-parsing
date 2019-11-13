@@ -1,4 +1,4 @@
-require('v8-compile-cache')
+// import('v8-compile-cache')
 
 import 'bulma-pro/bulma.sass'
 import { ipcRenderer } from 'electron'

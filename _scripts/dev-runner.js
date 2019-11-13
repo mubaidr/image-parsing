@@ -93,7 +93,7 @@ async function startMain() {
     },
     err => {
       if (err) console.error(err)
-    },
+    }
   )
 }
 

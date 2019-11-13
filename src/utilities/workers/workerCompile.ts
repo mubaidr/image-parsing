@@ -13,7 +13,7 @@ function sendMessage(obj: WorkerOutput): void {
 
 function start(
   msg: WorkerInput,
-  isChildProcess: boolean,
+  isChildProcess: boolean
 ): CompiledResult | undefined {
   const { results, keys, correctMarks, incorrectMarks } = msg
 

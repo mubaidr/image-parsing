@@ -99,13 +99,13 @@ class WorkerManager {
 
             this.stop()
           }
-        },
+        }
       )
 
       worker.on('exit', (code, signal) => {
         if (process.env.NODE_ENV === 'development') {
           console.info(
-            `child_process exited. code: ${code || 0}, signal: ${signal}`,
+            `child_process exited. code: ${code || 0}, signal: ${signal}`
           )
         }
 

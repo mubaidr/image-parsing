@@ -5,7 +5,7 @@ import { store } from './store'
 const { dialog, getCurrentWindow } = remote
 
 const openDirectory = async (
-  filters?: FileFilter[],
+  filters?: FileFilter[]
 ): Promise<string | undefined> => {
   const dir = await dialog.showOpenDialog(getCurrentWindow(), {
     defaultPath: store.lastOpenDir(),
@@ -21,7 +21,7 @@ const openDirectory = async (
 }
 
 const openFile = async (
-  filters?: FileFilter[],
+  filters?: FileFilter[]
 ): Promise<string | undefined> => {
   const file = await dialog.showOpenDialog(getCurrentWindow(), {
     defaultPath: store.lastOpenFile(),
@@ -37,7 +37,7 @@ const openFile = async (
 }
 
 const saveFile = async (
-  filters?: FileFilter[],
+  filters?: FileFilter[]
 ): Promise<string | undefined> => {
   const file = await dialog.showSaveDialog(getCurrentWindow(), {
     defaultPath: store.lastSaveDir(),

@@ -38,7 +38,7 @@ const importExcelToJson = (src: string): ResultJson[] => {
 
 function exportJsonToExcel(
   compiledResult: CompiledResult | ResultJson[],
-  destination: string,
+  destination: string
 ): void {
   const workbook = XLSX.utils.book_new()
   const rows =

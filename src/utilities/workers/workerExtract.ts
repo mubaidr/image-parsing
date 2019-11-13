@@ -18,7 +18,7 @@ function sendMessage(obj: WorkerOutput): void {
 
 async function start(
   msg: WorkerInput,
-  isChildProcess: boolean,
+  isChildProcess: boolean
 ): Promise<Result[] | undefined> {
   const { designData, imagePaths } = msg
 
