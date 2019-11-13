@@ -3,7 +3,6 @@ process.env.NODE_ENV = 'development'
 const electron = require('electron')
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
-const webpackHotMiddleware = require('webpack-hot-middleware')
 const kill = require('tree-kill')
 
 const path = require('path')
@@ -87,59 +86,31 @@ async function startMain() {
     }
   })
 
-  webpackSetup.watch(
-    {
-      // ignored: ['node_modules', 'src/', '!src/main', '!src/utilities/workers'],
-    },
+  webpackSetup.watch({},
     err => {
       if (err) console.error(err)
     }
   )
 }
 
-async function startRenderer() {
-  rendererConfig.entry.renderer = [
-    path.join(__dirname, 'dev-client'),
-    rendererConfig.entry.renderer,
-  ]
+function startRenderer(callback) {
+  const compiler = webpack(rendererConfig)
+  const { name } = compiler
 
-  return new Promise(resolve => {
-    const compiler = webpack(rendererConfig)
-    const { name } = compiler
-    const hotMiddleware = webpackHotMiddleware(compiler, {
-      log: false,
-      noInfo: true,
-      quiet: true,
-      reload: true,
-    })
-
-    compiler.hooks.afterEmit.tap('afterEmit', () => {
-      console.log(`\nCompiled ${name} script!`)
-      console.log(`\nWatching file changes for ${name} script...`)
-    })
-
-    const server = new WebpackDevServer(compiler, {
-      contentBase: path.join(__dirname, '../'),
-      hot: true,
-      noInfo: true,
-      overlay: true,
-      clientLogLevel: 'error',
-      before(app, ctx) {
-        app.use(hotMiddleware)
-
-        ctx.middleware.waitUntilValid(() => {
-          resolve()
-        })
-      },
-    })
-
-    server.listen(9080)
+  compiler.hooks.afterEmit.tap('afterEmit', () => {
+    console.log(`\nCompiled ${name} script!`)
+    console.log(`\nWatching file changes for ${name} script...`)
   })
+
+  const server = new WebpackDevServer(compiler, {
+    contentBase: path.join(__dirname, '../'),
+    hot: true,
+    noInfo: true,
+    overlay: true,
+    clientLogLevel: 'warning',
+  })
+
+  server.listen(9080, callback)
 }
 
-async function start() {
-  await startRenderer()
-  startMain()
-}
-
-start()
+startRenderer(startMain())

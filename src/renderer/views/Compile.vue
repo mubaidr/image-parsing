@@ -107,8 +107,8 @@ export default {
   data() {
     return {
       resultPath:
-        'D:\\Current\\image-parsing\\__tests__\\_test_data\\result.xlsx',
-      keyPath: 'D:\\Current\\image-parsing\\__tests__\\_test_data\\key.xlsx',
+        'D:\\Current\\image-parsing\\_test_data\\result.xlsx',
+      keyPath: 'D:\\Current\\image-parsing\\_test_data\\key.xlsx',
       correctMarks: 3,
       incorrectMarks: 1,
       progressState: ProgressStateEnum.STOPPED,

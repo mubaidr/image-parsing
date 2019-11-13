@@ -26,7 +26,7 @@ function start(msg: WorkerInput, isChildProcess: boolean): undefined {
   // export to provided path with roll-no in the name
 
   const img = Sharp(
-    'D:\\current\\image-parsing\\__tests__\\_test_data\\images-barcode\\10023.jpg'
+    'D:\\current\\image-parsing\\_test_data\\images-barcode\\10023.jpg'
   )
 
   img.toFile('D:\\current\\image-parsing\\.tmp\\image-with-text.jpg')
