@@ -1,24 +1,24 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-import Home from '../views/Home.vue'
+// compile
+import Compile from '../views/Compile.vue'
 // generate
 import Generate from '../views/Generate.vue'
 import AnswerSheets from '../views/Generate/AnswerSheets.vue'
 import TestData from '../views/Generate/TestData.vue'
+// help
+import Help from '../views/Help.vue'
+import About from '../views/Help/About.vue'
+import Contact from '../views/Help/Contact.vue'
+import Home from '../views/Home.vue'
 // process
 import Process from '../views/Process.vue'
 import Extract from '../views/Process/Extract.vue'
 import Review from '../views/Process/Review.vue'
-// compile
-import Compile from '../views/Compile.vue'
 // utilities
 import Utilities from '../views/Utilities.vue'
 import TrainNN from '../views/Utilities/train-nn.vue'
-// help
-import Help from '../views/Help.vue'
-import Contact from '../views/Help/Contact.vue'
-import About from '../views/Help/About.vue'
+
 
 Vue.use(Router)
 
@@ -46,7 +46,7 @@ const router = new Router({
           component: AnswerSheets,
         },
         {
-          path: '/generate/_test_data',
+          path: '/generate/_data',
           meta: {
             title: 'Generate Test Data',
           },

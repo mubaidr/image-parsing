@@ -1,5 +1,5 @@
 node_modules
-_test_data
+_data
 coverage
 dist
 build

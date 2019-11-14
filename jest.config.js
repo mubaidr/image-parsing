@@ -19,6 +19,6 @@ module.exports = {
   setupFiles: ['jest-canvas-mock'],
   testEnvironment: 'node',
   // testEnvironment: '@zeromake/jest-environment-jsdom-with-canvas',
-  testPathIgnorePatterns: ['/node_modules/', '.eslintrc.js', '__tests__/_test_data/'],
+  testPathIgnorePatterns: ['/node_modules/', '.eslintrc.js', '__tests__/_data/'],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$',
 }

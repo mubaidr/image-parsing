@@ -72,7 +72,7 @@ function createWindow() {
   if (isDev) {
     mainWindow.loadURL('http://localhost:9080')
   } else {
-    mainWindow.loadFile(`${__dirname}/index.html`)
+    mainWindow.loadFile(`${__dirname}/renderer/index.html`)
 
     // @ts-ignore
     global.__static = require('path')
@@ -179,7 +179,7 @@ const template = [
       {
         label: 'Test Data',
         click() {
-          sendMenuEvent({ route: '/generate/_test_data' })
+          sendMenuEvent({ route: '/generate/_data' })
         },
       },
     ],
