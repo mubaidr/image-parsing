@@ -21,8 +21,8 @@ const config = {
   },
   output: {
     libraryTarget: 'commonjs2',
-    path: path.join(__dirname, '../dist'),
-    filename: '[name].js',
+    path: path.join(__dirname, '../dist/renderer'),
+    filename: 'index.js',
   },
   externals: ['sharp', 'electron', 'jimp', 'xlsx', 'jsqr', 'brain.js'],
   module: {

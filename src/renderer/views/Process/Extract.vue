@@ -85,7 +85,7 @@
     data() {
       return {
         imagesDirectory:
-          'D:\\Current\\image-parsing\\_test_data\\images-barcode\\',
+          'D:\\Current\\image-parsing\\__tests__\\test_data\\images-barcode\\',
         perImageTime: 0,
         processedImages: 0,
         progressState: ProgressStateEnum.STOPPED,

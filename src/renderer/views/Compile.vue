@@ -95,108 +95,108 @@
 </template>
 
 <script>
-import { openFile, saveFile } from '../../utilities/electron-dialog'
-import { exportJsonToExcel } from '../../utilities/excel'
-import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
-import WorkerManagerCompile from '../../utilities/@classes/WorkerManagerCompile'
-import ProgressStateEnum from '../../utilities/@enums/ProgressStateEnum'
+  import { openFile, saveFile } from '../../utilities/electron-dialog'
+  import { exportJsonToExcel } from '../../utilities/excel'
+  import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
+  import WorkerManagerCompile from '../../utilities/@classes/WorkerManagerCompile'
+  import ProgressStateEnum from '../../utilities/@enums/ProgressStateEnum'
 
-const workerManager = new WorkerManagerCompile()
+  const workerManager = new WorkerManagerCompile()
 
-export default {
-  data() {
-    return {
-      resultPath:
-        'D:\\Current\\image-parsing\\_test_data\\result.xlsx',
-      keyPath: 'D:\\Current\\image-parsing\\_test_data\\key.xlsx',
-      correctMarks: 3,
-      incorrectMarks: 1,
-      progressState: ProgressStateEnum.STOPPED,
-    }
-  },
-
-  computed: {
-    inputIsValid() {
-      return (
-        this.resultPath !== null &&
-        this.keyPath !== null &&
-        this.correctMarks !== null &&
-        this.incorrectMarks !== null
-      )
+  export default {
+    data() {
+      return {
+        resultPath:
+          'D:\\Current\\image-parsing\\__tests__\\test_data\\result.xlsx',
+        keyPath: 'D:\\Current\\image-parsing\\__tests__\\test_data\\key.xlsx',
+        correctMarks: 3,
+        incorrectMarks: 1,
+        progressState: ProgressStateEnum.STOPPED,
+      }
     },
 
-    isRunning() {
-      return this.progressState === ProgressStateEnum.RUNNING
-    },
-  },
+    computed: {
+      inputIsValid() {
+        return (
+          this.resultPath !== null &&
+          this.keyPath !== null &&
+          this.correctMarks !== null &&
+          this.incorrectMarks !== null
+        )
+      },
 
-  unmounted() {
-    workerManager.stop()
-  },
-
-  methods: {
-    chooseResultFile() {
-      openFile([
-        {
-          name: 'Excel File',
-          extensions: Object.keys(KeyNativeEnum),
-        },
-      ]).then(file => {
-        this.resultPath = file
-      })
+      isRunning() {
+        return this.progressState === ProgressStateEnum.RUNNING
+      },
     },
 
-    chooseKeyFile() {
-      openFile([
-        {
-          name: 'Excel or Image File',
-          extensions: Object.keys(KeyNativeEnum),
-        },
-      ]).then(file => {
-        this.keyPath = file
-      })
-    },
-
-    start() {
-      workerManager.process({
-        callbacks: {
-          onsuccess(msg) {
-            console.log(msg)
-
-            saveFile([
-              {
-                name: 'Excel File',
-                extensions: Object.keys(KeyNativeEnum).reverse(),
-              },
-            ]).then(destination => {
-              if (!destination) return
-
-              exportJsonToExcel(msg.results, destination)
-
-              this.$toasted.show('File saved succesfully. ', {
-                icon: 'check_circle',
-                type: 'success',
-              })
-            })
-          },
-          onerror(msg) {
-            console.error(msg)
-          },
-        },
-        data: {
-          resultPath: this.resultPath,
-          keyPath: this.keyPath,
-          correctMarks: this.correctMarks,
-          incorrectMarks: this.incorrectMarks,
-        },
-      })
-    },
-
-    stop() {
+    unmounted() {
       workerManager.stop()
     },
-  },
-}
+
+    methods: {
+      chooseResultFile() {
+        openFile([
+          {
+            name: 'Excel File',
+            extensions: Object.keys(KeyNativeEnum),
+          },
+        ]).then(file => {
+          this.resultPath = file
+        })
+      },
+
+      chooseKeyFile() {
+        openFile([
+          {
+            name: 'Excel or Image File',
+            extensions: Object.keys(KeyNativeEnum),
+          },
+        ]).then(file => {
+          this.keyPath = file
+        })
+      },
+
+      start() {
+        workerManager.process({
+          callbacks: {
+            onsuccess(msg) {
+              console.log(msg)
+
+              saveFile([
+                {
+                  name: 'Excel File',
+                  extensions: Object.keys(KeyNativeEnum).reverse(),
+                },
+              ]).then(destination => {
+                if (!destination) return
+
+                exportJsonToExcel(msg.results, destination)
+
+                this.$toasted.show('File saved succesfully. ', {
+                  icon: 'check_circle',
+                  type: 'success',
+                })
+              })
+            },
+            onerror(msg) {
+              console.error(msg)
+            },
+          },
+          data: {
+            resultPath: this.resultPath,
+            keyPath: this.keyPath,
+            correctMarks: this.correctMarks,
+            incorrectMarks: this.incorrectMarks,
+          },
+        })
+      },
+
+      stop() {
+        workerManager.stop()
+      },
+    },
+  }
 </script>
 
 <style></style>

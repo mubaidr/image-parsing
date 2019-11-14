@@ -122,7 +122,7 @@ Result {
   },
   "correctCount": 0,
   "id": "183b5aad-7122-4947-99e9-75c2f73cb076",
-  "imageFile": "D:\\\\Current\\\\image-parsing\\\\_test_data\\\\images-barcode\\\\10023.jpg",
+  "imageFile": "D:\\\\Current\\\\image-parsing\\\\__tests__\\\\test_data\\\\images-barcode\\\\10023.jpg",
   "incorrectCount": 0,
   "isCompiled": false,
   "isRollNoExtracted": true,

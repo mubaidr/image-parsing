@@ -45,7 +45,7 @@ async function restartElectron() {
 
   // eslint-disable-next-line require-atomic-updates
   electronProcess = spawn(electron, [
-    path.join(__dirname, '../dist/main.js'),
+    path.join(__dirname, '../dist/main/index.js'),
     // '--enable-logging', // enables electron console window
     remoteDebugging ? '--inspect=9222 --remote-debugging-port=9223' : '',
   ])

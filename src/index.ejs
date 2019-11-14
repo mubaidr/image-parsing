@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
     <title><% htmlWebpackPlugin.options.productName %></title>
 
     <!-- add prefetch links for modules -->
     <% if (htmlWebpackPlugin.options.isDevMode) { %>
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self' 'unsafe-eval' 'unsafe-inline' http://localhost:9080 file://*"
-    />
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' 'unsafe-eval' 'unsafe-inline' http://localhost:9080 file://*" />
     <% } else { %>
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self' file://*"
-    />
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' file://*" />
     <% } %>
   </head>
 
@@ -23,4 +21,5 @@
     <div id="app"></div>
     <!-- webpack builds are automatically injected -->
   </body>
+
 </html>

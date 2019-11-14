@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const TerserJSPlugin = require('terser-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const {
   dependencies,
@@ -19,6 +20,11 @@ const config = {
   devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
   entry: {
     main: path.join(__dirname, '../src/main/index.js'),
+  },
+  output: {
+    filename: 'index.js',
+    libraryTarget: 'commonjs2',
+    path: path.join(__dirname, '../dist/main'),
   },
   externals: externals,
   module: {
@@ -50,15 +56,11 @@ const config = {
     __filename: isDevMode,
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       'process.env.PRODUCT_NAME': JSON.stringify(productName),
     }),
   ],
-  output: {
-    filename: '[name].js',
-    libraryTarget: 'commonjs2',
-    path: path.join(__dirname, '../dist'),
-  },
   resolve: {
     extensions: ['.ts', '.js', '.json'],
     alias: {

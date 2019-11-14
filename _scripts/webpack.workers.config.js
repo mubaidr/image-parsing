@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const fsGlob = require('fast-glob')
 const TerserJSPlugin = require('terser-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const {
   dependencies,
@@ -70,6 +71,7 @@ const config = {
     __filename: isDevMode,
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       'process.env.PRODUCT_NAME': JSON.stringify(productName),
     }),
