@@ -129,9 +129,9 @@ export default {
   data() {
     return {
       resultPath:
-        'D:\\Current\\image-parsing\\__tests__\\test_data\\resultCompiled.xlsx',
+        'D:\\Current\\image-parsing\\__tests__\\_data\\resultCompiled.xlsx',
       imagesDirectory:
-        'D:\\Current\\image-parsing\\__tests__\\test_data\\images-barcode\\',
+        'D:\\Current\\image-parsing\\__tests__\\_data\\images-barcode\\',
       exportDirectory: 'D:\\Current\\image-parsing\\.tmp\\',
       percentOfFiles: 5,
       perImageTime: 0,

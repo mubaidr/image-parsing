@@ -106,9 +106,8 @@
   export default {
     data() {
       return {
-        resultPath:
-          'D:\\Current\\image-parsing\\__tests__\\test_data\\result.xlsx',
-        keyPath: 'D:\\Current\\image-parsing\\__tests__\\test_data\\key.xlsx',
+        resultPath: 'D:\\Current\\image-parsing\\__tests__\\_data\\result.xlsx',
+        keyPath: 'D:\\Current\\image-parsing\\__tests__\\_data\\key.xlsx',
         correctMarks: 3,
         incorrectMarks: 1,
         progressState: ProgressStateEnum.STOPPED,
@@ -161,8 +160,6 @@
         workerManager.process({
           callbacks: {
             onsuccess(msg) {
-              console.log(msg)
-
               saveFile([
                 {
                   name: 'Excel File',
@@ -181,6 +178,14 @@
             },
             onerror(msg) {
               console.error(msg)
+
+              this.$toasted.show('Failed to save file. ', {
+                icon: 'cross',
+                type: 'error',
+              })
+            },
+            onprogress(msg) {
+              console.info(msg)
             },
           },
           data: {
