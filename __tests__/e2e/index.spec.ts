@@ -1,38 +1,45 @@
-// import electronPath from 'electron'
 import path from 'path'
 import { Application } from 'spectron'
 
-const appPath = path.join(__dirname, "../../dist/main/index.js")
-let electronPath = path.join(__dirname, "../../node_modules", ".bin", "electron")
+const appPath = path.join(__dirname, '../../dist/main/index.js')
+let electronPath = path.join(
+  __dirname,
+  '../../node_modules',
+  '.bin',
+  'electron'
+)
 
-if (process.platform === "win32") {
-  electronPath += ".cmd"
+if (process.platform === 'win32') {
+  electronPath += '.cmd'
 }
 
 const app = new Application({
   path: electronPath,
-  args: [appPath],
+  args: [appPath, '--enable-logging'],
   env: {
     ELECTRON_ENABLE_LOGGING: true,
     ELECTRON_ENABLE_STACK_DUMPING: true,
-    NODE_ENV: "test"
+    NODE_ENV: 'test',
   },
 })
 
+beforeAll(async () => {
+  return await app.start()
+})
+
+afterAll(async () => {
+  if (app && app.isRunning()) {
+    return await app.stop()
+  }
+})
+
 describe('Application launch', () => {
-  beforeAll(() => {
-    return app.start()
-  })
+  test('shows an initial window', async () => {
+    await app.client.waitUntilWindowLoaded()
 
-  afterAll(function () {
-    if (app && app.isRunning()) {
-      return app.stop()
-    }
-  })
+    console.log('yayyaya')
 
-  describe('shows an initial window', () => {
-    return app.client.getWindowCount().then((count) => {
-      expect(count).toBe(2)
-    })
+    const count = await app.client.getWindowCount()
+    expect(count).toBe(1)
   })
 })

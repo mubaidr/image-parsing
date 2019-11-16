@@ -2,7 +2,6 @@ const path = require('path')
 const webpack = require('webpack')
 const fsGlob = require('fast-glob')
 const TerserJSPlugin = require('terser-webpack-plugin')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const {
@@ -90,12 +89,6 @@ if (isDevMode) {
   // dev only plugins
   config.plugins.push()
 } else {
-  config.plugins.push(
-    new ForkTsCheckerWebpackPlugin({
-      eslint: true,
-    })
-  )
-
   config.optimization = {
     minimizer: [new TerserJSPlugin({})],
   }

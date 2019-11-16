@@ -22,7 +22,7 @@
     "vue-toasted": "^1.1.27",
     "vue-virtual-scroller": "^1.0.0-rc.2",
     "vuex": "^3.1.2",
-    "xlsx": "^0.15.1"
+    "xlsx": "^0.15.2"
   },
   "description": "A complete solution for Forms/MCQ based paper checking",
   "devDependencies": {
@@ -49,11 +49,10 @@
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jest": "^23.0.3",
+    "eslint-plugin-jest": "^23.0.4",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^6.0.1",
     "file-loader": "^4.2.0",
-    "fork-ts-checker-webpack-plugin": "^3.1.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^24.9.0",
     "jest-canvas-mock": "^2.2.0",
@@ -116,7 +115,7 @@
     "release": "run-s test build",
     "test": "run-s test:unit test:e2e",
     "test:coverage": "run-s rebuild:node pack:workers jest:coverage",
-    "test:e2e": "run-s rebuild:electron pack:workers jest:e2e",
+    "test:e2e": "run-s rebuild:electron pack jest:e2e",
     "test:unit": "run-s rebuild:node pack:workers jest:unit",
     "test:watch": "run-s rebuild:node pack:workers jest:watch",
     "typesync": "typesync --ignoredeps=dev",

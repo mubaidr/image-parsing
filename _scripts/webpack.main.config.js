@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const TerserJSPlugin = require('terser-webpack-plugin')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
@@ -80,9 +79,6 @@ if (isDevMode) {
   }
 
   config.plugins.push(
-    new ForkTsCheckerWebpackPlugin({
-      eslint: true,
-    }),
     new CopyWebpackPlugin([
       {
         from: path.join(__dirname, '../src/data'),

@@ -1,11 +1,9 @@
 // import('v8-compile-cache')
 
-import * as devtron from 'devtron'
 import { app, BrowserWindow, Menu, shell } from 'electron'
-import electronDebug from 'electron-debug'
 import { URL } from 'url'
-import * as vueDevtools from 'vue-devtools'
 import { productName } from '../../package.json'
+import path from 'path'
 
 app.setName(productName)
 app.allowRendererProcessReuse = true
@@ -14,36 +12,29 @@ app.allowRendererProcessReuse = true
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 
 const gotTheLock = app.requestSingleInstanceLock()
-const isDev = process.env.NODE_ENV === 'development'
+const isDevEnv = process.env.NODE_ENV === 'development'
+const isDebugEnv = process.env.NODE_ENV === 'debug'
+const isTestEnv = process.env.NODE_ENV === 'test'
 let mainWindow
 
-// only allow single instance of application
-if (!isDev) {
-  if (gotTheLock) {
-    app.on('second-instance', () => {
-      // Someone tried to run a second instance, we should focus our window.
-      if (mainWindow && mainWindow.isMinimized()) {
-        mainWindow.restore()
-      }
-      mainWindow.focus()
-    })
-  } else {
-    app.quit()
-    process.exit(0)
-  }
-} else {
-  electronDebug({
-    showDevTools: !(process.env.RENDERER_REMOTE_DEBUGGING === 'true'),
+if (isDevEnv && !isTestEnv) {
+  require('electron-debug')({
+    showDevTools: !isDebugEnv,
   })
 }
 
-async function installDevTools() {
-  try {
-    devtron.install()
-    vueDevtools.install()
-  } catch (err) {
-    console.error(err)
-  }
+// only allow single instance of application
+if (gotTheLock) {
+  app.on('second-instance', () => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow && mainWindow.isMinimized()) {
+      mainWindow.restore()
+    }
+    mainWindow.focus()
+  })
+} else {
+  app.quit()
+  process.exit(0)
 }
 
 function createWindow() {
@@ -69,10 +60,10 @@ function createWindow() {
   setMenu()
 
   // load root file/url
-  if (isDev) {
+  if (isDevEnv) {
     mainWindow.loadURL('http://localhost:9080')
   } else {
-    mainWindow.loadFile(`${__dirname}/renderer/index.html`)
+    mainWindow.loadFile(path.join(__dirname, '../','/renderer/index.html'))
 
     // @ts-ignore
     global.__static = require('path')
@@ -90,8 +81,12 @@ function createWindow() {
 app.on('ready', () => {
   createWindow()
 
-  if (isDev) {
-    installDevTools()
+  if (isDevEnv) {
+    require('vue-devtools').install()
+  }
+
+  if (process.argv.includes('--debug')) {
+    mainWindow.webContents.openDevTools()
   }
 })
 

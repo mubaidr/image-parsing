@@ -6,7 +6,6 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const TerserJSPlugin = require('terser-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const { productName } = require('../package.json')
 
@@ -53,7 +52,7 @@ const config = {
         use: {
           loader: 'vue-loader',
           options: {
-            extractCSS: !isDevMode,
+            // extractCSS: !isDevMode,
             loaders: {
               sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax',
             },
@@ -148,9 +147,6 @@ if (isDevMode) {
   config.plugins.push(new webpack.HotModuleReplacementPlugin())
 } else {
   config.plugins.push(
-    new ForkTsCheckerWebpackPlugin({
-      eslint: true,
-    }),
     new MiniCssExtractPlugin({
       filename: '[name].css',
     })

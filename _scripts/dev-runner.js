@@ -20,7 +20,7 @@ const remoteDebugging = !!(
 
 if (remoteDebugging) {
   // disable dvtools open in electron
-  process.env.RENDERER_REMOTE_DEBUGGING = true
+  process.env.NODE_ENV = 'debug'
 }
 
 async function killElectron(pid) {
