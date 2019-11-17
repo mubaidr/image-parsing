@@ -32,7 +32,6 @@ class WorkerManagerCompile extends WorkerManager {
 
     const results = CompiledResult.loadFromExcel(resultPath).getResults()
     const keys = await readKey(keyPath)
-
     const totalWorkers = Math.min(results.length, noOfCores)
     const step = Math.floor(results.length / totalWorkers)
 

@@ -15,7 +15,7 @@
             <button
               class="file-input"
               name="resume"
-              @click="chooseResultFile"
+              @click.stop.prevent="chooseResultFile"
             />
             <span class="file-cta">
               <i class="material-icons">list</i>
@@ -33,7 +33,11 @@
         <label class="label">Key File</label>
         <div class="file has-name is-fullwidth">
           <label class="file-label">
-            <button class="file-input" name="resume" @click="chooseKeyFile" />
+            <button
+              class="file-input"
+              name="resume"
+              @click.stop.prevent="chooseKeyFile"
+            />
             <span class="file-cta">
               <i class="material-icons">insert_drive_file</i>
               <span class="file-label">Choose File</span>
@@ -77,15 +81,19 @@
 
       <div class="buttons">
         <button
-          :disabled="!inputIsValid"
+          :disabled="!inputIsValid || isRunning"
           class="button is-primary"
-          @click="start"
+          @click.stop.prevent="startCompile"
         >
           <i class="material-icons">play_arrow</i>
-          <span>Train</span>
+          <span>Compile Result</span>
         </button>
 
-        <button :disabled="isRunning" class="button is-danger" @click="stop">
+        <button
+          :disabled="isStopped"
+          class="button is-danger"
+          @click.stop.prevent="stopCompile"
+        >
           <i class="material-icons">stop</i>
           <span>Stop</span>
         </button>
@@ -127,6 +135,10 @@
       isRunning() {
         return this.progressState === ProgressStateEnum.RUNNING
       },
+
+      isStopped() {
+        return this.progressState === ProgressStateEnum.STOPPED
+      },
     },
 
     unmounted() {
@@ -156,7 +168,9 @@
         })
       },
 
-      start() {
+      startCompile() {
+        this.progressState = ProgressStateEnum.RUNNING
+
         workerManager.process({
           callbacks: {
             onsuccess(msg) {
@@ -175,6 +189,8 @@
                   type: 'success',
                 })
               })
+
+              this.progressState = ProgressStateEnum.STOPPED
             },
             onerror(msg) {
               console.error(msg)
@@ -183,6 +199,8 @@
                 icon: 'cross',
                 type: 'error',
               })
+
+              this.progressState = ProgressStateEnum.STOPPED
             },
             onprogress(msg) {
               console.info(msg)
@@ -197,8 +215,9 @@
         })
       },
 
-      stop() {
+      stopCompile() {
         workerManager.stop()
+        this.progressState = ProgressStateEnum.STOPPED
       },
     },
   }

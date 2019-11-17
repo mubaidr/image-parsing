@@ -9,7 +9,11 @@
       <label class="label">Result File</label>
       <div class="file has-name is-fullwidth">
         <label class="file-label">
-          <button class="file-input" name="resume" @click="chooseResultFile" />
+          <button
+            class="file-input"
+            name="resume"
+            @click.stop.prevent="chooseResultFile"
+          />
           <span class="file-cta">
             <i class="material-icons">list</i>
             <span class="file-label">Choose File</span>
@@ -27,7 +31,7 @@
             :disabled="isRunning"
             class="file-input"
             name="resume"
-            @click="chooseimagesDirectory"
+            @click.stop.prevent="chooseimagesDirectory"
           />
           <span class="file-cta">
             <i class="material-icons">folder_open</i>
@@ -49,7 +53,7 @@
             :disabled="isRunning"
             class="file-input"
             name="resume"
-            @click="chooseExportDirectory"
+            @click.stop.prevent="chooseExportDirectory"
           />
           <span class="file-cta">
             <i class="material-icons">folder_open</i>
@@ -83,13 +87,17 @@
       <button
         :disabled="isRunning || !inputIsValid"
         class="button is-primary"
-        @click="start"
+        @click.stop.prevent="start"
       >
         <i class="material-icons">flash_on</i>
         <span>Process</span>
       </button>
 
-      <button :disabled="!isRunning" class="button is-danger" @click="stop">
+      <button
+        :disabled="!isRunning"
+        class="button is-danger"
+        @click.stop.prevent="stop"
+      >
         <i class="material-icons">stop</i>
         <span>Stop</span>
       </button>
@@ -114,146 +122,146 @@
 </template>
 
 <script>
-import { currentWindow } from '../../../utilities/electron-utilities'
-import { openDirectory, openFile } from '../../../utilities/electron-dialog'
-import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
-import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
-import prettyMs from 'pretty-ms'
-import WorkerManagerGenerateTestData from '../../../utilities/@classes/WorkerManagerGenerateTestData'
+  import { currentWindow } from '../../../utilities/electron-utilities'
+  import { openDirectory, openFile } from '../../../utilities/electron-dialog'
+  import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
+  import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
+  import prettyMs from 'pretty-ms'
+  import WorkerManagerGenerateTestData from '../../../utilities/@classes/WorkerManagerGenerateTestData'
 
-const workerManager = new WorkerManagerGenerateTestData()
+  const workerManager = new WorkerManagerGenerateTestData()
 
-export default {
-  name: 'GenerateTestData',
+  export default {
+    name: 'GenerateTestData',
 
-  data() {
-    return {
-      resultPath:
-        'D:\\Current\\image-parsing\\__tests__\\_data\\resultCompiled.xlsx',
-      imagesDirectory:
-        'D:\\Current\\image-parsing\\__tests__\\_data\\images-barcode\\',
-      exportDirectory: 'D:\\Current\\image-parsing\\.tmp\\',
-      percentOfFiles: 5,
-      perImageTime: 0,
-      processedImages: 0,
-      progressState: ProgressStateEnum.STOPPED,
-      totalImages: 0,
-    }
-  },
-
-  computed: {
-    inputIsValid() {
-      return (
-        this.resultPath &&
-        this.imagesDirectory &&
-        this.exportDirectory &&
-        this.percentOfFiles > 0
-      )
-    },
-
-    isRunning() {
-      return this.progressState === ProgressStateEnum.RUNNING
-    },
-
-    progress() {
-      return Math.floor((this.processedImages * 100) / this.totalImages)
-    },
-
-    remainingTime() {
-      const ms = (this.totalImages - this.processedImages) * this.perImageTime
-      return ms === 0 ? '...' : prettyMs(ms)
-    },
-  },
-
-  watch: {
-    // set taskbar progress
-    processedImages(val) {
-      if (val < this.totalImages) {
-        currentWindow.setProgressBar(val / this.totalImages)
-      } else {
-        currentWindow.setProgressBar(0)
-
-        // flash taskbar icon
-        if (currentWindow.isFocused()) {
-          window.setTimeout(() => {
-            currentWindow.flashFrame(false)
-          }, 1000)
-        } else {
-          currentWindow.once('focus', () => currentWindow.flashFrame(false))
-        }
-        currentWindow.flashFrame(true)
+    data() {
+      return {
+        resultPath:
+          'D:\\Current\\image-parsing\\__tests__\\_data\\resultCompiled.xlsx',
+        imagesDirectory:
+          'D:\\Current\\image-parsing\\__tests__\\_data\\images-barcode\\',
+        exportDirectory: 'D:\\Current\\image-parsing\\.tmp\\',
+        percentOfFiles: 5,
+        perImageTime: 0,
+        processedImages: 0,
+        progressState: ProgressStateEnum.STOPPED,
+        totalImages: 0,
       }
     },
-  },
 
-  unmounted() {
-    workerManager.stop()
-  },
+    computed: {
+      inputIsValid() {
+        return (
+          this.resultPath &&
+          this.imagesDirectory &&
+          this.exportDirectory &&
+          this.percentOfFiles > 0
+        )
+      },
 
-  methods: {
-    chooseResultFile() {
-      openFile([
-        {
-          name: 'Excel File',
-          extensions: Object.keys(KeyNativeEnum),
-        },
-      ]).then(file => {
-        this.resultPath = file
-      })
+      isRunning() {
+        return this.progressState === ProgressStateEnum.RUNNING
+      },
+
+      progress() {
+        return Math.floor((this.processedImages * 100) / this.totalImages)
+      },
+
+      remainingTime() {
+        const ms = (this.totalImages - this.processedImages) * this.perImageTime
+        return ms === 0 ? '...' : prettyMs(ms)
+      },
     },
 
-    chooseimagesDirectory() {
-      openDirectory().then(dir => {
-        this.imagesDirectory = dir
-      })
+    watch: {
+      // set taskbar progress
+      processedImages(val) {
+        if (val < this.totalImages) {
+          currentWindow.setProgressBar(val / this.totalImages)
+        } else {
+          currentWindow.setProgressBar(0)
+
+          // flash taskbar icon
+          if (currentWindow.isFocused()) {
+            window.setTimeout(() => {
+              currentWindow.flashFrame(false)
+            }, 1000)
+          } else {
+            currentWindow.once('focus', () => currentWindow.flashFrame(false))
+          }
+          currentWindow.flashFrame(true)
+        }
+      },
     },
 
-    chooseExportDirectory() {
-      openDirectory().then(dir => {
-        this.exportDirectory = dir
-      })
-    },
-
-    start() {
-      this.progressState = ProgressStateEnum.RUNNING
-
-      workerManager.process({
-        callbacks: {
-          onsuccess: msg => {
-            this.progressState = ProgressStateEnum.COMPLETED
-
-            console.log('onsuccess', msg.data)
-          },
-          onprogress: msg => {
-            this.perImageTime = msg.timeElapsed
-            this.processedImages += 1
-          },
-          onerror: msg => {
-            this.$toasted.show(msg.error, {
-              type: 'error',
-              icon: 'info',
-            })
-          },
-        },
-        data: {
-          imagesDirectory: this.imagesDirectory,
-          exportDirectory: this.exportDirectory,
-          resultPath: this.resultPath,
-          percentOfFiles: this.percentOfFiles,
-        },
-      })
-    },
-
-    stop() {
+    unmounted() {
       workerManager.stop()
-
-      this.perImageTime = 0
-      this.processedImages = 0
-      this.totalImages = 0
-      this.progressState = ProgressStateEnum.STOPPED
     },
-  },
-}
+
+    methods: {
+      chooseResultFile() {
+        openFile([
+          {
+            name: 'Excel File',
+            extensions: Object.keys(KeyNativeEnum),
+          },
+        ]).then(file => {
+          this.resultPath = file
+        })
+      },
+
+      chooseimagesDirectory() {
+        openDirectory().then(dir => {
+          this.imagesDirectory = dir
+        })
+      },
+
+      chooseExportDirectory() {
+        openDirectory().then(dir => {
+          this.exportDirectory = dir
+        })
+      },
+
+      start() {
+        this.progressState = ProgressStateEnum.RUNNING
+
+        workerManager.process({
+          callbacks: {
+            onsuccess: msg => {
+              this.progressState = ProgressStateEnum.COMPLETED
+
+              console.log('onsuccess', msg.data)
+            },
+            onprogress: msg => {
+              this.perImageTime = msg.timeElapsed
+              this.processedImages += 1
+            },
+            onerror: msg => {
+              this.$toasted.show(msg.error, {
+                type: 'error',
+                icon: 'info',
+              })
+            },
+          },
+          data: {
+            imagesDirectory: this.imagesDirectory,
+            exportDirectory: this.exportDirectory,
+            resultPath: this.resultPath,
+            percentOfFiles: this.percentOfFiles,
+          },
+        })
+      },
+
+      stop() {
+        workerManager.stop()
+
+        this.perImageTime = 0
+        this.processedImages = 0
+        this.totalImages = 0
+        this.progressState = ProgressStateEnum.STOPPED
+      },
+    },
+  }
 </script>
 
 <style scoped lang="scss"></style>

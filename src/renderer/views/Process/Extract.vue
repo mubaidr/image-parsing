@@ -15,7 +15,7 @@
             :disabled="isRunning"
             class="file-input"
             name="resume"
-            @click="chooseimagesDirectory"
+            @click.stop.prevent="chooseimagesDirectory"
           />
           <span class="file-cta">
             <i class="material-icons">folder_open</i>
@@ -35,13 +35,17 @@
       <button
         :disabled="isRunning || !inputIsValid"
         class="button is-primary"
-        @click="start"
+        @click.stop.prevent="start"
       >
         <i class="material-icons">flash_on</i>
         <span>Process</span>
       </button>
 
-      <button :disabled="!isRunning" class="button is-danger" @click="stop">
+      <button
+        :disabled="!isRunning"
+        class="button is-danger"
+        @click.stop.prevent="stop"
+      >
         <i class="material-icons">stop</i>
         <span>Stop</span>
       </button>

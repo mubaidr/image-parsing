@@ -36,6 +36,8 @@ function start(
   if (isChildProcess) {
     sendMessage({
       state: ProgressStateEnum.PROGRESS,
+      workerType: WorkerTypes.COMPILE,
+      timeElapsed: 0,
     })
 
     sendMessage({
