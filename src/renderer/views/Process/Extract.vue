@@ -73,155 +73,155 @@
 </template>
 
 <script>
-  import { currentWindow } from '../../../utilities/electron-utilities'
-  import { openDirectory, saveFile } from '../../../utilities/electron-dialog'
-  import { exportJsonToExcel } from '../../../utilities/excel'
-  import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
-  import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
-  import prettyMs from 'pretty-ms'
-  import WorkerManagerExtract from '../../../utilities/@classes/WorkerManagerExtract'
+import { currentWindow } from '../../../utilities/electron-utilities'
+import { openDirectory, saveFile } from '../../../utilities/electron-dialog'
+import { exportJsonToExcel } from '../../../utilities/excel'
+import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
+import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
+import prettyMs from 'pretty-ms'
+import WorkerManagerExtract from '../../../utilities/@classes/WorkerManagerExtract'
 
-  const workerManager = new WorkerManagerExtract()
+const workerManager = new WorkerManagerExtract()
 
-  export default {
-    name: 'ExtractResult',
+export default {
+  name: 'ExtractResult',
 
-    data() {
-      return {
-        imagesDirectory:
-          'D:\\Current\\image-parsing\\__tests__\\_data\\images-barcode\\',
-        perImageTime: 0,
-        processedImages: 0,
-        progressState: ProgressStateEnum.STOPPED,
-        totalImages: 0,
-        totalWorkers: 0,
+  data() {
+    return {
+      imagesDirectory:
+        'D:\\Current\\image-parsing\\__tests__\\_data\\images-barcode\\',
+      perImageTime: 0,
+      processedImages: 0,
+      progressState: ProgressStateEnum.STOPPED,
+      totalImages: 0,
+      totalWorkers: 0,
+    }
+  },
+
+  computed: {
+    inputIsValid() {
+      return this.imagesDirectory
+    },
+
+    isRunning() {
+      return this.progressState === ProgressStateEnum.RUNNING
+    },
+
+    progress() {
+      return Math.floor((this.processedImages * 100) / this.totalImages)
+    },
+
+    remainingTime() {
+      const ms =
+        (this.totalImages - this.processedImages) *
+        ((this.perImageTime || 500) / (this.totalWorkers || 1))
+
+      return ms === 0 ? '...' : prettyMs(ms)
+    },
+  },
+
+  watch: {
+    // set taskbar progress
+    processedImages(val) {
+      if (val < this.totalImages) {
+        currentWindow.setProgressBar(val / this.totalImages)
+      } else {
+        currentWindow.setProgressBar(0)
+
+        // flash taskbar icon
+        if (currentWindow.isFocused()) {
+          window.setTimeout(() => {
+            currentWindow.flashFrame(false)
+          }, 1000)
+        } else {
+          currentWindow.once('focus', () => currentWindow.flashFrame(false))
+        }
+        currentWindow.flashFrame(true)
       }
     },
+  },
 
-    computed: {
-      inputIsValid() {
-        return this.imagesDirectory
-      },
+  unmounted() {
+    workerManager.stop()
+  },
 
-      isRunning() {
-        return this.progressState === ProgressStateEnum.RUNNING
-      },
-
-      progress() {
-        return Math.floor((this.processedImages * 100) / this.totalImages)
-      },
-
-      remainingTime() {
-        const ms =
-          (this.totalImages - this.processedImages) *
-          ((this.perImageTime || 500) / (this.totalWorkers || 1))
-
-        return ms === 0 ? '...' : prettyMs(ms)
-      },
+  methods: {
+    chooseimagesDirectory() {
+      openDirectory().then(dir => {
+        this.imagesDirectory = dir
+      })
     },
+    start() {
+      this.progressState = ProgressStateEnum.RUNNING
 
-    watch: {
-      // set taskbar progress
-      processedImages(val) {
-        if (val < this.totalImages) {
-          currentWindow.setProgressBar(val / this.totalImages)
-        } else {
-          currentWindow.setProgressBar(0)
+      workerManager
+        .process({
+          callbacks: {
+            onsuccess: msg => {
+              this.progressState = ProgressStateEnum.COMPLETED
+              this.exportData(msg.data)
 
-          // flash taskbar icon
-          if (currentWindow.isFocused()) {
-            window.setTimeout(() => {
-              currentWindow.flashFrame(false)
-            }, 1000)
-          } else {
-            currentWindow.once('focus', () => currentWindow.flashFrame(false))
-          }
-          currentWindow.flashFrame(true)
-        }
-      },
-    },
-
-    unmounted() {
-      workerManager.stop()
-    },
-
-    methods: {
-      chooseimagesDirectory() {
-        openDirectory().then(dir => {
-          this.imagesDirectory = dir
-        })
-      },
-      start() {
-        this.progressState = ProgressStateEnum.RUNNING
-
-        workerManager
-          .process({
-            callbacks: {
-              onsuccess: msg => {
-                this.progressState = ProgressStateEnum.COMPLETED
-                this.exportData(msg.data)
-
-                this.stop()
-              },
-              onprogress: msg => {
-                this.perImageTime = msg.timeElapsed
-                this.processedImages += 1
-              },
-              onerror: msg => {
-                console.error(msg)
-
-                this.$toasted.show(msg.error, {
-                  type: 'error',
-                  icon: 'info',
-                })
-              },
+              this.stop()
             },
-            data: { imagesDirectory: this.imagesDirectory },
-          })
-          .then(({ totalOutput, totalWorkers }) => {
-            this.totalImages = totalOutput
-            this.totalWorkers = totalWorkers
-          })
-      },
+            onprogress: msg => {
+              this.perImageTime = msg.timeElapsed
+              this.processedImages += 1
+            },
+            onerror: msg => {
+              console.error(msg)
 
-      stop() {
-        workerManager.stop()
-
-        this.perImageTime = 0
-        this.processedImages = 0
-        this.totalImages = 0
-        this.progressState = ProgressStateEnum.STOPPED
-      },
-
-      exportData(compiledResult) {
-        saveFile([
-          {
-            name: 'Excel File',
-            extensions: Object.keys(KeyNativeEnum).reverse(),
+              this.$toasted.show(msg.error, {
+                type: 'error',
+                icon: 'info',
+              })
+            },
           },
-        ]).then(destination => {
-          if (!destination) return
-
-          exportJsonToExcel(compiledResult, destination)
-
-          this.$toasted.show('Result exported successfully. ', {
-            icon: 'check_circle',
-            type: 'success',
-            duration: 5000,
-            keepOnHover: true,
-            action: {
-              text: 'Open for Review',
-              class: 'has-text-white has-text-underlined',
-              onClick: (e, toastObject) => {
-                toastObject.goAway(0)
-                this.$router.push(`/process/review?resultFilePath=${destination}`)
-              },
-            },
-          })
+          data: { imagesDirectory: this.imagesDirectory },
         })
-      },
+        .then(({ totalOutput, totalWorkers }) => {
+          this.totalImages = totalOutput
+          this.totalWorkers = totalWorkers
+        })
     },
-  }
+
+    stop() {
+      workerManager.stop()
+
+      this.perImageTime = 0
+      this.processedImages = 0
+      this.totalImages = 0
+      this.progressState = ProgressStateEnum.STOPPED
+    },
+
+    exportData(compiledResult) {
+      saveFile([
+        {
+          name: 'Excel File',
+          extensions: Object.keys(KeyNativeEnum).reverse(),
+        },
+      ]).then(destination => {
+        if (!destination) return
+
+        exportJsonToExcel(compiledResult, destination)
+
+        this.$toasted.show('Result exported successfully. ', {
+          icon: 'check_circle',
+          type: 'success',
+          duration: 5000,
+          keepOnHover: true,
+          action: {
+            text: 'Open for Review',
+            class: 'has-text-white has-text-underlined',
+            onClick: (e, toastObject) => {
+              toastObject.goAway(0)
+              this.$router.push(`/process/review?resultFilePath=${destination}`)
+            },
+          },
+        })
+      })
+    },
+  },
+}
 </script>
 
 <style scoped lang="scss"></style>

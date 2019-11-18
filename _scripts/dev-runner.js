@@ -86,11 +86,9 @@ async function startMain() {
     }
   })
 
-  webpackSetup.watch({},
-    err => {
-      if (err) console.error(err)
-    }
-  )
+  webpackSetup.watch({}, err => {
+    if (err) console.error(err)
+  })
 }
 
 function startRenderer(callback) {

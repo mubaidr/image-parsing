@@ -19,7 +19,6 @@ import Review from '../views/Process/Review.vue'
 import Utilities from '../views/Utilities.vue'
 import TrainNN from '../views/Utilities/train-nn.vue'
 
-
 Vue.use(Router)
 
 const router = new Router({

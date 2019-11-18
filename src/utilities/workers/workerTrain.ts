@@ -1,4 +1,4 @@
-import brain, { INeuralNetworkState } from 'brain.js'
+import * as brain from 'brain.js'
 import fs from 'fs'
 
 import CompiledResult from '../@classes/CompiledResult'
@@ -19,7 +19,7 @@ function sendMessage(obj: WorkerOutput): void {
 async function start(
   msg: WorkerInput,
   isChildProcess: boolean
-): Promise<INeuralNetworkState | undefined> {
+): Promise<brain.INeuralNetworkState | undefined> {
   const { designData, resultPath, keyPath } = msg
 
   if (!designData) throw new Error('Invalid designData...')

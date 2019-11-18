@@ -15,7 +15,9 @@ const dataPaths = {
   imagesBarcode: path.resolve('__tests__', '_data', 'images-barcode'),
   key: path.resolve('__tests__', '_data', 'key.xlsx'),
   keyImage: path.resolve('__tests__', '_data', 'key.jpg'),
-  questionsModel: isDev ? path.resolve('src/data/questions-model.json') : path.resolve(__dirname, 'data', 'questions-model.json'),
+  questionsModel: isDev
+    ? path.resolve('src/data/questions-model.json')
+    : path.resolve(__dirname, 'data', 'questions-model.json'),
   result: path.resolve('__tests__', '_data', 'result.xlsx'),
   resultCompiled: path.resolve('__tests__', '_data', 'resultCompiled.xlsx'),
   root: path.resolve('.'),

@@ -88,8 +88,7 @@ let workerManager = new WorkerManagerTrain()
 export default {
   data() {
     return {
-      designPath:
-        'D:\\Current\\image-parsing\\__tests__\\_data\\design.svg',
+      designPath: 'D:\\Current\\image-parsing\\__tests__\\_data\\design.svg',
       resultPath: 'D:\\Current\\image-parsing\\__tests__\\_data\\key.xlsx',
       keyPath: 'D:\\Current\\image-parsing\\__tests__\\_data\\key.jpg',
       logs: [],

@@ -1,7 +1,3 @@
-/**
- * @jest-environment @zeromake/jest-environment-jsdom-with-canvas
- */
-
 import { dataPaths } from '../../src/utilities/dataPaths'
 import { readKey } from '../../src/utilities/readKey'
 

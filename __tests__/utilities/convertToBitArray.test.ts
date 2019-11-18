@@ -1,7 +1,3 @@
-/**
- * @jest-environment @zeromake/jest-environment-jsdom-with-canvas
- */
-
 import { convertToBitArray } from '../../src/utilities/convertToBitArray'
 import { dataPaths } from '../../src/utilities/dataPaths'
 import { getSharpObjectFromSource } from '../../src/utilities/images'
@@ -20,7 +16,7 @@ describe('convertToBitArray', () => {
 
     const bitData = convertToBitArray(
       Array.prototype.slice.call(data, 0),
-      info.channels,
+      info.channels
     )
 
     expect(bitData.length).toBeGreaterThan(0)

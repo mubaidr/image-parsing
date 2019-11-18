@@ -63,7 +63,7 @@ function createWindow() {
   if (isDevEnv) {
     mainWindow.loadURL('http://localhost:9080')
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../','/renderer/index.html'))
+    mainWindow.loadFile(path.join(__dirname, '../', '/renderer/index.html'))
 
     // @ts-ignore
     global.__static = require('path')

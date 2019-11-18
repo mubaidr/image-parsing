@@ -4,7 +4,7 @@ exports[`Result should be able to export to json object 1`] = `
 Object {
   "correctCount": 0,
   "id": "1c0e9adc-a474-4e33-babd-0aa3a67463e0",
-  "imageFile": "D:/Current/image-parsing/__tests__/test-data/images-barcode//10025.tif",
+  "imageFile": "D:/Current/image-parsing/__tests__/_data/images-barcode//10025.tif",
   "incorrectCount": 0,
   "isCompiled": false,
   "isRollNoExtracted": true,
@@ -122,7 +122,7 @@ Result {
   },
   "correctCount": 0,
   "id": "183b5aad-7122-4947-99e9-75c2f73cb076",
-  "imageFile": "D:\\\\Current\\\\image-parsing\\\\__tests__\\\\test_data\\\\images-barcode\\\\10023.jpg",
+  "imageFile": "D:\\\\Current\\\\image-parsing\\\\__tests__\\\\_data\\\\images-barcode\\\\10023.jpg",
   "incorrectCount": 0,
   "isCompiled": false,
   "isRollNoExtracted": true,
