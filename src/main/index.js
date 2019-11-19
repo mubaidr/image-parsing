@@ -1,9 +1,9 @@
 // import('v8-compile-cache')
 
 import { app, BrowserWindow, Menu, shell } from 'electron'
+import path from 'path'
 import { URL } from 'url'
 import { productName } from '../../package.json'
-import path from 'path'
 
 app.setName(productName)
 app.allowRendererProcessReuse = true

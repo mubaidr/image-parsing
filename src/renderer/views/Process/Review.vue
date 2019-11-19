@@ -112,10 +112,9 @@
       <!-- Header -->
       <div class="row header">
         <div class="col">#</div>
-        <div class="col"></div>
-        <div class="col is-100">Roll No</div>
         <div class="col is-200">Answer Sheet Image</div>
-        <div class="col custom-hidden">Answers</div>
+        <div class="col is-100">Roll No</div>
+        <!-- <div class="col custom-hidden">Answers</div> -->
       </div>
 
       <div class="scroll-parent">
@@ -134,8 +133,24 @@
                   {{ index + 1 }}
                 </span>
               </div>
-              <!-- Status Icon -->
-              <div class="col">
+
+              <!-- Answer sheet image -->
+              <div class="col is-200">
+                <a
+                  v-if="item.imageFile"
+                  class="custom-link"
+                  @click.stop.prevent="selectRow(index)"
+                >
+                  <i class="material-icons md-18">open_in_new</i>
+                  <span>View Image</span>
+                </a>
+                <span v-else>
+                  Not available
+                </span>
+              </div>
+
+              <!-- Status Icon & Roll No -->
+              <div class="col is-100">
                 <i
                   v-if="!item.rollNo"
                   class="material-icons md-18 has-text-danger"
@@ -151,33 +166,29 @@
                 <i v-else class="material-icons md-18 has-text-success">
                   check
                 </i>
-              </div>
-              <!-- Roll No -->
-              <div class="col is-100">
                 <span>
-                  {{ item.rollNo }}
+                  <template
+                    v-if="item.isRollNoExtracted"
+                    class="has-text-success"
+                  >
+                    {{ item.rollNo }}
+                  </template>
+                  <template v-else>
+                    <a
+                      class="custom-link"
+                      @click.stop.prevent="selectRow(index)"
+                    >
+                      <span>Update</span>
+                    </a>
+                  </template>
                 </span>
               </div>
-              <!-- Answer sheet image -->
-              <div class="col is-200">
-                <a
-                  v-if="item.imageFile"
-                  class="custom-link"
-                  @click.stop.prevent="selectRow(index)"
-                >
-                  <i class="material-icons md-18">open_in_new</i>
-                  <span v-if="item.isRollNoExtracted">View</span>
-                  <span v-else>Update Roll No</span>
-                </a>
-                <span v-else>
-                  Not available
-                </span>
-              </div>
-              <div class="col is-size-7 custom-hidden">
+
+              <!-- <div class="col is-size-7 custom-hidden">
                 <template v-for="answer in item.answers">
                   {{ answer.value }}
                 </template>
-              </div>
+              </div> -->
             </div>
           </template>
         </RecycleScroller>
@@ -209,269 +220,270 @@
 </template>
 
 <script>
-import modalPreview from '../../components/ModalPreview'
-import { saveFile, openFile } from '../../../utilities/electron-dialog'
-import { exportJsonToExcel } from '../../../utilities/excel'
-import { convertImage } from '../../../utilities/images'
-import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
-import CompiledResult from '../../../utilities/@classes/CompiledResult'
+  import modalPreview from '../../components/ModalPreview'
+  import { saveFile, openFile } from '../../../utilities/electron-dialog'
+  import { exportJsonToExcel } from '../../../utilities/excel'
+  import { convertImage } from '../../../utilities/images'
+  import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
+  import CompiledResult from '../../../utilities/@classes/CompiledResult'
 
-export default {
-  name: 'ReviewResult',
+  export default {
+    name: 'ReviewResult',
 
-  components: {
-    modalPreview,
-  },
-
-  data() {
-    return {
-      selectedIndex: null,
-      imageSource: null,
-      sortOrder: 'asc',
-      filterQuery: '',
-      resultFilePath: null,
-      showAllResults: true,
-      compiledResult: new CompiledResult(),
-    }
-  },
-
-  computed: {
-    hasResults() {
-      return this.compiledResult.getResults().length > 0
+    components: {
+      modalPreview,
     },
 
-    selectedRow() {
-      if (this.selectedIndex !== null && this.filteredResults.length > 0) {
-        return this.filteredResults[this.selectedIndex]
-      }
-
-      return null
-    },
-
-    filteredResults() {
-      let results = this.compiledResult.getResults()
-
-      if (this.filterQuery) {
-        return results.filter(r => {
-          return r.rollNo && r.rollNo.toString().includes(this.filterQuery)
-        })
-      } else {
-        if (this.showAllResults) return results
-
-        return results.filter(r => !r.rollNo)
-      }
-    },
-  },
-
-  watch: {
-    selectedRow(row) {
-      if (row && row.imageFile) {
-        convertImage(row.imageFile).then(is => {
-          this.imageSource = is
-        })
-      } else {
-        this.imageSource = null
-      }
-    },
-  },
-
-  created() {
-    window.removeEventListener('keydown', null)
-    window.addEventListener('keydown', this.handleKeyDown)
-
-    const resultFilePath = this.$route.query.resultFilePath
-    if (!resultFilePath) return
-
-    this.resultFilePath = resultFilePath
-  },
-
-  mounted() {
-    this.loadResult()
-  },
-
-  methods: {
-    selectRow(index) {
-      this.selectedIndex = index
-    },
-
-    unSelectRow() {
-      this.selectedIndex = null
-    },
-
-    selectNextRow() {
-      const nextIndex = this.selectedIndex + 1
-
-      if (nextIndex < this.filteredResults.length) {
-        this.selectedIndex = nextIndex
-      } else {
-        this.selectedIndex = 0
+    data() {
+      return {
+        selectedIndex: null,
+        imageSource: null,
+        sortOrder: 'asc',
+        filterQuery: '',
+        resultFilePath: null,
+        showAllResults: true,
+        compiledResult: new CompiledResult(),
       }
     },
 
-    selectPreviousRow() {
-      const nextIndex = this.selectedIndex - 1
+    computed: {
+      hasResults() {
+        return this.compiledResult.getResults().length > 0
+      },
 
-      if (nextIndex > -1) {
-        this.selectedIndex = nextIndex
-      } else {
-        this.selectedIndex = this.filteredResults.length - 1
-      }
+      selectedRow() {
+        if (this.selectedIndex !== null && this.filteredResults.length > 0) {
+          return this.filteredResults[this.selectedIndex]
+        }
+
+        return null
+      },
+
+      filteredResults() {
+        let results = this.compiledResult.getResults()
+
+        if (this.filterQuery) {
+          return results.filter(r => {
+            return r.rollNo && r.rollNo.toString().includes(this.filterQuery)
+          })
+        } else {
+          if (this.showAllResults) return results
+
+          return results.filter(r => !r.rollNo)
+        }
+      },
     },
 
-    toggleSortOrder() {
-      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'
-
-      this.compiledResult.sortResults()
-
-      if (this.sortOrder === 'desc') {
-        this.compiledResult.reverseResults()
-      }
+    watch: {
+      selectedRow(row) {
+        if (row && row.imageFile) {
+          convertImage(row.imageFile).then(is => {
+            this.imageSource = is
+          })
+        } else {
+          this.imageSource = null
+        }
+      },
     },
 
-    handleKeyDown(e) {
-      if (this.selectedIndex === null) return
+    created() {
+      window.removeEventListener('keydown', null)
+      window.addEventListener('keydown', this.handleKeyDown)
 
-      if (e.shiftKey) {
-        if (e.key === 'Tab' || e.key === 'Enter') this.selectPreviousRow()
+      const resultFilePath = this.$route.query.resultFilePath
+      if (!resultFilePath) return
 
-        return
-      }
-
-      switch (e.key) {
-        case 'Escape':
-          this.unSelectRow()
-          break
-        case 'Tab':
-        case 'Enter':
-          this.selectNextRow()
-          break
-        default:
-          break
-      }
+      this.resultFilePath = resultFilePath
     },
 
-    chooseResultFile() {
-      openFile([
-        {
-          name: 'Excel File',
-          extensions: Object.keys(KeyNativeEnum),
-        },
-      ]).then(file => {
-        if (!file) {
-          this.clearResult()
+    mounted() {
+      this.loadResult()
+    },
+
+    methods: {
+      selectRow(index) {
+        this.selectedIndex = index
+      },
+
+      unSelectRow() {
+        this.selectedIndex = null
+      },
+
+      selectNextRow() {
+        const nextIndex = this.selectedIndex + 1
+
+        if (nextIndex < this.filteredResults.length) {
+          this.selectedIndex = nextIndex
+        } else {
+          this.selectedIndex = 0
+        }
+      },
+
+      selectPreviousRow() {
+        const nextIndex = this.selectedIndex - 1
+
+        if (nextIndex > -1) {
+          this.selectedIndex = nextIndex
+        } else {
+          this.selectedIndex = this.filteredResults.length - 1
+        }
+      },
+
+      toggleSortOrder() {
+        this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'
+
+        this.compiledResult.sortResults()
+
+        if (this.sortOrder === 'desc') {
+          this.compiledResult.reverseResults()
+        }
+      },
+
+      handleKeyDown(e) {
+        if (this.selectedIndex === null) return
+
+        if (e.shiftKey) {
+          if (e.key === 'Tab' || e.key === 'Enter') this.selectPreviousRow()
 
           return
         }
 
-        this.resultFilePath = file
-        this.loadResult()
-      })
-    },
+        switch (e.key) {
+          case 'Escape':
+            this.unSelectRow()
+            break
+          case 'Tab':
+          case 'Enter':
+            this.selectNextRow()
+            break
+          default:
+            break
+        }
+      },
 
-    clearResult() {
-      this.compiledResult = new CompiledResult()
-    },
+      chooseResultFile() {
+        openFile([
+          {
+            name: 'Excel File',
+            extensions: Object.keys(KeyNativeEnum),
+          },
+        ]).then(file => {
+          if (!file) {
+            this.clearResult()
 
-    saveResult() {
-      exportJsonToExcel(this.compiledResult, this.resultFilePath)
-      this.$toasted.show('File saved succesfully. ', {
-        icon: 'check_circle',
-        type: 'success',
-      })
-    },
+            return
+          }
 
-    exportResult() {
-      saveFile([
-        {
-          name: 'Excel File',
-          extensions: Object.keys(KeyNativeEnum).reverse(),
-        },
-      ]).then(destination => {
-        if (!destination) return
+          this.resultFilePath = file
+          this.loadResult()
+        })
+      },
 
-        exportJsonToExcel(this.compiledResult, destination)
+      clearResult() {
+        this.compiledResult = new CompiledResult()
+      },
+
+      saveResult() {
+        exportJsonToExcel(this.compiledResult, this.resultFilePath)
         this.$toasted.show('File saved succesfully. ', {
           icon: 'check_circle',
           type: 'success',
         })
-      })
-    },
+      },
 
-    loadResult() {
-      if (!this.resultFilePath) return
+      exportResult() {
+        saveFile([
+          {
+            name: 'Excel File',
+            extensions: Object.keys(KeyNativeEnum).reverse(),
+          },
+        ]).then(destination => {
+          if (!destination) return
 
-      this.compiledResult = CompiledResult.loadFromExcel(this.resultFilePath)
+          exportJsonToExcel(this.compiledResult, destination)
+          this.$toasted.show('File saved succesfully. ', {
+            icon: 'check_circle',
+            type: 'success',
+          })
+        })
+      },
+
+      loadResult() {
+        if (!this.resultFilePath) return
+
+        this.compiledResult = CompiledResult.loadFromExcel(this.resultFilePath)
+      },
     },
-  },
-}
+  }
 </script>
 
 <style lang="scss" scoped>
-.level {
-  margin-bottom: 12px;
+  .level {
+    margin-bottom: 12px;
 
-  .level-left.custom {
-    min-width: 50%;
+    .level-left.custom {
+      min-width: 50%;
 
-    .field {
-      width: 100%;
+      .field {
+        width: 100%;
+      }
     }
   }
-}
 
-.scroll-parent {
-  overflow-x: auto;
-  width: 100%;
-}
-
-.vue-recycle-scroller.scroll-container {
-  width: 100%;
-  min-width: 1270px;
-  height: calc(100vh - 200px);
-  border-bottom: 1px solid #dbdbdb;
-  overflow: auto;
-}
-
-.row {
-  height: 24px !important;
-  width: 100%;
-  border: 1px solid #dbdbdb;
-  border-top-color: transparent;
-  font-family: monospace;
-
-  * {
-    vertical-align: middle;
+  .scroll-parent {
+    overflow-x: auto;
+    width: 100%;
   }
 
-  &.header {
-    border-top-color: #dbdbdb;
-    font-weight: bold;
+  .vue-recycle-scroller.scroll-container {
+    width: 100%;
+    min-width: 1270px;
+    height: calc(100vh - 200px);
+    border-bottom: 1px solid #dbdbdb;
+    overflow: auto;
   }
 
-  .col {
-    display: inline-block;
-    padding: 0 0.5em;
-    min-width: 25px;
+  .row {
+    height: 27px !important;
+    width: 100%;
+    border: 1px solid #dbdbdb;
+    border-top-color: transparent;
+    font-family: monospace;
+    font-size: 12px;
 
-    &.is-50 {
-      min-width: 50px;
+    * {
+      vertical-align: middle;
     }
 
-    &.is-75 {
-      min-width: 75px;
+    &.header {
+      border-top-color: #dbdbdb;
+      font-weight: bold !important;
     }
 
-    &.is-100 {
-      min-width: 100px;
-    }
+    .col {
+      display: inline-block;
+      padding: 5px;
+      min-width: 45px;
 
-    &.is-150 {
-      min-width: 150px;
-    }
+      &.is-50 {
+        min-width: 45px;
+      }
 
-    &.is-200 {
-      min-width: 200px;
+      &.is-75 {
+        min-width: 75px;
+      }
+
+      &.is-100 {
+        min-width: 100px;
+      }
+
+      &.is-150 {
+        min-width: 150px;
+      }
+
+      &.is-200 {
+        min-width: 200px;
+      }
     }
   }
-}
 </style>
