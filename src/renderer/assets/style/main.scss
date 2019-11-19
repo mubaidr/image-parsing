@@ -1,5 +1,5 @@
 html {
-  overflow: hidden;
+  overflow: auto;
 }
 
 body {
@@ -7,8 +7,8 @@ body {
   -moz-user-select: -moz-none;
   -ms-user-select: none;
   user-select: none;
-  border-top: 1px solid #efefef;
-  padding-bottom: 104px;
+  // border-top: 1px solid #efefef;
+  // padding-bottom: 104px;
 }
 
 img {

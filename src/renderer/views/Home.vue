@@ -20,7 +20,7 @@
             A complete solution for Forms/MCQ based paper checking.
           </p>
 
-          <hr />
+          <!-- <br /> -->
 
           <div class="buttons is-centered">
             <RouterLink class="button is-dark" to="/generate/answer-sheets">

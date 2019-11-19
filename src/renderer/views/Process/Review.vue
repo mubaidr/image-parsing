@@ -55,8 +55,6 @@
       </div>
     </nav>
 
-    <br />
-
     <!-- toolbar -->
     <nav class="level is-mobile">
       <!-- Left side -->
@@ -220,270 +218,270 @@
 </template>
 
 <script>
-  import modalPreview from '../../components/ModalPreview'
-  import { saveFile, openFile } from '../../../utilities/electron-dialog'
-  import { exportJsonToExcel } from '../../../utilities/excel'
-  import { convertImage } from '../../../utilities/images'
-  import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
-  import CompiledResult from '../../../utilities/@classes/CompiledResult'
+import modalPreview from '../../components/ModalPreview'
+import { saveFile, openFile } from '../../../utilities/electron-dialog'
+import { exportJsonToExcel } from '../../../utilities/excel'
+import { convertImage } from '../../../utilities/images'
+import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
+import CompiledResult from '../../../utilities/@classes/CompiledResult'
 
-  export default {
-    name: 'ReviewResult',
+export default {
+  name: 'ReviewResult',
 
-    components: {
-      modalPreview,
+  components: {
+    modalPreview,
+  },
+
+  data() {
+    return {
+      selectedIndex: null,
+      imageSource: null,
+      sortOrder: 'asc',
+      filterQuery: '',
+      resultFilePath: null,
+      showAllResults: true,
+      compiledResult: new CompiledResult(),
+    }
+  },
+
+  computed: {
+    hasResults() {
+      return this.compiledResult.getResults().length > 0
     },
 
-    data() {
-      return {
-        selectedIndex: null,
-        imageSource: null,
-        sortOrder: 'asc',
-        filterQuery: '',
-        resultFilePath: null,
-        showAllResults: true,
-        compiledResult: new CompiledResult(),
+    selectedRow() {
+      if (this.selectedIndex !== null && this.filteredResults.length > 0) {
+        return this.filteredResults[this.selectedIndex]
+      }
+
+      return null
+    },
+
+    filteredResults() {
+      let results = this.compiledResult.getResults()
+
+      if (this.filterQuery) {
+        return results.filter(r => {
+          return r.rollNo && r.rollNo.toString().includes(this.filterQuery)
+        })
+      } else {
+        if (this.showAllResults) return results
+
+        return results.filter(r => !r.rollNo)
+      }
+    },
+  },
+
+  watch: {
+    selectedRow(row) {
+      if (row && row.imageFile) {
+        convertImage(row.imageFile).then(is => {
+          this.imageSource = is
+        })
+      } else {
+        this.imageSource = null
+      }
+    },
+  },
+
+  created() {
+    window.removeEventListener('keydown', null)
+    window.addEventListener('keydown', this.handleKeyDown)
+
+    const resultFilePath = this.$route.query.resultFilePath
+    if (!resultFilePath) return
+
+    this.resultFilePath = resultFilePath
+  },
+
+  mounted() {
+    this.loadResult()
+  },
+
+  methods: {
+    selectRow(index) {
+      this.selectedIndex = index
+    },
+
+    unSelectRow() {
+      this.selectedIndex = null
+    },
+
+    selectNextRow() {
+      const nextIndex = this.selectedIndex + 1
+
+      if (nextIndex < this.filteredResults.length) {
+        this.selectedIndex = nextIndex
+      } else {
+        this.selectedIndex = 0
       }
     },
 
-    computed: {
-      hasResults() {
-        return this.compiledResult.getResults().length > 0
-      },
+    selectPreviousRow() {
+      const nextIndex = this.selectedIndex - 1
 
-      selectedRow() {
-        if (this.selectedIndex !== null && this.filteredResults.length > 0) {
-          return this.filteredResults[this.selectedIndex]
-        }
-
-        return null
-      },
-
-      filteredResults() {
-        let results = this.compiledResult.getResults()
-
-        if (this.filterQuery) {
-          return results.filter(r => {
-            return r.rollNo && r.rollNo.toString().includes(this.filterQuery)
-          })
-        } else {
-          if (this.showAllResults) return results
-
-          return results.filter(r => !r.rollNo)
-        }
-      },
+      if (nextIndex > -1) {
+        this.selectedIndex = nextIndex
+      } else {
+        this.selectedIndex = this.filteredResults.length - 1
+      }
     },
 
-    watch: {
-      selectedRow(row) {
-        if (row && row.imageFile) {
-          convertImage(row.imageFile).then(is => {
-            this.imageSource = is
-          })
-        } else {
-          this.imageSource = null
-        }
-      },
+    toggleSortOrder() {
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'
+
+      this.compiledResult.sortResults()
+
+      if (this.sortOrder === 'desc') {
+        this.compiledResult.reverseResults()
+      }
     },
 
-    created() {
-      window.removeEventListener('keydown', null)
-      window.addEventListener('keydown', this.handleKeyDown)
+    handleKeyDown(e) {
+      if (this.selectedIndex === null) return
 
-      const resultFilePath = this.$route.query.resultFilePath
-      if (!resultFilePath) return
+      if (e.shiftKey) {
+        if (e.key === 'Tab' || e.key === 'Enter') this.selectPreviousRow()
 
-      this.resultFilePath = resultFilePath
+        return
+      }
+
+      switch (e.key) {
+        case 'Escape':
+          this.unSelectRow()
+          break
+        case 'Tab':
+        case 'Enter':
+          this.selectNextRow()
+          break
+        default:
+          break
+      }
     },
 
-    mounted() {
-      this.loadResult()
-    },
-
-    methods: {
-      selectRow(index) {
-        this.selectedIndex = index
-      },
-
-      unSelectRow() {
-        this.selectedIndex = null
-      },
-
-      selectNextRow() {
-        const nextIndex = this.selectedIndex + 1
-
-        if (nextIndex < this.filteredResults.length) {
-          this.selectedIndex = nextIndex
-        } else {
-          this.selectedIndex = 0
-        }
-      },
-
-      selectPreviousRow() {
-        const nextIndex = this.selectedIndex - 1
-
-        if (nextIndex > -1) {
-          this.selectedIndex = nextIndex
-        } else {
-          this.selectedIndex = this.filteredResults.length - 1
-        }
-      },
-
-      toggleSortOrder() {
-        this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc'
-
-        this.compiledResult.sortResults()
-
-        if (this.sortOrder === 'desc') {
-          this.compiledResult.reverseResults()
-        }
-      },
-
-      handleKeyDown(e) {
-        if (this.selectedIndex === null) return
-
-        if (e.shiftKey) {
-          if (e.key === 'Tab' || e.key === 'Enter') this.selectPreviousRow()
+    chooseResultFile() {
+      openFile([
+        {
+          name: 'Excel File',
+          extensions: Object.keys(KeyNativeEnum),
+        },
+      ]).then(file => {
+        if (!file) {
+          this.clearResult()
 
           return
         }
 
-        switch (e.key) {
-          case 'Escape':
-            this.unSelectRow()
-            break
-          case 'Tab':
-          case 'Enter':
-            this.selectNextRow()
-            break
-          default:
-            break
-        }
-      },
+        this.resultFilePath = file
+        this.loadResult()
+      })
+    },
 
-      chooseResultFile() {
-        openFile([
-          {
-            name: 'Excel File',
-            extensions: Object.keys(KeyNativeEnum),
-          },
-        ]).then(file => {
-          if (!file) {
-            this.clearResult()
+    clearResult() {
+      this.compiledResult = new CompiledResult()
+    },
 
-            return
-          }
+    saveResult() {
+      exportJsonToExcel(this.compiledResult, this.resultFilePath)
+      this.$toasted.show('File saved succesfully. ', {
+        icon: 'check_circle',
+        type: 'success',
+      })
+    },
 
-          this.resultFilePath = file
-          this.loadResult()
-        })
-      },
+    exportResult() {
+      saveFile([
+        {
+          name: 'Excel File',
+          extensions: Object.keys(KeyNativeEnum).reverse(),
+        },
+      ]).then(destination => {
+        if (!destination) return
 
-      clearResult() {
-        this.compiledResult = new CompiledResult()
-      },
-
-      saveResult() {
-        exportJsonToExcel(this.compiledResult, this.resultFilePath)
+        exportJsonToExcel(this.compiledResult, destination)
         this.$toasted.show('File saved succesfully. ', {
           icon: 'check_circle',
           type: 'success',
         })
-      },
-
-      exportResult() {
-        saveFile([
-          {
-            name: 'Excel File',
-            extensions: Object.keys(KeyNativeEnum).reverse(),
-          },
-        ]).then(destination => {
-          if (!destination) return
-
-          exportJsonToExcel(this.compiledResult, destination)
-          this.$toasted.show('File saved succesfully. ', {
-            icon: 'check_circle',
-            type: 'success',
-          })
-        })
-      },
-
-      loadResult() {
-        if (!this.resultFilePath) return
-
-        this.compiledResult = CompiledResult.loadFromExcel(this.resultFilePath)
-      },
+      })
     },
-  }
+
+    loadResult() {
+      if (!this.resultFilePath) return
+
+      this.compiledResult = CompiledResult.loadFromExcel(this.resultFilePath)
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-  .level {
-    margin-bottom: 12px;
+.level {
+  margin-bottom: 12px;
 
-    .level-left.custom {
-      min-width: 50%;
+  .level-left.custom {
+    min-width: 50%;
 
-      .field {
-        width: 100%;
-      }
+    .field {
+      width: 100%;
     }
   }
+}
 
-  .scroll-parent {
-    overflow-x: auto;
-    width: 100%;
+.scroll-parent {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.vue-recycle-scroller.scroll-container {
+  width: 100%;
+  min-width: 750px;
+  height: calc(100vh - 200px);
+  border-bottom: 1px solid #dbdbdb;
+  overflow: auto;
+}
+
+.row {
+  height: 27px !important;
+  width: 100%;
+  border: 1px solid #dbdbdb;
+  border-top-color: transparent;
+  font-family: monospace;
+  font-size: 12px;
+
+  * {
+    vertical-align: middle;
   }
 
-  .vue-recycle-scroller.scroll-container {
-    width: 100%;
-    min-width: 1270px;
-    height: calc(100vh - 200px);
-    border-bottom: 1px solid #dbdbdb;
-    overflow: auto;
+  &.header {
+    border-top-color: #dbdbdb;
+    font-weight: bold !important;
   }
 
-  .row {
-    height: 27px !important;
-    width: 100%;
-    border: 1px solid #dbdbdb;
-    border-top-color: transparent;
-    font-family: monospace;
-    font-size: 12px;
+  .col {
+    display: inline-block;
+    padding: 5px;
+    min-width: 45px;
 
-    * {
-      vertical-align: middle;
-    }
-
-    &.header {
-      border-top-color: #dbdbdb;
-      font-weight: bold !important;
-    }
-
-    .col {
-      display: inline-block;
-      padding: 5px;
+    &.is-50 {
       min-width: 45px;
+    }
 
-      &.is-50 {
-        min-width: 45px;
-      }
+    &.is-75 {
+      min-width: 75px;
+    }
 
-      &.is-75 {
-        min-width: 75px;
-      }
+    &.is-100 {
+      min-width: 100px;
+    }
 
-      &.is-100 {
-        min-width: 100px;
-      }
+    &.is-150 {
+      min-width: 150px;
+    }
 
-      &.is-150 {
-        min-width: 150px;
-      }
-
-      &.is-200 {
-        min-width: 200px;
-      }
+    &.is-200 {
+      min-width: 200px;
     }
   }
+}
 </style>
