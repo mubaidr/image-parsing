@@ -18,7 +18,7 @@
               @click.stop.prevent="chooseResultFile"
             />
             <span class="file-cta">
-              <i class="material-icons">list</i>
+              <i class="material-icons">insert_drive_file</i>
               <span class="file-label">Choose File</span>
             </span>
             <span class="file-name">{{ resultPath }}</span>
@@ -91,7 +91,7 @@
 
         <button
           :disabled="isStopped"
-          class="button is-default"
+          class="button is-light"
           @click.stop.prevent="stopCompile"
         >
           <i class="material-icons">stop</i>
@@ -103,124 +103,124 @@
 </template>
 
 <script>
-import { openFile, saveFile } from '../../utilities/electron-dialog'
-import { exportJsonToExcel } from '../../utilities/excel'
-import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
-import WorkerManagerCompile from '../../utilities/@classes/WorkerManagerCompile'
-import ProgressStateEnum from '../../utilities/@enums/ProgressStateEnum'
+  import { openFile, saveFile } from '../../utilities/electron-dialog'
+  import { exportJsonToExcel } from '../../utilities/excel'
+  import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
+  import WorkerManagerCompile from '../../utilities/@classes/WorkerManagerCompile'
+  import ProgressStateEnum from '../../utilities/@enums/ProgressStateEnum'
 
-const workerManager = new WorkerManagerCompile()
+  const workerManager = new WorkerManagerCompile()
 
-export default {
-  data() {
-    return {
-      resultPath: 'D:\\Current\\image-parsing\\__tests__\\_data\\result.xlsx',
-      keyPath: 'D:\\Current\\image-parsing\\__tests__\\_data\\key.xlsx',
-      correctMarks: 3,
-      incorrectMarks: 1,
-      progressState: ProgressStateEnum.STOPPED,
-    }
-  },
-
-  computed: {
-    inputIsValid() {
-      return (
-        this.resultPath !== null &&
-        this.keyPath !== null &&
-        this.correctMarks !== null &&
-        this.incorrectMarks !== null
-      )
+  export default {
+    data() {
+      return {
+        resultPath: 'D:\\Current\\image-parsing\\__tests__\\_data\\result.xlsx',
+        keyPath: 'D:\\Current\\image-parsing\\__tests__\\_data\\key.xlsx',
+        correctMarks: 3,
+        incorrectMarks: 1,
+        progressState: ProgressStateEnum.STOPPED,
+      }
     },
 
-    isRunning() {
-      return this.progressState === ProgressStateEnum.RUNNING
+    computed: {
+      inputIsValid() {
+        return (
+          this.resultPath !== null &&
+          this.keyPath !== null &&
+          this.correctMarks !== null &&
+          this.incorrectMarks !== null
+        )
+      },
+
+      isRunning() {
+        return this.progressState === ProgressStateEnum.RUNNING
+      },
+
+      isStopped() {
+        return this.progressState === ProgressStateEnum.STOPPED
+      },
     },
 
-    isStopped() {
-      return this.progressState === ProgressStateEnum.STOPPED
-    },
-  },
-
-  unmounted() {
-    workerManager.stop()
-  },
-
-  methods: {
-    chooseResultFile() {
-      openFile([
-        {
-          name: 'Excel File',
-          extensions: Object.keys(KeyNativeEnum),
-        },
-      ]).then(file => {
-        this.resultPath = file
-      })
-    },
-
-    chooseKeyFile() {
-      openFile([
-        {
-          name: 'Excel or Image File',
-          extensions: Object.keys(KeyNativeEnum),
-        },
-      ]).then(file => {
-        this.keyPath = file
-      })
-    },
-
-    startCompile() {
-      this.progressState = ProgressStateEnum.RUNNING
-
-      workerManager.process({
-        callbacks: {
-          onsuccess(msg) {
-            saveFile([
-              {
-                name: 'Excel File',
-                extensions: Object.keys(KeyNativeEnum).reverse(),
-              },
-            ]).then(destination => {
-              if (!destination) return
-
-              exportJsonToExcel(msg.results, destination)
-
-              this.$toasted.show('File saved succesfully. ', {
-                icon: 'check_circle',
-                type: 'success',
-              })
-            })
-
-            this.progressState = ProgressStateEnum.STOPPED
-          },
-          onerror(msg) {
-            console.error(msg)
-
-            this.$toasted.show('Failed to save file. ', {
-              icon: 'cross',
-              type: 'error',
-            })
-
-            this.progressState = ProgressStateEnum.STOPPED
-          },
-          onprogress(msg) {
-            console.info(msg)
-          },
-        },
-        data: {
-          resultPath: this.resultPath,
-          keyPath: this.keyPath,
-          correctMarks: this.correctMarks,
-          incorrectMarks: this.incorrectMarks,
-        },
-      })
-    },
-
-    stopCompile() {
+    unmounted() {
       workerManager.stop()
-      this.progressState = ProgressStateEnum.STOPPED
     },
-  },
-}
+
+    methods: {
+      chooseResultFile() {
+        openFile([
+          {
+            name: 'Excel File',
+            extensions: Object.keys(KeyNativeEnum),
+          },
+        ]).then(file => {
+          this.resultPath = file
+        })
+      },
+
+      chooseKeyFile() {
+        openFile([
+          {
+            name: 'Excel or Image File',
+            extensions: Object.keys(KeyNativeEnum),
+          },
+        ]).then(file => {
+          this.keyPath = file
+        })
+      },
+
+      startCompile() {
+        this.progressState = ProgressStateEnum.RUNNING
+
+        workerManager.process({
+          callbacks: {
+            onsuccess(msg) {
+              saveFile([
+                {
+                  name: 'Excel File',
+                  extensions: Object.keys(KeyNativeEnum).reverse(),
+                },
+              ]).then(destination => {
+                if (!destination) return
+
+                exportJsonToExcel(msg.results, destination)
+
+                this.$toasted.show('File saved succesfully. ', {
+                  icon: 'check_circle',
+                  type: 'success',
+                })
+              })
+
+              this.progressState = ProgressStateEnum.STOPPED
+            },
+            onerror(msg) {
+              console.error(msg)
+
+              this.$toasted.show('Failed to save file. ', {
+                icon: 'cross',
+                type: 'error',
+              })
+
+              this.progressState = ProgressStateEnum.STOPPED
+            },
+            onprogress(msg) {
+              console.info(msg)
+            },
+          },
+          data: {
+            resultPath: this.resultPath,
+            keyPath: this.keyPath,
+            correctMarks: this.correctMarks,
+            incorrectMarks: this.incorrectMarks,
+          },
+        })
+      },
+
+      stopCompile() {
+        workerManager.stop()
+        this.progressState = ProgressStateEnum.STOPPED
+      },
+    },
+  }
 </script>
 
 <style></style>

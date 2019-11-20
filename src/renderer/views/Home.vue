@@ -51,14 +51,14 @@
 </template>
 
 <script>
-export default {
-  name: 'Home',
-}
+  export default {
+    name: 'Home',
+  }
 </script>
 
 <style>
-.hero-body {
-  min-height: 100vh;
-  height: 100%;
-}
+  .hero-body {
+    min-height: 100vh;
+    height: 100%;
+  }
 </style>
