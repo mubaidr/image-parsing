@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="hero is-bold">
+    <section class="hero is-dark is-bold">
       <div class="hero-body">
         <br />
         <div class="block has-text-centered">
@@ -23,23 +23,23 @@
           <!-- <br /> -->
 
           <div class="buttons is-centered">
-            <RouterLink class="button is-dark" to="/generate/answer-sheets">
+            <RouterLink class="button is-light" to="/generate/answer-sheets">
               <i class="material-icons">print</i>
               <span>Generate</span>
             </RouterLink>
-            <RouterLink class="button is-dark" to="/process/extract">
+            <RouterLink class="button is-light" to="/process/extract">
               <i class="material-icons">list</i>
               <span>Extract</span>
             </RouterLink>
-            <RouterLink class="button is-dark" to="/process/review">
+            <RouterLink class="button is-light" to="/process/review">
               <i class="material-icons">playlist_add_check</i>
               <span>Review</span>
             </RouterLink>
-            <RouterLink class="button is-dark" to="compile">
+            <RouterLink class="button is-light" to="compile">
               <i class="material-icons">assessment</i>
               <span>Compile</span>
             </RouterLink>
-            <RouterLink class="button is-dark" to="/utilities/train">
+            <RouterLink class="button is-light" to="/utilities/train">
               <i class="material-icons">build</i>
               <span>Train</span>
             </RouterLink>

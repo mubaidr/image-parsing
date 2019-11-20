@@ -43,7 +43,7 @@
 
       <button
         :disabled="!isRunning"
-        class="button is-danger"
+        class="button is-default"
         @click.stop.prevent="stop"
       >
         <i class="material-icons">stop</i>
@@ -63,9 +63,23 @@
         >
           {{ progress }}
         </progress>
-        <div>
-          <p>Files Processed: {{ processedImages }} / {{ totalImages }}</p>
-          <p>Estimated Time Remaining: {{ remainingTime }}</p>
+
+        <div class="columns is-mobile">
+          <div class="column">
+            <span>{{ timeElapsed }}</span>
+            <br />
+            <span class="tag is-dark">Time Elapsed</span>
+          </div>
+          <div class="column">
+            <span>{{ processedImages }}/{{ totalImages }}</span>
+            <br />
+            <span class="tag is-dark">File Processed</span>
+          </div>
+          <div class="column">
+            <span>{{ remainingTime }}</span>
+            <br />
+            <span class="tag is-dark">Estimated Remaining Time</span>
+          </div>
         </div>
       </div>
     </Transition>
@@ -95,6 +109,8 @@ export default {
       progressState: ProgressStateEnum.STOPPED,
       totalImages: 0,
       totalWorkers: 0,
+      timer: 0,
+      timerInterval: null,
     }
   },
 
@@ -117,6 +133,10 @@ export default {
         ((this.perImageTime || 500) / (this.totalWorkers || 1))
 
       return ms === 0 ? '...' : prettyMs(ms)
+    },
+
+    timeElapsed() {
+      return prettyMs(this.timer * 1000)
     },
   },
 
@@ -142,7 +162,7 @@ export default {
   },
 
   unmounted() {
-    workerManager.stop()
+    this.stop()
   },
 
   methods: {
@@ -152,8 +172,7 @@ export default {
       })
     },
     start() {
-      this.progressState = ProgressStateEnum.RUNNING
-
+      // start procesing
       workerManager
         .process({
           callbacks: {
@@ -182,11 +201,22 @@ export default {
           this.totalImages = totalOutput
           this.totalWorkers = totalWorkers
         })
+
+      // set running state
+      this.progressState = ProgressStateEnum.RUNNING
+
+      // timer
+      this.timer = 0
+      this.timerInterval = setInterval(() => {
+        this.timer += 1
+      }, 1000)
     },
 
     stop() {
       workerManager.stop()
 
+      clearInterval(this.timerInterval)
+      this.timer = 0
       this.perImageTime = 0
       this.processedImages = 0
       this.totalImages = 0
@@ -201,6 +231,9 @@ export default {
         },
       ]).then(destination => {
         if (!destination) return
+
+        // TODO: save to tmp file for later restore
+        // TODO: use streams to write processed data
 
         exportJsonToExcel(compiledResult, destination)
 
@@ -224,4 +257,8 @@ export default {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.bottom-centered-content {
+  font-family: monospace !important;
+}
+</style>

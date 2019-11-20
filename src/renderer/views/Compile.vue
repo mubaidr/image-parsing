@@ -82,7 +82,7 @@
       <div class="buttons">
         <button
           :disabled="!inputIsValid || isRunning"
-          class="button is-primary"
+          class="button is-light"
           @click.stop.prevent="startCompile"
         >
           <i class="material-icons">play_arrow</i>
@@ -91,7 +91,7 @@
 
         <button
           :disabled="isStopped"
-          class="button is-danger"
+          class="button is-default"
           @click.stop.prevent="stopCompile"
         >
           <i class="material-icons">stop</i>

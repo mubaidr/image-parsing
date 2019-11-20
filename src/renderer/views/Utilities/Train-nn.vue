@@ -60,14 +60,14 @@
       <div class="buttons">
         <button
           :disabled="!inputIsValid"
-          class="button is-primary"
+          class="button is-light"
           @click="start"
         >
           <i class="material-icons">play_arrow</i>
           <span>Train</span>
         </button>
 
-        <button :disabled="isRunning" class="button is-danger" @click="stop">
+        <button :disabled="isRunning" class="button is-default" @click="stop">
           <i class="material-icons">stop</i>
           <span>Stop</span>
         </button>

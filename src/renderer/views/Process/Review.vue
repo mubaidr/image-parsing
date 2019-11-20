@@ -32,7 +32,7 @@
           <p class="control">
             <button
               :disabled="!resultFilePath"
-              class="button is-dark"
+              class="button is-light"
               @click.stop.prevent="saveResult"
             >
               <i class="material-icons md-18">save</i>
@@ -44,7 +44,7 @@
           <p class="control">
             <button
               :disabled="!resultFilePath"
-              class="button is-success"
+              class="button is-light"
               @click.stop.prevent="exportResult"
             >
               <i class="material-icons md-18">cloud_download</i>
@@ -176,7 +176,7 @@
                       class="custom-link"
                       @click.stop.prevent="selectRow(index)"
                     >
-                      <span>Update</span>
+                      <span>{{ item.rollNo }} Update</span>
                     </a>
                   </template>
                 </span>
@@ -195,10 +195,10 @@
 
     <!-- Show message when no data is loaded -->
     <div v-else key="message">
-      <article class="message is-light">
+      <article class="message is-info">
         <div class="message-body">
           <i class="material-icons">info</i>
-          <span>Please load a result file to review, save or export.</span>
+          <span>Please load a result file to review or update.</span>
         </div>
       </article>
     </div>

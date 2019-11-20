@@ -86,7 +86,7 @@
     <div class="buttons">
       <button
         :disabled="isRunning || !inputIsValid"
-        class="button is-primary"
+        class="button is-light"
         @click.stop.prevent="start"
       >
         <i class="material-icons">flash_on</i>
@@ -95,7 +95,7 @@
 
       <button
         :disabled="!isRunning"
-        class="button is-danger"
+        class="button is-default"
         @click.stop.prevent="stop"
       >
         <i class="material-icons">stop</i>
