@@ -1,3 +1,4 @@
+import childProcess from 'child_process'
 import path from 'path'
 import { Application } from 'spectron'
 
@@ -24,6 +25,8 @@ const app = new Application({
 })
 
 beforeAll(async () => {
+  jest.setTimeout(15000)
+  childProcess.execSync('npm run pack')
   return await app.start()
 })
 
