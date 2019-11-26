@@ -13,7 +13,7 @@ describe('workerExtract', () => {
         designData,
         imagePaths,
       },
-      false,
+      false
     )
 
     const result = results ? results[0] : {}

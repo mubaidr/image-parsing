@@ -66,7 +66,11 @@ const logImageData = async (
 const getImagePaths = async (dir: string): Promise<string[]> => {
   const loc = dir.replace(/\\/g, '/')
   const exts = Object.keys(ImageTypesEnum)
-  const glob = `${loc}/**/*.{${exts}}`.replace('//', '/')
+  // avoid deep directory scan in test env
+  const glob =
+    process.env.NODE_ENV === 'test'
+      ? `${loc}/*.{${exts}}`.replace('//', '/')
+      : `${loc}/**/*.{${exts}}`.replace('//', '/')
 
   return fastGlob(glob, {
     absolute: true,
