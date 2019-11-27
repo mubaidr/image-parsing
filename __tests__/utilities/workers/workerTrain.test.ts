@@ -14,12 +14,11 @@ describe('workerTrain', () => {
         resultPath,
         keyPath,
       },
-      false,
+      false
     )
 
     if (!nnState) return fail()
 
     expect(nnState.error).toBeLessThanOrEqual(0.001)
-
   })
 })

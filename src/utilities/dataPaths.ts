@@ -1,9 +1,7 @@
 import os from 'os'
 import path from 'path'
 
-const isDev: boolean =
-  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
-
+const isDev: boolean = process.env.NODE_ENV === 'development'
 const tmp: string = isDev ? path.resolve('.tmp') : os.tmpdir()
 const home: string = path.join(os.homedir(), 'desktop')
 
@@ -17,7 +15,7 @@ const dataPaths = {
   keyImage: path.resolve('__tests__', '_data', 'key.jpg'),
   questionsModel: isDev
     ? path.resolve('src/data/questions-model.json')
-    : path.resolve(__dirname, 'data', 'questions-model.json'),
+    : path.resolve('dist/data/questions-model.json'),
   result: path.resolve('__tests__', '_data', 'result.xlsx'),
   resultCompiled: path.resolve('__tests__', '_data', 'resultCompiled.xlsx'),
   root: path.resolve('.'),

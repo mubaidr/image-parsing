@@ -7,14 +7,11 @@ import { readKey } from '../readKey'
 import CompiledResult from './CompiledResult'
 import WorkerManager from './WorkerManager'
 
-const isDev =
-  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+// const isDev = process.env.NODE_ENV === 'development'
 
 class WorkerManagerCompile extends WorkerManager {
   constructor() {
-    const workerPath = isDev
-      ? path.resolve('./dist/workers/workerCompile.js')
-      : path.resolve(__dirname, './workers/workerCompile.js')
+    const workerPath = path.resolve('./dist/workers/workerCompile.js')
 
     super(workerPath)
   }

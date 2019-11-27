@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'test'
+
 const path = require('path')
 const webpack = require('webpack')
 const fsGlob = require('fast-glob')

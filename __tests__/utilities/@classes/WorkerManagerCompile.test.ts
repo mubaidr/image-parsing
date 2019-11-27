@@ -1,11 +1,9 @@
-import childProcess from 'child_process'
-
 import WorkerManagerCompile from '../../../src/utilities/@classes/WorkerManagerCompile'
 import { dataPaths } from '../../../src/utilities/dataPaths'
 import { getDesignData } from '../../../src/utilities/design'
 
 beforeAll(() => {
-  childProcess.execSync('node _scripts/dev-runner-worker.js compile')
+  // childProcess.execSync('node _scripts/dev-runner-worker.js compile')
   jest.setTimeout(15000)
 })
 

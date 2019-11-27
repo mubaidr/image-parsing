@@ -66,6 +66,7 @@ const config = {
             loader: isDevMode
               ? 'vue-style-loader'
               : MiniCssExtractPlugin.loader,
+            options: { hmr: isDevMode },
           },
           {
             loader: 'css-loader',
@@ -82,7 +83,12 @@ const config = {
       {
         test: /\.css$/,
         use: [
-          isDevMode ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
+          {
+            loader: isDevMode
+              ? 'vue-style-loader'
+              : MiniCssExtractPlugin.loader,
+            options: { hmr: isDevMode },
+          },
           'css-loader',
         ],
       },

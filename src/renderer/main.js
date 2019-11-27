@@ -13,8 +13,7 @@ import './assets/style/main.scss'
 import router from './router/index'
 import store from './store/index'
 
-const isDev =
-  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+const isDev = process.env.NODE_ENV === 'development'
 
 Vue.use(Toasted, {
   duration: 2500,

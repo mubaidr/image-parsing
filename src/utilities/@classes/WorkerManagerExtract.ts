@@ -8,14 +8,12 @@ import { getDesignData } from '../design'
 import { getImagePaths } from '../images'
 import WorkerManager from './WorkerManager'
 
-const isDev =
-  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
+// const isDev = process.env.NODE_ENV === 'development'
 
 class WorkerManagerExtract extends WorkerManager {
   constructor() {
-    const workerPath = isDev
-      ? path.resolve('./dist/workers/workerExtract.js')
-      : path.resolve(__dirname, './workers/workerExtract.js')
+    // TODO: get path by webpack require
+    const workerPath = path.resolve('./dist/workers/workerExtract.js')
 
     super(workerPath)
   }
