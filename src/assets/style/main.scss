@@ -1,0 +1,112 @@
+html {
+  overflow: auto;
+}
+
+body {
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
+  // border-top: 1px solid #efefef;
+  // padding-bottom: 104px;
+}
+
+img {
+  box-shadow: none;
+}
+
+.section {
+  padding: 1.5em;
+}
+
+.material-icons {
+  vertical-align: middle;
+}
+
+span + .material-icons {
+  margin-left: 0.5em;
+}
+
+.material-icons + span {
+  margin-left: 0.5em;
+}
+
+.has-pointer {
+  cursor: pointer;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.notification.bottom-centered-content {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0;
+
+  progress {
+    height: 10px;
+    margin: 0 !important;
+  }
+
+  div {
+    text-align: center;
+    padding: 1em;
+  }
+}
+
+.has-text-underlined {
+  text-decoration: underline !important;
+}
+
+/* custom Scroll bars */
+::-webkit-scrollbar {
+  width: 10px !important;
+  height: 10px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #666666;
+}
+
+/* Rules for sizing the icon. */
+.material-icons.md-18 {
+  font-size: 18px;
+}
+.material-icons.md-24 {
+  font-size: 24px;
+}
+.material-icons.md-36 {
+  font-size: 36px;
+}
+.material-icons.md-48 {
+  font-size: 48px;
+}
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark {
+  color: rgba(0, 0, 0, 0.54);
+}
+.material-icons.md-dark.md-inactive {
+  color: rgba(0, 0, 0, 0.26);
+}
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light {
+  color: rgba(255, 255, 255, 1);
+}
+.material-icons.md-light.md-inactive {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.button {
+  &.is-light {
+    border: 1px solid #ddd !important;
+  }
+}
