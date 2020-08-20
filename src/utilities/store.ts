@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import Store from 'electron-store'
-
 import { dataPaths } from './dataPaths'
+
 
 const newStore = new Store()
 
