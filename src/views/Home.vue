@@ -5,20 +5,13 @@
         <br />
         <div class="block has-text-centered">
           <figure class="image is-128x128">
-            <img
-              alt="Placeholder image"
-              src="../../../_icons/512icontype11.png"
-            />
+            <img alt="Placeholder image" src="../../../_icons/512icontype11.png" />
           </figure>
         </div>
 
         <div class="content has-text-centered">
-          <h1 class="title is-4">
-            Image Parsing
-          </h1>
-          <p class="subtitle is-6">
-            A complete solution for Forms/MCQ based paper checking.
-          </p>
+          <h1 class="title is-4">Image Parsing</h1>
+          <p class="subtitle is-6">A complete solution for Forms/MCQ based paper checking.</p>
 
           <!-- <br /> -->
 
@@ -51,14 +44,14 @@
 </template>
 
 <script>
-  export default {
-    name: 'Home',
-  }
+export default {
+  name: 'Home',
+}
 </script>
 
 <style>
-  .hero-body {
-    min-height: 100vh;
-    height: 100%;
-  }
+.hero-body {
+  min-height: 100vh;
+  height: 100%;
+}
 </style>
