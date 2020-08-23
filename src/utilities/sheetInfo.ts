@@ -1,11 +1,10 @@
 import javascriptBarcodeReader from 'javascript-barcode-reader'
 import javascriptQRReader from 'jsqr'
 import { Sharp } from 'sharp'
+
 import DesignData from './@interfaces/DesignData'
 
 // import { logImageData } from './images'
-
-// TODO: use chrome built in barcode detector: https://web.dev/shape-detection/#barcodedetector
 
 const getRollNoFromImage = async (
   designData: DesignData,

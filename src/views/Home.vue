@@ -5,7 +5,10 @@
         <br />
         <div class="block has-text-centered">
           <figure class="image is-128x128">
-            <img alt="Placeholder image" src="../../_icons/512icontype11.png" />
+            <img
+              alt="Placeholder image"
+              src="../../../_icons/512icontype11.png"
+            />
           </figure>
         </div>
 
@@ -48,14 +51,14 @@
 </template>
 
 <script>
-export default {
-  name: 'Home',
-}
+  export default {
+    name: 'Home',
+  }
 </script>
 
 <style>
-.hero-body {
-  min-height: 100vh;
-  height: 100%;
-}
+  .hero-body {
+    min-height: 100vh;
+    height: 100%;
+  }
 </style>
