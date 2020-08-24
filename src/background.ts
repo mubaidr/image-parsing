@@ -1,9 +1,10 @@
 'use strict'
 // @ts-ignore
 import('v8-compile-cache')
-
+/* global __static */
 import { app, BrowserWindow, Menu, protocol } from 'electron'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import path from 'path'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -29,6 +30,8 @@ function createWindow() {
       nodeIntegration: (process.env
         .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
     },
+    // @ts-ignore
+    icon: path.join(__static, 'icon.png'),
   })
 
   // eslint-disable-next-line

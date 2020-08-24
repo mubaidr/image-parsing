@@ -17,6 +17,7 @@ const app = new Application({
     // ELECTRON_ENABLE_LOGGING: true,
     // ELECTRON_ENABLE_STACK_DUMPING: true,
     NODE_ENV: 'test',
+    IS_TEST: true,
   },
 })
 

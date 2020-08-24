@@ -5,6 +5,10 @@ module.exports = {
     browser: true,
     es6: true,
   },
+  globals: {
+    __static: 'readonly',
+    // var2: 'writable',
+  },
   extends: [
     'plugin:vue/essential',
     'eslint:recommended',
