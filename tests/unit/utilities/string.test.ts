@@ -1,4 +1,4 @@
-import { toCamelCase, toHeadingCase } from '../../src/utilities/string'
+import { toCamelCase, toHeadingCase } from '../../../src/utilities/string'
 
 describe('string', () => {
   test('should be defined', () => {

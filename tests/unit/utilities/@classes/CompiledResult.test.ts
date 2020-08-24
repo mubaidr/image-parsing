@@ -1,6 +1,6 @@
-import CompiledResult from '../../../src/utilities/@classes/CompiledResult'
-import { dataPaths } from '../../../src/utilities/dataPaths'
-import { readKey } from '../../../src/utilities/readKey'
+import CompiledResult from '../../../../src/utilities/@classes/CompiledResult'
+import { dataPaths } from '../../../../src/utilities/dataPaths'
+import { readKey } from '../../../../src/utilities/readKey'
 
 describe('CompiledResult', () => {
   test('should be defined', () => {
@@ -150,7 +150,7 @@ describe('CompiledResult', () => {
 
     compiledResult.addFromExcel(dataPaths.key).compile(3, 1)
 
-    compiledResult.getResults().forEach(result => {
+    compiledResult.getResults().forEach((result) => {
       expect(result.getTotalMarks()).toBeGreaterThan(0)
     })
   })

@@ -9,7 +9,7 @@ const importExcelToJson = (src: string): ResultJson[] => {
 
   const arr: ResultJson[] = []
 
-  Object.values(workbook.Sheets).forEach(sheet => {
+  Object.values(workbook.Sheets).forEach((sheet) => {
     const rows: ResultJson[] = XLSX.utils.sheet_to_json(sheet, {
       blankrows: false,
       raw: true,
@@ -38,7 +38,7 @@ const importExcelToJson = (src: string): ResultJson[] => {
 
 function exportJsonToExcel(
   compiledResult: CompiledResult | ResultJson[],
-  destination: string
+  destination: string,
 ): void {
   const workbook = XLSX.utils.book_new()
   const rows =

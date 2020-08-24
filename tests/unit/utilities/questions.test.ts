@@ -1,8 +1,8 @@
-import CompiledResult from '../../src/utilities/@classes/CompiledResult'
-import { dataPaths } from '../../src/utilities/dataPaths'
-import { getDesignData } from '../../src/utilities/design'
-import { getSharpObjectFromSource } from '../../src/utilities/images'
-import { getQuestionsData } from '../../src/utilities/questions'
+import CompiledResult from '../../../src/utilities/@classes/CompiledResult'
+import { dataPaths } from '../../../src/utilities/dataPaths'
+import { getDesignData } from '../../../src/utilities/design'
+import { getSharpObjectFromSource } from '../../../src/utilities/images'
+import { getQuestionsData } from '../../../src/utilities/questions'
 
 describe('getQuestionsData', () => {
   test('should be defined', async () => {

@@ -1,4 +1,4 @@
-import WorkerManager from '../../../src/utilities/@classes/WorkerManager'
+import WorkerManager from '../../../../src/utilities/@classes/WorkerManager'
 
 describe('WorkerManager', () => {
   test('should be defined', () => {

@@ -23,16 +23,15 @@
 
 <script>
 import Vue from 'vue'
+import { platform } from 'os'
 
 export default Vue.extend({
   data() {
     return {
       versions: process.versions,
-      platform: require('os').platform(),
+      platform: platform(),
     }
   },
-
-  created() {},
 })
 </script>
 

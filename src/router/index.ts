@@ -1,112 +1,112 @@
-import Vue from "vue";
-import Router from "vue-router";
+import Vue from 'vue'
+import Router from 'vue-router'
 // compile
-import Compile from "../views/Compile.vue";
+import Compile from '../views/Compile.vue'
 // generate
-import Generate from "../views/Generate.vue";
-import AnswerSheets from "../views/Generate/AnswerSheets.vue";
+import Generate from '../views/Generate.vue'
+import AnswerSheets from '../views/Generate/AnswerSheets.vue'
 // help
-import Help from "../views/Help.vue";
-import About from "../views/Help/About.vue";
-import Contact from "../views/Help/Contact.vue";
-import Home from "../views/Home.vue";
+import Help from '../views/Help.vue'
+import About from '../views/Help/About.vue'
+import Contact from '../views/Help/Contact.vue'
+import Home from '../views/Home.vue'
 // process
-import Process from "../views/Process.vue";
-import Extract from "../views/Process/Extract.vue";
-import Review from "../views/Process/Review.vue";
+import Process from '../views/Process.vue'
+import Extract from '../views/Process/Extract.vue'
+import Review from '../views/Process/Review.vue'
 
-Vue.use(Router);
+Vue.use(Router)
 
 const router = new Router({
   routes: [
     {
-      path: "/home",
+      path: '/home',
       meta: {
-        title: "Home",
+        title: 'Home',
       },
       component: Home,
     },
     {
-      path: "/generate",
+      path: '/generate',
       meta: {
-        title: "Generate",
+        title: 'Generate',
       },
       component: Generate,
       children: [
         {
-          path: "/generate/answer-sheets",
+          path: '/generate/answer-sheets',
           meta: {
-            title: "Generate Answer Sheets",
+            title: 'Generate Answer Sheets',
           },
           component: AnswerSheets,
         },
       ],
     },
     {
-      path: "/process",
+      path: '/process',
       meta: {
-        title: "Process",
+        title: 'Process',
       },
       component: Process,
       children: [
         {
-          path: "/process/extract",
+          path: '/process/extract',
           meta: {
-            title: "Extract Results",
+            title: 'Extract Results',
           },
           component: Extract,
         },
         {
-          path: "/process/review",
+          path: '/process/review',
           meta: {
-            title: "Review Results",
+            title: 'Review Results',
           },
           component: Review,
         },
       ],
     },
     {
-      path: "/compile",
+      path: '/compile',
       meta: {
-        title: "Compile",
+        title: 'Compile',
       },
       component: Compile,
     },
     {
-      path: "/help",
+      path: '/help',
       meta: {
-        title: "Help",
+        title: 'Help',
       },
       component: Help,
       children: [
         {
-          path: "/help/contact",
+          path: '/help/contact',
           meta: {
-            title: "Contact",
+            title: 'Contact',
           },
           component: Contact,
         },
         {
-          path: "/help/about",
+          path: '/help/about',
           meta: {
-            title: "About",
+            title: 'About',
           },
           component: About,
         },
       ],
     },
     {
-      path: "*",
-      redirect: "/home",
+      path: '*',
+      redirect: '/home',
     },
   ],
-});
+})
 
 router.afterEach((to) => {
-  const productName = process.env.PRODUCT_NAME || "";
+  const productName = process.env.PRODUCT_NAME || ''
 
   document.title =
-    to.path === "/home" ? productName : `${to.meta.title} - ${productName}`;
-});
+    to.path === '/home' ? productName : `${to.meta.title} - ${productName}`
+})
 
-export default router;
+export default router

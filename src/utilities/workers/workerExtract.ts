@@ -18,7 +18,7 @@ function sendMessage(obj: WorkerOutput): void {
 
 async function start(
   msg: WorkerInput,
-  isChildProcess: boolean
+  isChildProcess: boolean,
 ): Promise<Result[] | undefined> {
   const { designData, imagePaths } = msg
 
@@ -102,19 +102,19 @@ process.on('message', (msg: WorkerInput) => {
   }
 })
 
-process.on('unhandledRejection', error => {
+process.on('unhandledRejection', (error) => {
   console.error(error)
 
   stop()
 })
 
-process.on('uncaughtException', error => {
+process.on('uncaughtException', (error) => {
   console.error(error)
 
   stop()
 })
 
-process.on('warning', warning => {
+process.on('warning', (warning) => {
   console.warn(warning)
 })
 

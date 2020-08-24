@@ -7,7 +7,7 @@ import WorkerManager from './WorkerManager'
 class WorkerManagerGenerateAnswerSheets extends WorkerManager {
   constructor() {
     const workerPath = path.resolve(
-      './dist/workers/workerGenerateAnswerSheets.js'
+      './dist/workers/workerGenerateAnswerSheets.js',
     )
 
     super(workerPath)

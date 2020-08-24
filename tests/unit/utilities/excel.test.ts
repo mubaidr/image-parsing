@@ -4,10 +4,13 @@
 
 import fs from 'fs'
 import path from 'path'
-
-import CompiledResult from '../../src/utilities/@classes/CompiledResult'
-import { dataPaths } from '../../src/utilities/dataPaths'
-import { exportHtmltoExcel, exportJsonToExcel, importExcelToJson } from '../../src/utilities/excel'
+import CompiledResult from '../../../src/utilities/@classes/CompiledResult'
+import { dataPaths } from '../../../src/utilities/dataPaths'
+import {
+  exportHtmltoExcel,
+  exportJsonToExcel,
+  importExcelToJson,
+} from '../../../src/utilities/excel'
 
 describe('exportHtmltoExcel', () => {
   test('defined', () => {

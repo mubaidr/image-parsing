@@ -6,7 +6,7 @@ const electronPath = path.join(
   __dirname,
   '../../node_modules',
   '.bin',
-  process.platform === 'win32' ? 'electron.cmd' : 'electron'
+  process.platform === 'win32' ? 'electron.cmd' : 'electron',
 )
 
 const app = new Application({

@@ -1,4 +1,4 @@
-import Cache from '../../../src/utilities/@classes/Cache'
+import Cache from '../../../../src/utilities/@classes/Cache'
 
 const cache = new Cache()
 

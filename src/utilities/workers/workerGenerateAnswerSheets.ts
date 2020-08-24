@@ -19,7 +19,7 @@ function stop(): void {
 }
 
 // add message listner
-process.on('message', msg => {
+process.on('message', (msg) => {
   if (msg.stop) {
     stop()
   } else {
@@ -27,19 +27,19 @@ process.on('message', msg => {
   }
 })
 
-process.on('unhandledRejection', error => {
+process.on('unhandledRejection', (error) => {
   console.error(error)
 
   stop()
 })
 
-process.on('uncaughtException', error => {
+process.on('uncaughtException', (error) => {
   console.error(error)
 
   stop()
 })
 
-process.on('warning', warning => {
+process.on('warning', (warning) => {
   console.warn(warning)
 })
 

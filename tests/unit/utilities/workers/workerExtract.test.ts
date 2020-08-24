@@ -1,7 +1,7 @@
-import { dataPaths } from '../../../src/utilities/dataPaths'
-import { getDesignData } from '../../../src/utilities/design'
-import { getImagePaths } from '../../../src/utilities/images'
-import workerExtract from '../../../src/utilities/workers/workerExtract'
+import { dataPaths } from '../../../../src/utilities/dataPaths'
+import { getDesignData } from '../../../../src/utilities/design'
+import { getImagePaths } from '../../../../src/utilities/images'
+import workerExtract from '../../../../src/utilities/workers/workerExtract'
 
 describe('workerExtract', () => {
   test('should be able to extract result just fine', async () => {
@@ -13,7 +13,7 @@ describe('workerExtract', () => {
         designData,
         imagePaths,
       },
-      false
+      false,
     )
 
     const result = results ? results[0] : {}

@@ -1,11 +1,13 @@
 import fs from 'fs'
 import path from 'path'
 import Sharp from 'sharp'
-
-import { dataPaths } from '../../src/utilities/dataPaths'
+import { dataPaths } from '../../../src/utilities/dataPaths'
 import {
-  convertImage, getImagePaths, getSharpObjectFromSource, logImageData,
-} from '../../src/utilities/images'
+  convertImage,
+  getImagePaths,
+  getSharpObjectFromSource,
+  logImageData,
+} from '../../../src/utilities/images'
 
 describe('convertImage', () => {
   test('works', async () => {
@@ -28,7 +30,7 @@ describe('getImagePaths', () => {
   test('works', async () => {
     const paths = await getImagePaths(dataPaths.imagesBarcode)
 
-    paths.forEach(path => {
+    paths.forEach((path) => {
       expect(fs.existsSync(path)).toBeTruthy()
     })
   })

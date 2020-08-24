@@ -1,6 +1,6 @@
-import WorkerManagerExtract from '../../../src/utilities/@classes/WorkerManagerExtract'
-import { dataPaths } from '../../../src/utilities/dataPaths'
-import { getDesignData } from '../../../src/utilities/design'
+import WorkerManagerExtract from '../../../../src/utilities/@classes/WorkerManagerExtract'
+import { dataPaths } from '../../../../src/utilities/dataPaths'
+import { getDesignData } from '../../../../src/utilities/design'
 
 beforeAll(() => {
   // childProcess.execSync('node _scripts/dev-runner-worker.js extract')
@@ -19,7 +19,7 @@ describe('WorkerManagerExtract', () => {
       const wm = new WorkerManagerExtract()
       const designData = getDesignData(dataPaths.designBarcode)
 
-      const onerror = jest.fn(err => {
+      const onerror = jest.fn((err) => {
         wm.stop()
         fail(err)
       })

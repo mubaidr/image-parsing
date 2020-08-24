@@ -38,7 +38,7 @@ class Result {
     const result =
       typeof o.rollNo === 'string' ? new Result(o.rollNo) : new Result()
 
-    Object.keys(o).forEach(key => {
+    Object.keys(o).forEach((key) => {
       const value = o[key]
 
       if (answerRegExp.test(key)) {
@@ -171,7 +171,7 @@ class Result {
 
   public toJson(): Record<string, any> {
     const o: { [key: string]: string | AnswerCollection } = JSON.parse(
-      JSON.stringify(this)
+      JSON.stringify(this),
     )
 
     for (const prop in o) {

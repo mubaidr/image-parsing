@@ -19,7 +19,7 @@ class CompiledResult {
     compiledResult
       .sortResults()
       .getResults()
-      .forEach(result => {
+      .forEach((result) => {
         obj.push(result.toJson())
       })
 
@@ -30,7 +30,7 @@ class CompiledResult {
     const rows: any[] = importExcelToJson(src)
     const compiledResult = new CompiledResult()
 
-    rows.forEach(row => {
+    rows.forEach((row) => {
       const result = Result.fromJson(row)
 
       if (result.isKey()) {
@@ -48,7 +48,7 @@ class CompiledResult {
   public static merge(compiledResults: CompiledResult[]): CompiledResult {
     const compiledResult = new CompiledResult()
 
-    compiledResults.forEach(cr => {
+    compiledResults.forEach((cr) => {
       compiledResult
         .addKeys(cr.getKeys())
         .addResults(cr.getResults())
@@ -61,7 +61,7 @@ class CompiledResult {
   public addFromExcel(src: string): CompiledResult {
     const rows: any[] = importExcelToJson(src)
 
-    rows.forEach(row => {
+    rows.forEach((row) => {
       const result = Result.fromJson(row)
 
       if (result.isKey()) {
@@ -79,7 +79,7 @@ class CompiledResult {
   public add(obj: Result): CompiledResult {
     if (obj.isKey()) {
       const notAdded =
-        this.keys.findIndex(key => {
+        this.keys.findIndex((key) => {
           return key.id === obj.id
         }) === -1
 
@@ -129,7 +129,7 @@ class CompiledResult {
 
     this.sortResults()
       .getResults()
-      .forEach(result => {
+      .forEach((result) => {
         obj.push(result.toJson())
       })
 

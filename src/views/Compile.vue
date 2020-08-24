@@ -152,7 +152,7 @@ export default {
           name: 'Excel File',
           extensions: Object.keys(KeyNativeEnum),
         },
-      ]).then(file => {
+      ]).then((file) => {
         this.resultPath = file
       })
     },
@@ -163,7 +163,7 @@ export default {
           name: 'Excel or Image File',
           extensions: Object.keys(KeyNativeEnum),
         },
-      ]).then(file => {
+      ]).then((file) => {
         this.keyPath = file
       })
     },
@@ -173,12 +173,12 @@ export default {
 
       workerManager.process({
         callbacks: {
-          onsuccess: (msg)=> {
+          onsuccess: (msg) => {
             this.progressState = ProgressStateEnum.COMPLETED
             this.exportData(msg.data)
             this.stop()
           },
-          onerror: (msg)=> {
+          onerror: (msg) => {
             this.progressState = ProgressStateEnum.STOPPED
             console.error(msg)
             this.$toasted.show('Failed to save file. ', {
@@ -186,7 +186,7 @@ export default {
               type: 'error',
             })
           },
-          onprogress: (msg)=> {
+          onprogress: (msg) => {
             console.info('progress: ', msg)
           },
         },
@@ -210,7 +210,7 @@ export default {
           name: 'Excel File',
           extensions: Object.keys(KeyNativeEnum).reverse(),
         },
-      ]).then(destination => {
+      ]).then((destination) => {
         if (!destination) return
 
         exportJsonToExcel(compiledResult, destination)

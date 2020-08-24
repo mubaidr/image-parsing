@@ -4,7 +4,7 @@ interface WorkerOutput {
   state: ProgressStateEnum
   timeElapsed?: number
   workerType?: string
-  data?: {} | null | undefined
+  data?: Record<string, unknown>
 }
 
 export default WorkerOutput

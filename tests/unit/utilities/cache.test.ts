@@ -1,4 +1,4 @@
-import { cache } from '../../src/utilities/cache'
+import { cache } from '../../../src/utilities/cache'
 
 describe('cache', () => {
   test('should be defined', () => {

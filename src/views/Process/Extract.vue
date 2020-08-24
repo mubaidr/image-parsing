@@ -167,7 +167,7 @@ export default {
 
   methods: {
     chooseimagesDirectory() {
-      openDirectory().then(dir => {
+      openDirectory().then((dir) => {
         this.imagesDirectory = dir
       })
     },
@@ -176,16 +176,16 @@ export default {
       workerManager
         .process({
           callbacks: {
-            onsuccess: msg => {
+            onsuccess: (msg) => {
               this.progressState = ProgressStateEnum.COMPLETED
               this.exportData(msg.data)
               this.stop()
             },
-            onprogress: msg => {
+            onprogress: (msg) => {
               this.perImageTime = msg.timeElapsed
               this.processedImages += 1
             },
-            onerror: msg => {
+            onerror: (msg) => {
               console.error(msg)
 
               this.$toasted.show(msg.error, {
@@ -228,7 +228,7 @@ export default {
           name: 'Excel File',
           extensions: Object.keys(KeyNativeEnum).reverse(),
         },
-      ]).then(destination => {
+      ]).then((destination) => {
         if (!destination) return
 
         // TODO: save to tmp file for later restore

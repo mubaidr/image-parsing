@@ -9,9 +9,7 @@ import { cache } from './cache'
 import { dataPaths } from './dataPaths'
 
 const getSharpObjectFromSource = (src: string): Sharp => {
-  return sharp(src)
-    .raw()
-    .flatten()
+  return sharp(src).raw().flatten()
 }
 
 const convertImage = async (src: string): Promise<string> => {
@@ -37,9 +35,7 @@ const convertImage = async (src: string): Promise<string> => {
   cache.set(src, url)
 
   // save file for preview
-  await getSharpObjectFromSource(src)
-    .jpeg()
-    .toFile(url)
+  await getSharpObjectFromSource(src).jpeg().toFile(url)
 
   // returns new url
   return url
@@ -47,7 +43,7 @@ const convertImage = async (src: string): Promise<string> => {
 
 const logImageData = async (
   src: string | Sharp,
-  name?: string
+  name?: string,
 ): Promise<string> => {
   let img: Sharp
   const target = path.join(dataPaths.tmp, `${name || uuid()}.jpg`)

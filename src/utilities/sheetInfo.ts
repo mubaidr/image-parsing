@@ -9,7 +9,7 @@ import DesignData from './@interfaces/DesignData'
 const getRollNoFromImage = async (
   designData: DesignData,
   img: Sharp,
-  isBarcode: boolean
+  isBarcode: boolean,
 ): Promise<string | undefined> => {
   const codeLocation = designData.code
   const metadata = await img.metadata()
@@ -36,7 +36,7 @@ const getRollNoFromImage = async (
     if (isBarcode) {
       rollNo = await javascriptBarcodeReader(
         { data, width, height },
-        { barcode: 'code-39' }
+        { barcode: 'code-39' },
       )
     } else {
       const res = javascriptQRReader(
@@ -45,7 +45,7 @@ const getRollNoFromImage = async (
         height,
         {
           inversionAttempts: 'dontInvert',
-        }
+        },
       )
 
       rollNo = res ? res.data : undefined

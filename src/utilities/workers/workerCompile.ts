@@ -13,7 +13,7 @@ function sendMessage(obj: WorkerOutput): void {
 
 function start(
   msg: WorkerInput,
-  isChildProcess: boolean
+  isChildProcess: boolean,
 ): CompiledResult | undefined {
   const { results, keys, correctMarks, incorrectMarks } = msg
 
@@ -22,11 +22,11 @@ function start(
 
   const compiledResult = new CompiledResult()
 
-  results.forEach(result => {
+  results.forEach((result) => {
     compiledResult.addResults(Result.fromJson(result))
   })
 
-  keys.forEach(key => {
+  keys.forEach((key) => {
     compiledResult.addKeys(Result.fromJson(key))
   })
 
@@ -62,19 +62,19 @@ process.on('message', (msg: WorkerInput) => {
   }
 })
 
-process.on('unhandledRejection', error => {
+process.on('unhandledRejection', (error) => {
   console.error(error)
 
   stop()
 })
 
-process.on('uncaughtException', error => {
+process.on('uncaughtException', (error) => {
   console.error(error)
 
   stop()
 })
 
-process.on('warning', warning => {
+process.on('warning', (warning) => {
   console.warn(warning)
 })
 

@@ -1,7 +1,7 @@
 import AnswerCollection from './AnswerCollection'
 
 interface ResultJson {
-  [key: string]: string | object | undefined
+  [key: string]: string | Record<string, unknown> | undefined
 
   answers: AnswerCollection
 }

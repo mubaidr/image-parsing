@@ -1,6 +1,5 @@
 import childProcess, { ChildProcess } from 'child_process'
 import noOfCores from 'physical-cpu-count'
-
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
 import WorkerTypes from '../@enums/WorkerTypes'
 import Callbacks from '../@interfaces/Callbacks'
@@ -9,7 +8,7 @@ import Result from './Result'
 
 class WorkerManager {
   private completed = 0
-  private data: object[] = []
+  private data: Record<string, unknown>[] = []
   public workers: ChildProcess[] = []
   public workerPath: string
 
@@ -34,7 +33,7 @@ class WorkerManager {
   }
 
   public stop(): WorkerManager {
-    this.workers.forEach(worker => {
+    this.workers.forEach((worker) => {
       worker.kill('SIGKILL')
       worker.unref()
     })
@@ -51,7 +50,7 @@ class WorkerManager {
   }
 
   public addWorkerHandlers(callbacks: Callbacks): void {
-    this.workers.forEach(worker => {
+    this.workers.forEach((worker) => {
       worker.on(
         'message',
         (message: {
@@ -84,7 +83,7 @@ class WorkerManager {
             ) {
               const compiledResult = new CompiledResult()
 
-              this.data.forEach(o => {
+              this.data.forEach((o) => {
                 compiledResult.add(Result.fromJson(o))
               })
 
@@ -99,13 +98,13 @@ class WorkerManager {
 
             this.stop()
           }
-        }
+        },
       )
 
       worker.on('exit', (code, signal) => {
         if (process.env.NODE_ENV === 'development') {
           console.info(
-            `child_process exited. code: ${code || 0}, signal: ${signal}`
+            `child_process exited. code: ${code || 0}, signal: ${signal}`,
           )
         }
 
@@ -114,7 +113,7 @@ class WorkerManager {
         this.stop()
       })
 
-      worker.on('error', err => {
+      worker.on('error', (err) => {
         callbacks.onerror(err)
 
         this.stop()

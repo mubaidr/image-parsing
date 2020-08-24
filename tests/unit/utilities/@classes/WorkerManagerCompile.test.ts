@@ -1,6 +1,6 @@
-import WorkerManagerCompile from '../../../src/utilities/@classes/WorkerManagerCompile'
-import { dataPaths } from '../../../src/utilities/dataPaths'
-import { getDesignData } from '../../../src/utilities/design'
+import WorkerManagerCompile from '../../../../src/utilities/@classes/WorkerManagerCompile'
+import { dataPaths } from '../../../../src/utilities/dataPaths'
+import { getDesignData } from '../../../../src/utilities/design'
 
 beforeAll(() => {
   // childProcess.execSync('node _scripts/dev-runner-worker.js compile')
@@ -19,7 +19,7 @@ describe('WorkerManagerCompile', () => {
       const wm = new WorkerManagerCompile()
       const designData = getDesignData(dataPaths.designBarcode)
 
-      const onerror = jest.fn(err => {
+      const onerror = jest.fn((err) => {
         wm.stop()
         fail(err)
       })

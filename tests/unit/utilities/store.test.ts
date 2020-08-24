@@ -1,5 +1,5 @@
-import { dataPaths } from '../../src/utilities/dataPaths'
-import { store } from '../../src/utilities/store'
+import { dataPaths } from '../../../src/utilities/dataPaths'
+import { store } from '../../../src/utilities/store'
 
 describe('store', () => {
   test('should be defined', () => {
