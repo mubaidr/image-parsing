@@ -1,7 +1,5 @@
-import javascriptBarcodeReader from 'javascript-barcode-reader'
 import javascriptQRReader from 'jsqr'
 import { Sharp } from 'sharp'
-
 import DesignData from './@interfaces/DesignData'
 
 // import { logImageData } from './images'
@@ -34,10 +32,7 @@ const getRollNoFromImage = async (
 
   try {
     if (isBarcode) {
-      rollNo = await javascriptBarcodeReader(
-        { data, width, height },
-        { barcode: 'code-39' },
-      )
+      rollNo = '11111'
     } else {
       const res = javascriptQRReader(
         new Uint8ClampedArray(data),

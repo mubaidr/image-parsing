@@ -1,7 +1,7 @@
 // @ts-ignore
 import('v8-compile-cache')
 
-import 'bulma-pro/bulma.sass'
+import 'bulma-fluent'
 import { ipcRenderer } from 'electron'
 import 'material-design-icons/iconfont/material-icons.css'
 import Vue from 'vue'
@@ -45,3 +45,6 @@ ipcRenderer.on('change-view', (event, data) => {
     router.push(route)
   }
 })
+
+// @ts-ignore
+console.log(window.BarcodeDetector)

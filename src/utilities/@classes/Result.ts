@@ -1,5 +1,4 @@
-import uuid from 'uuid'
-
+import { v4 as uuid4 } from 'uuid'
 import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
 import RegExpPattern from '../@enums/RegExpPatterns'
 import AnswerCollection from '../@interfaces/AnswerCollection'
@@ -27,7 +26,7 @@ class Result {
   public testTime = ''
 
   public constructor(rollNo?: string, imageFile?: string) {
-    this.id = uuid()
+    this.id = uuid4()
     this.rollNo = rollNo
     this.imageFile = imageFile
     this.isRollNoExtracted = !!rollNo

@@ -1,5 +1,4 @@
-import uuid from 'uuid'
-
+import { v4 as uuidv4 } from 'uuid'
 import { importExcelToJson } from '../excel'
 import Result from './Result'
 
@@ -10,7 +9,7 @@ class CompiledResult {
   private results: Result[] = []
 
   public constructor() {
-    this.id = uuid()
+    this.id = uuidv4()
   }
 
   public static export(compiledResult: CompiledResult): any[] {

@@ -17,9 +17,9 @@
                   <i class="material-icons">insert_drive_file</i>
                   <span class="file-label">Choose File:</span>
                 </span>
-                <span class="file-name">
-                  {{ resultFilePath || 'Please choose a result file...' }}
-                </span>
+                <span class="file-name">{{
+                  resultFilePath || 'Please choose a result file...'
+                }}</span>
               </label>
             </div>
           </div>
@@ -211,12 +211,12 @@
 </template>
 
 <script>
-import modalPreview from '../../components/ModalPreview'
-import { saveFile, openFile } from '../../../utilities/electron-dialog'
-import { exportJsonToExcel } from '../../../utilities/excel'
-import { convertImage } from '../../../utilities/images'
-import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
-import CompiledResult from '../../../utilities/@classes/CompiledResult'
+import modalPreview from '@/components/ModalPreview'
+import { saveFile, openFile } from '@/utilities/electron-dialog'
+import { exportJsonToExcel } from '@/utilities/excel'
+import { convertImage } from '@/utilities/images'
+import KeyNativeEnum from '@/utilities/@enums/KeyNativeEnum'
+import CompiledResult from '@/utilities/@classes/CompiledResult'
 
 export default {
   name: 'ReviewResult',

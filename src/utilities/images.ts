@@ -1,8 +1,7 @@
 import fastGlob from 'fast-glob'
 import path from 'path'
 import sharp, { Sharp } from 'sharp'
-import uuid from 'uuid'
-
+import { v4 as uuid4 } from 'uuid'
 import ImageNativeTypesEnum from './@enums/ImageNativeTypesEnum'
 import ImageTypesEnum from './@enums/ImageTypesEnum'
 import { cache } from './cache'
@@ -31,7 +30,7 @@ const convertImage = async (src: string): Promise<string> => {
   }
 
   // generate random tmp url
-  const url = path.join(dataPaths.tmp, `${uuid()}.jpg`)
+  const url = path.join(dataPaths.tmp, `${uuid4()}.jpg`)
   cache.set(src, url)
 
   // save file for preview
@@ -46,7 +45,7 @@ const logImageData = async (
   name?: string,
 ): Promise<string> => {
   let img: Sharp
-  const target = path.join(dataPaths.tmp, `${name || uuid()}.jpg`)
+  const target = path.join(dataPaths.tmp, `${name || uuid4()}.jpg`)
 
   if (typeof src === 'string') {
     img = getSharpObjectFromSource(src)

@@ -1,0 +1,52 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "plugin:vue/essential",
+    "eslint:recommended",
+    "@vue/typescript/recommended",
+    "@vue/prettier",
+    "@vue/prettier/@typescript-eslint"
+  ],
+  "globals": {
+    "__static": "readonly"
+  },
+  "overrides": [
+    {
+      "env": {
+        "jest": true
+      },
+      "files": [
+        "**/__tests__/*.{j,t}s?(x)",
+        "**/tests/unit/**/*.spec.{j,t}s?(x)"
+      ]
+    },
+    {
+      "env": {
+        "worker": true
+      },
+      "files": ["src/utilities/workers/**/*.{j,t}s?(x)"]
+    },
+    {
+      "files": ["src/**/*.vue"],
+      "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": "off"
+      }
+    }
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "root": true,
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "warn",
+    "@typescript-eslint/no-empty-function": "warn",
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "prettier/prettier": "error"
+  }
+}

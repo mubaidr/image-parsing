@@ -1,11 +1,7 @@
 <template>
   <div class="section">
-    <h1 class="title is-5">
-      Process
-    </h1>
-    <h2 class="subtitle is-6">
-      Process scanned images to generate result.
-    </h2>
+    <h1 class="title is-5">Process</h1>
+    <h2 class="subtitle is-6">Process scanned images to generate result.</h2>
 
     <div class="field">
       <label class="label">Scanned images directory:</label>
@@ -60,9 +56,8 @@
           :value="progress"
           max="100"
           class="progress is-success is-large"
+          >{{ progress }}</progress
         >
-          {{ progress }}
-        </progress>
 
         <div class="columns is-mobile">
           <div class="column">
@@ -87,13 +82,13 @@
 </template>
 
 <script>
-import { currentWindow } from '../../../utilities/electron-utilities'
-import { openDirectory, saveFile } from '../../../utilities/electron-dialog'
-import { exportJsonToExcel } from '../../../utilities/excel'
-import KeyNativeEnum from '../../../utilities/@enums/KeyNativeEnum'
-import ProgressStateEnum from '../../../utilities/@enums/ProgressStateEnum'
+import { currentWindow } from '@/utilities/electron-utilities'
+import { openDirectory, saveFile } from '@/utilities/electron-dialog'
+import { exportJsonToExcel } from '@/utilities/excel'
+import KeyNativeEnum from '@/utilities/@enums/KeyNativeEnum'
+import ProgressStateEnum from '@/utilities/@enums/ProgressStateEnum'
 import prettyMs from 'pretty-ms'
-import WorkerManagerExtract from '../../../utilities/@classes/WorkerManagerExtract'
+import WorkerManagerExtract from '@/utilities/@classes/WorkerManagerExtract'
 
 const workerManager = new WorkerManagerExtract()
 

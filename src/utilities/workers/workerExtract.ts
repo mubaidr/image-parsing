@@ -1,11 +1,8 @@
 import Result from '../@classes/Result'
 import ProgressStateEnum from '../@enums/ProgressStateEnum'
-import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
 import WorkerTypes from '../@enums/WorkerTypes'
-import NNQuestionOutput from '../@interfaces/NNQuestionOutput'
 import WorkerInput from '../@interfaces/WorkerInput'
 import WorkerOutput from '../@interfaces/WorkerOutput'
-import { getQuestionsNeuralNet } from '../getQuestionsNeuralNet'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
 import { getRollNoFromImage } from '../sheetInfo'
@@ -25,7 +22,6 @@ async function start(
   if (!designData) throw new Error('Invalid designData...')
   if (!imagePaths) throw new Error('Invalid imagePaths...')
 
-  const neuralNet = getQuestionsNeuralNet()
   const results: Result[] = []
 
   for (let i = 0, imagesLength = imagePaths.length; i < imagesLength; i += 1) {
@@ -50,21 +46,8 @@ async function start(
 
       if (!title) continue
 
-      const pre = neuralNet.run<number[], NNQuestionOutput>(input)
-      let value: string
-
-      if (pre[QuestionOptionsEnum.NONE] >= 0.95) {
-        value = QuestionOptionsEnum.NONE
-      } else {
-        const [first, second] = Object.entries(pre).sort((a, b) => b[1] - a[1])
-
-        // 20% more sure than any other option
-        if (first[1] - second[1] >= 0.2) {
-          value = first[0]
-        } else {
-          value = QuestionOptionsEnum.MULTIPLE
-        }
-      }
+      // TODO: calculate value using area average
+      const value = 'A'
 
       result.addAnswer(title, value)
     }

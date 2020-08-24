@@ -1,8 +1,6 @@
 <template>
   <div class="section">
-    <h1 class="title is-4">
-      Compile
-    </h1>
+    <h1 class="title is-4">Compile</h1>
     <h2 class="subtitle is-6">
       Compile result using extracted results and answer key.
     </h2>
@@ -26,7 +24,7 @@
         </div>
         <!-- <p class="help">
           Choose the result file
-        </p> -->
+        </p>-->
       </div>
 
       <div class="field">
@@ -47,7 +45,7 @@
         </div>
         <!-- <p class="help">
           Choose the key file
-        </p> -->
+        </p>-->
       </div>
 
       <div class="field is-grouped">
@@ -103,11 +101,11 @@
 </template>
 
 <script>
-import { openFile, saveFile } from '../../utilities/electron-dialog'
-import { exportJsonToExcel } from '../../utilities/excel'
-import KeyNativeEnum from '../../utilities/@enums/KeyNativeEnum'
-import WorkerManagerCompile from '../../utilities/@classes/WorkerManagerCompile'
-import ProgressStateEnum from '../../utilities/@enums/ProgressStateEnum'
+import { openFile, saveFile } from '@/utilities/electron-dialog'
+import { exportJsonToExcel } from '@/utilities/excel'
+import KeyNativeEnum from '@/utilities/@enums/KeyNativeEnum'
+import WorkerManagerCompile from '@/utilities/@classes/WorkerManagerCompile'
+import ProgressStateEnum from '@/utilities/@enums/ProgressStateEnum'
 
 const workerManager = new WorkerManagerCompile()
 
