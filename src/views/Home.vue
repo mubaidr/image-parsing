@@ -5,10 +5,7 @@
         <br />
         <div class="block has-text-centered">
           <figure class="image is-128x128">
-            <img
-              alt="Placeholder image"
-              src="/public/_icons/512icontype11.png"
-            />
+            <img alt="Product Logo" src="@/assets/icon.png" />
           </figure>
         </div>
 
@@ -18,22 +15,20 @@
             A complete solution for Forms/MCQ based paper checking.
           </p>
 
-          <!-- <br /> -->
-
           <div class="buttons is-centered">
-            <RouterLink class="button is-light" to="/generate/answer-sheets">
+            <RouterLink class="button is-primary" to="/generate/answer-sheets">
               <i class="material-icons">print</i>
               <span>Generate</span>
             </RouterLink>
-            <RouterLink class="button is-light" to="/process/extract">
+            <RouterLink class="button is-primary" to="/process/extract">
               <i class="material-icons">list</i>
               <span>Extract</span>
             </RouterLink>
-            <RouterLink class="button is-light" to="/process/review">
+            <RouterLink class="button is-primary" to="/process/review">
               <i class="material-icons">playlist_add_check</i>
               <span>Review</span>
             </RouterLink>
-            <RouterLink class="button is-light" to="compile">
+            <RouterLink class="button is-primary" to="compile">
               <i class="material-icons">assessment</i>
               <span>Compile</span>
             </RouterLink>

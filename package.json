@@ -71,6 +71,7 @@
   },
   "main": "background.js",
   "name": "image-parsing",
+  "productName": "image-parsing",
   "private": true,
   "scripts": {
     "build": "vue-cli-service electron:build -- --linux deb --win nsis",

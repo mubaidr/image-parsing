@@ -14,8 +14,6 @@ import './assets/style/main.scss'
 import router from './router/index'
 import store from './store/index'
 
-const isDev = process.env.NODE_ENV === 'development'
-
 Vue.use(Toasted, {
   duration: 2500,
   Icon: 'info',
@@ -25,8 +23,8 @@ Vue.use(Toasted, {
 })
 Vue.use(VueVirtualScroller)
 
-Vue.config.devtools = isDev
-Vue.config.performance = isDev
+Vue.config.devtools = false
+Vue.config.performance = false
 Vue.config.productionTip = false
 
 // tslint:disable-next-line: no-unused-expression
@@ -45,6 +43,3 @@ ipcRenderer.on('change-view', (event, data) => {
     router.push(route)
   }
 })
-
-// @ts-ignore
-console.log(window.BarcodeDetector)
