@@ -1,4 +1,3 @@
-import javascriptQRReader from 'jsqr'
 import { Sharp } from 'sharp'
 import DesignData from './@interfaces/DesignData'
 
@@ -7,7 +6,6 @@ import DesignData from './@interfaces/DesignData'
 const getRollNoFromImage = async (
   designData: DesignData,
   img: Sharp,
-  isBarcode: boolean,
 ): Promise<string | undefined> => {
   const codeLocation = designData.code
   const metadata = await img.metadata()
@@ -27,27 +25,8 @@ const getRollNoFromImage = async (
   // log image
   // logImageData(img)
 
-  const data = await img.ensureAlpha().toBuffer()
-  let rollNo: string | undefined
-
-  try {
-    if (isBarcode) {
-      rollNo = '11111'
-    } else {
-      const res = javascriptQRReader(
-        new Uint8ClampedArray(data),
-        width,
-        height,
-        {
-          inversionAttempts: 'dontInvert',
-        },
-      )
-
-      rollNo = res ? res.data : undefined
-    }
-  } catch {
-    rollNo = undefined
-  }
+  // const data = await img.ensureAlpha().toBuffer()
+  const rollNo = '11111'
 
   return rollNo
 }
