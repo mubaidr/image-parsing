@@ -62,8 +62,12 @@ export class WorkerManager extends EventEmitter {
         },
       )
 
+      console.log('yay')
+
       worker.on('message', (message: WorkerOutputMessage) => {
         const { progressState, payload } = message
+
+        console.log(progressState)
 
         if (progressState === PROGRESS_STATES.PROGRESS) {
           return this.emit(PROGRESS_STATES.PROGRESS)
@@ -78,16 +82,19 @@ export class WorkerManager extends EventEmitter {
 
           if (this.finished === this.workers.length) {
             this.emit(PROGRESS_STATES.SUCCESS, this.data)
-            this.stop()
           }
         }
       })
 
       worker.on('exit', (code, signal) => {
+        // eslint-disable-next-line no-console
+        // console.log(code, signal)
         this.emit('exit', code, signal)
       })
 
       worker.on('error', (error) => {
+        // eslint-disable-next-line no-console
+        console.error(error)
         this.emit('error', error)
       })
 

@@ -5,12 +5,8 @@ import {
   WorkerManager
 } from '../../../../src/utilities/@classes/WorkerManager'
 
-beforeAll(() => {
-  // TODO: compile worker files to js
-})
-
 describe('WorkerManager', () => {
-  test('should be able to extract using workers', () => {
+  test('should be able to extract using workers', async () => {
     const workerManager = new WorkerManager()
     const progressCallback = jest.fn()
     const successCallback = jest.fn()
@@ -29,15 +25,26 @@ describe('WorkerManager', () => {
       successCallback()
     })
 
-    return workerManager
+    workerManager.on('error', (error) => {
+      console.error(error)
+    })
+
+    workerManager.on('log', (log) => {
+      console.log(log)
+    })
+
+    await workerManager
       .extract(dataPaths.imagesBarcode, 'barcode')
       .then(() => {
         expect(workerManager.inputCount).toBe(3)
-        expect(progressCallback).toBeCalledTimes(3)
         expect(successCallback).toBeCalledTimes(1)
+        expect(progressCallback).toBeCalledTimes(3)
       })
       .catch((err) => {
         fail(err)
+      })
+      .then(() => {
+        workerManager.stop()
       })
   })
 

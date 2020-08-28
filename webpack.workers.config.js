@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
-const webpack = require('webpack')
 const fsGlob = require('fast-glob')
 const TerserJSPlugin = require('terser-webpack-plugin')
-const { dependencies, devDependencies, productName } = require('./package.json')
+const { dependencies, devDependencies } = require('./package.json')
 
 const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
@@ -64,16 +63,8 @@ const config = {
     __dirname: isDevMode,
     __filename: isDevMode,
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.PRODUCT_NAME': JSON.stringify(productName),
-    }),
-  ],
+  plugins: [],
   resolve: {
-    alias: {
-      '@': path.join(__dirname, '../src/'),
-      src: path.join(__dirname, '../src/'),
-    },
     extensions: ['.ts', '.js', '.json', '.node'],
   },
   target: 'node',

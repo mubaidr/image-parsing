@@ -6,8 +6,6 @@ import { dataPaths } from './dataPaths'
 
 function getDesignPathByID(id: string) {
   //TODO: implement internal store for designs with import/export functionality
-  console.log(id)
-
   return dataPaths.designBarcode
 }
 
