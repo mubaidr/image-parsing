@@ -11,7 +11,7 @@
       "dom.iterable",
       "scripthost"
     ],
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "paths": {
       "@/*": [
@@ -36,6 +36,6 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx", "src/utilities/workers/extract.worker.ts"
   ]
 }

@@ -64,9 +64,9 @@
             <div class="select is-small">
               <select v-model="showAllResults">
                 <option :value="true">Show all results</option>
-                <option :value="false"
-                  >Show results with missing roll numbers</option
-                >
+                <option :value="false">
+                  Show results with missing roll numbers
+                </option>
               </select>
             </div>
           </div>

@@ -1,7 +1,6 @@
 import CompiledResult from '../@classes/CompiledResult'
 import Result from '../@classes/Result'
-import ProgressStateEnum from '../@enums/ProgressStateEnum'
-import WorkerTypes from '../@enums/WorkerTypes'
+import { PROGRESS_STATES } from '../@classes/WorkerManager'
 import WorkerInput from '../@interfaces/WorkerInput'
 import WorkerOutput from '../@interfaces/WorkerOutput'
 
@@ -35,13 +34,13 @@ function start(
   // report progress status
   if (isChildProcess) {
     sendMessage({
-      state: ProgressStateEnum.PROGRESS,
-      workerType: WorkerTypes.COMPILE,
+      state: PROGRESS_STATES.PROGRESS,
+      workerType: WORKER_TYPES.COMPILE,
       timeElapsed: 0,
     })
 
     sendMessage({
-      state: ProgressStateEnum.COMPLETED,
+      state: PROGRESS_STATES.SUCCESS,
       workerType: WorkerTypes.COMPILE,
       data: compiledResult.getKeysAndResults(),
     })

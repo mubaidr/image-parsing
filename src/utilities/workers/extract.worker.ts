@@ -1,36 +1,38 @@
 import Result from '../@classes/Result'
-import ProgressStateEnum from '../@enums/ProgressStateEnum'
-import WorkerTypes from '../@enums/WorkerTypes'
-import WorkerInput from '../@interfaces/WorkerInput'
-import WorkerOutput from '../@interfaces/WorkerOutput'
+import { DesignData, PROGRESS_STATES } from '../@classes/WorkerManager'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
 import { getRollNoFromImage } from '../sheetInfo'
 
-function sendMessage(obj: WorkerOutput): void {
+export type WorkerExtractInputMessage = {
+  designData: DesignData
+  imagePaths: string[]
+}
+
+export type WorkerExtractOutputMessage = {
+  progressState: PROGRESS_STATES
+  payload?: Result[]
+}
+
+function sendMessage(message: WorkerExtractOutputMessage): void {
   if (process && process.send) {
-    process.send(obj)
+    process.send(message)
   }
 }
 
-async function start(
-  msg: WorkerInput,
-  isChildProcess: boolean,
+export async function start(
+  message: WorkerExtractInputMessage,
+  isWorker = true,
 ): Promise<Result[] | undefined> {
-  const { designData, imagePaths } = msg
-
-  if (!designData) throw new Error('Invalid designData...')
-  if (!imagePaths) throw new Error('Invalid imagePaths...')
-
+  const { designData, imagePaths } = message
   const results: Result[] = []
 
-  for (let i = 0, imagesLength = imagePaths.length; i < imagesLength; i += 1) {
+  for (let i = 0; i < imagePaths.length; i += 1) {
     const image = imagePaths[i]
     const sharpImage = getSharpObjectFromSource(image)
-    const lastTimeSnapshot = Date.now()
 
     const [rollNo, questionsData] = await Promise.all([
-      getRollNoFromImage(designData, sharpImage, true),
+      getRollNoFromImage(designData, sharpImage),
       getQuestionsData(designData, sharpImage.clone()),
     ])
     const result = new Result(rollNo, image)
@@ -54,51 +56,40 @@ async function start(
 
     results.push(result)
 
-    if (isChildProcess) {
+    if (isWorker) {
       sendMessage({
-        state: ProgressStateEnum.PROGRESS,
-        timeElapsed: Date.now() - lastTimeSnapshot,
+        progressState: PROGRESS_STATES.PROGRESS,
       })
     }
   }
 
-  if (isChildProcess) {
+  if (isWorker) {
     sendMessage({
-      state: ProgressStateEnum.COMPLETED,
-      workerType: WorkerTypes.EXTRACT,
-      data: results,
+      progressState: PROGRESS_STATES.SUCCESS,
+      payload: results,
     })
   } else {
     return results
   }
 }
 
-function stop(): void {
-  process.exit(0)
-}
-
-process.on('message', (msg: WorkerInput) => {
-  if (msg.stop) {
-    stop()
-  } else {
-    start(msg, true)
-  }
+process.on('message', (message: WorkerExtractInputMessage) => {
+  start(message)
 })
 
 process.on('unhandledRejection', (error) => {
+  // eslint-disable-next-line no-console
   console.error(error)
-
-  stop()
+  process.exit(1)
 })
 
 process.on('uncaughtException', (error) => {
+  // eslint-disable-next-line no-console
   console.error(error)
-
-  stop()
+  process.exit(1)
 })
 
 process.on('warning', (warning) => {
+  // eslint-disable-next-line no-console
   console.warn(warning)
 })
-
-export default { start, stop }

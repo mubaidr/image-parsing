@@ -56,8 +56,9 @@
           :value="progress"
           max="100"
           class="progress is-success is-large"
-          >{{ progress }}</progress
         >
+          {{ progress }}
+        </progress>
 
         <div class="columns is-mobile">
           <div class="column">

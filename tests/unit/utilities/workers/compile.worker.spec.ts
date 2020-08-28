@@ -2,7 +2,7 @@ import CompiledResult from '../../../../src/utilities/@classes/CompiledResult'
 import { dataPaths } from '../../../../src/utilities/dataPaths'
 import { getDesignData } from '../../../../src/utilities/design'
 import { readKey } from '../../../../src/utilities/readKey'
-import workerCompile from '../../../../src/utilities/workers/workerCompile'
+import workerCompile from '../../../../src/utilities/workers/compile.worker'
 
 describe('workerCompile', () => {
   test('should compile just fine', async () => {

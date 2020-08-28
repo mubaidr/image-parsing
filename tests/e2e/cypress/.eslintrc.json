@@ -1,0 +1,14 @@
+{
+  "env": {
+    "cypress/globals": true,
+    "es6": true,
+    "node": true
+  },
+  "plugins": [
+    "cypress"
+  ],
+  "rules": {
+    "strict": "off"
+  },
+  "extends": "../../../.eslintrc.json"
+}

@@ -1,14 +1,20 @@
 import { parse } from 'fast-xml-parser'
 import { readFileSync } from 'fs'
-
-// import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
+import { DesignData, ItemInfo } from './@classes/WorkerManager'
 import RegExpPatterns from './@enums/RegExpPatterns'
-import DesignData from './@interfaces/DesignData'
-import Location from './@interfaces/Location'
-import QuestionsLocations from './@interfaces/QuestionsLocations'
+import { dataPaths } from './dataPaths'
 
-const getDesignData = (file: string): DesignData => {
-  const { svg } = parse(readFileSync(file).toString(), {
+function getDesignPathByID(id: string) {
+  //TODO: implement internal store for designs with import/export functionality
+  console.log(id)
+
+  return dataPaths.designBarcode
+}
+
+export async function getDesignData(id: string): Promise<DesignData> {
+  const filePath = getDesignPathByID(id)
+
+  const { svg } = parse(readFileSync(filePath).toString(), {
     attributeNamePrefix: '',
     ignoreAttributes: false,
     parseNodeValue: true,
@@ -29,8 +35,10 @@ const getDesignData = (file: string): DesignData => {
   const PATTERN_QRCODE = new RegExp(RegExpPatterns.QRCODE, 'i')
 
   // for export
-  const questions: QuestionsLocations = {}
-  let code: Location = { x: 0, y: 0, width: 0, height: 0 }
+  let code: ItemInfo = { x: 0, y: 0, width: 0, height: 0 }
+  const questions: {
+    [key: string]: ItemInfo
+  } = {}
 
   svg.g.forEach((group: any) => {
     const { title, transform, rect } = group
@@ -49,13 +57,12 @@ const getDesignData = (file: string): DesignData => {
         .map((val: string) => parseInt(val, 10) || 0)
     }
 
-    x = x - rx + xTransform - 3
-    y = y - ry + yTransform - 6
-    width = width + rx + 6
-    height = height + ry + 6
+    x = Math.floor(x - rx + xTransform - 3)
+    y = Math.floor(y - ry + yTransform - 3)
+    width = Math.ceil(width + rx + 6)
+    height = Math.ceil(height + ry + 6)
 
     if (PATTERN_OPTION.test(title)) {
-      // const option: string = title.slice(-1)
       const questionNumber: string = title.slice(0, -1)
 
       if (!questions[questionNumber]) {
@@ -96,5 +103,3 @@ const getDesignData = (file: string): DesignData => {
     height: svgHeight,
   }
 }
-
-export { getDesignData }

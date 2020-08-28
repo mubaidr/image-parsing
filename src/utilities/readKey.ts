@@ -3,7 +3,7 @@ import KeyNativeEnum from './@enums/KeyNativeEnum'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { importExcelToJson } from './excel'
-import extractTask from './workers/workerExtract'
+import extractTask from './workers/extract.worker'
 
 async function readKey(src: string): Promise<Result[] | undefined> {
   const ext = src.split('.').pop()

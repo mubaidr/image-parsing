@@ -1,8 +1,7 @@
 import { Sharp } from 'sharp'
-
 import CompiledResult from './@classes/CompiledResult'
+import { DesignData } from './@classes/WorkerManager'
 import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
-import DesignData from './@interfaces/DesignData'
 import QuestionData from './@interfaces/QuestionData'
 import { convertToBitArray } from './convertToBitArray'
 

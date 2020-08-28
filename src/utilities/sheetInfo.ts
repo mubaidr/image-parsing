@@ -1,7 +1,5 @@
 import { Sharp } from 'sharp'
-import DesignData from './@interfaces/DesignData'
-
-// import { logImageData } from './images'
+import { DesignData } from './@classes/WorkerManager'
 
 const getRollNoFromImage = async (
   designData: DesignData,
@@ -13,20 +11,16 @@ const getRollNoFromImage = async (
   const width = Math.ceil(codeLocation.width * ratio)
   const height = Math.ceil(codeLocation.height * ratio)
 
-  img
-    .extract({
-      left: Math.floor(codeLocation.x * ratio),
-      top: Math.floor(codeLocation.y * ratio),
-      width,
-      height,
-    })
-    .median(3)
+  img.extract({
+    left: Math.floor(codeLocation.x * ratio),
+    top: Math.floor(codeLocation.y * ratio),
+    width,
+    height,
+  })
 
-  // log image
-  // logImageData(img)
-
-  // const data = await img.ensureAlpha().toBuffer()
   const rollNo = '11111'
+
+  // console.log(window.BarcodeScanner)
 
   return rollNo
 }
