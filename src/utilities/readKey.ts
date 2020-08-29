@@ -3,7 +3,7 @@ import KeyNativeEnum from './@enums/KeyNativeEnum'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { importExcelToJson } from './excel'
-import extractTask from './workers/extract.worker'
+import * as extractTask from './workers/extract.worker'
 
 async function readKey(src: string): Promise<Result[] | undefined> {
   const ext = src.split('.').pop()
@@ -16,7 +16,7 @@ async function readKey(src: string): Promise<Result[] | undefined> {
     }
     return results
   }
-  const designData = getDesignData(dataPaths.designBarcode)
+  const designData = await getDesignData(dataPaths.designBarcode)
   const keys = await extractTask.start(
     {
       designData,

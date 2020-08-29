@@ -123,14 +123,14 @@ export class WorkerManager extends EventEmitter {
     return this
   }
 
-  public async generate(): Promise<WorkerManager> {
-    await this.createWorkers(CPU_COUNT, WORKER_TYPES.GENERATE)
+  public async compile(): Promise<WorkerManager> {
+    await this.createWorkers(CPU_COUNT, WORKER_TYPES.COMPILE)
 
     return this
   }
 
-  public async compile(): Promise<WorkerManager> {
-    await this.createWorkers(CPU_COUNT, WORKER_TYPES.COMPILE)
+  public async generate(): Promise<WorkerManager> {
+    await this.createWorkers(CPU_COUNT, WORKER_TYPES.GENERATE)
 
     return this
   }

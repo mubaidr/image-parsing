@@ -1,24 +1,30 @@
 import CompiledResult from '../@classes/CompiledResult'
 import Result from '../@classes/Result'
 import { PROGRESS_STATES } from '../@classes/WorkerManager'
-import WorkerInput from '../@interfaces/WorkerInput'
-import WorkerOutput from '../@interfaces/WorkerOutput'
 
-function sendMessage(obj: WorkerOutput): void {
+export type WorkerCompileInputMessage = {
+  results: Result[]
+  keys: Result[]
+  correctMarks?: number
+  incorrectMarks?: number
+}
+
+export type WorkerCompileOutputMessage = {
+  progressState: PROGRESS_STATES
+  payload?: Result[]
+}
+
+function sendMessage(message: WorkerCompileOutputMessage): void {
   if (process && process.send) {
-    process.send(obj)
+    process.send(message)
   }
 }
 
-function start(
-  msg: WorkerInput,
-  isChildProcess: boolean,
-): CompiledResult | undefined {
-  const { results, keys, correctMarks, incorrectMarks } = msg
-
-  if (!results) throw new Error('Invalid results...')
-  if (!keys) throw new Error('Invalid keys...')
-
+export async function start(
+  message: WorkerCompileInputMessage,
+  isWorker = true,
+): Promise<CompiledResult | undefined> {
+  const { results, keys, correctMarks, incorrectMarks } = message
   const compiledResult = new CompiledResult()
 
   results.forEach((result) => {
@@ -32,49 +38,37 @@ function start(
   compiledResult.compile(correctMarks, incorrectMarks)
 
   // report progress status
-  if (isChildProcess) {
+  if (isWorker) {
     sendMessage({
-      state: PROGRESS_STATES.PROGRESS,
-      workerType: WORKER_TYPES.COMPILE,
-      timeElapsed: 0,
+      progressState: PROGRESS_STATES.PROGRESS,
     })
 
     sendMessage({
-      state: PROGRESS_STATES.COMPLETED,
-      workerType: WorkerTypes.COMPILE,
-      data: compiledResult.getKeysAndResults(),
+      progressState: PROGRESS_STATES.COMPLETED,
+      payload: compiledResult.getKeysAndResults(),
     })
   } else {
     return compiledResult
   }
 }
 
-function stop(): void {
-  process.exit(0)
-}
-
-process.on('message', (msg: WorkerInput) => {
-  if (msg.stop) {
-    stop()
-  } else {
-    start(msg, true)
-  }
+process.on('message', (message: WorkerCompileInputMessage) => {
+  start(message)
 })
 
 process.on('unhandledRejection', (error) => {
+  // eslint-disable-next-line no-console
   console.error(error)
-
-  stop()
+  process.exit(1)
 })
 
 process.on('uncaughtException', (error) => {
+  // eslint-disable-next-line no-console
   console.error(error)
-
-  stop()
+  process.exit(1)
 })
 
 process.on('warning', (warning) => {
+  // eslint-disable-next-line no-console
   console.warn(warning)
 })
-
-export default { start, stop }
