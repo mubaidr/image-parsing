@@ -40,7 +40,7 @@ function start(
     })
 
     sendMessage({
-      state: PROGRESS_STATES.SUCCESS,
+      state: PROGRESS_STATES.COMPLETED,
       workerType: WorkerTypes.COMPILE,
       data: compiledResult.getKeysAndResults(),
     })

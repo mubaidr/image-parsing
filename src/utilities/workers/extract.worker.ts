@@ -18,8 +18,6 @@ function sendMessage(message: WorkerExtractOutputMessage): void {
   if (process && process.send) {
     process.send(message)
   }
-
-  console.log(message)
 }
 
 export async function start(
@@ -28,8 +26,6 @@ export async function start(
 ): Promise<Result[] | undefined> {
   const { designData, imagePaths } = message
   const results: Result[] = []
-
-  console.log(imagePaths)
 
   for (let i = 0; i < imagePaths.length; i += 1) {
     const image = imagePaths[i]
@@ -69,7 +65,7 @@ export async function start(
 
   if (isWorker) {
     sendMessage({
-      progressState: PROGRESS_STATES.SUCCESS,
+      progressState: PROGRESS_STATES.COMPLETED,
       payload: results,
     })
   } else {

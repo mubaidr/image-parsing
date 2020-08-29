@@ -8,7 +8,10 @@ const CPU_COUNT = cpus().length
 
 export enum PROGRESS_STATES {
   PROGRESS = 'progress',
-  SUCCESS = 'success',
+  COMPLETED = 'completed',
+  ERROR = 'error',
+  LOG = 'log',
+  EXIT = 'exit',
 }
 
 enum WORKER_TYPES {
@@ -50,30 +53,18 @@ export class WorkerManager extends EventEmitter {
     super()
   }
 
-  private async createWorkers(count: number, workerType: WORKER_TYPES) {
-    await this.stop()
-
+  private async createWorkers(count: number, type: WORKER_TYPES) {
     for (let i = 0; i < count; i += 1) {
-      const worker = fork(
-        `./dist-electron/workers/${workerType}.worker.js`,
-        [],
-        {
-          silent: true,
-        },
-      )
-
-      console.log('yay')
+      const worker = fork(`./dist-electron/workers/${type}.worker.js`)
 
       worker.on('message', (message: WorkerOutputMessage) => {
         const { progressState, payload } = message
-
-        console.log(progressState)
 
         if (progressState === PROGRESS_STATES.PROGRESS) {
           return this.emit(PROGRESS_STATES.PROGRESS)
         }
 
-        if (progressState === PROGRESS_STATES.SUCCESS) {
+        if (progressState === PROGRESS_STATES.COMPLETED) {
           this.finished += 1
 
           if (payload) {
@@ -81,36 +72,22 @@ export class WorkerManager extends EventEmitter {
           }
 
           if (this.finished === this.workers.length) {
-            this.emit(PROGRESS_STATES.SUCCESS, this.data)
+            this.emit(PROGRESS_STATES.COMPLETED, this.data)
           }
         }
       })
 
       worker.on('exit', (code, signal) => {
-        // eslint-disable-next-line no-console
-        // console.log(code, signal)
-        this.emit('exit', code, signal)
+        this.emit(PROGRESS_STATES.EXIT, code, signal)
       })
 
       worker.on('error', (error) => {
-        // eslint-disable-next-line no-console
-        console.error(error)
-        this.emit('error', error)
+        this.emit(PROGRESS_STATES.ERROR, error)
       })
 
       if (worker.stdout) {
         worker.stdout.on('data', (data: Buffer) => {
-          // eslint-disable-next-line no-console
-          console.log(data.toString())
-          this.emit('log', data.toString())
-        })
-      }
-
-      if (worker.stderr) {
-        worker.stderr.on('data', (data: Buffer) => {
-          // eslint-disable-next-line no-console
-          console.error(data.toString())
-          this.emit('error', new Error(data.toString()))
+          this.emit(PROGRESS_STATES.LOG, data.toString())
         })
       }
 
@@ -120,15 +97,17 @@ export class WorkerManager extends EventEmitter {
 
   public async extract(
     directory: string,
-    designID: string,
+    designId: string,
   ): Promise<WorkerManager> {
-    const designData = await getDesignData(designID)
-    const totalImages = await getImagePaths(directory)
+    const [designData, totalImages] = await Promise.all([
+      getDesignData(designId),
+      getImagePaths(directory),
+    ])
     const totalWorkers = Math.min(totalImages.length, CPU_COUNT)
     const step = Math.floor(totalImages.length / totalWorkers)
+    await this.createWorkers(totalWorkers, WORKER_TYPES.EXTRACT)
 
     this.inputCount = totalImages.length
-    await this.createWorkers(totalWorkers, WORKER_TYPES.EXTRACT)
 
     for (let i = 0; i < totalWorkers; i += 1) {
       const startIndex = i * step
@@ -156,17 +135,16 @@ export class WorkerManager extends EventEmitter {
     return this
   }
 
-  public async stop(): Promise<WorkerManager> {
+  public async stop(): Promise<void> {
     this.workers.forEach((w) => {
       w.kill('SIGKILL')
       w.unref()
     })
 
     this.finished = 0
+    this.inputCount = 0
     this.data.length = 0
     this.workers.length = 0
     this.removeAllListeners()
-
-    return this
   }
 }
