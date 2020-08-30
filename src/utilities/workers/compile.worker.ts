@@ -44,9 +44,11 @@ export async function start(
     })
 
     sendMessage({
-      progressState: PROGRESS_STATES.COMPLETED,
+      progressState: PROGRESS_STATES.COMPLETE,
       payload: compiledResult.getKeysAndResults(),
     })
+
+    process.exit(0)
   } else {
     return compiledResult
   }

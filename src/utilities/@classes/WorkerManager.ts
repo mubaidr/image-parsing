@@ -3,15 +3,18 @@ import { EventEmitter } from 'events'
 import { cpus } from 'os'
 import { getDesignData } from '../design'
 import { getImagePaths } from '../images'
+import { readKey } from '../readKey'
+import CompiledResult from './CompiledResult'
 
-const CPU_COUNT = cpus().length
+const CPU_CORE_COUNT = cpus().length
 
 export enum PROGRESS_STATES {
   PROGRESS = 'progress',
-  COMPLETED = 'completed',
+  COMPLETE = 'completed',
   ERROR = 'error',
   LOG = 'log',
   EXIT = 'exit',
+  DATA = 'data',
 }
 
 enum WORKER_TYPES {
@@ -53,7 +56,7 @@ export class WorkerManager extends EventEmitter {
     super()
   }
 
-  private async createWorkers(count: number, type: WORKER_TYPES) {
+  private createWorkers(count: number, type: WORKER_TYPES) {
     for (let i = 0; i < count; i += 1) {
       const worker = fork(`./dist-electron/workers/${type}.worker.js`)
 
@@ -64,7 +67,7 @@ export class WorkerManager extends EventEmitter {
           return this.emit(PROGRESS_STATES.PROGRESS)
         }
 
-        if (progressState === PROGRESS_STATES.COMPLETED) {
+        if (progressState === PROGRESS_STATES.COMPLETE) {
           this.finished += 1
 
           if (payload) {
@@ -72,21 +75,21 @@ export class WorkerManager extends EventEmitter {
           }
 
           if (this.finished === this.workers.length) {
-            this.emit(PROGRESS_STATES.COMPLETED, this.data)
+            this.emit(PROGRESS_STATES.COMPLETE, this.data)
           }
         }
       })
 
-      worker.on('exit', (code, signal) => {
-        this.emit(PROGRESS_STATES.EXIT, code, signal)
+      worker.on(PROGRESS_STATES.EXIT, (code) => {
+        this.emit(PROGRESS_STATES.EXIT, code)
       })
 
-      worker.on('error', (error) => {
+      worker.on(PROGRESS_STATES.ERROR, (error) => {
         this.emit(PROGRESS_STATES.ERROR, error)
       })
 
       if (worker.stdout) {
-        worker.stdout.on('data', (data: Buffer) => {
+        worker.stdout.on(PROGRESS_STATES.DATA, (data: Buffer) => {
           this.emit(PROGRESS_STATES.LOG, data.toString())
         })
       }
@@ -95,19 +98,16 @@ export class WorkerManager extends EventEmitter {
     }
   }
 
-  public async extract(
-    directory: string,
-    designId: string,
-  ): Promise<WorkerManager> {
+  public async extract(directory: string, designId: string): Promise<any[]> {
     const [designData, totalImages] = await Promise.all([
       getDesignData(designId),
       getImagePaths(directory),
     ])
-    const totalWorkers = Math.min(totalImages.length, CPU_COUNT)
+    const totalWorkers = Math.min(totalImages.length, CPU_CORE_COUNT)
     const step = Math.floor(totalImages.length / totalWorkers)
-    await this.createWorkers(totalWorkers, WORKER_TYPES.EXTRACT)
 
     this.inputCount = totalImages.length
+    this.createWorkers(totalWorkers, WORKER_TYPES.EXTRACT)
 
     for (let i = 0; i < totalWorkers; i += 1) {
       const startIndex = i * step
@@ -120,25 +120,54 @@ export class WorkerManager extends EventEmitter {
       })
     }
 
-    return this
+    return new Promise((resolve) => {
+      this.on(PROGRESS_STATES.COMPLETE, resolve)
+    })
   }
 
-  public async compile(): Promise<WorkerManager> {
-    await this.createWorkers(CPU_COUNT, WORKER_TYPES.COMPILE)
+  public async compile(
+    resultPath: string,
+    keyPath: string,
+    correctMarks?: number,
+    incorrectMarks?: number,
+  ): Promise<any[]> {
+    const results = CompiledResult.loadFromExcel(resultPath).getResults()
+    const keys = await readKey(keyPath)
+    const totalWorkers = Math.min(results.length, CPU_CORE_COUNT)
+    const step = Math.floor(results.length / totalWorkers)
 
-    return this
+    this.inputCount = results.length
+    this.createWorkers(totalWorkers, WORKER_TYPES.COMPILE)
+
+    for (let i = 0; i < totalWorkers; i += 1) {
+      const startIndex = i * step
+      const endIndex = i === totalWorkers - 1 ? results.length : (i + 1) * step
+
+      this.workers[i].send({
+        results: results.slice(startIndex, endIndex),
+        keys,
+        correctMarks,
+        incorrectMarks,
+      })
+    }
+
+    return new Promise((resolve) => {
+      this.on(PROGRESS_STATES.COMPLETE, resolve)
+    })
   }
 
   public async generate(): Promise<WorkerManager> {
-    await this.createWorkers(CPU_COUNT, WORKER_TYPES.GENERATE)
+    this.createWorkers(CPU_CORE_COUNT, WORKER_TYPES.GENERATE)
 
     return this
   }
 
   public async stop(): Promise<void> {
     this.workers.forEach((w) => {
-      w.kill('SIGKILL')
-      w.unref()
+      if (w.connected) {
+        w.kill('SIGKILL')
+        w.unref()
+      }
     })
 
     this.finished = 0

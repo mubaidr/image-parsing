@@ -65,9 +65,11 @@ export async function start(
 
   if (isWorker) {
     sendMessage({
-      progressState: PROGRESS_STATES.COMPLETED,
+      progressState: PROGRESS_STATES.COMPLETE,
       payload: results,
     })
+
+    process.exit(0)
   } else {
     return results
   }
