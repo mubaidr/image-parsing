@@ -8,7 +8,7 @@ const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
 const isDevMode = process.env.NODE_ENV === 'development'
 
 const rootPath = path
-  .join(__dirname, './src/utilities/workers', '*.ts')
+  .join(__dirname, './@/utilities/workers', '*.worker.ts')
   .replace(/\\/g, '/')
 
 const entry = {}

@@ -1,6 +1,6 @@
 import { v4 as uuid4 } from 'uuid'
-import { RegExpPattern } from '../design'
-import { QuestionOptionsEnum } from '../questions'
+import { RegExpPattern } from './design'
+import { QuestionOptionsEnum } from './questions'
 
 interface AnswerCollection {
   [key: string]: {

@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { importExcelToJson } from '../excel'
+import { importExcelToJson } from './excel'
 import Result from './Result'
 
 class CompiledResult {

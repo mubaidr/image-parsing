@@ -1,5 +1,5 @@
 import { Sharp } from 'sharp'
-import { DesignData } from './@classes/WorkerManager'
+import { DesignData } from './workers/WorkerManager'
 
 const getRollNoFromImage = async (
   designData: DesignData,

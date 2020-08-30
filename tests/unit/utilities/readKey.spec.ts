@@ -1,5 +1,5 @@
-import { dataPaths } from '../../../src/utilities/dataPaths'
-import { readKey } from '../../../src/utilities/readKey'
+import { dataPaths } from '@/utilities/dataPaths'
+import { readKey } from '@/utilities/readKey'
 
 describe('readKey', () => {
   test('should read excel keys', async () => {

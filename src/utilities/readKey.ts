@@ -1,7 +1,7 @@
-import Result from './@classes/Result'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { importExcelToJson } from './excel'
+import Result from './Result'
 import * as extractTask from './workers/extract.worker'
 
 export enum KeyNativeEnum {

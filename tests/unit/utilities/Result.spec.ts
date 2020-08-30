@@ -1,8 +1,8 @@
+import CompiledResult from '@/utilities/CompiledResult'
+import { dataPaths } from '@/utilities/dataPaths'
+import { readKey } from '@/utilities/readKey'
+import Result from '@/utilities/Result'
 import path from 'path'
-import CompiledResult from '../../../../src/utilities/@classes/CompiledResult'
-import Result from '../../../../src/utilities/@classes/Result'
-import { dataPaths } from '../../../../src/utilities/dataPaths'
-import { readKey } from '../../../../src/utilities/readKey'
 
 describe('Result', () => {
   test('should be defined', () => {

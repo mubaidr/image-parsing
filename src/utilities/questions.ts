@@ -1,7 +1,21 @@
 import { Sharp } from 'sharp'
-import CompiledResult from './@classes/CompiledResult'
-import { DesignData } from './@classes/WorkerManager'
+import CompiledResult from './CompiledResult'
 import { convertToBitArray } from './convertToBitArray'
+import { DesignData } from './workers/WorkerManager'
+
+// enum QuestionPaperTypeEnum {
+//   A = 'A',
+//   B = 'B',
+//   C = 'C',
+//   D = 'D',
+//   E = 'E',
+//   F = 'F',
+//   G = 'G',
+//   I = 'I',
+//   J = 'J',
+//   K = 'K',
+//   L = 'L',
+// }
 
 export enum QuestionOptionsEnum {
   A = 'A',

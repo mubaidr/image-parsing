@@ -2,15 +2,15 @@
  * @jest-environment jsdom
  */
 
-import fs from 'fs'
-import path from 'path'
-import CompiledResult from '../../../src/utilities/@classes/CompiledResult'
-import { dataPaths } from '../../../src/utilities/dataPaths'
+import CompiledResult from '@/utilities/CompiledResult'
+import { dataPaths } from '@/utilities/dataPaths'
 import {
   exportHtmltoExcel,
   exportJsonToExcel,
-  importExcelToJson,
-} from '../../../src/utilities/excel'
+  importExcelToJson
+} from '@/utilities/excel'
+import fs from 'fs'
+import path from 'path'
 
 describe('exportHtmltoExcel', () => {
   test('defined', () => {

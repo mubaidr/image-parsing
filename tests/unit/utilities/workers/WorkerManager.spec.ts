@@ -3,7 +3,7 @@ import {
   PROGRESS_STATES,
   // eslint-disable-next-line prettier/prettier
   WorkerManager
-} from '../../../../src/utilities/@classes/WorkerManager'
+} from '@/utilities/workers/WorkerManager'
 
 const workerManager = new WorkerManager()
 

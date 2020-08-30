@@ -1,8 +1,8 @@
 // import path from 'path'
-// import { dataPaths } from '../../../src/utilities/dataPaths'
-// import { getDesignData } from '../../../src/utilities/design'
-// import { getSharpObjectFromSource } from '../../../src/utilities/images'
-// import { getRollNoFromImage } from '../../../src/utilities/sheetInfo'
+// import { dataPaths } from '@/utilities/dataPaths'
+// import { getDesignData } from '@/utilities/design'
+// import { getSharpObjectFromSource } from '@/utilities/images'
+// import { getRollNoFromImage } from '@/utilities/sheetInfo'
 
 describe('getRollNoFromImage', () => {
   test('should be working with barcode', async () => {

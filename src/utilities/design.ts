@@ -1,7 +1,7 @@
 import { parse } from 'fast-xml-parser'
 import { readFileSync } from 'fs'
-import { DesignData, ItemInfo } from './@classes/WorkerManager'
 import { dataPaths } from './dataPaths'
+import { DesignData, ItemInfo } from './workers/WorkerManager'
 
 export enum RegExpPattern {
   BARCODE = 'barcode$',

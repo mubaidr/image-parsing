@@ -1,5 +1,5 @@
-import { dataPaths } from '../../../src/utilities/dataPaths'
-import { getDesignData } from '../../../src/utilities/design'
+import { dataPaths } from '@/utilities/dataPaths'
+import { getDesignData } from '@/utilities/design'
 
 describe('getDesignData', () => {
   test('should be defined', () => {

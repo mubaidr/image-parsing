@@ -1,13 +1,13 @@
-import fs from 'fs'
-import path from 'path'
-import Sharp from 'sharp'
-import { dataPaths } from '../../../src/utilities/dataPaths'
+import { dataPaths } from '@/utilities/dataPaths'
 import {
   convertImage,
   getImagePaths,
   getSharpObjectFromSource,
-  logImageData,
-} from '../../../src/utilities/images'
+  logImageData
+} from '@/utilities/images'
+import fs from 'fs'
+import path from 'path'
+import Sharp from 'sharp'
 
 describe('convertImage', () => {
   test('works', async () => {

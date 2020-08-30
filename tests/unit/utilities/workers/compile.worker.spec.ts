@@ -1,7 +1,7 @@
-import CompiledResult from '../../../../src/utilities/@classes/CompiledResult'
-import { dataPaths } from '../../../../src/utilities/dataPaths'
-import { readKey } from '../../../../src/utilities/readKey'
-import { start } from '../../../../src/utilities/workers/compile.worker'
+import CompiledResult from '@/utilities/CompiledResult'
+import { dataPaths } from '@/utilities/dataPaths'
+import { readKey } from '@/utilities/readKey'
+import { start } from '@/utilities/workers/compile.worker'
 
 describe('workerCompile', () => {
   test('should compile just fine', async () => {

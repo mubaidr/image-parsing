@@ -1,8 +1,8 @@
-import Result from '../@classes/Result'
-import { DesignData, PROGRESS_STATES } from '../@classes/WorkerManager'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
+import Result from '../Result'
 import { getRollNoFromImage } from '../sheetInfo'
+import { DesignData, PROGRESS_STATES } from './WorkerManager'
 
 export type WorkerExtractInputMessage = {
   designData: DesignData

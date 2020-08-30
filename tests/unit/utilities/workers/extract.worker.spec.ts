@@ -1,7 +1,7 @@
-import { dataPaths } from '../../../../src/utilities/dataPaths'
-import { getDesignData } from '../../../../src/utilities/design'
-import { getImagePaths } from '../../../../src/utilities/images'
-import { start } from '../../../../src/utilities/workers/extract.worker'
+import { dataPaths } from '@/utilities/dataPaths'
+import { getDesignData } from '@/utilities/design'
+import { getImagePaths } from '@/utilities/images'
+import { start } from '@/utilities/workers/extract.worker'
 
 describe('workerExtract', () => {
   test('should be able to extract result just fine', async () => {

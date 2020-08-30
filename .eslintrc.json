@@ -28,7 +28,7 @@
       "env": {
         "worker": true
       },
-      "files": ["src/utilities/workers/**/*.{j,t}s?(x)"]
+      "files": ["@/utilities/workers/**/*.{j,t}s?(x)"]
     },
     {
       "files": ["src/**/*.vue"],

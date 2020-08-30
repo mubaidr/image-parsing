@@ -1,6 +1,6 @@
-import { convertToBitArray } from '../../../src/utilities/convertToBitArray'
-import { dataPaths } from '../../../src/utilities/dataPaths'
-import { getSharpObjectFromSource } from '../../../src/utilities/images'
+import { convertToBitArray } from '@/utilities/convertToBitArray'
+import { dataPaths } from '@/utilities/dataPaths'
+import { getSharpObjectFromSource } from '@/utilities/images'
 
 describe('convertToBitArray', () => {
   test('should be able to convert to bit data array', async () => {

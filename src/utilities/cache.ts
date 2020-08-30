@@ -1,5 +1,36 @@
-import Cache from './@classes/Cache'
+export class Cache {
+  private list: {
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    [key: string]: any
+  }
 
-const cache = new Cache()
+  public constructor() {
+    this.list = {}
+  }
 
-export { cache }
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  public get(key: string): any {
+    return this.list[key]
+  }
+
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  public remove(key: string): any {
+    const t = this.list[key]
+    delete this.list[key]
+
+    return t
+  }
+
+  public reset(): void {
+    this.list = {}
+  }
+
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  public set(key: string, value: any): any {
+    this.list[key] = value
+
+    return value
+  }
+}
+
+export const cache = new Cache()

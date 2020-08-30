@@ -1,6 +1,6 @@
-import CompiledResult from '../@classes/CompiledResult'
-import Result from '../@classes/Result'
-import { PROGRESS_STATES } from '../@classes/WorkerManager'
+import CompiledResult from '../CompiledResult'
+import Result from '../Result'
+import { PROGRESS_STATES } from './WorkerManager'
 
 export type WorkerCompileInputMessage = {
   results: Result[]

@@ -1,6 +1,8 @@
-import { cache } from '../../../src/utilities/cache'
+import { Cache } from '@/utilities/Cache'
 
-describe('cache', () => {
+const cache = new Cache()
+
+describe('Cache', () => {
   test('should be defined', () => {
     expect(cache).toBeDefined()
     expect(cache.get).toBeDefined()

@@ -1,7 +1,6 @@
 import XLSX from 'xlsx'
-
-import CompiledResult from './@classes/CompiledResult'
-import ResultJson from './@interfaces/ResultJson'
+import CompiledResult from './CompiledResult'
+import { ResultJson } from './Result'
 import { toCamelCase, toHeadingCase } from './string'
 
 const importExcelToJson = (src: string): ResultJson[] => {
