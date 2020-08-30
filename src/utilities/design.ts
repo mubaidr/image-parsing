@@ -1,8 +1,15 @@
 import { parse } from 'fast-xml-parser'
 import { readFileSync } from 'fs'
 import { DesignData, ItemInfo } from './@classes/WorkerManager'
-import RegExpPatterns from './@enums/RegExpPatterns'
 import { dataPaths } from './dataPaths'
+
+export enum RegExpPattern {
+  BARCODE = 'barcode$',
+  NONE = '',
+  OPTION = 'q[1-9][0-9]?[a-e]$',
+  QRCODE = 'qrcode$',
+  QUESTION = 'q[1-9][0-9]?$',
+}
 
 function getDesignPathByID(id: string) {
   //TODO: implement internal store for designs with import/export functionality
@@ -28,9 +35,9 @@ export async function getDesignData(id: string): Promise<DesignData> {
   const svgHeight = y2 - y1
 
   // prepare pattern matching reg expressions
-  const PATTERN_OPTION = new RegExp(RegExpPatterns.OPTION, 'i')
-  const PATTERN_BARCODE = new RegExp(RegExpPatterns.BARCODE, 'i')
-  const PATTERN_QRCODE = new RegExp(RegExpPatterns.QRCODE, 'i')
+  const PATTERN_OPTION = new RegExp(RegExpPattern.OPTION, 'i')
+  const PATTERN_BARCODE = new RegExp(RegExpPattern.BARCODE, 'i')
+  const PATTERN_QRCODE = new RegExp(RegExpPattern.QRCODE, 'i')
 
   // for export
   let code: ItemInfo = { x: 0, y: 0, width: 0, height: 0 }

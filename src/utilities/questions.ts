@@ -1,15 +1,31 @@
 import { Sharp } from 'sharp'
 import CompiledResult from './@classes/CompiledResult'
 import { DesignData } from './@classes/WorkerManager'
-import QuestionOptionsEnum from './@enums/QuestionOptionsEnum'
-import QuestionData from './@interfaces/QuestionData'
 import { convertToBitArray } from './convertToBitArray'
 
-const getQuestionsData = async (
+export enum QuestionOptionsEnum {
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  D = 'D',
+  E = 'E',
+  MULTIPLE = '*',
+  NONE = '?',
+}
+
+export interface QuestionData {
+  input: number[]
+  output?: {
+    [x: string]: number
+  }
+  title?: string
+}
+
+export async function getQuestionsData(
   design: DesignData,
   img: Sharp,
   compiledResult?: CompiledResult,
-): Promise<QuestionData[]> => {
+): Promise<QuestionData[]> {
   const { width } = await img.metadata()
   const scale = width && width > design.width ? design.width / width : 1
   const extractedQuestionData: QuestionData[] = []
@@ -66,5 +82,3 @@ const getQuestionsData = async (
 
   return extractedQuestionData
 }
-
-export { getQuestionsData }

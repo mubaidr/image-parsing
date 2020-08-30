@@ -2,10 +2,35 @@ import fastGlob from 'fast-glob'
 import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import { v4 as uuid4 } from 'uuid'
-import ImageNativeTypesEnum from './@enums/ImageNativeTypesEnum'
-import ImageTypesEnum from './@enums/ImageTypesEnum'
 import { cache } from './cache'
 import { dataPaths } from './dataPaths'
+
+export enum ImageNativeTypesEnum {
+  'bmp' = 'bmp',
+  'gif' = 'gif',
+  'jfif' = 'jfif',
+  'jpe' = 'jpe',
+  'jpeg' = 'jpeg',
+  'jpg' = 'jpg',
+  'png' = 'png',
+  'svg' = 'svg',
+  'webp' = 'webp',
+}
+
+export enum ImageTypesEnum {
+  'bmp' = 'bmp',
+  'dib' = 'dib',
+  'gif' = 'gif',
+  'jfif' = 'jfif',
+  'jpe' = 'jpe',
+  'jpeg' = 'jpeg',
+  'jpg' = 'jpg',
+  'png' = 'png',
+  'svg' = 'svg',
+  'tif' = 'tif',
+  'tiff' = 'tiff',
+  'webp' = 'webp',
+}
 
 const getSharpObjectFromSource = (src: string): Sharp => {
   return sharp(src).raw().flatten()

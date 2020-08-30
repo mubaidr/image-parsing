@@ -10,7 +10,7 @@ describe('getQuestionsData', () => {
   })
 
   test('should return json for new data', async () => {
-    const design = getDesignData(dataPaths.designBarcode)
+    const design = await getDesignData(dataPaths.designBarcode)
     const sharpImg = getSharpObjectFromSource(dataPaths.keyImage)
     const qd = await getQuestionsData(design, sharpImg)
 
@@ -19,7 +19,7 @@ describe('getQuestionsData', () => {
 
   test('should return json for training data', async () => {
     const compiledResult = CompiledResult.loadFromExcel(dataPaths.key)
-    const design = getDesignData(dataPaths.designBarcode)
+    const design = await getDesignData(dataPaths.designBarcode)
     const sharpImg = getSharpObjectFromSource(dataPaths.keyImage)
     const qd = await getQuestionsData(design, sharpImg, compiledResult)
 

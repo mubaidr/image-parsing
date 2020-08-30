@@ -1,9 +1,23 @@
 import { v4 as uuid4 } from 'uuid'
-import QuestionOptionsEnum from '../@enums/QuestionOptionsEnum'
-import RegExpPattern from '../@enums/RegExpPatterns'
-import AnswerCollection from '../@interfaces/AnswerCollection'
+import { RegExpPattern } from '../design'
+import { QuestionOptionsEnum } from '../questions'
 
-class Result {
+interface AnswerCollection {
+  [key: string]: {
+    value: string
+    unattempted?: boolean
+    correct?: boolean
+    skipped?: boolean
+  }
+}
+
+export interface ResultJson {
+  [key: string]: string | Record<string, unknown> | undefined
+
+  answers: AnswerCollection
+}
+
+class Result implements ResultJson {
   [key: string]: any
 
   private correctCount = 0

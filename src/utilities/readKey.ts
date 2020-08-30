@@ -1,11 +1,36 @@
 import Result from './@classes/Result'
-import KeyNativeEnum from './@enums/KeyNativeEnum'
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { importExcelToJson } from './excel'
 import * as extractTask from './workers/extract.worker'
 
-async function readKey(src: string): Promise<Result[] | undefined> {
+export enum KeyNativeEnum {
+  'csv' = 'csv',
+  'xls' = 'xls',
+  'xlsm' = 'xlsm',
+  'xlsx' = 'xlsx',
+}
+
+export enum KeyTypesEnum {
+  'bmp' = 'bmp',
+  'csv' = 'csv',
+  'dib' = 'dib',
+  'gif' = 'gif',
+  'jfif' = 'jfif',
+  'jpe' = 'jpe',
+  'jpeg' = 'jpeg',
+  'jpg' = 'jpg',
+  'png' = 'png',
+  'svg' = 'svg',
+  'tif' = 'tif',
+  'tiff' = 'tiff',
+  'webp' = 'webp',
+  'xls' = 'xls',
+  'xlsm' = 'xlsm',
+  'xlsx' = 'xlsx',
+}
+
+export async function readKey(src: string): Promise<Result[] | undefined> {
   const ext = src.split('.').pop()
   if (ext === undefined) throw new Error('Invalid path specified')
   if (ext in KeyNativeEnum) {
@@ -26,4 +51,3 @@ async function readKey(src: string): Promise<Result[] | undefined> {
   )
   return keys
 }
-export { readKey }
