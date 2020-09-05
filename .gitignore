@@ -21,7 +21,9 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-#Electron-builder output
-/dist_electron/**/*
-/tests_data/images-barcode/more/**/*
-/tests_data/images-qrcode/more/**/*
+# Electron-builder output
+/dist_electron
+
+# supplementary test data
+/tests_data/images-barcode/more
+/tests_data/images-qrcode/more

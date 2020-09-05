@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// compile
-import Compile from '../views/Compile.vue'
 // generate
 import Generate from '../views/Generate.vue'
 import AnswerSheets from '../views/Generate/AnswerSheets.vue'
@@ -12,6 +10,7 @@ import Contact from '../views/Help/Contact.vue'
 import Home from '../views/Home.vue'
 // process
 import Process from '../views/Process.vue'
+import Compile from '../views/Process/Compile.vue'
 import Extract from '../views/Process/Extract.vue'
 import Review from '../views/Process/Review.vue'
 
@@ -63,14 +62,14 @@ const router = new Router({
           },
           component: Review,
         },
+        {
+          path: '/process/compile',
+          meta: {
+            title: 'Compile Results',
+          },
+          component: Compile,
+        },
       ],
-    },
-    {
-      path: '/compile',
-      meta: {
-        title: 'Compile',
-      },
-      component: Compile,
     },
     {
       path: '/help',

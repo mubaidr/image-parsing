@@ -19,17 +19,17 @@
     </div>
 
     <h2 class="subtitle is-4">System Information</h2>
-    <SystemInformation />
+    <!-- <SystemInformation /> -->
     <br />
   </div>
 </template>
 
 <script>
-import SystemInformation from '../../components/SystemInformation'
+// import SystemInformation from '../../components/SystemInformation'
 
 export default {
   name: 'About',
-  components: { SystemInformation },
+  // components: { SystemInformation },
 }
 </script>
 

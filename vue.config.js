@@ -7,4 +7,5 @@ module.exports = {
   configureWebpack: {
     devtool: 'eval-cheap-module-source-map',
   },
+  lintOnSave: true,
 }

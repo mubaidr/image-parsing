@@ -2,10 +2,11 @@
   "env": {
     "browser": true,
     "es6": true,
-    "node": true
+    "node": true,
+    "worker": true
   },
   "extends": [
-    "plugin:vue/essential",
+    "plugin:vue/recommended",
     "eslint:recommended",
     "@vue/typescript/recommended",
     "@vue/prettier",
@@ -17,6 +18,9 @@
   "overrides": [
     {
       "env": {
+        "es6": true,
+        "node": true,
+        "worker": true,
         "jest": true
       },
       "files": [
@@ -26,12 +30,18 @@
     },
     {
       "env": {
+        "es6": true,
+        "node": true,
         "worker": true
       },
-      "files": ["@/utilities/workers/**/*.{j,t}s?(x)"]
+      "files": [
+        "@/utilities/workers/**/*.{j,t}s?(x)"
+      ]
     },
     {
-      "files": ["src/**/*.vue"],
+      "files": [
+        "src/**/*.vue"
+      ],
       "rules": {
         "@typescript-eslint/explicit-module-boundary-types": "off"
       }
@@ -48,5 +58,25 @@
     "no-console": "warn",
     "no-debugger": "warn",
     "prettier/prettier": "error"
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          [
+            "@/",
+            "./src/"
+          ]
+        ],
+        "extensions": [
+          ".ts",
+          ".js",
+          ".tsx",
+          ".jsx",
+          ".vue",
+          ".json"
+        ]
+      }
+    }
   }
 }

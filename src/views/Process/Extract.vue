@@ -83,15 +83,16 @@
 </template>
 
 <script>
-import { currentWindow } from '@/utilities/electron-utilities'
 import { openDirectory, saveFile } from '@/utilities/electron-dialog'
 import { exportJsonToExcel } from '@/utilities/excel'
-import KeyNativeEnum from '@/utilities/@enums/KeyNativeEnum'
-import ProgressStateEnum from '@/utilities/@enums/ProgressStateEnum'
-import prettyMs from 'pretty-ms'
-import WorkerManagerExtract from '@/utilities/@classes/WorkerManagerExtract'
+import {
+  // PROGRESS_STATES,
+  WorkerManager,
+} from '@/utilities/workers/WorkerManager'
+import { KeyNativeEnum } from '@/utilities/readKey'
+import Vue from 'vue/types/umd'
 
-const workerManager = new WorkerManagerExtract()
+const workerManager = new WorkerManager()
 
 export default {
   name: 'ExtractResult',
@@ -100,13 +101,9 @@ export default {
     return {
       imagesDirectory:
         'D:\\Current\\image-parsing\\__tests__\\_data\\images-barcode\\',
-      perImageTime: 0,
       processedImages: 0,
-      progressState: ProgressStateEnum.STOPPED,
       totalImages: 0,
-      totalWorkers: 0,
-      timer: 0,
-      timerInterval: null,
+      isRunning: false,
     }
   },
 
@@ -114,51 +111,6 @@ export default {
     inputIsValid() {
       return this.imagesDirectory
     },
-
-    isRunning() {
-      return this.progressState === ProgressStateEnum.RUNNING
-    },
-
-    progress() {
-      return Math.floor((this.processedImages * 100) / this.totalImages)
-    },
-
-    remainingTime() {
-      const ms =
-        (this.totalImages - this.processedImages) *
-        ((this.perImageTime || 500) / (this.totalWorkers || 1))
-
-      return ms === 0 ? '...' : prettyMs(ms)
-    },
-
-    timeElapsed() {
-      return prettyMs(this.timer * 1000)
-    },
-  },
-
-  watch: {
-    // set taskbar progress
-    processedImages(val) {
-      if (val < this.totalImages) {
-        currentWindow.setProgressBar(val / this.totalImages)
-      } else {
-        currentWindow.setProgressBar(0)
-
-        // flash taskbar icon
-        if (currentWindow.isFocused()) {
-          window.setTimeout(() => {
-            currentWindow.flashFrame(false)
-          }, 1000)
-        } else {
-          currentWindow.once('focus', () => currentWindow.flashFrame(false))
-        }
-        currentWindow.flashFrame(true)
-      }
-    },
-  },
-
-  unmounted() {
-    this.stop()
   },
 
   methods: {
@@ -167,57 +119,14 @@ export default {
         this.imagesDirectory = dir
       })
     },
+
     start() {
-      // start procesing
-      workerManager
-        .process({
-          callbacks: {
-            onsuccess: (msg) => {
-              this.progressState = ProgressStateEnum.COMPLETED
-              this.exportData(msg.data)
-              this.stop()
-            },
-            onprogress: (msg) => {
-              this.perImageTime = msg.timeElapsed
-              this.processedImages += 1
-            },
-            onerror: (msg) => {
-              console.error(msg)
-
-              this.$toasted.show(msg.error, {
-                type: 'error',
-                icon: 'info',
-              })
-            },
-          },
-          data: { imagesDirectory: this.imagesDirectory },
-        })
-        .then(({ totalOutput, totalWorkers }) => {
-          this.totalImages = totalOutput
-          this.totalWorkers = totalWorkers
-        })
-
-      // set running state
-      this.progressState = ProgressStateEnum.RUNNING
-
-      // timer
-      this.timer = 0
-      this.timerInterval = setInterval(() => {
-        this.timer += 1
-      }, 1000)
+      console.log(workerManager)
     },
 
-    stop() {
-      workerManager.stop()
-
-      clearInterval(this.timerInterval)
-      this.timer = 0
-      this.perImageTime = 0
-      this.processedImages = 0
-      this.totalImages = 0
-      this.progressState = ProgressStateEnum.STOPPED
-    },
-
+    /**
+     * @param {import("../../utilities/CompiledResult").default | import("../../utilities/Result").ResultJson[]} compiledResult
+     */
     exportData(compiledResult) {
       saveFile([
         {
@@ -226,26 +135,7 @@ export default {
         },
       ]).then((destination) => {
         if (!destination) return
-
-        // TODO: save to tmp file for later restore
-        // TODO: use streams to write processed data
-
         exportJsonToExcel(compiledResult, destination)
-
-        this.$toasted.show('Result exported successfully. ', {
-          icon: 'check_circle',
-          type: 'success',
-          duration: 5000,
-          keepOnHover: true,
-          action: {
-            text: 'Open for Review',
-            class: 'has-text-white has-text-underlined',
-            onClick: (e, toastObject) => {
-              toastObject.goAway(0)
-              this.$router.push(`/process/review?resultFilePath=${destination}`)
-            },
-          },
-        })
       })
     },
   },

@@ -3,7 +3,7 @@ import {
   convertImage,
   getImagePaths,
   getSharpObjectFromSource,
-  logImageData
+  logImageData,
 } from '@/utilities/images'
 import fs from 'fs'
 import path from 'path'

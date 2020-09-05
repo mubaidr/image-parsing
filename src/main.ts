@@ -15,11 +15,12 @@ import router from './router/index'
 import store from './store/index'
 
 Vue.use(Toasted, {
-  duration: 2500,
-  Icon: 'info',
+  duration: 5000,
   iconPack: 'material',
   position: 'bottom-center',
+  Icon: 'info',
   type: 'info',
+  keepOnHover: true,
 })
 Vue.use(VueVirtualScroller)
 
