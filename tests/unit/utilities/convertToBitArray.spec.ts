@@ -1,25 +1,25 @@
-import { convertToBitArray } from '@/utilities/convertToBitArray'
-import { dataPaths } from '@/utilities/dataPaths'
-import { getSharpObjectFromSource } from '@/utilities/images'
+import { convertToBitArray } from "@/utilities/convertToBitArray";
+import { dataPaths } from "@/utilities/dataPaths";
+import { getSharpObjectFromSource } from "@/utilities/images";
 
-describe('convertToBitArray', () => {
-  test('should be able to convert to bit data array', async () => {
-    const sharpImg = getSharpObjectFromSource(dataPaths.keyImage)
+describe("convertToBitArray", () => {
+  test("should be able to convert to bit data array", async () => {
+    const sharpImg = getSharpObjectFromSource(dataPaths.keyImage);
     const { data, info } = await sharpImg
       .extract({
         left: 0,
         top: 0,
         width: 100,
-        height: 100,
+        height: 100
       })
-      .toBuffer({ resolveWithObject: true })
+      .toBuffer({ resolveWithObject: true });
 
     const bitData = convertToBitArray(
       Array.prototype.slice.call(data, 0),
-      info.channels,
-    )
+      info.channels
+    );
 
-    expect(bitData.length).toBeGreaterThan(0)
-    expect(bitData).toMatchSnapshot()
-  })
-})
+    expect(bitData.length).toBeGreaterThan(0);
+    expect(bitData).toMatchSnapshot();
+  });
+});

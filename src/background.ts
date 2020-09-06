@@ -1,26 +1,28 @@
-'use strict'
+"use strict";
+
 // @ts-ignore
-import('v8-compile-cache')
+import("v8-compile-cache");
+
 /* global __static */
-import { app, BrowserWindow, Menu, protocol } from 'electron'
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
-import path from 'path'
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-import { productName } from '../package.json'
-const isDevelopment = process.env.NODE_ENV !== 'production'
+import { app, BrowserWindow, Menu, protocol } from "electron";
+import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+import path from "path";
+import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
+import { name } from "../package.json";
+const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win: BrowserWindow | null
+let win: BrowserWindow | null;
 
 // set application name from package.json
-app.setName(productName)
-process.env.PRODUCT_NAME = productName
+app.setName(name);
+process.env.PRODUCT_NAME = name;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true } },
-])
+  { scheme: "app", privileges: { secure: true, standard: true } }
+]);
 
 function createWindow() {
   // Create the browser window.
@@ -35,181 +37,181 @@ function createWindow() {
       nodeIntegration: (process.env
         .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
       experimentalFeatures: true,
-      enableBlinkFeatures: 'BarcodeDetector',
+      enableBlinkFeatures: "BarcodeDetector"
     },
     // @ts-ignore
-    icon: path.join(__static, 'icon.png'),
-  })
+    icon: path.join(__static, "icon.png")
+  });
 
   // eslint-disable-next-line
-  setMenu()
+  setMenu();
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
+    if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
-    createProtocol('app')
+    createProtocol("app");
     // Load the index.html when not in development
-    win.loadURL('app://./index.html')
+    win.loadURL("app://./index.html");
   }
 
-  win.on('closed', () => {
-    win = null
-  })
+  win.on("closed", () => {
+    win = null;
+  });
 }
 
 // Quit when all windows are closed.
-app.on('window-all-closed', () => {
+app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
+  if (process.platform !== "darwin") {
+    app.quit();
   }
-})
+});
 
-app.on('activate', () => {
+app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    createWindow()
+    createWindow();
   }
-})
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', async () => {
-  registerLocalResourceProtocol()
+app.on("ready", async () => {
+  registerLocalResourceProtocol();
 
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
-      await installExtension(VUEJS_DEVTOOLS)
+      await installExtension(VUEJS_DEVTOOLS);
     } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString())
+      console.error("Vue Devtools failed to install:", e.toString());
     }
   }
-  createWindow()
-})
+  createWindow();
+});
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
-  if (process.platform === 'win32') {
-    process.on('message', (data) => {
-      if (data === 'graceful-exit') {
-        app.quit()
+  if (process.platform === "win32") {
+    process.on("message", data => {
+      if (data === "graceful-exit") {
+        app.quit();
       }
-    })
+    });
   } else {
-    process.on('SIGTERM', () => {
-      app.quit()
-    })
+    process.on("SIGTERM", () => {
+      app.quit();
+    });
   }
 }
 
 // allow loading local resources
 function registerLocalResourceProtocol() {
-  protocol.registerFileProtocol('local-resource', (request, callback) => {
-    const url = request.url.replace(/^local-resource:\/\//, '')
+  protocol.registerFileProtocol("local-resource", (request: { url: string; }, callback: (arg0: string) => any) => {
+    const url = request.url.replace(/^local-resource:\/\//, "");
     // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
-    const decodedUrl = decodeURI(url) // Needed in case URL contains spaces
+    const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
     try {
-      return callback(decodedUrl)
+      return callback(decodedUrl);
     } catch (error) {
       console.error(
-        'ERROR: registerLocalResourceProtocol: Could not get file path:',
-        error,
-      )
+        "ERROR: registerLocalResourceProtocol: Could not get file path:",
+        error
+      );
     }
-  })
+  });
 }
 
 // setup application menu
 function setMenu() {
   const sendMenuEvent = async (data: { route: string }) => {
-    if (win) win.webContents.send('change-view', data)
-  }
+    if (win) win.webContents.send("change-view", data);
+  };
 
   const menuTemplate: Electron.MenuItemConstructorOptions[] = [
     {
       label: app.getName(),
       submenu: [
         {
-          label: 'Home',
+          label: "Home",
           // accelerator: 'CommandOrControl+H',
           click() {
-            sendMenuEvent({ route: '/home' })
-          },
+            sendMenuEvent({ route: "/home" });
+          }
         },
-        { type: 'separator' },
-        { role: 'minimize' },
-        { role: 'togglefullscreen' },
-        { type: 'separator' },
-        { role: 'quit', accelerator: 'Alt+F4' },
-      ],
+        { type: "separator" },
+        { role: "minimize" },
+        { role: "togglefullscreen" },
+        { type: "separator" },
+        { role: "quit", accelerator: "Alt+F4" }
+      ]
     },
     {
-      label: 'Generate',
+      label: "Generate",
       submenu: [
         {
-          label: 'Answer Sheets',
+          label: "Answer Sheets",
           click() {
-            sendMenuEvent({ route: '/generate/answer-sheets' })
-          },
-        },
-      ],
+            sendMenuEvent({ route: "/generate/answer-sheets" });
+          }
+        }
+      ]
     },
     {
-      label: 'Process',
+      label: "Process",
       submenu: [
         {
-          label: 'Extract Result',
+          label: "Extract Result",
           click() {
-            sendMenuEvent({ route: '/process/extract' })
-          },
+            sendMenuEvent({ route: "/process/extract" });
+          }
         },
         {
-          label: 'Review Result',
+          label: "Review Result",
           click() {
-            sendMenuEvent({ route: '/process/review' })
-          },
-        },
-      ],
+            sendMenuEvent({ route: "/process/review" });
+          }
+        }
+      ]
     },
     {
-      label: 'Compile',
+      label: "Compile",
       submenu: [
         {
-          label: 'Compile Result',
+          label: "Compile Result",
           click() {
-            sendMenuEvent({ route: '/compile' })
-          },
-        },
-      ],
+            sendMenuEvent({ route: "/compile" });
+          }
+        }
+      ]
     },
     {
-      role: 'help',
+      role: "help",
       submenu: [
         {
-          label: 'Get Help',
-          role: 'help',
-          accelerator: 'F1',
+          label: "Get Help",
+          role: "help",
+          accelerator: "F1",
           click() {
-            sendMenuEvent({ route: '/help/contact' })
-          },
+            sendMenuEvent({ route: "/help/contact" });
+          }
         },
         {
-          label: 'About',
-          role: 'about',
+          label: "About",
+          role: "about",
           click() {
-            sendMenuEvent({ route: '/help/about' })
-          },
-        },
-      ],
-    },
-  ]
+            sendMenuEvent({ route: "/help/about" });
+          }
+        }
+      ]
+    }
+  ];
 
-  const menu = Menu.buildFromTemplate(menuTemplate)
-  Menu.setApplicationMenu(menu)
+  const menu = Menu.buildFromTemplate(menuTemplate);
+  Menu.setApplicationMenu(menu);
 }

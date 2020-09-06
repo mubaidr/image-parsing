@@ -1,38 +1,40 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const path = require('path')
-const fsGlob = require('fast-glob')
-const TerserJSPlugin = require('terser-webpack-plugin')
-const { dependencies, devDependencies } = require('./package.json')
+const path = require("path");
+const fsGlob = require("fast-glob");
+const TerserJSPlugin = require("terser-webpack-plugin");
+const { dependencies, devDependencies } = require("./old/package.json");
 
-const externals = Object.keys(dependencies).concat(Object.keys(devDependencies))
-const isDevMode = process.env.NODE_ENV === 'development'
+const externals = Object.keys(dependencies).concat(
+  Object.keys(devDependencies)
+);
+const isDevMode = process.env.NODE_ENV === "development";
 
 const rootPath = path
-  .join(__dirname, './src/utilities/workers/**/', '*.worker.ts')
-  .replace(/\\/g, '/')
+  .join(__dirname, "./src/utilities/workers/**/", "*.worker.ts")
+  .replace(/\\/g, "/");
 
-const entry = {}
+const entry = {};
 
 fsGlob
   .sync(rootPath, {
     absolute: true,
-    onlyFiles: true,
+    onlyFiles: true
   })
-  .forEach((workerPath) => {
-    const split = workerPath.split('/')
+  .forEach(workerPath => {
+    const split = workerPath.split("/");
 
-    entry[split[split.length - 1].split('.')[0]] = workerPath
-  })
+    entry[split[split.length - 1].split(".")[0]] = workerPath;
+  });
 
 const config = {
-  name: 'workers',
+  name: "workers",
   mode: process.env.NODE_ENV,
-  devtool: isDevMode ? 'cheap-module-eval-source-map' : false,
+  devtool: isDevMode ? "cheap-module-eval-source-map" : false,
   entry: entry,
   output: {
-    libraryTarget: 'commonjs2',
-    path: path.join(__dirname, './dist_electron/workers/'),
-    filename: '[name].worker.js',
+    libraryTarget: "commonjs2",
+    path: path.join(__dirname, "./dist_electron/workers/"),
+    filename: "[name].worker.js"
   },
   externals: externals,
   module: {
@@ -40,43 +42,43 @@ const config = {
       {
         test: /\.js(x?)$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        loader: "babel-loader"
       },
       {
         test: /\.ts(x?)$/,
         use: [
           {
-            loader: 'ts-loader',
+            loader: "ts-loader",
             options: {
-              transpileOnly: true,
-            },
-          },
-        ],
+              transpileOnly: true
+            }
+          }
+        ]
       },
       {
         test: /\.node$/,
-        loader: 'node-loader',
-      },
-    ],
+        loader: "node-loader"
+      }
+    ]
   },
   node: {
     __dirname: isDevMode,
-    __filename: isDevMode,
+    __filename: isDevMode
   },
   plugins: [],
   resolve: {
-    extensions: ['.ts', '.js', '.json', '.node'],
+    extensions: [".ts", ".js", ".json", ".node"]
   },
-  target: 'node',
-}
+  target: "node"
+};
 
 if (isDevMode) {
   // dev only plugins
-  config.plugins.push()
+  config.plugins.push();
 } else {
   config.optimization = {
-    minimizer: [new TerserJSPlugin({})],
-  }
+    minimizer: [new TerserJSPlugin({})]
+  };
 }
 
-module.exports = config
+module.exports = config;

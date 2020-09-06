@@ -4,8 +4,8 @@
 // import { getSharpObjectFromSource } from '@/utilities/images'
 // import { getRollNoFromImage } from '@/utilities/sheetInfo'
 
-describe('getRollNoFromImage', () => {
-  test('should be working with barcode', async () => {
+describe("getRollNoFromImage", () => {
+  test("should be working with barcode", async () => {
     //     const designData = getDesignData(dataPaths.designBarcode)
     //     let sharpImg = getSharpObjectFromSource(
     //       path.join(dataPaths.imagesBarcode, '10023.jpg'),
@@ -30,5 +30,5 @@ describe('getRollNoFromImage', () => {
     //     )
     //     rollNo = await getRollNoFromImage(designDataQr, sharpImg)
     //     expect(rollNo).toBeUndefined()
-  })
-})
+  });
+});
