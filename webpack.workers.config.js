@@ -31,7 +31,7 @@ const config = {
   entry: entry,
   output: {
     libraryTarget: 'commonjs2',
-    path: path.join(__dirname, './dist-electron/workers/'),
+    path: path.join(__dirname, './dist_electron/workers/'),
     filename: '[name].worker.js',
   },
   externals: externals,
