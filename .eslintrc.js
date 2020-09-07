@@ -53,12 +53,4 @@ module.exports = {
       files: ['src/utilities/workers/**/*.{j,t}s?(x)'],
     },
   ],
-
-  extends: [
-    'plugin:vue/recommended',
-    'eslint:recommended',
-    '@vue/typescript/recommended',
-    '@vue/prettier',
-    '@vue/prettier/@typescript-eslint',
-  ],
 }

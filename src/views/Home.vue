@@ -5,7 +5,7 @@
         <br />
         <div class="block has-text-centered">
           <figure class="image is-128x128">
-            <img alt="Product Logo" src="@/assets/icon.png" />
+            <img alt="Product Logo" src="@/assets/logo.png" />
           </figure>
         </div>
 
@@ -16,22 +16,22 @@
           </p>
 
           <div class="buttons is-centered">
-            <RouterLink class="button is-primary" to="/generate/answer-sheets">
+            <router-link class="button is-primary" to="/generate/answer-sheets">
               <i class="material-icons">print</i>
               <span>Generate</span>
-            </RouterLink>
-            <RouterLink class="button is-primary" to="/process/extract">
+            </router-link>
+            <router-link class="button is-primary" to="/process/extract">
               <i class="material-icons">list</i>
               <span>Extract</span>
-            </RouterLink>
-            <RouterLink class="button is-primary" to="/process/review">
+            </router-link>
+            <router-link class="button is-primary" to="/process/review">
               <i class="material-icons">playlist_add_check</i>
               <span>Review</span>
-            </RouterLink>
-            <RouterLink class="button is-primary" to="compile">
+            </router-link>
+            <router-link class="button is-primary" to="/compile">
               <i class="material-icons">assessment</i>
               <span>Compile</span>
-            </RouterLink>
+            </router-link>
           </div>
         </div>
       </div>
@@ -39,10 +39,11 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'Home',
-}
+})
 </script>
 
 <style>

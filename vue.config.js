@@ -1,13 +1,14 @@
-// import fs from "fs";
-
 module.exports = {
   configureWebpack: {
-    devtool: 'eval-cheap-module-source-map',
+    devtool:
+      process.env.NODE_ENV === 'development'
+        ? 'eval-cheap-module-source-map'
+        : false,
   },
 
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: true,
     },
-  }
+  },
 }

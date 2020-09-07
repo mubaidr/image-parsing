@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Transition mode="out-in" name="slide-up">
-      <RouterView />
-    </Transition>
+    <transition mode="out-in" name="slide-up">
+      <router-view />
+    </transition>
   </div>
 </template>
 

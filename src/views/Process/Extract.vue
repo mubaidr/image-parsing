@@ -47,7 +47,7 @@
       </button>
     </div>
 
-    <Transition mode="out-in" name="slide-up">
+    <transition mode="out-in" name="slide-up">
       <div
         v-show="isRunning"
         class="notification is-primary bottom-centered-content"
@@ -78,7 +78,7 @@
           </div>
         </div>
       </div>
-    </Transition>
+    </transition>
   </div>
 </template>
 
