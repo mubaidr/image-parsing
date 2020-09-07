@@ -7,16 +7,12 @@
     "fast-xml-parser": "^3.17.4",
     "jsbarcode": "^3.11.0",
     "material-design-icons": "^3.0.1",
-    "pretty-ms": "^7.0.0",
     "qrcode": "^1.4.4",
     "sharp": "^0.26.0",
     "uuid": "^8.3.0",
     "v8-compile-cache": "^2.1.1",
     "vue": "^3.0.0-0",
     "vue-router": "^4.0.0-0",
-    "vue-toasted": "^1.1.28",
-    "vue-virtual-scroller": "^1.0.10",
-    "vuex": "^4.0.0-0",
     "xlsx": "^0.16.6"
   },
   "devDependencies": {
@@ -30,6 +26,7 @@
     "@types/sass": "^1.16.0",
     "@types/sharp": "^0.25.1",
     "@types/uuid": "^8.3.0",
+    "@types/webpack": "^4.41.22",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
     "@typescript-eslint/parser": "^4.0.1",
     "@vue/cli-plugin-babel": "~4.5.4",
@@ -38,7 +35,6 @@
     "@vue/cli-plugin-router": "~4.5.4",
     "@vue/cli-plugin-typescript": "~4.5.4",
     "@vue/cli-plugin-unit-jest": "~4.5.4",
-    "@vue/cli-plugin-vuex": "~4.5.4",
     "@vue/cli-service": "~4.5.4",
     "@vue/compiler-sfc": "^3.0.0-rc.10",
     "@vue/eslint-config-prettier": "^6.0.0",
@@ -56,7 +52,9 @@
     "spectron": "^11.1.0",
     "typescript": "~4.0.2",
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
-    "vue-jest": "^5.0.0-0"
+    "vue-jest": "^5.0.0-0",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
@@ -72,8 +70,11 @@
   "private": true,
   "scripts": {
     "build": "npm run build:workers && npm run electron:build",
+    "build:workers": "webpack --mode=production --env.NODE_ENV=production --hide-modules --config webpack.workers.config.js",
+    "build:workers:dev": "webpack --mode=development --env.NODE_ENV=development --hide-modules --watch --config webpack.workers.config.js",
     "dev": "npm run build:workers && npm run electron:serve",
     "electron:build": "vue-cli-service electron:build",
+    "electron:generate-icons": "electron-icon-builder --input=./public/logo.png --output=build --flatten",
     "electron:serve": "vue-cli-service electron:serve",
     "lint": "vue-cli-service lint --fix",
     "postinstall": "electron-builder install-app-deps",
@@ -81,10 +82,7 @@
     "serve": "vue-cli-service serve",
     "test": "npm run build:workers && npm run test:unit && npm run test:e2e",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit",
-    "build:workers": "webpack --mode=production --env.NODE_ENV=production --hide-modules --config webpack.workers.config.js",
-    "build:workers:dev": "webpack --mode=development --env.NODE_ENV=development --hide-modules --watch --config webpack.workers.config.js",
-    "electron:generate-icons": "electron-icon-builder --input=./public/logo.png --output=build --flatten"
+    "test:unit": "vue-cli-service test:unit"
   },
   "version": "0.1.0"
 }

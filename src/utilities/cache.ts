@@ -25,7 +25,7 @@ export class Cache {
     this.list = {}
   }
 
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public set(key: string, value: any): any {
     this.list[key] = value
 

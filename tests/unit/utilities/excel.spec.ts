@@ -2,22 +2,22 @@
  * @jest-environment jsdom
  */
 
-import CompiledResult from "@/utilities/CompiledResult";
-import { dataPaths } from "@/utilities/dataPaths";
+import CompiledResult from '@/utilities/CompiledResult'
+import { dataPaths } from '@/utilities/dataPaths'
 import {
   exportHtmltoExcel,
   exportJsonToExcel,
-  importExcelToJson
-} from "@/utilities/excel";
-import fs from "fs";
-import path from "path";
+  importExcelToJson,
+} from '@/utilities/excel'
+import fs from 'fs'
+import path from 'path'
 
-describe("exportHtmltoExcel", () => {
-  test("defined", () => {
-    expect(exportHtmltoExcel).toBeInstanceOf(Function);
-  });
+describe('exportHtmltoExcel', () => {
+  test('defined', () => {
+    expect(exportHtmltoExcel).toBeInstanceOf(Function)
+  })
 
-  test("works", () => {
+  test('works', () => {
     document.body.innerHTML = `
       <table id="customers">
         <tbody><tr>
@@ -55,46 +55,46 @@ describe("exportHtmltoExcel", () => {
           <td>Giovanni Rovelli</td>
           <td>Italy</td>
         </tr>
-      </tbody></table>`;
+      </tbody></table>`
 
-    const table = document.getElementById("customers");
-    const target = path.resolve(dataPaths.tmp, Date.now().toString() + ".xlsx");
+    const table = document.getElementById('customers')
+    const target = path.resolve(dataPaths.tmp, Date.now().toString() + '.xlsx')
 
-    if (!table) return;
+    if (!table) return
 
-    exportHtmltoExcel(table, target);
-    expect(fs.existsSync(target)).toBeTruthy();
+    exportHtmltoExcel(table, target)
+    expect(fs.existsSync(target)).toBeTruthy()
 
-    fs.unlinkSync(target);
-  });
-});
+    fs.unlinkSync(target)
+  })
+})
 
-describe("exportJsonToExcel", () => {
-  test("defined", () => {
-    expect(exportJsonToExcel).toBeInstanceOf(Function);
-  });
+describe('exportJsonToExcel', () => {
+  test('defined', () => {
+    expect(exportJsonToExcel).toBeInstanceOf(Function)
+  })
 
-  test("works", () => {
+  test('works', () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled
-    );
-    const target = path.resolve(dataPaths.tmp, Date.now().toString() + ".xlsx");
+      dataPaths.resultCompiled,
+    )
+    const target = path.resolve(dataPaths.tmp, Date.now().toString() + '.xlsx')
 
-    exportJsonToExcel(compiledResult, target);
-    expect(fs.existsSync(target)).toBeTruthy();
+    exportJsonToExcel(compiledResult, target)
+    expect(fs.existsSync(target)).toBeTruthy()
 
-    fs.unlinkSync(target);
-  });
-});
+    fs.unlinkSync(target)
+  })
+})
 
-describe("importExcelToJson", () => {
-  test("defined", () => {
-    expect(importExcelToJson).toBeInstanceOf(Function);
-  });
+describe('importExcelToJson', () => {
+  test('defined', () => {
+    expect(importExcelToJson).toBeInstanceOf(Function)
+  })
 
-  test("works", () => {
-    const json = importExcelToJson(dataPaths.result);
+  test('works', () => {
+    const json = importExcelToJson(dataPaths.result)
 
-    expect(json).toMatchSnapshot();
-  });
-});
+    expect(json).toMatchSnapshot()
+  })
+})

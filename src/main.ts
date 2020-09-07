@@ -1,10 +1,12 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import "./assets/scss/app.scss";
-import router from "./router";
-import store from "./store";
+// @ts-ignore
+import('v8-compile-cache')
 
-createApp(App)
-  .use(store)
-  .use(router)
-  .mount("#app");
+import { createApp } from 'vue'
+import App from './App.vue'
+import './assets/scss/animations.scss'
+import './assets/scss/app.scss'
+import router from './router'
+
+createApp(App).use(router).mount('#app')
+
+// TODO: vue add vuetify
