@@ -22,7 +22,7 @@ function sendMessage(message: WorkerExtractOutputMessage): void {
 
 export async function start(
   message: WorkerExtractInputMessage,
-  isWorker = true,
+  isWorker = true
 ): Promise<Result[] | undefined> {
   const { designData, imagePaths } = message
   const results: Result[] = []

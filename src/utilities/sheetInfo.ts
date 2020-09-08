@@ -3,7 +3,7 @@ import { DesignData } from './workers/WorkerManager'
 
 const getRollNoFromImage = async (
   designData: DesignData,
-  img: Sharp,
+  img: Sharp
 ): Promise<string | undefined> => {
   const codeLocation = designData.code
   const metadata = await img.metadata()

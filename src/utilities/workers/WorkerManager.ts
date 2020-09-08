@@ -129,7 +129,7 @@ export class WorkerManager extends EventEmitter {
     resultPath: string,
     keyPath: string,
     correctMarks?: number,
-    incorrectMarks?: number,
+    incorrectMarks?: number
   ): Promise<any[]> {
     const results = CompiledResult.loadFromExcel(resultPath).getResults()
     const keys = await readKey(keyPath)

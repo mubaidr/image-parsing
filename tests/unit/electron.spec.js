@@ -24,8 +24,8 @@ test('Window Loads Properly', async () => {
   // App is loaded properly
   expect(
     /Welcome to Your Vue\.js (\+ TypeScript )?App/.test(
-      await client.getHTML('#app'),
-    ),
+      await client.getHTML('#app')
+    )
   ).toBe(true)
 
   await stopServe()

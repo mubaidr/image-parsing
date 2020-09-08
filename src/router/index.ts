@@ -91,7 +91,7 @@ const routes: Array<RouteRecordRaw> = [
   //   ],
   // },
   {
-    path: '*',
+    path: '/:catchAll(.*)',
     redirect: '/home',
   },
 ]
@@ -102,11 +102,9 @@ const router = createRouter({
 })
 
 router.afterEach((to) => {
-  // TODO: get name from APP
-  const productName = process.env.PRODUCT_NAME || ''
+  const name = process.env.NAME || ''
 
-  document.title =
-    to.path === '/home' ? productName : `${to.meta.title} - ${productName}`
+  document.title = to.path === '/home' ? name : `${to.meta.title} - ${name}`
 })
 
 export default router

@@ -46,9 +46,8 @@ export default defineComponent({
 })
 </script>
 
-<style>
-.hero-body {
-  min-height: 100vh;
-  height: 100%;
-}
+<style lang="sass">
+.hero-body
+  min-height: 100vh
+  height: 100%
 </style>

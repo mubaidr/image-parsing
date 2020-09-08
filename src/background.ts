@@ -15,7 +15,7 @@ let win: BrowserWindow | null
 
 // set application name from package.json
 app.setName(name)
-process.env.PRODUCT_NAME = name
+process.env.NAME = name
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -121,10 +121,10 @@ function registerLocalResourceProtocol() {
       } catch (error) {
         console.error(
           'ERROR: registerLocalResourceProtocol: Could not get file path:',
-          error,
+          error
         )
       }
-    },
+    }
   )
 }
 

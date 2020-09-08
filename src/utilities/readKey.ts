@@ -47,7 +47,7 @@ export async function readKey(src: string): Promise<Result[] | undefined> {
       designData,
       imagePaths: [src],
     },
-    false,
+    false
   )
   return keys
 }

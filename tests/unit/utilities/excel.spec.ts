@@ -76,7 +76,7 @@ describe('exportJsonToExcel', () => {
 
   test('works', () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled,
+      dataPaths.resultCompiled
     )
     const target = path.resolve(dataPaths.tmp, Date.now().toString() + '.xlsx')
 

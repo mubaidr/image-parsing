@@ -20,7 +20,7 @@ describe('CompiledResult', () => {
 
   test('should be able to load from excel', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled,
+      dataPaths.resultCompiled
     )
     const key = await readKey(dataPaths.key)
 
@@ -33,14 +33,14 @@ describe('CompiledResult', () => {
 
       expect(compiledResult.getKeyCount()).toBe(1)
       expect(compiledResult.getKeysAndResults().length).toBeGreaterThanOrEqual(
-        4,
+        4
       )
     }
   })
 
   test('should be able to add key from excel', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled,
+      dataPaths.resultCompiled
     )
 
     expect(compiledResult.getKeyCount()).toBe(0)
@@ -69,7 +69,7 @@ describe('CompiledResult', () => {
 
   test('should be able to sort results', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled,
+      dataPaths.resultCompiled
     )
 
     compiledResult.sortResults()
@@ -85,11 +85,11 @@ describe('CompiledResult', () => {
 
   test('should be able to merge two compiled Results', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled,
+      dataPaths.resultCompiled
     )
 
     const compiledResult2 = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled,
+      dataPaths.resultCompiled
     )
 
     expect(compiledResult.getResultCount()).toBeGreaterThanOrEqual(3)
@@ -105,7 +105,7 @@ describe('CompiledResult', () => {
 
   test('should return random number of results from collection', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled,
+      dataPaths.resultCompiled
     )
 
     expect(compiledResult.getRandomResults(50).length).toBeGreaterThanOrEqual(1)
@@ -113,7 +113,7 @@ describe('CompiledResult', () => {
 
   test('should be able to addResults', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled,
+      dataPaths.resultCompiled
     )
 
     const compiledResultKey = new CompiledResult()
@@ -129,7 +129,7 @@ describe('CompiledResult', () => {
 
   test('should be able to export as obj array', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled,
+      dataPaths.resultCompiled
     )
 
     const d = compiledResult.export()
@@ -138,7 +138,7 @@ describe('CompiledResult', () => {
 
   test('should be able to export as obj array from static method', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled,
+      dataPaths.resultCompiled
     )
 
     const d = CompiledResult.export(compiledResult)

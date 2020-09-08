@@ -16,7 +16,7 @@ describe('convertToBitArray', () => {
 
     const bitData = convertToBitArray(
       Array.prototype.slice.call(data, 0),
-      info.channels,
+      info.channels
     )
 
     expect(bitData.length).toBeGreaterThan(0)

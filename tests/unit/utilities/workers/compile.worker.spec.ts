@@ -15,7 +15,7 @@ describe('workerCompile', () => {
         results,
         keys,
       },
-      false,
+      false
     )
 
     expect(compiledResult).toBeDefined()

@@ -67,7 +67,7 @@ const convertImage = async (src: string): Promise<string> => {
 
 const logImageData = async (
   src: string | Sharp,
-  name?: string,
+  name?: string
 ): Promise<string> => {
   let img: Sharp
   const target = path.join(dataPaths.tmp, `${name || uuid4()}.jpg`)

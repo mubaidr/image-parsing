@@ -22,7 +22,7 @@ function sendMessage(message: WorkerCompileOutputMessage): void {
 
 export async function start(
   message: WorkerCompileInputMessage,
-  isWorker = true,
+  isWorker = true
 ): Promise<CompiledResult | undefined> {
   const { results, keys, correctMarks, incorrectMarks } = message
   const compiledResult = new CompiledResult()
