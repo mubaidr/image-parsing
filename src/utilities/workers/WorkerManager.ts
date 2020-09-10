@@ -6,6 +6,8 @@ import { getDesignData } from '../design'
 import { getImagePaths } from '../images'
 import { readKey } from '../readKey'
 
+// TODO: integrate https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
+
 const CPU_CORE_COUNT = cpus().length
 
 export enum PROGRESS_STATES {
@@ -58,7 +60,7 @@ export class WorkerManager extends EventEmitter {
 
   private createWorkers(count: number, type: WORKER_TYPES) {
     for (let i = 0; i < count; i += 1) {
-      const worker = fork(`./dist-electron/workers/${type}.worker.js`)
+      const worker = fork(`./dist_electron/workers/${type}.worker.js`)
 
       worker.on('message', (message: WorkerOutputMessage) => {
         const { progressState, payload } = message
