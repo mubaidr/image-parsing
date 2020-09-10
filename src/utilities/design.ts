@@ -16,8 +16,11 @@ function getDesignPathByID(id: string) {
   return dataPaths.designBarcode
 }
 
-export async function getDesignData(id: string): Promise<DesignData> {
-  const filePath = getDesignPathByID(id)
+export async function getDesignData(
+  designPath: string,
+  isPath = true
+): Promise<DesignData> {
+  const filePath = isPath ? designPath : getDesignPathByID(designPath)
 
   const { svg } = parse(readFileSync(filePath).toString(), {
     attributeNamePrefix: '',
@@ -40,6 +43,7 @@ export async function getDesignData(id: string): Promise<DesignData> {
   const PATTERN_QRCODE = new RegExp(RegExpPattern.QRCODE, 'i')
 
   // for export
+  let isQrCode = false
   let code: ItemInfo = { x: 0, y: 0, width: 0, height: 0 }
   const questions: {
     [key: string]: ItemInfo
@@ -96,12 +100,17 @@ export async function getDesignData(id: string): Promise<DesignData> {
       if (questions[questionNumber].height < height) {
         questions[questionNumber].height = height
       }
-    } else if (PATTERN_BARCODE.test(title) || PATTERN_QRCODE.test(title)) {
+    } else if (PATTERN_BARCODE.test(title)) {
       code = { x, y, width, height }
+    } else if (PATTERN_QRCODE.test(title)) {
+      code = { x, y, width, height }
+
+      isQrCode = true
     }
   })
 
   return {
+    isQrCode,
     code,
     questions,
     width: svgWidth,

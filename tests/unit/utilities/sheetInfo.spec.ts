@@ -1,34 +1,56 @@
-// import path from 'path'
-// import { dataPaths } from '@/utilities/dataPaths'
-// import { getDesignData } from '@/utilities/design'
-// import { getSharpObjectFromSource } from '@/utilities/images'
-// import { getRollNoFromImage } from '@/utilities/sheetInfo'
+import { dataPaths } from '@/utilities/dataPaths'
+import { getDesignData } from '@/utilities/design'
+import { getSharpObjectFromSource } from '@/utilities/images'
+import { getRollNoFromImage } from '@/utilities/sheetInfo'
+import path from 'path'
+
+const designData = getDesignData(dataPaths.designBarcode)
+const designDataQr = getDesignData(dataPaths.design)
 
 describe('getRollNoFromImage', () => {
-  test('should be working with barcode', async () => {
-    //     const designData = getDesignData(dataPaths.designBarcode)
-    //     let sharpImg = getSharpObjectFromSource(
-    //       path.join(dataPaths.imagesBarcode, '10023.jpg'),
-    //     )
-    //     let rollNo = await getRollNoFromImage(designData, sharpImg)
-    //     expect(rollNo).toBe('10023')
-    //     sharpImg = getSharpObjectFromSource(
-    //       path.join(dataPaths.imagesBarcode, 'no-roll.jpg'),
-    //     )
-    //     rollNo = await getRollNoFromImage(designData, sharpImg)
-    //     expect(rollNo).toBeUndefined()
-    //   })
-    //   test('should be working with qrcode', async () => {
-    //     const designDataQr = getDesignData(dataPaths.design)
-    //     let sharpImg = getSharpObjectFromSource(
-    //       path.join(dataPaths.images, '10023-qr.jpg'),
-    //     )
-    //     let rollNo = await getRollNoFromImage(designDataQr, sharpImg)
-    //     expect(rollNo).toBe('99A-10023-AAA-AAA-A')
-    //     sharpImg = getSharpObjectFromSource(
-    //       path.join(dataPaths.images, 'no-roll-qr.tif'),
-    //     )
-    //     rollNo = await getRollNoFromImage(designDataQr, sharpImg)
-    //     expect(rollNo).toBeUndefined()
+  test('should be working with barcode jpg', async () => {
+    const sharpImg = getSharpObjectFromSource(
+      path.join(dataPaths.imagesBarcode, '10023.jpg')
+    )
+    const rollNo = await getRollNoFromImage(await designData, sharpImg)
+    expect(rollNo).toBe('10023')
+  })
+
+  test('should be working with barcode tif', async () => {
+    const sharpImg = getSharpObjectFromSource(
+      path.join(dataPaths.imagesBarcode, '10025.tif')
+    )
+    const rollNo = await getRollNoFromImage(await designData, sharpImg)
+    expect(rollNo).toBe('10025')
+  })
+
+  test('should be working with qrcode jpg', async () => {
+    const sharpImg = getSharpObjectFromSource(
+      path.join(dataPaths.images, '10023.jpg')
+    )
+    const rollNo = await getRollNoFromImage(await designDataQr, sharpImg)
+    expect(rollNo).toBe('99A-10023-AAA-AAA-A')
+  })
+
+  test('should be working with qrcode tif', async () => {
+    const sharpImg = getSharpObjectFromSource(
+      path.join(dataPaths.images, '10025.tif')
+    )
+    const rollNo = await getRollNoFromImage(await designDataQr, sharpImg)
+    expect(rollNo).toBe('99A-10025-AAA-AAA-A')
+  })
+
+  test('should return undefined if not found', async () => {
+    let sharpImg = getSharpObjectFromSource(
+      path.join(dataPaths.imagesBarcode, 'no-roll.jpg')
+    )
+    let rollNo = await getRollNoFromImage(await designData, sharpImg)
+    expect(rollNo).toBeUndefined()
+
+    sharpImg = getSharpObjectFromSource(
+      path.join(dataPaths.images, 'no-roll.tif')
+    )
+    rollNo = await getRollNoFromImage(await designDataQr, sharpImg)
+    expect(rollNo).toBeUndefined()
   })
 })

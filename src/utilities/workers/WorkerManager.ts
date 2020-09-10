@@ -41,6 +41,7 @@ export type DesignData = {
   questions: {
     [key: string]: ItemInfo
   }
+  isQrCode: boolean
 }
 
 type WorkerOutputMessage = {
