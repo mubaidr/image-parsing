@@ -1,4 +1,4 @@
-import QrScanner from 'qr-scanner'
+import jsqr from 'jsqr'
 import { Sharp } from 'sharp'
 import { DesignData } from './workers/WorkerManager'
 
@@ -7,37 +7,32 @@ export async function getRollNoFromImage(
   image: Sharp
 ): Promise<string | undefined> {
   let rollNo: string | undefined
-  const codeLocation = designData.code
   const metadata = await image.metadata()
   const ratio = metadata.width ? metadata.width / designData.width : 1
-  const width = Math.ceil(codeLocation.width * ratio)
-  const height = Math.ceil(codeLocation.height * ratio)
   const { data, info } = await image
     .extract({
-      left: Math.floor(codeLocation.x * ratio),
-      top: Math.floor(codeLocation.y * ratio),
-      width,
-      height,
+      left: Math.floor(designData.code.x * ratio),
+      top: Math.floor(designData.code.y * ratio),
+      width: Math.ceil(designData.code.width * ratio),
+      height: Math.ceil(designData.code.height * ratio),
     })
+    .ensureAlpha()
     .toBuffer({
       resolveWithObject: true,
     })
 
   try {
     if (designData.isQrCode) {
-      rollNo = await QrScanner
-        .scanImage
-        // await createImageBitmap(
-        //   new ImageData(new Uint8ClampedArray(data), info.width, info.height)
-        // )
-        ()
-      console.log('rollNo', rollNo)
+      rollNo = jsqr(new Uint8ClampedArray(data), info.width, info.height, {
+        inversionAttempts: 'dontInvert',
+      })?.data
     } else {
-      console.log('barcode scan')
+      console.log('barcode only')
     }
   } catch (e) {
-    console.log('Failed!', e)
-    rollNo = undefined
+    console.error(e)
+
+    //TODO: try to extract from written roll no using tesseract/opencv
   }
 
   return rollNo

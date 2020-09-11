@@ -5,7 +5,6 @@ module.exports = {
     browser: true,
     es6: true,
     node: true,
-    worker: true,
   },
 
   globals: {
@@ -46,8 +45,12 @@ module.exports = {
     },
     {
       env: {
-        es6: true,
-        node: true,
+        browser: false,
+      },
+      files: ['src/utilities/**/*.{j,t}s?(x)'],
+    },
+    {
+      env: {
         worker: true,
       },
       files: ['src/utilities/workers/**/*.{j,t}s?(x)'],
