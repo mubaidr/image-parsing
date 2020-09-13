@@ -9,6 +9,7 @@ import {
 } from '@zxing/library/esm5'
 import jsqr from 'jsqr'
 import { Sharp } from 'sharp'
+import Tesseract from 'tesseract.js'
 import { DesignData } from './workers/WorkerManager'
 
 export async function getRollNoFromImage(
@@ -18,6 +19,7 @@ export async function getRollNoFromImage(
   let rollNo: string | undefined
   const metadata = await image.metadata()
   const ratio = metadata.width ? metadata.width / designData.width : 1
+  const imageClone = image.clone()
 
   image.extract({
     left: Math.floor(designData.code.x * ratio),
@@ -64,7 +66,23 @@ export async function getRollNoFromImage(
   }
 
   if (!rollNo) {
-    //TODO try to extract from text
+    imageClone.extract({
+      left: Math.floor(designData.rollNo.x * ratio),
+      top: Math.floor(designData.rollNo.y * ratio),
+      width: Math.ceil(designData.rollNo.width * ratio),
+      height: Math.ceil(designData.rollNo.height * ratio),
+    })
+
+    const { data, info } = await imageClone.ensureAlpha().toBuffer({
+      resolveWithObject: true,
+    })
+
+    try {
+      const result = await Tesseract.recognize(data, 'eng')
+      rollNo = result.data.text
+    } catch {
+      rollNo = undefined
+    }
   }
 
   return rollNo
