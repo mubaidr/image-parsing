@@ -1,6 +1,5 @@
 import { parse } from 'fast-xml-parser'
 import { readFileSync } from 'fs'
-import { dataPaths } from './dataPaths'
 import { DesignData, ItemInfo } from './workers/WorkerManager'
 
 export enum RegExpPattern {
@@ -11,18 +10,8 @@ export enum RegExpPattern {
   QUESTION = 'q[1-9][0-9]?$',
 }
 
-function getDesignPathByID(id: string) {
-  //TODO: implement internal store for designs with import/export functionality
-  return dataPaths.designBarcode
-}
-
-export async function getDesignData(
-  designPath: string,
-  isPath = true
-): Promise<DesignData> {
-  const filePath = isPath ? designPath : getDesignPathByID(designPath)
-
-  const { svg } = parse(readFileSync(filePath).toString(), {
+export async function getDesignData(designPath: string): Promise<DesignData> {
+  const { svg } = parse(readFileSync(designPath).toString(), {
     attributeNamePrefix: '',
     ignoreAttributes: false,
     parseNodeValue: true,

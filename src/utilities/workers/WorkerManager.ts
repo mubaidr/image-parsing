@@ -101,9 +101,9 @@ export class WorkerManager extends EventEmitter {
     }
   }
 
-  public async extract(directory: string, designId: string): Promise<any[]> {
+  public async extract(directory: string, designPath: string): Promise<any[]> {
     const [designData, totalImages] = await Promise.all([
-      getDesignData(designId),
+      getDesignData(designPath),
       getImagePaths(directory),
     ])
     const totalWorkers = Math.min(totalImages.length, CPU_CORE_COUNT)

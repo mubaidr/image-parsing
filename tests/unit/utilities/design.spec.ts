@@ -6,8 +6,8 @@ describe('getDesignData', () => {
     expect(getDesignData).toBeInstanceOf(Function)
   })
 
-  test('works', () => {
-    const designData = getDesignData(dataPaths.designBarcode)
+  test('works', async () => {
+    const designData = await getDesignData(dataPaths.designBarcode)
 
     expect(designData).toMatchSnapshot()
   })

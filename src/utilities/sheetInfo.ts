@@ -1,3 +1,10 @@
+import {
+  BinaryBitmap,
+  DecodeHintType,
+  HybridBinarizer,
+  MultiFormatReader,
+  RGBLuminanceSource,
+} from '@zxing/library/esm5'
 import jsqr from 'jsqr'
 import { Sharp } from 'sharp'
 import { DesignData } from './workers/WorkerManager'
@@ -9,30 +16,49 @@ export async function getRollNoFromImage(
   let rollNo: string | undefined
   const metadata = await image.metadata()
   const ratio = metadata.width ? metadata.width / designData.width : 1
-  const { data, info } = await image
-    .extract({
-      left: Math.floor(designData.code.x * ratio),
-      top: Math.floor(designData.code.y * ratio),
-      width: Math.ceil(designData.code.width * ratio),
-      height: Math.ceil(designData.code.height * ratio),
-    })
-    .ensureAlpha()
-    .toBuffer({
+
+  image.extract({
+    left: Math.floor(designData.code.x * ratio),
+    top: Math.floor(designData.code.y * ratio),
+    width: Math.ceil(designData.code.width * ratio),
+    height: Math.ceil(designData.code.height * ratio),
+  })
+
+  if (designData.isQrCode) {
+    const { data, info } = await image.ensureAlpha().toBuffer({
       resolveWithObject: true,
     })
 
-  try {
-    if (designData.isQrCode) {
-      rollNo = jsqr(new Uint8ClampedArray(data), info.width, info.height, {
-        inversionAttempts: 'dontInvert',
-      })?.data
-    } else {
-      console.log('barcode only')
-    }
-  } catch (e) {
-    console.error(e)
+    rollNo = jsqr(Uint8ClampedArray.from(data), info.width, info.height, {
+      inversionAttempts: 'dontInvert',
+    })?.data
+  } else {
+    const { data, info } = await image.greyscale().toBuffer({
+      resolveWithObject: true,
+    })
 
-    //TODO: try to extract from written roll no using tesseract/opencv
+    const binaryBitmap = new BinaryBitmap(
+      new HybridBinarizer(
+        new RGBLuminanceSource(
+          Uint8ClampedArray.from(data),
+          info.width,
+          info.height
+        )
+      )
+    )
+    const reader = new MultiFormatReader()
+    const hints = new Map()
+    // const formats = [BarcodeFormat.CODE_39, BarcodeFormat.CODE_93]
+
+    // hints.set(DecodeHintType.POSSIBLE_FORMATS, formats)
+    hints.set(DecodeHintType.PURE_BARCODE, true)
+    reader.setHints(hints)
+
+    try {
+      rollNo = reader.decode(binaryBitmap).getText()
+    } catch {
+      rollNo = undefined
+    }
   }
 
   return rollNo

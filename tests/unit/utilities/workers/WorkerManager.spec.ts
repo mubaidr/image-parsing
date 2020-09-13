@@ -25,7 +25,7 @@ describe('WorkerManager', () => {
       .on(PROGRESS_STATES.ERROR, errorCallback)
       .on(PROGRESS_STATES.PROGRESS, progressCallback)
       .on(PROGRESS_STATES.COMPLETE, completeCallback)
-      .extract(dataPaths.imagesBarcode, 'barcode')
+      .extract(dataPaths.imagesBarcode, dataPaths.designBarcode)
 
     expect(workerManager.inputCount).toBe(3)
     expect(data.length).toBe(3)
