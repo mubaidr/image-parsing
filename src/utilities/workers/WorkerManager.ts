@@ -35,13 +35,17 @@ export type ItemInfo = {
 export type DesignData = {
   id?: string
   name?: string
+  path?: string
   width: number
   height: number
+  isQrCode: boolean
   code: ItemInfo
+  rollNo: ItemInfo
   questions: {
     [key: string]: ItemInfo
   }
-  isQrCode: boolean
+  createAt?: Date
+  modifiedAt?: Date
 }
 
 type WorkerOutputMessage = {

@@ -4,10 +4,11 @@ import { DesignData, ItemInfo } from './workers/WorkerManager'
 
 export enum RegExpPattern {
   BARCODE = 'barcode$',
-  NONE = '',
-  OPTION = 'q[1-9][0-9]?[a-e]$',
   QRCODE = 'qrcode$',
   QUESTION = 'q[1-9][0-9]?$',
+  OPTION = 'q[1-9][0-9]?[a-e]$',
+  ROLL_NO = 'rollno$',
+  NONE = '',
 }
 
 export async function getDesignData(designPath: string): Promise<DesignData> {
@@ -30,10 +31,12 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
   const PATTERN_OPTION = new RegExp(RegExpPattern.OPTION, 'i')
   const PATTERN_BARCODE = new RegExp(RegExpPattern.BARCODE, 'i')
   const PATTERN_QRCODE = new RegExp(RegExpPattern.QRCODE, 'i')
+  const PATTERN_ROLL_NO = new RegExp(RegExpPattern.ROLL_NO, 'i')
 
   // for export
   let isQrCode = false
   let code: ItemInfo = { x: 0, y: 0, width: 0, height: 0 }
+  let rollNo: ItemInfo = { x: 0, y: 0, width: 0, height: 0 }
   const questions: {
     [key: string]: ItemInfo
   } = {}
@@ -93,14 +96,16 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
       code = { x, y, width, height }
     } else if (PATTERN_QRCODE.test(title)) {
       code = { x, y, width, height }
-
       isQrCode = true
+    } else if (PATTERN_ROLL_NO.test(title)) {
+      rollNo = { x, y, width, height }
     }
   })
 
   return {
     isQrCode,
     code,
+    rollNo,
     questions,
     width: svgWidth,
     height: svgHeight,

@@ -372,6 +372,12 @@ Object {
       "y": 683,
     },
   },
+  "rollNo": Object {
+    "height": 95,
+    "width": 414,
+    "x": 156,
+    "y": 57,
+  },
   "width": 595,
 }
 `;

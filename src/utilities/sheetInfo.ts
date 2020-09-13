@@ -1,9 +1,11 @@
 import {
+  BarcodeFormat,
   BinaryBitmap,
   DecodeHintType,
   HybridBinarizer,
   MultiFormatReader,
-  RGBLuminanceSource,
+  // eslint-disable-next-line prettier/prettier
+  RGBLuminanceSource
 } from '@zxing/library/esm5'
 import jsqr from 'jsqr'
 import { Sharp } from 'sharp'
@@ -48,9 +50,9 @@ export async function getRollNoFromImage(
     )
     const reader = new MultiFormatReader()
     const hints = new Map()
-    // const formats = [BarcodeFormat.CODE_39, BarcodeFormat.CODE_93]
+    const formats = [BarcodeFormat.CODE_39]
 
-    // hints.set(DecodeHintType.POSSIBLE_FORMATS, formats)
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, formats)
     hints.set(DecodeHintType.PURE_BARCODE, true)
     reader.setHints(hints)
 
@@ -59,6 +61,10 @@ export async function getRollNoFromImage(
     } catch {
       rollNo = undefined
     }
+  }
+
+  if (!rollNo) {
+    //TODO try to extract from text
   }
 
   return rollNo
