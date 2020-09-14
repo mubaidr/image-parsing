@@ -31,22 +31,20 @@ export async function start(
   const results: Result[] = []
 
   for (let i = 0; i < imagePaths.length; i += 1) {
-    const image = imagePaths[i]
-    const sharpImage = getSharpObjectFromSource(image)
+    const imagePath = imagePaths[i]
+    const sharpImage = getSharpObjectFromSource(imagePath)
+    const sharpImageClone = sharpImage.clone().toColourspace('b-w')
 
     const [rollNo, questionsData] = await Promise.all([
       getRollNoFromImage(designData, sharpImage),
-      getQuestionsData(designData, sharpImage.clone()),
+      getQuestionsData(designData, sharpImageClone),
     ])
-    const result = new Result(rollNo, image)
+    const result = new Result(rollNo, imagePath)
 
+    // TODO: add error message to result object
     if (!questionsData) throw new Error('Unable to extract questions data...')
 
-    for (
-      let j = 0, questionsDataLength = questionsData.length;
-      j < questionsDataLength;
-      j += 1
-    ) {
+    for (let j = 0; j < questionsData.length; j += 1) {
       const { title, input } = questionsData[j]
 
       if (!title) continue
