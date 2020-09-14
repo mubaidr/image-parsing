@@ -17,18 +17,17 @@ export async function getRollNoFromImage(
   let rollNo: string | undefined
   const metadata = await image.metadata()
   const ratio = metadata.width ? metadata.width / designData.width : 1
-  const imageClone = image.clone()
 
-  image.extract({
-    left: Math.floor(designData.code.x * ratio),
-    top: Math.floor(designData.code.y * ratio),
-    width: Math.ceil(designData.code.width * ratio),
-    height: Math.ceil(designData.code.height * ratio),
-  })
-
-  const { data, info } = await image.greyscale().toBuffer({
-    resolveWithObject: true,
-  })
+  const { data, info } = await image
+    .extract({
+      left: Math.floor(designData.code.x * ratio),
+      top: Math.floor(designData.code.y * ratio),
+      width: Math.ceil(designData.code.width * ratio),
+      height: Math.ceil(designData.code.height * ratio),
+    })
+    .toBuffer({
+      resolveWithObject: true,
+    })
 
   const formats: BarcodeFormat[] = []
   const reader = new MultiFormatReader()
@@ -60,7 +59,7 @@ export async function getRollNoFromImage(
   }
 
   if (!rollNo) {
-    // try to extract from written content
+    // try to extract from written content using ocr
   }
 
   return rollNo

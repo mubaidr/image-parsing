@@ -1,3 +1,6 @@
+// @ts-ignore
+import('v8-compile-cache')
+
 import CompiledResult from '../CompiledResult'
 import Result from '../Result'
 import { PROGRESS_STATES } from './WorkerManager'

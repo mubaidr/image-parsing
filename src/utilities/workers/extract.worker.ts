@@ -1,3 +1,6 @@
+// @ts-ignore
+import('v8-compile-cache')
+
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
 import Result from '../Result'

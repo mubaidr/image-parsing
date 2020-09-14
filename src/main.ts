@@ -10,3 +10,4 @@ import router from './router'
 createApp(App).use(router).mount('#app')
 
 // TODO: vue add vuetify
+// TODO: add de skew view
