@@ -40,17 +40,19 @@ describe('getRollNoFromImage', () => {
     expect(rollNo).toBe('99A-10025-AAA-AAA-A')
   })
 
-  test('should return undefined if not found', async () => {
-    let sharpImg = getSharpObjectFromSource(
+  test('should return undefined if not found jpg', async () => {
+    const sharpImg = getSharpObjectFromSource(
       path.join(dataPaths.imagesBarcode, 'no-roll.jpg')
     )
-    let rollNo = await getRollNoFromImage(await designData, sharpImg)
+    const rollNo = await getRollNoFromImage(await designData, sharpImg)
     expect(rollNo).toBeUndefined()
+  })
 
-    sharpImg = getSharpObjectFromSource(
+  test('should return undefined if not found if', async () => {
+    const sharpImg = getSharpObjectFromSource(
       path.join(dataPaths.images, 'no-roll.tif')
     )
-    rollNo = await getRollNoFromImage(await designDataQr, sharpImg)
+    const rollNo = await getRollNoFromImage(await designDataQr, sharpImg)
     expect(rollNo).toBeUndefined()
   })
 })
