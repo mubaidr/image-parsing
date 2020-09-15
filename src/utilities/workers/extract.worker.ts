@@ -34,26 +34,31 @@ export async function start(
   for (let i = 0; i < imagePaths.length; i += 1) {
     const imagePath = imagePaths[i]
     const sharpImage = getSharpObjectFromSource(imagePath)
-    const sharpImageClone = sharpImage.clone().toColourspace('b-w')
 
+    // get design and image data
     const [rollNo, questionsData] = await Promise.all([
       getRollNoFromImage(designData, sharpImage),
-      getQuestionsData(designData, sharpImageClone),
+      getQuestionsData(designData, sharpImage.clone()),
     ])
     const result = new Result(rollNo, imagePath)
 
-    // TODO: add error message to result object
-    if (!questionsData) throw new Error('Unable to extract questions data...')
+    if (questionsData === undefined) {
+      result.error = 'Image is not in correct format!'
+    } else {
+      Object.entries(questionsData).forEach(
+        ([questionTitle, optionsDataCollection]) => {
+          Object.entries(optionsDataCollection).forEach(
+            ([optionTitle, optionsData]) => {
+              //TODO: determine if option is checked using optionsData
 
-    for (let j = 0; j < questionsData.length; j += 1) {
-      const { title, data } = questionsData[j]
-
-      if (!title) continue
-
-      // TODO: calculate value using area average
-      const value = QUESTION_OPTIONS_ENUM.NONE
-
-      result.addAnswer(title, value)
+              result.addAnswer(
+                `${questionTitle}${optionTitle}`,
+                QUESTION_OPTIONS_ENUM.NONE
+              )
+            }
+          )
+        }
+      )
     }
 
     results.push(result)

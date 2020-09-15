@@ -77,7 +77,7 @@
     "electron:build": "vue-cli-service electron:build",
     "electron:generate-icons": "electron-icon-builder --input=./public/logo.png --output=build --flatten",
     "electron:serve": "vue-cli-service electron:serve",
-    "lint": "vue-cli-service lint --fix",
+    "lint": " tsc && vue-cli-service lint --fix",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "serve": "vue-cli-service serve",

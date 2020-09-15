@@ -4,6 +4,22 @@ import { getImagePaths } from '@/utilities/images'
 import { start } from '@/utilities/workers/extract.worker'
 
 describe('workerExtract', () => {
+  test('should be able to extract key just fine', async () => {
+    const designData = await getDesignData(dataPaths.designBarcode)
+    const results = await start(
+      {
+        designData,
+        imagePaths: [dataPaths.keyImage],
+      },
+      false
+    )
+
+    console.log(results)
+
+    expect(results).toBeDefined()
+    expect(results?.length).toBe(1)
+  })
+
   test('should be able to extract result just fine', async () => {
     const designData = await getDesignData(dataPaths.designBarcode)
     const imagePaths = await getImagePaths(dataPaths.imagesBarcode)

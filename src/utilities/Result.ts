@@ -12,7 +12,6 @@ interface AnswerCollection {
 
 export interface ResultJson {
   [key: string]: string | Record<string, unknown> | undefined
-
   answers: AnswerCollection
 }
 
@@ -29,6 +28,7 @@ class Result implements ResultJson {
 
   public answers: AnswerCollection = {}
 
+  public error: string | undefined
   public id: string
   public imageFile: string | undefined
   public isRollNoExtracted: boolean
