@@ -25,29 +25,6 @@ enum WORKER_TYPES {
   GENERATE = 'generate',
 }
 
-export type ItemInfo = {
-  x: number
-  y: number
-  width: number
-  height: number
-}
-
-export type DesignData = {
-  id?: string
-  name?: string
-  path?: string
-  width: number
-  height: number
-  isQrCode: boolean
-  code: ItemInfo
-  rollNo: ItemInfo
-  questions: {
-    [key: string]: ItemInfo
-  }
-  createAt?: Date
-  modifiedAt?: Date
-}
-
 type WorkerOutputMessage = {
   progressState: PROGRESS_STATES
   payload: any

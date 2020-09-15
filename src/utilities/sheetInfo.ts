@@ -8,7 +8,7 @@ import {
   RGBLuminanceSource
 } from '@zxing/library/esm5'
 import { Sharp } from 'sharp'
-import { DesignData } from './workers/WorkerManager'
+import { DesignData } from './design'
 
 export async function getRollNoFromImage(
   designData: DesignData,

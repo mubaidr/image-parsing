@@ -1,11 +1,12 @@
 // @ts-ignore
 import('v8-compile-cache')
 
+import { DesignData, QUESTION_OPTIONS_ENUM } from '../design'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
 import Result from '../Result'
 import { getRollNoFromImage } from '../sheetInfo'
-import { DesignData, PROGRESS_STATES } from './WorkerManager'
+import { PROGRESS_STATES } from './WorkerManager'
 
 export type WorkerExtractInputMessage = {
   designData: DesignData
@@ -45,12 +46,12 @@ export async function start(
     if (!questionsData) throw new Error('Unable to extract questions data...')
 
     for (let j = 0; j < questionsData.length; j += 1) {
-      const { title, input } = questionsData[j]
+      const { title, data } = questionsData[j]
 
       if (!title) continue
 
       // TODO: calculate value using area average
-      const value = 'A'
+      const value = QUESTION_OPTIONS_ENUM.NONE
 
       result.addAnswer(title, value)
     }

@@ -1,6 +1,5 @@
 import { v4 as uuid4 } from 'uuid'
-import { RegExpPattern } from './design'
-import { QuestionOptionsEnum } from './questions'
+import { QUESTION_OPTIONS_ENUM, REG_EXP_PATTERNS } from './design'
 
 interface AnswerCollection {
   [key: string]: {
@@ -47,7 +46,7 @@ class Result implements ResultJson {
   }
 
   public static fromJson(o: any): Result {
-    const answerRegExp = new RegExp(RegExpPattern.QUESTION)
+    const answerRegExp = new RegExp(REG_EXP_PATTERNS.QUESTION)
     const result =
       typeof o.rollNo === 'string' ? new Result(o.rollNo) : new Result()
 
@@ -71,9 +70,6 @@ class Result implements ResultJson {
   public addAnswer(title: string, value: string): Result {
     this.answers[title] = {
       value,
-      unattempted: false,
-      correct: false,
-      skipped: false,
     }
 
     return this
@@ -91,15 +87,15 @@ class Result implements ResultJson {
       const candidateChoice = this.answers[prop]
 
       // question not attempted
-      if (candidateChoice.value === QuestionOptionsEnum.NONE) {
+      if (candidateChoice.value === QUESTION_OPTIONS_ENUM.NONE) {
         candidateChoice.unattempted = true
         this.unattemptedCount += 1
       }
 
       // question skipped
       if (
-        keyChoice.value === QuestionOptionsEnum.NONE ||
-        keyChoice.value === QuestionOptionsEnum.MULTIPLE
+        keyChoice.value === QUESTION_OPTIONS_ENUM.NONE ||
+        keyChoice.value === QUESTION_OPTIONS_ENUM.MULTIPLE
       ) {
         candidateChoice.skipped = true
         this.skippedCount += 1

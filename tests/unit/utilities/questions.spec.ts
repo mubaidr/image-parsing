@@ -9,10 +9,11 @@ describe('getQuestionsData', () => {
   })
 
   test('should return json for new data', async () => {
-    const design = await getDesignData(dataPaths.designBarcode)
     const sharpImg = getSharpObjectFromSource(dataPaths.keyImage)
+    const design = await getDesignData(dataPaths.designBarcode)
     const qd = await getQuestionsData(design, sharpImg)
 
-    expect(qd.length).toBeGreaterThanOrEqual(60)
+    expect(Object.keys(qd).length).toBe(60)
+    expect(qd).toMatchSnapshot()
   })
 })

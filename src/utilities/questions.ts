@@ -1,66 +1,53 @@
 import { Sharp } from 'sharp'
-import { DesignData } from './workers/WorkerManager'
+import { DesignData, QUESTION_OPTIONS_ENUM } from './design'
+// import { logImageData } from './images'
 
-// enum QuestionPaperTypeEnum {
-//   A = 'A',
-//   B = 'B',
-//   C = 'C',
-//   D = 'D',
-//   E = 'E',
-//   F = 'F',
-//   G = 'G',
-//   I = 'I',
-//   J = 'J',
-//   K = 'K',
-//   L = 'L',
-// }
-
-export enum QuestionOptionsEnum {
-  A = 'A',
-  B = 'B',
-  C = 'C',
-  D = 'D',
-  E = 'E',
-  MULTIPLE = '*',
-  NONE = '?',
-}
-
-export interface QuestionData {
-  title: string
-  data: number[]
+export type QuestionData = {
+  [key: string]: {
+    [key in QUESTION_OPTIONS_ENUM]?: number[]
+  }
 }
 
 export async function getQuestionsData(
   design: DesignData,
-  img: Sharp
-): Promise<QuestionData[]> {
-  const { width } = await img.metadata()
+  sharpImage: Sharp
+): Promise<QuestionData> {
+  const { width } = await sharpImage.metadata()
   const scale = width && width > design.width ? design.width / width : 1
-  const extractedQuestionData: QuestionData[] = []
   const questions = Object.entries(design.questions)
+  const questionsData: QuestionData = {}
 
-  if (scale !== 1) img.resize(Math.floor(design.width * scale))
+  if (scale !== 1) sharpImage.resize(Math.ceil(design.width * scale))
 
   for (let i = 0; i < questions.length; i += 1) {
-    const [title, q] = questions[i]
+    const [questionTitle, q] = questions[i]
+    const options = Object.entries(q)
 
-    img.extract({
-      left: Math.floor(q.x * scale),
-      top: Math.floor(q.y * scale),
-      width: Math.ceil(q.width * scale),
-      height: Math.ceil(q.height * scale),
-    })
+    for (let j = 0; j < options.length; j += 1) {
+      const [optionTitle, itemInfo] = options[j]
 
-    // log image
-    // logImageData(img, title)
+      if (itemInfo === undefined) continue
 
-    const buffer = await img.toBuffer()
+      sharpImage.extract({
+        left: Math.floor(itemInfo.x * scale),
+        top: Math.floor(itemInfo.y * scale),
+        width: Math.ceil(itemInfo.width * scale),
+        height: Math.ceil(itemInfo.height * scale),
+      })
 
-    extractedQuestionData.push({
-      title,
-      data: [...buffer],
-    })
+      // log image
+      // logImageData(sharpImage, title)
+
+      const buffer = await sharpImage.toBuffer()
+
+      if (questionsData[questionTitle] === undefined) {
+        questionsData[questionTitle] = {}
+      }
+      questionsData[questionTitle][optionTitle as QUESTION_OPTIONS_ENUM] = [
+        ...buffer,
+      ]
+    }
   }
 
-  return extractedQuestionData
+  return questionsData
 }

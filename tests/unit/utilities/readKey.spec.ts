@@ -9,7 +9,6 @@ describe('readKey', () => {
     expect(results.length).toBeGreaterThanOrEqual(1)
     expect(results[0]).toMatchSnapshot({
       id: expect.any(String),
-      // imageFile: expect.any(String) || undefined,
     })
   })
 

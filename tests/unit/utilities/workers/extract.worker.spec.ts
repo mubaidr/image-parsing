@@ -19,4 +19,10 @@ describe('workerExtract', () => {
     expect(results).toBeDefined()
     expect(results?.length).toBeGreaterThanOrEqual(3)
   })
+
+  test('extracted result should match with results.xlsx', async () => {
+    // read excel file
+    // extract results
+    // compare using file path (to  compare answer sheet without roll no)
+  })
 })

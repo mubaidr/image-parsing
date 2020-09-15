@@ -4,14 +4,14 @@ import { importExcelToJson } from './excel'
 import Result from './Result'
 import * as extractTask from './workers/extract.worker'
 
-export enum KeyNativeEnum {
+export enum KEY_NATIVE_TYPES_ENUM {
   'csv' = 'csv',
   'xls' = 'xls',
   'xlsm' = 'xlsm',
   'xlsx' = 'xlsx',
 }
 
-export enum KeyTypesEnum {
+export enum KEY_TYPES_ENUM {
   'bmp' = 'bmp',
   'csv' = 'csv',
   'dib' = 'dib',
@@ -32,8 +32,10 @@ export enum KeyTypesEnum {
 
 export async function readKey(src: string): Promise<Result[] | undefined> {
   const ext = src.split('.').pop()
+
   if (ext === undefined) throw new Error('Invalid path specified')
-  if (ext in KeyNativeEnum) {
+
+  if (ext in KEY_NATIVE_TYPES_ENUM) {
     const rows = importExcelToJson(src)
     const results: Result[] = []
     for (let i = 0, len = rows.length; i < len; i += 1) {
@@ -41,13 +43,14 @@ export async function readKey(src: string): Promise<Result[] | undefined> {
     }
     return results
   }
+
   const designData = await getDesignData(dataPaths.designBarcode)
-  const keys = await extractTask.start(
+
+  return extractTask.start(
     {
       designData,
       imagePaths: [src],
     },
     false
   )
-  return keys
 }

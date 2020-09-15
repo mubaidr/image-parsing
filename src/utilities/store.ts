@@ -1,67 +1,66 @@
-/* eslint-disable @typescript-eslint/unbound-method */
-import Store from 'electron-store'
+// /* eslint-disable @typescript-eslint/unbound-method */
+// import Store from 'electron-store'
+// import { dataPaths } from './dataPaths'
+// TODO replace with electron-json-storage
+// const newStore = new Store()
 
-import { dataPaths } from './dataPaths'
+// const store = {
+//   // export store methods
+//   clear: newStore.clear,
+//   delete: newStore.delete,
+//   get: newStore.get,
+//   has: newStore.has,
+//   set: newStore.set,
 
-const newStore = new Store()
+//   // get last used file/ dir paths
+//   lastOpenDir: (): string => {
+//     const lastOpenDir = newStore.get('openDirectory')
 
-const store = {
-  // export store methods
-  clear: newStore.clear,
-  delete: newStore.delete,
-  get: newStore.get,
-  has: newStore.has,
-  set: newStore.set,
+//     return typeof lastOpenDir === 'string' ? lastOpenDir : dataPaths.home
+//   },
 
-  // get last used file/ dir paths
-  lastOpenDir: (): string => {
-    const lastOpenDir = newStore.get('openDirectory')
+//   lastSaveDir: (): string => {
+//     const lastOpenDir = newStore.get('saveDirectory')
 
-    return typeof lastOpenDir === 'string' ? lastOpenDir : dataPaths.home
-  },
+//     return typeof lastOpenDir === 'string' ? lastOpenDir : dataPaths.home
+//   },
 
-  lastSaveDir: (): string => {
-    const lastOpenDir = newStore.get('saveDirectory')
+//   lastOpenFile: (): string => {
+//     const lastOpenDir = newStore.get('openFile')
 
-    return typeof lastOpenDir === 'string' ? lastOpenDir : dataPaths.home
-  },
+//     return typeof lastOpenDir === 'string' ? lastOpenDir : dataPaths.home
+//   },
 
-  lastOpenFile: (): string => {
-    const lastOpenDir = newStore.get('openFile')
+//   lastSaveFile: (): string => {
+//     const lastOpenDir = newStore.get('saveFile')
 
-    return typeof lastOpenDir === 'string' ? lastOpenDir : dataPaths.home
-  },
+//     return typeof lastOpenDir === 'string' ? lastOpenDir : dataPaths.home
+//   },
 
-  lastSaveFile: (): string => {
-    const lastOpenDir = newStore.get('saveFile')
+//   // update last used file/ dir paths
+//   updateLastOpenDir: (value: string): string => {
+//     newStore.set('openDirectory', value)
 
-    return typeof lastOpenDir === 'string' ? lastOpenDir : dataPaths.home
-  },
+//     return value
+//   },
 
-  // update last used file/ dir paths
-  updateLastOpenDir: (value: string): string => {
-    newStore.set('openDirectory', value)
+//   updateLastSaveDir: (value: string): string => {
+//     newStore.set('saveDirectory', value)
 
-    return value
-  },
+//     return value
+//   },
 
-  updateLastSaveDir: (value: string): string => {
-    newStore.set('saveDirectory', value)
+//   updateLastOpenFile: (value: string): string => {
+//     newStore.set('openFile', value)
 
-    return value
-  },
+//     return value
+//   },
 
-  updateLastOpenFile: (value: string): string => {
-    newStore.set('openFile', value)
+//   updateLastSaveFile: (value: string): string => {
+//     newStore.set('saveFile', value)
 
-    return value
-  },
+//     return value
+//   },
+// }
 
-  updateLastSaveFile: (value: string): string => {
-    newStore.set('saveFile', value)
-
-    return value
-  },
-}
-
-export { store }
+// export { store }
