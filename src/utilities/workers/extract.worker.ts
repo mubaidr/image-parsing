@@ -51,10 +51,7 @@ export async function start(
             ([optionTitle, optionsData]) => {
               //TODO: determine if option is checked using optionsData
 
-              result.addAnswer(
-                `${questionTitle}${optionTitle}`,
-                QUESTION_OPTIONS_ENUM.NONE
-              )
+              result.addAnswer(questionTitle, QUESTION_OPTIONS_ENUM.NONE)
             }
           )
         }

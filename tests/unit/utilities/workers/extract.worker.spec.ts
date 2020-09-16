@@ -14,7 +14,7 @@ describe('workerExtract', () => {
       false
     )
 
-    console.log(results)
+    if (results) console.dir(results[0].answers)
 
     expect(results).toBeDefined()
     expect(results?.length).toBe(1)

@@ -3,7 +3,7 @@ import { QUESTION_OPTIONS_ENUM, REG_EXP_PATTERNS } from './design'
 
 interface AnswerCollection {
   [key: string]: {
-    value: string
+    value: QUESTION_OPTIONS_ENUM
     unattempted?: boolean
     correct?: boolean
     skipped?: boolean
@@ -51,13 +51,13 @@ class Result implements ResultJson {
       typeof o.rollNo === 'string' ? new Result(o.rollNo) : new Result()
 
     Object.keys(o).forEach((key) => {
-      const value = o[key]
+      const value = o[key] as QUESTION_OPTIONS_ENUM
 
       if (answerRegExp.test(key)) {
         if (typeof value === 'string') {
           result.addAnswer(key, value)
         } else {
-          result.addAnswer(key, '?')
+          result.addAnswer(key, QUESTION_OPTIONS_ENUM.NONE)
         }
       } else {
         result[key] = value
@@ -67,7 +67,7 @@ class Result implements ResultJson {
     return result
   }
 
-  public addAnswer(title: string, value: string): Result {
+  public addAnswer(title: string, value: QUESTION_OPTIONS_ENUM): Result {
     this.answers[title] = {
       value,
     }
