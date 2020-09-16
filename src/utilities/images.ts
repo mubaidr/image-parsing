@@ -5,7 +5,7 @@ import { v4 as uuid4 } from 'uuid'
 import { cache } from './cache'
 import { dataPaths } from './dataPaths'
 
-export enum IMAGE_NATIVE_TYPES_ENUM {
+export enum IMAGE_NATIVE_TYPES {
   'bmp' = 'bmp',
   'gif' = 'gif',
   'jfif' = 'jfif',
@@ -17,7 +17,7 @@ export enum IMAGE_NATIVE_TYPES_ENUM {
   'webp' = 'webp',
 }
 
-export enum IMAGE_TYPES_ENUM {
+export enum IMAGE_TYPES {
   'bmp' = 'bmp',
   'dib' = 'dib',
   'gif' = 'gif',
@@ -44,7 +44,7 @@ const convertImage = async (src: string): Promise<string> => {
   const ext = src.split('.').pop()
 
   // native supported images
-  if (ext && ext in IMAGE_NATIVE_TYPES_ENUM) {
+  if (ext && ext in IMAGE_NATIVE_TYPES) {
     return src
   }
 
@@ -85,7 +85,7 @@ const logImageData = async (
 
 const getImagePaths = async (dir: string): Promise<string[]> => {
   const loc = dir.replace(/\\/g, '/')
-  const exts = Object.keys(IMAGE_TYPES_ENUM)
+  const exts = Object.keys(IMAGE_TYPES)
   // avoid deep directory scan in test env
   const glob =
     process.env.NODE_ENV === 'test'

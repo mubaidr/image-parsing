@@ -1,7 +1,7 @@
 import { ChildProcess, fork } from 'child_process'
 import { EventEmitter } from 'events'
 import { cpus } from 'os'
-import CompiledResult from '../CompiledResult'
+import { CompiledResult } from '../CompiledResult'
 import { getDesignData } from '../design'
 import { getImagePaths } from '../images'
 import { readKey } from '../readKey'

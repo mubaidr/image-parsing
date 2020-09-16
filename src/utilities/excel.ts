@@ -1,5 +1,5 @@
 import XLSX from 'xlsx'
-import CompiledResult from './CompiledResult'
+import { CompiledResult } from './CompiledResult'
 import { ResultJson } from './Result'
 import { toCamelCase, toHeadingCase } from './string'
 

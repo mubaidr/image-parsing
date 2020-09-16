@@ -1,10 +1,10 @@
 // @ts-ignore
 import('v8-compile-cache')
 
-import { DesignData, QUESTION_OPTIONS_ENUM } from '../design'
+import { DesignData, QUESTION_OPTIONS } from '../design'
 import { getSharpObjectFromSource } from '../images'
-import { getQuestionsData } from '../questions'
-import Result from '../Result'
+import { getQuestionsData, QuestionData } from '../questions'
+import { Result } from '../Result'
 import { getRollNoFromImage } from '../sheetInfo'
 import { PROGRESS_STATES } from './WorkerManager'
 
@@ -24,6 +24,23 @@ function sendMessage(message: WorkerExtractOutputMessage): void {
   }
 }
 
+function addAnswersFromData(result: Result, questionsData: QuestionData) {
+  Object.entries(questionsData).forEach(
+    ([questionTitle, optionsDataCollection]) => {
+      const answers: { [key in QUESTION_OPTIONS]?: number }[] = []
+
+      Object.entries(optionsDataCollection).forEach(
+        ([optionTitle, optionsData]) => {
+          // answers[optionTitle as QUESTION_OPTIONS] = 0
+          console.log(optionTitle)
+        }
+      )
+
+      result.addAnswer(questionTitle, QUESTION_OPTIONS.MULTIPLE)
+    }
+  )
+}
+
 export async function start(
   message: WorkerExtractInputMessage,
   isWorker = true
@@ -41,24 +58,13 @@ export async function start(
       getQuestionsData(designData, sharpImage.clone()),
     ])
     const result = new Result(rollNo, imagePath)
-
-    if (questionsData === undefined) {
-      result.error = 'Image is not in correct format!'
-    } else {
-      Object.entries(questionsData).forEach(
-        ([questionTitle, optionsDataCollection]) => {
-          Object.entries(optionsDataCollection).forEach(
-            ([optionTitle, optionsData]) => {
-              //TODO: determine if option is checked using optionsData
-
-              result.addAnswer(questionTitle, QUESTION_OPTIONS_ENUM.NONE)
-            }
-          )
-        }
-      )
-    }
-
     results.push(result)
+
+    if (questionsData) {
+      addAnswersFromData(result, questionsData)
+    } else {
+      result.error = 'Image is not in correct format!'
+    }
 
     if (isWorker) {
       sendMessage({

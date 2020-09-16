@@ -1,10 +1,10 @@
 import { Sharp } from 'sharp'
-import { DesignData, QUESTION_OPTIONS_ENUM } from './design'
+import { DesignData, QUESTION_OPTIONS } from './design'
 // import { logImageData } from './images'
 
 export type QuestionData = {
   [key: string]: {
-    [key in QUESTION_OPTIONS_ENUM]?: number[]
+    [key in QUESTION_OPTIONS]?: number[]
   }
 }
 
@@ -18,6 +18,8 @@ export async function getQuestionsData(
   const questionsData: QuestionData = {}
 
   if (scale !== 1) sharpImage.resize(Math.ceil(design.width * scale))
+
+  // TODO: adjust itemInfo(x,y) according to orientation info (squares position) from image
 
   for (let i = 0; i < questions.length; i += 1) {
     const [questionTitle, q] = questions[i]
@@ -36,14 +38,15 @@ export async function getQuestionsData(
       })
 
       // log image
-      // logImageData(sharpImage, title)
+      // logImageData(sharpImage, questionTitle + optionTitle)
 
       const buffer = await sharpImage.toBuffer()
 
       if (questionsData[questionTitle] === undefined) {
         questionsData[questionTitle] = {}
       }
-      questionsData[questionTitle][optionTitle as QUESTION_OPTIONS_ENUM] = [
+
+      questionsData[questionTitle][optionTitle as QUESTION_OPTIONS] = [
         ...buffer,
       ]
     }

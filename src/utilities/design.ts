@@ -24,7 +24,7 @@ export enum REG_EXP_PATTERNS {
 //   K = 'k',
 // }
 
-export enum QUESTION_OPTIONS_ENUM {
+export enum QUESTION_OPTIONS {
   A = 'a',
   B = 'b',
   C = 'c',
@@ -43,7 +43,7 @@ export type ItemInfo = {
 
 export type QuestionsInfo = {
   [key: string]: {
-    [key in QUESTION_OPTIONS_ENUM]?: ItemInfo
+    [key in QUESTION_OPTIONS]?: ItemInfo
   }
 }
 
@@ -109,10 +109,10 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
           .map((val: string) => parseInt(val, 10) || 0)
       }
 
-      x = Math.floor(x + xTransform - 3)
-      y = Math.floor(y + yTransform - 3)
-      width = Math.ceil(width + 6)
-      height = Math.ceil(height + 6)
+      x = Math.floor(x + xTransform)
+      y = Math.floor(y + yTransform)
+      width = Math.ceil(width)
+      height = Math.ceil(height)
 
       const ii = { x, y, width, height }
       // prepare pattern matching reg expressions
@@ -123,7 +123,7 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
 
       if (PATTERN_OPTION.test(title)) {
         const questionTitle = title.slice(0, -1)
-        const optionTitle = title.slice(-1) as QUESTION_OPTIONS_ENUM
+        const optionTitle = title.slice(-1) as QUESTION_OPTIONS
 
         if (questions[questionTitle] === undefined) {
           questions[questionTitle] = {}

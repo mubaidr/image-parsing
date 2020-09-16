@@ -1,4 +1,4 @@
-import CompiledResult from '@/utilities/CompiledResult'
+import { CompiledResult } from '@/utilities/CompiledResult'
 import { dataPaths } from '@/utilities/dataPaths'
 import { readKey } from '@/utilities/readKey'
 

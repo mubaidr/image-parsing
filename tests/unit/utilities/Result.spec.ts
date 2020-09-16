@@ -1,7 +1,7 @@
-import CompiledResult from '@/utilities/CompiledResult'
+import { CompiledResult } from '@/utilities/CompiledResult'
 import { dataPaths } from '@/utilities/dataPaths'
 import { readKey } from '@/utilities/readKey'
-import Result from '@/utilities/Result'
+import { Result } from '@/utilities/Result'
 import path from 'path'
 
 describe('Result', () => {

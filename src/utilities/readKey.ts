@@ -1,17 +1,17 @@
 import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { importExcelToJson } from './excel'
-import Result from './Result'
+import { Result } from './Result'
 import * as extractTask from './workers/extract.worker'
 
-export enum KEY_NATIVE_TYPES_ENUM {
+export enum KEY_NATIVE_TYPES {
   'csv' = 'csv',
   'xls' = 'xls',
   'xlsm' = 'xlsm',
   'xlsx' = 'xlsx',
 }
 
-export enum KEY_TYPES_ENUM {
+export enum KEY_TYPES {
   'bmp' = 'bmp',
   'csv' = 'csv',
   'dib' = 'dib',
@@ -35,7 +35,7 @@ export async function readKey(src: string): Promise<Result[] | undefined> {
 
   if (ext === undefined) throw new Error('Invalid path specified')
 
-  if (ext in KEY_NATIVE_TYPES_ENUM) {
+  if (ext in KEY_NATIVE_TYPES) {
     const rows = importExcelToJson(src)
     const results: Result[] = []
     for (let i = 0, len = rows.length; i < len; i += 1) {

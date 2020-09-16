@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import { importExcelToJson } from './excel'
-import Result from './Result'
+import { Result } from './Result'
 
-class CompiledResult {
+export class CompiledResult {
   private id: string
   private keys: Result[] = []
   private lastSavedTime: Date | undefined
@@ -189,5 +189,3 @@ class CompiledResult {
     return results
   }
 }
-
-export default CompiledResult

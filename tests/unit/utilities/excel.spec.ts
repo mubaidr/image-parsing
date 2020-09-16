@@ -2,12 +2,12 @@
  * @jest-environment jsdom
  */
 
-import CompiledResult from '@/utilities/CompiledResult'
+import { CompiledResult } from '@/utilities/CompiledResult'
 import { dataPaths } from '@/utilities/dataPaths'
 import {
   exportHtmltoExcel,
   exportJsonToExcel,
-  importExcelToJson,
+  importExcelToJson
 } from '@/utilities/excel'
 import fs from 'fs'
 import path from 'path'

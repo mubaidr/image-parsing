@@ -84,39 +84,21 @@ exports[`Result should load from json 1`] = `
 Result {
   "answers": Object {
     "q1": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "a",
     },
     "q2": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "b",
     },
     "q3": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "c",
     },
     "q4": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "d",
     },
     "q5": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "?",
     },
     "q6": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "*",
     },
   },

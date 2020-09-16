@@ -1,9 +1,9 @@
 import { v4 as uuid4 } from 'uuid'
-import { QUESTION_OPTIONS_ENUM, REG_EXP_PATTERNS } from './design'
+import { QUESTION_OPTIONS, REG_EXP_PATTERNS } from './design'
 
-interface AnswerCollection {
+export type AnswerCollection = {
   [key: string]: {
-    value: QUESTION_OPTIONS_ENUM
+    value: QUESTION_OPTIONS
     unattempted?: boolean
     correct?: boolean
     skipped?: boolean
@@ -15,7 +15,7 @@ export interface ResultJson {
   answers: AnswerCollection
 }
 
-class Result implements ResultJson {
+export class Result implements ResultJson {
   [key: string]: any
 
   private correctCount = 0
@@ -51,13 +51,13 @@ class Result implements ResultJson {
       typeof o.rollNo === 'string' ? new Result(o.rollNo) : new Result()
 
     Object.keys(o).forEach((key) => {
-      const value = o[key] as QUESTION_OPTIONS_ENUM
+      const value = o[key] as QUESTION_OPTIONS
 
       if (answerRegExp.test(key)) {
         if (typeof value === 'string') {
           result.addAnswer(key, value)
         } else {
-          result.addAnswer(key, QUESTION_OPTIONS_ENUM.NONE)
+          result.addAnswer(key, QUESTION_OPTIONS.NONE)
         }
       } else {
         result[key] = value
@@ -67,7 +67,7 @@ class Result implements ResultJson {
     return result
   }
 
-  public addAnswer(title: string, value: QUESTION_OPTIONS_ENUM): Result {
+  public addAnswer(title: string, value: QUESTION_OPTIONS): Result {
     this.answers[title] = {
       value,
     }
@@ -87,15 +87,15 @@ class Result implements ResultJson {
       const candidateChoice = this.answers[prop]
 
       // question not attempted
-      if (candidateChoice.value === QUESTION_OPTIONS_ENUM.NONE) {
+      if (candidateChoice.value === QUESTION_OPTIONS.NONE) {
         candidateChoice.unattempted = true
         this.unattemptedCount += 1
       }
 
       // question skipped
       if (
-        keyChoice.value === QUESTION_OPTIONS_ENUM.NONE ||
-        keyChoice.value === QUESTION_OPTIONS_ENUM.MULTIPLE
+        keyChoice.value === QUESTION_OPTIONS.NONE ||
+        keyChoice.value === QUESTION_OPTIONS.MULTIPLE
       ) {
         candidateChoice.skipped = true
         this.skippedCount += 1
@@ -200,5 +200,3 @@ class Result implements ResultJson {
     return o
   }
 }
-
-export default Result
