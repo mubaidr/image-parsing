@@ -27,14 +27,26 @@ function sendMessage(message: WorkerExtractOutputMessage): void {
 function addAnswersFromData(result: Result, questionsData: QuestionData) {
   Object.entries(questionsData).forEach(
     ([questionTitle, optionsDataCollection]) => {
-      const answers: { [key in QUESTION_OPTIONS]?: number }[] = []
+      const answers: { [key in QUESTION_OPTIONS]?: number } = {}
 
       Object.entries(optionsDataCollection).forEach(
         ([optionTitle, optionsData]) => {
-          // answers[optionTitle as QUESTION_OPTIONS] = 0
-          console.log(optionTitle)
+          if (optionsData) {
+            answers[optionTitle as QUESTION_OPTIONS] = optionsData.reduce(
+              (prev, item) => {
+                if (item <= 192) {
+                  return prev + 1
+                } else {
+                  return prev
+                }
+              },
+              0
+            )
+          }
         }
       )
+
+      console.log(questionTitle, answers)
 
       result.addAnswer(questionTitle, QUESTION_OPTIONS.MULTIPLE)
     }

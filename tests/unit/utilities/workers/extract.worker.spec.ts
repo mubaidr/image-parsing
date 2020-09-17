@@ -14,10 +14,9 @@ describe('workerExtract', () => {
       false
     )
 
-    if (results) console.dir(results[0].answers)
-
     expect(results).toBeDefined()
     expect(results?.length).toBe(1)
+    // expect(results).toMatchSnapshot()
   })
 
   test('should be able to extract result just fine', async () => {
