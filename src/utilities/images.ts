@@ -1,8 +1,11 @@
 import fastGlob from 'fast-glob'
+import NodeCache from 'node-cache'
 import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import { v4 as uuid4 } from 'uuid'
 import { dataPaths } from './dataPaths'
+
+const myCache = new NodeCache()
 
 export enum IMAGE_NATIVE_TYPES {
   'bmp' = 'bmp',
@@ -47,15 +50,15 @@ const convertImage = async (src: string): Promise<string> => {
     return src
   }
 
-  // // check cache
-  // const cached = cache.get(src)
-  // if (cached) {
-  //   return cached
-  // }
+  // check cache
+  const cached = myCache.get(src)
+  if (cached !== undefined) {
+    return cached as string
+  }
 
   // // generate random tmp url
   const url = path.join(dataPaths.tmp, `${uuid4()}.jpg`)
-  // cache.set(src, url)
+  myCache.set(src, url)
 
   // save file for preview
   await getSharpObjectFromSource(src).jpeg().toFile(url)
