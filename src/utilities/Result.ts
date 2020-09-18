@@ -68,8 +68,8 @@ export class Result implements ResultJson {
   }
 
   public addAnswer(title: string, value: QUESTION_OPTIONS): Result {
-    this.answers[title] = {
-      value,
+    this.answers[title.toUpperCase()] = {
+      value: value.toUpperCase() as QUESTION_OPTIONS,
     }
 
     return this

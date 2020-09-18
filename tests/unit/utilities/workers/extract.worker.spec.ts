@@ -1,6 +1,7 @@
 import { dataPaths } from '@/utilities/dataPaths'
 import { getDesignData } from '@/utilities/design'
 import { getImagePaths } from '@/utilities/images'
+import { readKey } from '@/utilities/readKey'
 import { start } from '@/utilities/workers/extract.worker'
 
 describe('workerExtract', () => {
@@ -51,8 +52,22 @@ describe('workerExtract', () => {
   })
 
   test('extracted result should match with results.xlsx', async () => {
-    // read excel file
-    // extract results
-    // compare using file path (to  compare answer sheet without roll no)
+    const resultsExcel = await readKey(dataPaths.result)
+    const designData = await getDesignData(dataPaths.designBarcode)
+    const imagePaths = await getImagePaths(dataPaths.imagesBarcode)
+
+    const results = await start(
+      {
+        designData,
+        imagePaths,
+      },
+      false
+    )
+
+    // TODO: compare reuslts object using for loop and roll no
+
+    if (!results || !resultsExcel) fail()
+
+    expect(results).toMatchObject(resultsExcel)
   })
 })
