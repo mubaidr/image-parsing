@@ -64,10 +64,31 @@ describe('workerExtract', () => {
       false
     )
 
-    // TODO: compare reuslts object using for loop and roll no
-
     if (!results || !resultsExcel) fail()
 
-    expect(results).toMatchObject(resultsExcel)
+    results.forEach((r) => {
+      resultsExcel.forEach((re) => {
+        if (r.rollNo === re.rollNo) {
+          expect(r.answers).toMatchObject(re.answers)
+        }
+      })
+    })
+  })
+
+  test('extracted result when multiple options are checked', async () => {
+    const designData = await getDesignData(dataPaths.designBarcode)
+    const imagePaths = await getImagePaths(dataPaths.imagesBarcode)
+
+    const results = await start(
+      {
+        designData,
+        imagePaths,
+      },
+      false
+    )
+
+    if (!results) fail()
+
+    // TODO implement this test
   })
 })

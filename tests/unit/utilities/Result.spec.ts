@@ -55,12 +55,12 @@ describe('Result', () => {
     expect(result.rollNo).toBe(o.rollNo)
     expect(result.imageFile).toBe(o.imageFile)
 
-    expect(result.answers['q1'].value).toBe('a')
-    expect(result.answers['q2'].value).toBe('b')
-    expect(result.answers['q3'].value).toBe('c')
-    expect(result.answers['q4'].value).toBe('d')
-    expect(result.answers['q5'].value).toBe('?')
-    expect(result.answers['q6'].value).toBe('*')
+    expect(result.answers['Q1'].value).toBe('A')
+    expect(result.answers['Q2'].value).toBe('B')
+    expect(result.answers['Q3'].value).toBe('C')
+    expect(result.answers['Q4'].value).toBe('D')
+    expect(result.answers['Q5'].value).toBe('?')
+    expect(result.answers['Q6'].value).toBe('*')
   })
 
   test('should compile', async () => {
