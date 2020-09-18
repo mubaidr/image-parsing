@@ -24,33 +24,37 @@ function sendMessage(message: WorkerExtractOutputMessage): void {
   }
 }
 
-function addAnswersFromData(result: Result, questionsData: QuestionData) {
-  Object.entries(questionsData).forEach(
-    ([questionTitle, optionsDataCollection]) => {
-      const answers: { [key in QUESTION_OPTIONS]?: number } = {}
+function addAnswersFromData(result: Result, data: QuestionData) {
+  Object.entries(data).forEach(([questionTitle, questionData]) => {
+    const answersCollection: { title: QUESTION_OPTIONS; data: number }[] = []
+    let finalOption: QUESTION_OPTIONS = QUESTION_OPTIONS.NONE
 
-      Object.entries(optionsDataCollection).forEach(
-        ([optionTitle, optionsData]) => {
-          if (optionsData) {
-            answers[optionTitle as QUESTION_OPTIONS] = optionsData.reduce(
-              (prev, item) => {
-                if (item <= 192) {
-                  return prev + 1
-                } else {
-                  return prev
-                }
-              },
-              0
-            )
-          }
-        }
-      )
+    Object.entries(questionData).forEach(([optionTitle, optionData]) => {
+      if (optionData) {
+        answersCollection.push({
+          title: optionTitle as QUESTION_OPTIONS,
+          data:
+            optionData.reduce((prev, item) => {
+              return item <= 170 ? prev + 1 : prev
+            }, 0) / optionData.length,
+        })
+      }
+    })
 
-      console.log(questionTitle, answers)
+    answersCollection.sort((a, b) => {
+      return b.data - a.data
+    })
 
-      result.addAnswer(questionTitle, QUESTION_OPTIONS.MULTIPLE)
+    if (answersCollection[0].data <= 0.16) {
+      finalOption = QUESTION_OPTIONS.NONE
+    } else if (answersCollection[0].data - answersCollection[1].data <= 0.33) {
+      finalOption = QUESTION_OPTIONS.MULTIPLE
+    } else {
+      finalOption = answersCollection[0].title
     }
-  )
+
+    result.addAnswer(questionTitle, finalOption)
+  })
 }
 
 export async function start(

@@ -14,9 +14,15 @@ describe('workerExtract', () => {
       false
     )
 
-    expect(results).toBeDefined()
-    expect(results?.length).toBe(1)
-    // expect(results).toMatchSnapshot()
+    if (!results) fail()
+
+    expect(results.length).toBe(1)
+    expect(results).toMatchSnapshot([
+      {
+        id: expect.any(String),
+        imageFile: expect.any(String),
+      },
+    ])
   })
 
   test('should be able to extract result just fine', async () => {
@@ -31,8 +37,9 @@ describe('workerExtract', () => {
       false
     )
 
-    expect(results).toBeDefined()
-    expect(results?.length).toBeGreaterThanOrEqual(3)
+    if (!results) fail()
+
+    expect(results.length).toBeGreaterThanOrEqual(3)
   })
 
   test('extracted result should match with results.xlsx', async () => {

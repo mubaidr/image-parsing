@@ -1,4 +1,4 @@
-import { Sharp } from 'sharp'
+import { kernel, Sharp } from 'sharp'
 import { DesignData, QUESTION_OPTIONS } from './design'
 // import { logImageData } from './images'
 
@@ -17,9 +17,11 @@ export async function getQuestionsData(
   const questions = Object.entries(design.questions)
   const questionsData: QuestionData = {}
 
-  if (scale !== 1) sharpImage.resize(Math.ceil(design.width * scale))
-
-  // TODO: adjust itemInfo(x,y) according to orientation info (squares position) from image
+  if (scale !== 1) {
+    sharpImage.resize(Math.ceil(design.width * scale), null, {
+      kernel: kernel.nearest,
+    })
+  }
 
   for (let i = 0; i < questions.length; i += 1) {
     const [questionTitle, q] = questions[i]
@@ -31,8 +33,8 @@ export async function getQuestionsData(
       if (itemInfo === undefined) continue
 
       sharpImage.extract({
-        left: Math.floor(itemInfo.x * scale),
-        top: Math.floor(itemInfo.y * scale),
+        left: Math.floor((itemInfo.x - itemInfo.width * 0.5) * scale),
+        top: Math.floor((itemInfo.y - itemInfo.height * 0.5) * scale),
         width: Math.ceil(itemInfo.width * scale),
         height: Math.ceil(itemInfo.height * scale),
       })
