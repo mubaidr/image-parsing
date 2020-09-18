@@ -45,12 +45,14 @@ function addAnswersFromData(result: Result, data: QuestionData) {
       return b.data - a.data
     })
 
-    if (answersCollection[0].data <= 0.16) {
+    const [first, second] = answersCollection
+
+    if (first.data < 0.2) {
       finalOption = QUESTION_OPTIONS.NONE
-    } else if (answersCollection[0].data - answersCollection[1].data <= 0.33) {
+    } else if (first.data - second.data < 0.2) {
       finalOption = QUESTION_OPTIONS.MULTIPLE
     } else {
-      finalOption = answersCollection[0].title
+      finalOption = first.title
     }
 
     result.addAnswer(questionTitle, finalOption)

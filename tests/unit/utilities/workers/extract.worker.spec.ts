@@ -41,7 +41,7 @@ describe('workerExtract', () => {
     if (!results) fail()
 
     expect(results.length).toBe(4)
-    // TODO: improve this test
+
     results.forEach((result) => {
       expect(result).toMatchSnapshot({
         id: expect.any(String),
