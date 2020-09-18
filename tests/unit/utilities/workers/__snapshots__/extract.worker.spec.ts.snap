@@ -2,204 +2,1010 @@
 
 exports[`workerExtract should be able to extract key just fine 1`] = `
 Object {
-  "0": Result {
-    "answers": Object {
-      "q1": Object {
-        "value": "d",
-      },
-      "q10": Object {
-        "value": "c",
-      },
-      "q11": Object {
-        "value": "b",
-      },
-      "q12": Object {
-        "value": "d",
-      },
-      "q13": Object {
-        "value": "b",
-      },
-      "q14": Object {
-        "value": "a",
-      },
-      "q15": Object {
-        "value": "d",
-      },
-      "q16": Object {
-        "value": "c",
-      },
-      "q17": Object {
-        "value": "b",
-      },
-      "q18": Object {
-        "value": "a",
-      },
-      "q19": Object {
-        "value": "c",
-      },
-      "q2": Object {
-        "value": "b",
-      },
-      "q20": Object {
-        "value": "b",
-      },
-      "q21": Object {
-        "value": "a",
-      },
-      "q22": Object {
-        "value": "b",
-      },
-      "q23": Object {
-        "value": "a",
-      },
-      "q24": Object {
-        "value": "b",
-      },
-      "q25": Object {
-        "value": "a",
-      },
-      "q26": Object {
-        "value": "b",
-      },
-      "q27": Object {
-        "value": "a",
-      },
-      "q28": Object {
-        "value": "b",
-      },
-      "q29": Object {
-        "value": "d",
-      },
-      "q3": Object {
-        "value": "d",
-      },
-      "q30": Object {
-        "value": "a",
-      },
-      "q31": Object {
-        "value": "b",
-      },
-      "q32": Object {
-        "value": "a",
-      },
-      "q33": Object {
-        "value": "b",
-      },
-      "q34": Object {
-        "value": "b",
-      },
-      "q35": Object {
-        "value": "a",
-      },
-      "q36": Object {
-        "value": "c",
-      },
-      "q37": Object {
-        "value": "b",
-      },
-      "q38": Object {
-        "value": "a",
-      },
-      "q39": Object {
-        "value": "a",
-      },
-      "q4": Object {
-        "value": "a",
-      },
-      "q40": Object {
-        "value": "a",
-      },
-      "q41": Object {
-        "value": "a",
-      },
-      "q42": Object {
-        "value": "c",
-      },
-      "q43": Object {
-        "value": "a",
-      },
-      "q44": Object {
-        "value": "c",
-      },
-      "q45": Object {
-        "value": "b",
-      },
-      "q46": Object {
-        "value": "a",
-      },
-      "q47": Object {
-        "value": "c",
-      },
-      "q48": Object {
-        "value": "b",
-      },
-      "q49": Object {
-        "value": "a",
-      },
-      "q5": Object {
-        "value": "c",
-      },
-      "q50": Object {
-        "value": "d",
-      },
-      "q51": Object {
-        "value": "a",
-      },
-      "q52": Object {
-        "value": "b",
-      },
-      "q53": Object {
-        "value": "b",
-      },
-      "q54": Object {
-        "value": "d",
-      },
-      "q55": Object {
-        "value": "b",
-      },
-      "q56": Object {
-        "value": "b",
-      },
-      "q57": Object {
-        "value": "a",
-      },
-      "q58": Object {
-        "value": "d",
-      },
-      "q59": Object {
-        "value": "a",
-      },
-      "q6": Object {
-        "value": "d",
-      },
-      "q60": Object {
-        "value": "a",
-      },
-      "q7": Object {
-        "value": "c",
-      },
-      "q8": Object {
-        "value": "a",
-      },
-      "q9": Object {
-        "value": "d",
-      },
+  "answers": Object {
+    "q1": Object {
+      "value": "d",
     },
-    "correctCount": 0,
-    "id": "d7463256-8edc-469a-838d-2cdcae4a8c47",
-    "imageFile": "D:\\\\Current\\\\image-parsing\\\\tests\\\\_data\\\\key.jpg",
-    "incorrectCount": 0,
-    "isCompiled": false,
-    "isRollNoExtracted": false,
-    "marks": 0,
-    "post": "",
-    "questionPaperType": "",
-    "rollNo": undefined,
-    "skippedCount": 0,
-    "testCenter": "",
-    "testTime": "",
-    "totalMarks": 0,
-    "unattemptedCount": 0,
+    "q10": Object {
+      "value": "c",
+    },
+    "q11": Object {
+      "value": "b",
+    },
+    "q12": Object {
+      "value": "d",
+    },
+    "q13": Object {
+      "value": "b",
+    },
+    "q14": Object {
+      "value": "a",
+    },
+    "q15": Object {
+      "value": "d",
+    },
+    "q16": Object {
+      "value": "c",
+    },
+    "q17": Object {
+      "value": "b",
+    },
+    "q18": Object {
+      "value": "a",
+    },
+    "q19": Object {
+      "value": "c",
+    },
+    "q2": Object {
+      "value": "b",
+    },
+    "q20": Object {
+      "value": "b",
+    },
+    "q21": Object {
+      "value": "a",
+    },
+    "q22": Object {
+      "value": "b",
+    },
+    "q23": Object {
+      "value": "a",
+    },
+    "q24": Object {
+      "value": "b",
+    },
+    "q25": Object {
+      "value": "a",
+    },
+    "q26": Object {
+      "value": "b",
+    },
+    "q27": Object {
+      "value": "a",
+    },
+    "q28": Object {
+      "value": "b",
+    },
+    "q29": Object {
+      "value": "d",
+    },
+    "q3": Object {
+      "value": "d",
+    },
+    "q30": Object {
+      "value": "a",
+    },
+    "q31": Object {
+      "value": "b",
+    },
+    "q32": Object {
+      "value": "a",
+    },
+    "q33": Object {
+      "value": "b",
+    },
+    "q34": Object {
+      "value": "b",
+    },
+    "q35": Object {
+      "value": "a",
+    },
+    "q36": Object {
+      "value": "c",
+    },
+    "q37": Object {
+      "value": "b",
+    },
+    "q38": Object {
+      "value": "a",
+    },
+    "q39": Object {
+      "value": "a",
+    },
+    "q4": Object {
+      "value": "a",
+    },
+    "q40": Object {
+      "value": "a",
+    },
+    "q41": Object {
+      "value": "a",
+    },
+    "q42": Object {
+      "value": "c",
+    },
+    "q43": Object {
+      "value": "a",
+    },
+    "q44": Object {
+      "value": "c",
+    },
+    "q45": Object {
+      "value": "b",
+    },
+    "q46": Object {
+      "value": "a",
+    },
+    "q47": Object {
+      "value": "c",
+    },
+    "q48": Object {
+      "value": "b",
+    },
+    "q49": Object {
+      "value": "a",
+    },
+    "q5": Object {
+      "value": "c",
+    },
+    "q50": Object {
+      "value": "d",
+    },
+    "q51": Object {
+      "value": "a",
+    },
+    "q52": Object {
+      "value": "b",
+    },
+    "q53": Object {
+      "value": "b",
+    },
+    "q54": Object {
+      "value": "d",
+    },
+    "q55": Object {
+      "value": "b",
+    },
+    "q56": Object {
+      "value": "b",
+    },
+    "q57": Object {
+      "value": "a",
+    },
+    "q58": Object {
+      "value": "d",
+    },
+    "q59": Object {
+      "value": "a",
+    },
+    "q6": Object {
+      "value": "d",
+    },
+    "q60": Object {
+      "value": "a",
+    },
+    "q7": Object {
+      "value": "c",
+    },
+    "q8": Object {
+      "value": "a",
+    },
+    "q9": Object {
+      "value": "d",
+    },
   },
+  "correctCount": 0,
+  "id": Any<String>,
+  "imageFile": Any<String>,
+  "incorrectCount": 0,
+  "isCompiled": false,
+  "isRollNoExtracted": false,
+  "marks": 0,
+  "post": "",
+  "questionPaperType": "",
+  "rollNo": undefined,
+  "skippedCount": 0,
+  "testCenter": "",
+  "testTime": "",
+  "totalMarks": 0,
+  "unattemptedCount": 0,
+}
+`;
+
+exports[`workerExtract should be able to extract result just fine 1`] = `
+Object {
+  "answers": Object {
+    "q1": Object {
+      "value": "d",
+    },
+    "q10": Object {
+      "value": "d",
+    },
+    "q11": Object {
+      "value": "*",
+    },
+    "q12": Object {
+      "value": "d",
+    },
+    "q13": Object {
+      "value": "c",
+    },
+    "q14": Object {
+      "value": "b",
+    },
+    "q15": Object {
+      "value": "a",
+    },
+    "q16": Object {
+      "value": "b",
+    },
+    "q17": Object {
+      "value": "c",
+    },
+    "q18": Object {
+      "value": "b",
+    },
+    "q19": Object {
+      "value": "c",
+    },
+    "q2": Object {
+      "value": "d",
+    },
+    "q20": Object {
+      "value": "a",
+    },
+    "q21": Object {
+      "value": "d",
+    },
+    "q22": Object {
+      "value": "d",
+    },
+    "q23": Object {
+      "value": "?",
+    },
+    "q24": Object {
+      "value": "d",
+    },
+    "q25": Object {
+      "value": "d",
+    },
+    "q26": Object {
+      "value": "c",
+    },
+    "q27": Object {
+      "value": "c",
+    },
+    "q28": Object {
+      "value": "a",
+    },
+    "q29": Object {
+      "value": "b",
+    },
+    "q3": Object {
+      "value": "c",
+    },
+    "q30": Object {
+      "value": "c",
+    },
+    "q31": Object {
+      "value": "b",
+    },
+    "q32": Object {
+      "value": "*",
+    },
+    "q33": Object {
+      "value": "d",
+    },
+    "q34": Object {
+      "value": "b",
+    },
+    "q35": Object {
+      "value": "*",
+    },
+    "q36": Object {
+      "value": "b",
+    },
+    "q37": Object {
+      "value": "c",
+    },
+    "q38": Object {
+      "value": "d",
+    },
+    "q39": Object {
+      "value": "a",
+    },
+    "q4": Object {
+      "value": "a",
+    },
+    "q40": Object {
+      "value": "b",
+    },
+    "q41": Object {
+      "value": "c",
+    },
+    "q42": Object {
+      "value": "a",
+    },
+    "q43": Object {
+      "value": "a",
+    },
+    "q44": Object {
+      "value": "c",
+    },
+    "q45": Object {
+      "value": "b",
+    },
+    "q46": Object {
+      "value": "d",
+    },
+    "q47": Object {
+      "value": "a",
+    },
+    "q48": Object {
+      "value": "c",
+    },
+    "q49": Object {
+      "value": "a",
+    },
+    "q5": Object {
+      "value": "c",
+    },
+    "q50": Object {
+      "value": "d",
+    },
+    "q51": Object {
+      "value": "d",
+    },
+    "q52": Object {
+      "value": "b",
+    },
+    "q53": Object {
+      "value": "b",
+    },
+    "q54": Object {
+      "value": "d",
+    },
+    "q55": Object {
+      "value": "d",
+    },
+    "q56": Object {
+      "value": "d",
+    },
+    "q57": Object {
+      "value": "*",
+    },
+    "q58": Object {
+      "value": "b",
+    },
+    "q59": Object {
+      "value": "d",
+    },
+    "q6": Object {
+      "value": "d",
+    },
+    "q60": Object {
+      "value": "d",
+    },
+    "q7": Object {
+      "value": "c",
+    },
+    "q8": Object {
+      "value": "a",
+    },
+    "q9": Object {
+      "value": "*",
+    },
+  },
+  "correctCount": 0,
+  "id": Any<String>,
+  "imageFile": Any<String>,
+  "incorrectCount": 0,
+  "isCompiled": false,
+  "isRollNoExtracted": true,
+  "marks": 0,
+  "post": "",
+  "questionPaperType": "",
+  "rollNo": "10023",
+  "skippedCount": 0,
+  "testCenter": "",
+  "testTime": "",
+  "totalMarks": 0,
+  "unattemptedCount": 0,
+}
+`;
+
+exports[`workerExtract should be able to extract result just fine 2`] = `
+Object {
+  "answers": Object {
+    "q1": Object {
+      "value": "d",
+    },
+    "q10": Object {
+      "value": "?",
+    },
+    "q11": Object {
+      "value": "b",
+    },
+    "q12": Object {
+      "value": "d",
+    },
+    "q13": Object {
+      "value": "b",
+    },
+    "q14": Object {
+      "value": "a",
+    },
+    "q15": Object {
+      "value": "d",
+    },
+    "q16": Object {
+      "value": "c",
+    },
+    "q17": Object {
+      "value": "b",
+    },
+    "q18": Object {
+      "value": "a",
+    },
+    "q19": Object {
+      "value": "c",
+    },
+    "q2": Object {
+      "value": "b",
+    },
+    "q20": Object {
+      "value": "b",
+    },
+    "q21": Object {
+      "value": "a",
+    },
+    "q22": Object {
+      "value": "?",
+    },
+    "q23": Object {
+      "value": "a",
+    },
+    "q24": Object {
+      "value": "?",
+    },
+    "q25": Object {
+      "value": "a",
+    },
+    "q26": Object {
+      "value": "*",
+    },
+    "q27": Object {
+      "value": "a",
+    },
+    "q28": Object {
+      "value": "b",
+    },
+    "q29": Object {
+      "value": "d",
+    },
+    "q3": Object {
+      "value": "d",
+    },
+    "q30": Object {
+      "value": "a",
+    },
+    "q31": Object {
+      "value": "*",
+    },
+    "q32": Object {
+      "value": "a",
+    },
+    "q33": Object {
+      "value": "b",
+    },
+    "q34": Object {
+      "value": "b",
+    },
+    "q35": Object {
+      "value": "a",
+    },
+    "q36": Object {
+      "value": "*",
+    },
+    "q37": Object {
+      "value": "?",
+    },
+    "q38": Object {
+      "value": "a",
+    },
+    "q39": Object {
+      "value": "a",
+    },
+    "q4": Object {
+      "value": "a",
+    },
+    "q40": Object {
+      "value": "a",
+    },
+    "q41": Object {
+      "value": "a",
+    },
+    "q42": Object {
+      "value": "?",
+    },
+    "q43": Object {
+      "value": "*",
+    },
+    "q44": Object {
+      "value": "c",
+    },
+    "q45": Object {
+      "value": "b",
+    },
+    "q46": Object {
+      "value": "a",
+    },
+    "q47": Object {
+      "value": "?",
+    },
+    "q48": Object {
+      "value": "*",
+    },
+    "q49": Object {
+      "value": "*",
+    },
+    "q5": Object {
+      "value": "c",
+    },
+    "q50": Object {
+      "value": "*",
+    },
+    "q51": Object {
+      "value": "a",
+    },
+    "q52": Object {
+      "value": "*",
+    },
+    "q53": Object {
+      "value": "b",
+    },
+    "q54": Object {
+      "value": "*",
+    },
+    "q55": Object {
+      "value": "?",
+    },
+    "q56": Object {
+      "value": "b",
+    },
+    "q57": Object {
+      "value": "*",
+    },
+    "q58": Object {
+      "value": "d",
+    },
+    "q59": Object {
+      "value": "a",
+    },
+    "q6": Object {
+      "value": "d",
+    },
+    "q60": Object {
+      "value": "*",
+    },
+    "q7": Object {
+      "value": "c",
+    },
+    "q8": Object {
+      "value": "a",
+    },
+    "q9": Object {
+      "value": "d",
+    },
+  },
+  "correctCount": 0,
+  "id": Any<String>,
+  "imageFile": Any<String>,
+  "incorrectCount": 0,
+  "isCompiled": false,
+  "isRollNoExtracted": true,
+  "marks": 0,
+  "post": "",
+  "questionPaperType": "",
+  "rollNo": "10025",
+  "skippedCount": 0,
+  "testCenter": "",
+  "testTime": "",
+  "totalMarks": 0,
+  "unattemptedCount": 0,
+}
+`;
+
+exports[`workerExtract should be able to extract result just fine 3`] = `
+Object {
+  "answers": Object {
+    "q1": Object {
+      "value": "d",
+    },
+    "q10": Object {
+      "value": "d",
+    },
+    "q11": Object {
+      "value": "*",
+    },
+    "q12": Object {
+      "value": "d",
+    },
+    "q13": Object {
+      "value": "c",
+    },
+    "q14": Object {
+      "value": "b",
+    },
+    "q15": Object {
+      "value": "a",
+    },
+    "q16": Object {
+      "value": "b",
+    },
+    "q17": Object {
+      "value": "c",
+    },
+    "q18": Object {
+      "value": "b",
+    },
+    "q19": Object {
+      "value": "c",
+    },
+    "q2": Object {
+      "value": "d",
+    },
+    "q20": Object {
+      "value": "a",
+    },
+    "q21": Object {
+      "value": "d",
+    },
+    "q22": Object {
+      "value": "d",
+    },
+    "q23": Object {
+      "value": "?",
+    },
+    "q24": Object {
+      "value": "d",
+    },
+    "q25": Object {
+      "value": "d",
+    },
+    "q26": Object {
+      "value": "c",
+    },
+    "q27": Object {
+      "value": "c",
+    },
+    "q28": Object {
+      "value": "a",
+    },
+    "q29": Object {
+      "value": "b",
+    },
+    "q3": Object {
+      "value": "c",
+    },
+    "q30": Object {
+      "value": "c",
+    },
+    "q31": Object {
+      "value": "b",
+    },
+    "q32": Object {
+      "value": "*",
+    },
+    "q33": Object {
+      "value": "d",
+    },
+    "q34": Object {
+      "value": "b",
+    },
+    "q35": Object {
+      "value": "*",
+    },
+    "q36": Object {
+      "value": "b",
+    },
+    "q37": Object {
+      "value": "c",
+    },
+    "q38": Object {
+      "value": "d",
+    },
+    "q39": Object {
+      "value": "a",
+    },
+    "q4": Object {
+      "value": "a",
+    },
+    "q40": Object {
+      "value": "b",
+    },
+    "q41": Object {
+      "value": "c",
+    },
+    "q42": Object {
+      "value": "a",
+    },
+    "q43": Object {
+      "value": "a",
+    },
+    "q44": Object {
+      "value": "c",
+    },
+    "q45": Object {
+      "value": "b",
+    },
+    "q46": Object {
+      "value": "d",
+    },
+    "q47": Object {
+      "value": "a",
+    },
+    "q48": Object {
+      "value": "c",
+    },
+    "q49": Object {
+      "value": "a",
+    },
+    "q5": Object {
+      "value": "c",
+    },
+    "q50": Object {
+      "value": "d",
+    },
+    "q51": Object {
+      "value": "d",
+    },
+    "q52": Object {
+      "value": "b",
+    },
+    "q53": Object {
+      "value": "b",
+    },
+    "q54": Object {
+      "value": "d",
+    },
+    "q55": Object {
+      "value": "d",
+    },
+    "q56": Object {
+      "value": "d",
+    },
+    "q57": Object {
+      "value": "*",
+    },
+    "q58": Object {
+      "value": "b",
+    },
+    "q59": Object {
+      "value": "d",
+    },
+    "q6": Object {
+      "value": "d",
+    },
+    "q60": Object {
+      "value": "d",
+    },
+    "q7": Object {
+      "value": "c",
+    },
+    "q8": Object {
+      "value": "a",
+    },
+    "q9": Object {
+      "value": "*",
+    },
+  },
+  "correctCount": 0,
+  "id": Any<String>,
+  "imageFile": Any<String>,
+  "incorrectCount": 0,
+  "isCompiled": false,
+  "isRollNoExtracted": false,
+  "marks": 0,
+  "post": "",
+  "questionPaperType": "",
+  "rollNo": undefined,
+  "skippedCount": 0,
+  "testCenter": "",
+  "testTime": "",
+  "totalMarks": 0,
+  "unattemptedCount": 0,
+}
+`;
+
+exports[`workerExtract should be able to extract result just fine 4`] = `
+Object {
+  "answers": Object {
+    "q1": Object {
+      "value": "d",
+    },
+    "q10": Object {
+      "value": "d",
+    },
+    "q11": Object {
+      "value": "*",
+    },
+    "q12": Object {
+      "value": "d",
+    },
+    "q13": Object {
+      "value": "c",
+    },
+    "q14": Object {
+      "value": "b",
+    },
+    "q15": Object {
+      "value": "a",
+    },
+    "q16": Object {
+      "value": "b",
+    },
+    "q17": Object {
+      "value": "c",
+    },
+    "q18": Object {
+      "value": "b",
+    },
+    "q19": Object {
+      "value": "c",
+    },
+    "q2": Object {
+      "value": "d",
+    },
+    "q20": Object {
+      "value": "a",
+    },
+    "q21": Object {
+      "value": "d",
+    },
+    "q22": Object {
+      "value": "d",
+    },
+    "q23": Object {
+      "value": "?",
+    },
+    "q24": Object {
+      "value": "d",
+    },
+    "q25": Object {
+      "value": "d",
+    },
+    "q26": Object {
+      "value": "c",
+    },
+    "q27": Object {
+      "value": "c",
+    },
+    "q28": Object {
+      "value": "a",
+    },
+    "q29": Object {
+      "value": "b",
+    },
+    "q3": Object {
+      "value": "c",
+    },
+    "q30": Object {
+      "value": "c",
+    },
+    "q31": Object {
+      "value": "b",
+    },
+    "q32": Object {
+      "value": "*",
+    },
+    "q33": Object {
+      "value": "d",
+    },
+    "q34": Object {
+      "value": "b",
+    },
+    "q35": Object {
+      "value": "*",
+    },
+    "q36": Object {
+      "value": "b",
+    },
+    "q37": Object {
+      "value": "c",
+    },
+    "q38": Object {
+      "value": "d",
+    },
+    "q39": Object {
+      "value": "a",
+    },
+    "q4": Object {
+      "value": "a",
+    },
+    "q40": Object {
+      "value": "b",
+    },
+    "q41": Object {
+      "value": "c",
+    },
+    "q42": Object {
+      "value": "a",
+    },
+    "q43": Object {
+      "value": "a",
+    },
+    "q44": Object {
+      "value": "c",
+    },
+    "q45": Object {
+      "value": "b",
+    },
+    "q46": Object {
+      "value": "d",
+    },
+    "q47": Object {
+      "value": "a",
+    },
+    "q48": Object {
+      "value": "c",
+    },
+    "q49": Object {
+      "value": "a",
+    },
+    "q5": Object {
+      "value": "c",
+    },
+    "q50": Object {
+      "value": "d",
+    },
+    "q51": Object {
+      "value": "d",
+    },
+    "q52": Object {
+      "value": "b",
+    },
+    "q53": Object {
+      "value": "b",
+    },
+    "q54": Object {
+      "value": "d",
+    },
+    "q55": Object {
+      "value": "d",
+    },
+    "q56": Object {
+      "value": "d",
+    },
+    "q57": Object {
+      "value": "*",
+    },
+    "q58": Object {
+      "value": "b",
+    },
+    "q59": Object {
+      "value": "d",
+    },
+    "q6": Object {
+      "value": "d",
+    },
+    "q60": Object {
+      "value": "d",
+    },
+    "q7": Object {
+      "value": "c",
+    },
+    "q8": Object {
+      "value": "a",
+    },
+    "q9": Object {
+      "value": "*",
+    },
+  },
+  "correctCount": 0,
+  "id": Any<String>,
+  "imageFile": Any<String>,
+  "incorrectCount": 0,
+  "isCompiled": false,
+  "isRollNoExtracted": false,
+  "marks": 0,
+  "post": "",
+  "questionPaperType": "",
+  "rollNo": undefined,
+  "skippedCount": 0,
+  "testCenter": "",
+  "testTime": "",
+  "totalMarks": 0,
+  "unattemptedCount": 0,
 }
 `;

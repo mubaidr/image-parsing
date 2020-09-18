@@ -17,12 +17,13 @@ describe('workerExtract', () => {
     if (!results) fail()
 
     expect(results.length).toBe(1)
-    expect(results).toMatchSnapshot([
-      {
+
+    results.forEach((result) => {
+      expect(result).toMatchSnapshot({
         id: expect.any(String),
         imageFile: expect.any(String),
-      },
-    ])
+      })
+    })
   })
 
   test('should be able to extract result just fine', async () => {
@@ -39,7 +40,14 @@ describe('workerExtract', () => {
 
     if (!results) fail()
 
-    expect(results.length).toBeGreaterThanOrEqual(3)
+    expect(results.length).toBe(4)
+    // TODO: improve this test
+    results.forEach((result) => {
+      expect(result).toMatchSnapshot({
+        id: expect.any(String),
+        imageFile: expect.any(String),
+      })
+    })
   })
 
   test('extracted result should match with results.xlsx', async () => {
