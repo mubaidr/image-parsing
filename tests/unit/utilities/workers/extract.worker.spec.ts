@@ -74,21 +74,4 @@ describe('workerExtract', () => {
       })
     })
   })
-
-  test('extracted result when multiple options are checked', async () => {
-    const designData = await getDesignData(dataPaths.designBarcode)
-    const imagePaths = await getImagePaths(dataPaths.imagesBarcode)
-
-    const results = await start(
-      {
-        designData,
-        imagePaths,
-      },
-      false
-    )
-
-    if (!results) fail()
-
-    // TODO implement this test
-  })
 })

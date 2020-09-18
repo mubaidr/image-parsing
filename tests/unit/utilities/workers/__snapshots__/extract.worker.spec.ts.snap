@@ -450,7 +450,7 @@ Object {
       "value": "A",
     },
     "Q22": Object {
-      "value": "?",
+      "value": "*",
     },
     "Q23": Object {
       "value": "A",
@@ -558,7 +558,7 @@ Object {
       "value": "D",
     },
     "Q55": Object {
-      "value": "?",
+      "value": "*",
     },
     "Q56": Object {
       "value": "B",
