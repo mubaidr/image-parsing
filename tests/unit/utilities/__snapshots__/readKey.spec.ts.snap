@@ -3,184 +3,184 @@
 exports[`readKey should read excel keys 1`] = `
 Object {
   "answers": Object {
-    "q1": Object {
+    "Q1": Object {
       "value": "D",
     },
-    "q10": Object {
+    "Q10": Object {
       "value": "C",
     },
-    "q11": Object {
+    "Q11": Object {
       "value": "B",
     },
-    "q12": Object {
+    "Q12": Object {
       "value": "D",
     },
-    "q13": Object {
+    "Q13": Object {
       "value": "B",
     },
-    "q14": Object {
+    "Q14": Object {
       "value": "A",
     },
-    "q15": Object {
+    "Q15": Object {
       "value": "D",
     },
-    "q16": Object {
+    "Q16": Object {
       "value": "C",
     },
-    "q17": Object {
+    "Q17": Object {
       "value": "B",
     },
-    "q18": Object {
+    "Q18": Object {
       "value": "A",
     },
-    "q19": Object {
+    "Q19": Object {
       "value": "C",
     },
-    "q2": Object {
+    "Q2": Object {
       "value": "B",
     },
-    "q20": Object {
+    "Q20": Object {
       "value": "B",
     },
-    "q21": Object {
+    "Q21": Object {
       "value": "A",
     },
-    "q22": Object {
+    "Q22": Object {
       "value": "B",
     },
-    "q23": Object {
+    "Q23": Object {
       "value": "A",
     },
-    "q24": Object {
+    "Q24": Object {
       "value": "B",
     },
-    "q25": Object {
+    "Q25": Object {
       "value": "A",
     },
-    "q26": Object {
+    "Q26": Object {
       "value": "B",
     },
-    "q27": Object {
+    "Q27": Object {
       "value": "A",
     },
-    "q28": Object {
+    "Q28": Object {
       "value": "B",
     },
-    "q29": Object {
+    "Q29": Object {
       "value": "D",
     },
-    "q3": Object {
+    "Q3": Object {
       "value": "D",
     },
-    "q30": Object {
+    "Q30": Object {
       "value": "A",
     },
-    "q31": Object {
+    "Q31": Object {
       "value": "B",
     },
-    "q32": Object {
+    "Q32": Object {
       "value": "A",
     },
-    "q33": Object {
+    "Q33": Object {
       "value": "B",
     },
-    "q34": Object {
+    "Q34": Object {
       "value": "B",
     },
-    "q35": Object {
+    "Q35": Object {
       "value": "A",
     },
-    "q36": Object {
+    "Q36": Object {
       "value": "C",
     },
-    "q37": Object {
+    "Q37": Object {
       "value": "B",
     },
-    "q38": Object {
+    "Q38": Object {
       "value": "A",
     },
-    "q39": Object {
+    "Q39": Object {
       "value": "A",
     },
-    "q4": Object {
+    "Q4": Object {
       "value": "A",
     },
-    "q40": Object {
+    "Q40": Object {
       "value": "A",
     },
-    "q41": Object {
+    "Q41": Object {
       "value": "A",
     },
-    "q42": Object {
+    "Q42": Object {
       "value": "C",
     },
-    "q43": Object {
+    "Q43": Object {
       "value": "A",
     },
-    "q44": Object {
+    "Q44": Object {
       "value": "C",
     },
-    "q45": Object {
+    "Q45": Object {
       "value": "B",
     },
-    "q46": Object {
+    "Q46": Object {
       "value": "A",
     },
-    "q47": Object {
+    "Q47": Object {
       "value": "C",
     },
-    "q48": Object {
+    "Q48": Object {
       "value": "B",
     },
-    "q49": Object {
+    "Q49": Object {
       "value": "A",
     },
-    "q5": Object {
+    "Q5": Object {
       "value": "C",
     },
-    "q50": Object {
+    "Q50": Object {
       "value": "D",
     },
-    "q51": Object {
+    "Q51": Object {
       "value": "A",
     },
-    "q52": Object {
+    "Q52": Object {
       "value": "B",
     },
-    "q53": Object {
+    "Q53": Object {
       "value": "B",
     },
-    "q54": Object {
+    "Q54": Object {
       "value": "D",
     },
-    "q55": Object {
+    "Q55": Object {
       "value": "B",
     },
-    "q56": Object {
+    "Q56": Object {
       "value": "B",
     },
-    "q57": Object {
+    "Q57": Object {
       "value": "A",
     },
-    "q58": Object {
+    "Q58": Object {
       "value": "D",
     },
-    "q59": Object {
+    "Q59": Object {
       "value": "A",
     },
-    "q6": Object {
+    "Q6": Object {
       "value": "D",
     },
-    "q60": Object {
+    "Q60": Object {
       "value": "A",
     },
-    "q7": Object {
+    "Q7": Object {
       "value": "C",
     },
-    "q8": Object {
+    "Q8": Object {
       "value": "A",
     },
-    "q9": Object {
+    "Q9": Object {
       "value": "D",
     },
   },
@@ -206,364 +206,184 @@ exports[`readKey should read image keys 1`] = `
 Object {
   "answers": Object {
     "Q1": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "D",
     },
     "Q10": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "C",
     },
     "Q11": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q12": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "D",
     },
     "Q13": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q14": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q15": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "D",
     },
     "Q16": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "C",
     },
     "Q17": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q18": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q19": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "C",
     },
     "Q2": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q20": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q21": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q22": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q23": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q24": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q25": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q26": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q27": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q28": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q29": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "D",
     },
     "Q3": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "D",
     },
     "Q30": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q31": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q32": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q33": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q34": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q35": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q36": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "C",
     },
     "Q37": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q38": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q39": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q4": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q40": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q41": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q42": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "C",
     },
     "Q43": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q44": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "C",
     },
     "Q45": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q46": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q47": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "C",
     },
     "Q48": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q49": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q5": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "C",
     },
     "Q50": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "D",
     },
     "Q51": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q52": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q53": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q54": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "D",
     },
     "Q55": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q56": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "B",
     },
     "Q57": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q58": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "D",
     },
     "Q59": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q6": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "D",
     },
     "Q60": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q7": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "C",
     },
     "Q8": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
       "value": "A",
     },
     "Q9": Object {
-      "correct": false,
-      "skipped": false,
-      "unattempted": false,
-      "value": "A",
+      "value": "D",
     },
   },
   "correctCount": 0,
