@@ -35,7 +35,7 @@ export enum IMAGE_TYPES {
 }
 
 const getSharpObjectFromSource = (src: string): Sharp => {
-  return sharp(src).raw().greyscale().flatten()
+  return sharp(src).raw().flatten()
 }
 
 const convertImage = async (src: string): Promise<string> => {

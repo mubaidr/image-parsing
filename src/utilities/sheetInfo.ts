@@ -25,6 +25,7 @@ export async function getRollNoFromImage(
       width: Math.ceil(designData.code.width * ratio),
       height: Math.ceil(designData.code.height * ratio),
     })
+    .greyscale()
     .toBuffer({
       resolveWithObject: true,
     })
