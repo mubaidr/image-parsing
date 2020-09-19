@@ -1,5 +1,5 @@
 <template>
-  <div>Compile</div>
+  <div>Review</div>
 </template>
 
 <script>

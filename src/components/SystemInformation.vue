@@ -22,17 +22,16 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import { platform } from 'os'
 
-export default Vue.extend({
+export default {
   data() {
     return {
       versions: process.versions,
       platform: platform(),
     }
   },
-})
+}
 </script>
 
 <style></style>

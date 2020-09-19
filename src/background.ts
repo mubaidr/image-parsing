@@ -173,20 +173,15 @@ function setMenu() {
           },
         },
         {
+          label: 'Compile Result',
+          click() {
+            sendMenuEvent({ route: '/process/compile' })
+          },
+        },
+        {
           label: 'Review Result',
           click() {
             sendMenuEvent({ route: '/process/review' })
-          },
-        },
-      ],
-    },
-    {
-      label: 'Compile',
-      submenu: [
-        {
-          label: 'Compile Result',
-          click() {
-            sendMenuEvent({ route: '/compile' })
           },
         },
       ],
@@ -196,7 +191,7 @@ function setMenu() {
       submenu: [
         {
           label: 'Get Help',
-          role: 'help',
+          // role: 'help',
           accelerator: 'F1',
           click() {
             sendMenuEvent({ route: '/help/contact' })
@@ -204,7 +199,7 @@ function setMenu() {
         },
         {
           label: 'About',
-          role: 'about',
+          // role: 'about',
           click() {
             sendMenuEvent({ route: '/help/about' })
           },

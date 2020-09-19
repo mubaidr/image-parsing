@@ -1,8 +1,12 @@
 <template>
   <div id="app">
-    <transition mode="out-in" name="slide-up">
-      <router-view />
-    </transition>
+    <router-view v-slot="{ Component }">
+      <transition mode="out-in" name="slide-up">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </transition>
+    </router-view>
   </div>
 </template>
 
