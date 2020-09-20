@@ -48,7 +48,7 @@ describe('getRollNoFromImage', () => {
     expect(rollNo).toBeUndefined()
   })
 
-  test('should return undefined if not found if', async () => {
+  test('should return undefined if not found tif', async () => {
     const sharpImg = getSharpObjectFromSource(
       path.join(dataPaths.images, 'no-roll.tif')
     )

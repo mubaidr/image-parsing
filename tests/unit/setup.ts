@@ -2,8 +2,6 @@ import webpack from 'webpack'
 // @ts-ignore
 import config from '../../webpack.workers.config.js'
 
-config.mode = 'development'
-
 module.exports = async () => {
   webpack(
     {
@@ -11,7 +9,7 @@ module.exports = async () => {
     },
     (err, stats) => {
       if (err || stats.hasErrors()) {
-        console.error(err)
+        console.error(err || stats.compilation.errors[0])
         process.exit(1)
       }
     }
