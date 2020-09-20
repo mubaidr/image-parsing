@@ -3,5 +3,5 @@ module.exports = {
   transform: {
     '^.+\\.vue$': 'vue-jest',
   },
-  globalSetup: './tests/unit/setup.ts',
+  // globalSetup: './tests/unit/setup.ts',
 }

@@ -44,6 +44,7 @@ export class WorkerManager extends EventEmitter {
   private createWorkers(count: number, type: WORKER_TYPES) {
     for (let i = 0; i < count; i += 1) {
       const worker = new Worker(`./dist_electron/workers/${type}.worker.js`)
+      this.workers.push(worker)
 
       worker.on(PROGRESS_STATES.EXIT, (code) => {
         this.emit(PROGRESS_STATES.EXIT, code)
@@ -72,8 +73,6 @@ export class WorkerManager extends EventEmitter {
           }
         }
       })
-
-      this.workers.push(worker)
     }
   }
 
@@ -99,8 +98,9 @@ export class WorkerManager extends EventEmitter {
       })
     }
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.COMPLETE, resolve)
+      this.on(PROGRESS_STATES.ERROR, reject)
     })
   }
 
@@ -130,20 +130,23 @@ export class WorkerManager extends EventEmitter {
       })
     }
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.COMPLETE, resolve)
+      this.on(PROGRESS_STATES.ERROR, reject)
     })
   }
 
   public async generate(): Promise<WorkerManager> {
     this.createWorkers(CPU_CORE_COUNT, WORKER_TYPES.GENERATE)
 
-    return this
+    return new Promise((resolve, reject) => {
+      this.on(PROGRESS_STATES.COMPLETE, resolve)
+      this.on(PROGRESS_STATES.ERROR, reject)
+    })
   }
 
   public async stop(): Promise<void> {
     this.workers.forEach((w) => {
-      w.unref()
       w.terminate()
     })
 

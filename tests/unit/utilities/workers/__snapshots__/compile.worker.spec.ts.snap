@@ -1,0 +1,794 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`workerCompile should compile just fine 1`] = `
+Object {
+  "answers": Object {
+    "Q1": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q10": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q11": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q12": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q13": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q14": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q15": Object {
+      "correct": false,
+      "value": "A",
+    },
+    "Q16": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q17": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q18": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q19": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q2": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q20": Object {
+      "correct": false,
+      "value": "A",
+    },
+    "Q21": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q22": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q23": Object {
+      "correct": false,
+      "unattempted": true,
+      "value": "?",
+    },
+    "Q24": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q25": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q26": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q27": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q28": Object {
+      "correct": false,
+      "value": "A",
+    },
+    "Q29": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q3": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q30": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q31": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q32": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q33": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q34": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q35": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q36": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q37": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q38": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q39": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q4": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q40": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q41": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q42": Object {
+      "correct": false,
+      "value": "A",
+    },
+    "Q43": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q44": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q45": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q46": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q47": Object {
+      "correct": false,
+      "value": "A",
+    },
+    "Q48": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q49": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q5": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q50": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q51": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q52": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q53": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q54": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q55": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q56": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q57": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q58": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q59": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q6": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q60": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q7": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q8": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q9": Object {
+      "correct": false,
+      "value": "C",
+    },
+  },
+  "correctCount": 21,
+  "id": Any<String>,
+  "imageFile": Any<String>,
+  "incorrectCount": 39,
+  "isCompiled": true,
+  "isRollNoExtracted": false,
+  "marks": 0,
+  "post": 1,
+  "questionPaperType": 1,
+  "rollNo": undefined,
+  "skippedCount": 0,
+  "testCenter": 1,
+  "testTime": 1,
+  "totalMarks": 0,
+  "unattemptedCount": 1,
+}
+`;
+
+exports[`workerCompile should compile just fine 2`] = `
+Object {
+  "answers": Object {
+    "Q1": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q10": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q11": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q12": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q13": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q14": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q15": Object {
+      "correct": false,
+      "value": "A",
+    },
+    "Q16": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q17": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q18": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q19": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q2": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q20": Object {
+      "correct": false,
+      "value": "A",
+    },
+    "Q21": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q22": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q23": Object {
+      "correct": false,
+      "unattempted": true,
+      "value": "?",
+    },
+    "Q24": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q25": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q26": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q27": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q28": Object {
+      "correct": false,
+      "value": "A",
+    },
+    "Q29": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q3": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q30": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q31": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q32": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q33": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q34": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q35": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q36": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q37": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q38": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q39": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q4": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q40": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q41": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q42": Object {
+      "correct": false,
+      "value": "A",
+    },
+    "Q43": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q44": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q45": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q46": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q47": Object {
+      "correct": false,
+      "value": "A",
+    },
+    "Q48": Object {
+      "correct": false,
+      "value": "C",
+    },
+    "Q49": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q5": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q50": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q51": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q52": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q53": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q54": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q55": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q56": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q57": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q58": Object {
+      "correct": false,
+      "value": "B",
+    },
+    "Q59": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q6": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q60": Object {
+      "correct": false,
+      "value": "D",
+    },
+    "Q7": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q8": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q9": Object {
+      "correct": false,
+      "value": "C",
+    },
+  },
+  "correctCount": 21,
+  "id": Any<String>,
+  "imageFile": Any<String>,
+  "incorrectCount": 39,
+  "isCompiled": true,
+  "isRollNoExtracted": true,
+  "marks": 0,
+  "post": 1,
+  "questionPaperType": 1,
+  "rollNo": "10023",
+  "skippedCount": 0,
+  "testCenter": 1,
+  "testTime": 1,
+  "totalMarks": 0,
+  "unattemptedCount": 1,
+}
+`;
+
+exports[`workerCompile should compile just fine 3`] = `
+Object {
+  "answers": Object {
+    "Q1": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q10": Object {
+      "correct": false,
+      "unattempted": true,
+      "value": "?",
+    },
+    "Q11": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q12": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q13": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q14": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q15": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q16": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q17": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q18": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q19": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q2": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q20": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q21": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q22": Object {
+      "correct": false,
+      "value": "*",
+    },
+    "Q23": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q24": Object {
+      "correct": false,
+      "unattempted": true,
+      "value": "?",
+    },
+    "Q25": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q26": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q27": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q28": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q29": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q3": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q30": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q31": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q32": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q33": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q34": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q35": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q36": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q37": Object {
+      "correct": false,
+      "unattempted": true,
+      "value": "?",
+    },
+    "Q38": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q39": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q4": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q40": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q41": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q42": Object {
+      "correct": false,
+      "unattempted": true,
+      "value": "?",
+    },
+    "Q43": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q44": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q45": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q46": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q47": Object {
+      "correct": false,
+      "unattempted": true,
+      "value": "?",
+    },
+    "Q48": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q49": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q5": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q50": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q51": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q52": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q53": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q54": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q55": Object {
+      "correct": false,
+      "value": "*",
+    },
+    "Q56": Object {
+      "correct": true,
+      "value": "B",
+    },
+    "Q57": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q58": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q59": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q6": Object {
+      "correct": true,
+      "value": "D",
+    },
+    "Q60": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q7": Object {
+      "correct": true,
+      "value": "C",
+    },
+    "Q8": Object {
+      "correct": true,
+      "value": "A",
+    },
+    "Q9": Object {
+      "correct": true,
+      "value": "D",
+    },
+  },
+  "correctCount": 53,
+  "id": Any<String>,
+  "imageFile": Any<String>,
+  "incorrectCount": 7,
+  "isCompiled": true,
+  "isRollNoExtracted": true,
+  "marks": 0,
+  "post": 1,
+  "questionPaperType": 1,
+  "rollNo": "10025",
+  "skippedCount": 0,
+  "testCenter": 1,
+  "testTime": 1,
+  "totalMarks": 0,
+  "unattemptedCount": 5,
+}
+`;

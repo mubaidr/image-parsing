@@ -18,8 +18,16 @@ describe('workerCompile', () => {
       false
     )
 
-    expect(compiledResult).toBeDefined()
-    expect(compiledResult?.getKeyCount()).toBeGreaterThanOrEqual(1)
-    expect(compiledResult?.getResultCount()).toBeGreaterThanOrEqual(3)
+    if (!compiledResult) fail()
+
+    expect(compiledResult.getKeyCount()).toBeGreaterThanOrEqual(1)
+    expect(compiledResult.getResultCount()).toBeGreaterThanOrEqual(3)
+
+    compiledResult.getResults().forEach((result) => {
+      expect(result).toMatchSnapshot({
+        id: expect.any(String),
+        imageFile: expect.any(String),
+      })
+    })
   })
 })

@@ -54,6 +54,7 @@ export async function getRollNoFromImage(
   reader.setHints(hints)
 
   try {
+    // TODO: extract question paper, center, vacancy etc info from qrcode
     rollNo = reader.decode(binaryBitmap).getText()
   } catch {
     rollNo = undefined
