@@ -1,6 +1,7 @@
 // @ts-ignore
 import('v8-compile-cache')
 
+import { parentPort } from 'worker_threads'
 import { DesignData, QUESTION_OPTIONS } from '../design'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData, QuestionData } from '../questions'
@@ -19,8 +20,8 @@ export type WorkerExtractOutputMessage = {
 }
 
 function sendMessage(message: WorkerExtractOutputMessage): void {
-  if (process && process.send) {
-    process.send(message)
+  if (parentPort) {
+    parentPort.postMessage(message)
   }
 }
 
@@ -139,30 +140,13 @@ export async function start(
       progressState: PROGRESS_STATES.COMPLETE,
       payload: results,
     })
-
-    process.exit(0)
   } else {
     return results
   }
 }
 
-process.on('message', (message: WorkerExtractInputMessage) => {
-  start(message)
-})
-
-process.on('unhandledRejection', (error) => {
-  // eslint-disable-next-line no-console
-  console.error(error)
-  process.exit(1)
-})
-
-process.on('uncaughtException', (error) => {
-  // eslint-disable-next-line no-console
-  console.error(error)
-  process.exit(1)
-})
-
-process.on('warning', (warning) => {
-  // eslint-disable-next-line no-console
-  console.warn(warning)
-})
+if (parentPort) {
+  parentPort.on('message', (payload: WorkerExtractInputMessage) => {
+    start(payload)
+  })
+}

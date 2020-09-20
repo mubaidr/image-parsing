@@ -1,6 +1,6 @@
-import { ChildProcess, fork } from 'child_process'
 import { EventEmitter } from 'events'
 import { cpus } from 'os'
+import { Worker } from 'worker_threads'
 import { CompiledResult } from '../CompiledResult'
 import { getDesignData } from '../design'
 import { getImagePaths } from '../images'
@@ -11,6 +11,7 @@ import { readKey } from '../readKey'
 const CPU_CORE_COUNT = cpus().length
 
 export enum PROGRESS_STATES {
+  MESSAGE = 'message',
   PROGRESS = 'progress',
   COMPLETE = 'completed',
   ERROR = 'error',
@@ -32,7 +33,7 @@ type WorkerOutputMessage = {
 
 export class WorkerManager extends EventEmitter {
   private data: any[] = []
-  private workers: ChildProcess[] = []
+  private workers: Worker[] = []
   private finished = 0
   public inputCount = 0
 
@@ -42,9 +43,17 @@ export class WorkerManager extends EventEmitter {
 
   private createWorkers(count: number, type: WORKER_TYPES) {
     for (let i = 0; i < count; i += 1) {
-      const worker = fork(`./dist_electron/workers/${type}.worker.js`)
+      const worker = new Worker(`./dist_electron/workers/${type}.worker.js`)
 
-      worker.on('message', (message: WorkerOutputMessage) => {
+      worker.on(PROGRESS_STATES.EXIT, (code) => {
+        this.emit(PROGRESS_STATES.EXIT, code)
+      })
+
+      worker.on(PROGRESS_STATES.ERROR, (error) => {
+        this.emit(PROGRESS_STATES.ERROR, error)
+      })
+
+      worker.on(PROGRESS_STATES.MESSAGE, (message: WorkerOutputMessage) => {
         const { progressState, payload } = message
 
         if (progressState === PROGRESS_STATES.PROGRESS) {
@@ -63,20 +72,6 @@ export class WorkerManager extends EventEmitter {
           }
         }
       })
-
-      worker.on(PROGRESS_STATES.EXIT, (code) => {
-        this.emit(PROGRESS_STATES.EXIT, code)
-      })
-
-      worker.on(PROGRESS_STATES.ERROR, (error) => {
-        this.emit(PROGRESS_STATES.ERROR, error)
-      })
-
-      if (worker.stdout) {
-        worker.stdout.on(PROGRESS_STATES.DATA, (data: Buffer) => {
-          this.emit(PROGRESS_STATES.LOG, data.toString())
-        })
-      }
 
       this.workers.push(worker)
     }
@@ -98,7 +93,7 @@ export class WorkerManager extends EventEmitter {
       const endIndex =
         i === totalWorkers - 1 ? totalImages.length : (i + 1) * step
 
-      this.workers[i].send({
+      this.workers[i].postMessage({
         designData,
         imagePaths: totalImages.slice(startIndex, endIndex),
       })
@@ -127,7 +122,7 @@ export class WorkerManager extends EventEmitter {
       const startIndex = i * step
       const endIndex = i === totalWorkers - 1 ? results.length : (i + 1) * step
 
-      this.workers[i].send({
+      this.workers[i].postMessage({
         results: results.slice(startIndex, endIndex),
         keys,
         correctMarks,
@@ -148,10 +143,8 @@ export class WorkerManager extends EventEmitter {
 
   public async stop(): Promise<void> {
     this.workers.forEach((w) => {
-      if (w.connected) {
-        w.kill('SIGKILL')
-        w.unref()
-      }
+      w.unref()
+      w.terminate()
     })
 
     this.finished = 0

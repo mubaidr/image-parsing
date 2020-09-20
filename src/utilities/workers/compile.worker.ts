@@ -1,6 +1,7 @@
 // @ts-ignore
 import('v8-compile-cache')
 
+import { parentPort } from 'worker_threads'
 import { CompiledResult } from '../CompiledResult'
 import { Result } from '../Result'
 import { PROGRESS_STATES } from './WorkerManager'
@@ -18,8 +19,8 @@ export type WorkerCompileOutputMessage = {
 }
 
 function sendMessage(message: WorkerCompileOutputMessage): void {
-  if (process && process.send) {
-    process.send(message)
+  if (parentPort) {
+    parentPort.postMessage(message)
   }
 }
 
@@ -50,30 +51,13 @@ export async function start(
       progressState: PROGRESS_STATES.COMPLETE,
       payload: compiledResult.getKeysAndResults(),
     })
-
-    process.exit(0)
   } else {
     return compiledResult
   }
 }
 
-process.on('message', (message: WorkerCompileInputMessage) => {
-  start(message)
-})
-
-process.on('unhandledRejection', (error) => {
-  // eslint-disable-next-line no-console
-  console.error(error)
-  process.exit(1)
-})
-
-process.on('uncaughtException', (error) => {
-  // eslint-disable-next-line no-console
-  console.error(error)
-  process.exit(1)
-})
-
-process.on('warning', (warning) => {
-  // eslint-disable-next-line no-console
-  console.warn(warning)
-})
+if (parentPort) {
+  parentPort.on('message', (payload: WorkerCompileInputMessage) => {
+    start(payload)
+  })
+}
