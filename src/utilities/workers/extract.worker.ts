@@ -2,12 +2,13 @@
 import('v8-compile-cache')
 
 import { parentPort } from 'worker_threads'
-import { DesignData, QUESTION_OPTIONS } from '../design'
+import { DesignData } from '../design'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData, QuestionData } from '../questions'
+import { QUESTION_OPTIONS } from '../QUESTION_OPTIONS'
 import { Result } from '../Result'
 import { getRollNoFromImage } from '../sheetInfo'
-import { PROGRESS_STATES } from './WorkerManager'
+import { PROGRESS_STATES } from './PROGRESS_STATES'
 
 export type WorkerExtractInputMessage = {
   designData: DesignData

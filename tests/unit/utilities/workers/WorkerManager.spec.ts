@@ -1,6 +1,6 @@
 import { dataPaths } from '@/utilities/dataPaths'
+import { PROGRESS_STATES } from '@/utilities/workers/PROGRESS_STATES'
 import {
-  PROGRESS_STATES,
   // eslint-disable-next-line prettier/prettier
   WorkerManager
 } from '@/utilities/workers/WorkerManager'

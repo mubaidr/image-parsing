@@ -1,5 +1,6 @@
 import { kernel, Sharp } from 'sharp'
-import { DesignData, QUESTION_OPTIONS } from './design'
+import { DesignData } from './design'
+import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
 // import { logImageData } from './images'
 
 export type QuestionData = {

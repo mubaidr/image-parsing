@@ -1,5 +1,6 @@
 import { v4 as uuid4 } from 'uuid'
-import { QUESTION_OPTIONS, REG_EXP_PATTERNS } from './design'
+import { REG_EXP_PATTERNS } from './design'
+import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
 
 export type AnswerCollection = {
   [key: string]: {

@@ -4,7 +4,7 @@ import('v8-compile-cache')
 import { parentPort } from 'worker_threads'
 import { CompiledResult } from '../CompiledResult'
 import { Result } from '../Result'
-import { PROGRESS_STATES } from './WorkerManager'
+import { PROGRESS_STATES } from './PROGRESS_STATES'
 
 export type WorkerCompileInputMessage = {
   results: Result[]

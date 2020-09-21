@@ -1,5 +1,6 @@
 import { parse } from 'fast-xml-parser'
 import { readFileSync } from 'fs'
+import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
 
 export enum REG_EXP_PATTERNS {
   BARCODE = 'barcode$',
@@ -8,30 +9,6 @@ export enum REG_EXP_PATTERNS {
   QUESTION = 'q[1-9][0-9]?$',
   OPTION = 'q[1-9][0-9]?[a-e]$',
   NONE = '',
-}
-
-// enum QuestionPaperTypeEnum {
-//   A = 'a',
-//   B = 'c',
-//   C = 'c',
-//   D = 'd',
-//   E = 'e',
-//   F = 'f',
-//   G = 'g',
-//   H = 'h',
-//   I = 'i',
-//   J = 'j',
-//   K = 'k',
-// }
-
-export enum QUESTION_OPTIONS {
-  A = 'a',
-  B = 'b',
-  C = 'c',
-  D = 'd',
-  E = 'e',
-  MULTIPLE = '*',
-  NONE = '?',
 }
 
 export type ItemInfo = {

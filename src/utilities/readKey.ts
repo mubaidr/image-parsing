@@ -2,7 +2,7 @@ import { dataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { importExcelToJson } from './excel'
 import { Result } from './Result'
-import * as extractTask from './workers/extract.worker'
+import { start as extractStart } from './workers/extract.worker'
 
 export enum KEY_NATIVE_TYPES {
   'csv' = 'csv',
@@ -38,15 +38,17 @@ export async function readKey(src: string): Promise<Result[] | undefined> {
   if (ext in KEY_NATIVE_TYPES) {
     const rows = importExcelToJson(src)
     const results: Result[] = []
+
     for (let i = 0, len = rows.length; i < len; i += 1) {
       results.push(Result.fromJson(rows[i]))
     }
+
     return results
   }
 
   const designData = await getDesignData(dataPaths.designBarcode)
 
-  return extractTask.start(
+  return extractStart(
     {
       designData,
       imagePaths: [src],

@@ -5,20 +5,11 @@ import { CompiledResult } from '../CompiledResult'
 import { getDesignData } from '../design'
 import { getImagePaths } from '../images'
 import { readKey } from '../readKey'
+import { PROGRESS_STATES } from './PROGRESS_STATES'
 
 // TODO: integrate https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
 
 const CPU_CORE_COUNT = cpus().length
-
-export enum PROGRESS_STATES {
-  MESSAGE = 'message',
-  PROGRESS = 'progress',
-  COMPLETE = 'completed',
-  ERROR = 'error',
-  LOG = 'log',
-  EXIT = 'exit',
-  DATA = 'data',
-}
 
 enum WORKER_TYPES {
   COMPILE = 'compile',
