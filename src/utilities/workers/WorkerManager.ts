@@ -5,6 +5,7 @@ import { CompiledResult } from '../CompiledResult'
 import { getDesignData } from '../design'
 import { getImagePaths } from '../images'
 import { readKey } from '../readKey'
+import { Result } from '../Result'
 import { PROGRESS_STATES } from './PROGRESS_STATES'
 
 // TODO: integrate https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
@@ -19,11 +20,11 @@ enum WORKER_TYPES {
 
 type WorkerOutputMessage = {
   progressState: PROGRESS_STATES
-  payload: any
+  payload: Result[]
 }
 
 export class WorkerManager extends EventEmitter {
-  private data: any[] = []
+  private data: Result[] = []
   private workers: Worker[] = []
   private finished = 0
   public inputCount = 0
@@ -56,7 +57,7 @@ export class WorkerManager extends EventEmitter {
           this.finished += 1
 
           if (payload) {
-            this.data.push(payload)
+            this.data.push(...payload)
           }
 
           if (this.finished === this.workers.length) {
@@ -67,7 +68,10 @@ export class WorkerManager extends EventEmitter {
     }
   }
 
-  public async extract(directory: string, designPath: string): Promise<any[]> {
+  public async extract(
+    directory: string,
+    designPath: string
+  ): Promise<Result[]> {
     const [designData, totalImages] = await Promise.all([
       getDesignData(designPath),
       getImagePaths(directory),
@@ -100,7 +104,7 @@ export class WorkerManager extends EventEmitter {
     keyPath: string,
     correctMarks?: number,
     incorrectMarks?: number
-  ): Promise<any[]> {
+  ): Promise<Result[]> {
     const results = CompiledResult.loadFromExcel(resultPath).getResults()
     const keys = await readKey(keyPath)
     const totalWorkers = Math.min(results.length, CPU_CORE_COUNT)
