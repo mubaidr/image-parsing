@@ -4,7 +4,9 @@ import config from '../../webpack.workers.config.js'
 
 // enable dev mode for workers
 config.mode = 'development'
-config.devtool = 'eval-cheap-module-source-map'
+config.devtool = 'eval'
+config.plugins = []
+config.optimization = {}
 config.node = {
   __dirname: true,
   __filename: true,

@@ -29,7 +29,7 @@ const isDevMode = process.env.NODE_ENV === 'development'
 const config = {
   name: 'workers',
   mode: isDevMode ? 'development' : 'production',
-  devtool: isDevMode ? 'eval-cheap-module-source-map' : false,
+  devtool: isDevMode ? 'eval ' : false,
   entry: entry,
   output: {
     libraryTarget: 'commonjs2',
@@ -77,7 +77,13 @@ if (isDevMode) {
   config.plugins.push(new BundleAnalyzerPlugin())
 } else {
   config.optimization = {
-    minimizer: [new TerserJSPlugin({})],
+    minimizer: [
+      new TerserJSPlugin({
+        parallel: true,
+        cache: true,
+        sourceMap: true,
+      }),
+    ],
   }
 }
 
