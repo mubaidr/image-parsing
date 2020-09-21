@@ -51,6 +51,9 @@ describe('WorkerManager', () => {
       .compile(dataPaths.result, dataPaths.key)
 
     expect(workerManager.inputCount).toBe(3)
+    // TODO: remove duplicate keys
+    // remove all keys from workers
+    // add keys again in worker manager
     expect(data.length).toBe(3)
     expect(logCallback).toBeCalledTimes(0)
     expect(errorCallback).toBeCalledTimes(0)
