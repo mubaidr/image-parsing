@@ -24,16 +24,16 @@ type WorkerOutputMessage = {
 }
 
 export class WorkerManager extends EventEmitter {
-  private data: Result[] = []
-  private workers: Worker[] = []
-  private finished = 0
-  public inputCount = 0
+  data: Result[] = []
+  workers: Worker[] = []
+  finished = 0
+  inputCount = 0
 
   constructor() {
     super()
   }
 
-  private createWorkers(count: number, type: WORKER_TYPES) {
+  createWorkers(count: number, type: WORKER_TYPES) {
     for (let i = 0; i < count; i += 1) {
       const worker = new Worker(`./dist_electron/workers/${type}.worker.js`)
       this.workers.push(worker)
@@ -68,10 +68,7 @@ export class WorkerManager extends EventEmitter {
     }
   }
 
-  public async extract(
-    directory: string,
-    designPath: string
-  ): Promise<Result[]> {
+  async extract(directory: string, designPath: string): Promise<Result[]> {
     const [designData, totalImages] = await Promise.all([
       getDesignData(designPath),
       getImagePaths(directory),
@@ -94,12 +91,12 @@ export class WorkerManager extends EventEmitter {
     }
 
     return new Promise((resolve, reject) => {
-      this.on(PROGRESS_STATES.COMPLETE, resolve)
       this.on(PROGRESS_STATES.ERROR, reject)
+      this.on(PROGRESS_STATES.COMPLETE, resolve)
     })
   }
 
-  public async compile(
+  async compile(
     resultPath: string,
     keyPath: string,
     correctMarks?: number,
@@ -126,21 +123,24 @@ export class WorkerManager extends EventEmitter {
     }
 
     return new Promise((resolve, reject) => {
-      this.on(PROGRESS_STATES.COMPLETE, resolve)
       this.on(PROGRESS_STATES.ERROR, reject)
+      this.on(PROGRESS_STATES.COMPLETE, (data: Result[]) => {
+        console.log('compile data: ', data)
+        resolve(data)
+      })
     })
   }
 
-  public async generate(): Promise<WorkerManager> {
+  async generate(): Promise<WorkerManager> {
     this.createWorkers(CPU_CORE_COUNT, WORKER_TYPES.GENERATE)
 
     return new Promise((resolve, reject) => {
-      this.on(PROGRESS_STATES.COMPLETE, resolve)
       this.on(PROGRESS_STATES.ERROR, reject)
+      this.on(PROGRESS_STATES.COMPLETE, resolve)
     })
   }
 
-  public async stop(): Promise<void> {
+  async stop(): Promise<void> {
     this.workers.forEach((w) => {
       w.terminate()
     })

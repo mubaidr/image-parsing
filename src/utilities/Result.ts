@@ -11,45 +11,119 @@ export type AnswerCollection = {
   }
 }
 
-export interface ResultJson {
-  [key: string]: string | Record<string, unknown> | undefined
-  answers: AnswerCollection
-}
+export class Result {
+  isCompiled = false
+  correctCount = 0
+  incorrectCount = 0
+  marks = 0
+  skippedCount = 0
+  totalMarks = 0
+  unattemptedCount = 0
+  answers: AnswerCollection = {}
+  error: string | undefined
+  id: string
+  imageFile: string | undefined
+  isRollNoExtracted: boolean
+  post = ''
+  questionPaperType = ''
+  rollNo: string | undefined
+  testCenter = ''
+  testTime = ''
 
-export class Result implements ResultJson {
-  [key: string]: any
-
-  private correctCount = 0
-  private incorrectCount = 0
-  private isCompiled = false
-  private marks = 0
-  private skippedCount = 0
-  private totalMarks = 0
-  private unattemptedCount = 0
-
-  public answers: AnswerCollection = {}
-
-  public error: string | undefined
-  public id: string
-  public imageFile: string | undefined
-  public isRollNoExtracted: boolean
-  public post = ''
-  public questionPaperType = ''
-  public rollNo: string | undefined
-  public testCenter = ''
-  public testTime = ''
-
-  public constructor(rollNo?: string, imageFile?: string) {
+  constructor(rollNo?: string, imageFile?: string) {
     this.id = uuid4()
     this.rollNo = rollNo
     this.imageFile = imageFile
     this.isRollNoExtracted = !!rollNo
   }
 
-  public static fromJson(o: any): Result {
+  hasImageFile(): boolean {
+    return this.imageFile !== undefined
+  }
+
+  hasValidRollNo(): boolean {
+    return !this.isKey() && this.rollNo !== undefined
+  }
+
+  isKey(): boolean {
+    return (
+      this.rollNo !== undefined && this.rollNo.trim().toLowerCase() === 'key'
+    )
+  }
+
+  addAnswer(title: string, value: QUESTION_OPTIONS): Result {
+    this.answers[title] = { value }
+
+    return this
+  }
+
+  setMarks(marks: number, negativeMarks: number): Result {
+    this.marks = this.correctCount * marks - this.incorrectCount * negativeMarks
+    this.totalMarks = (60 - this.skippedCount) * marks
+
+    return this
+  }
+
+  compile(key: Result, marks?: number, negativeMarks?: number): Result {
+    if (
+      this.isCompiled ||
+      this.post !== key.post ||
+      this.testTime !== key.testTime ||
+      this.testCenter !== key.testCenter ||
+      this.questionPaperType !== key.questionPaperType
+    ) {
+      return this
+    }
+
+    const props = Object.keys(key.answers)
+
+    for (let k = 0; k < props.length; k += 1) {
+      const prop = props[k]
+      const choice = this.answers[prop]
+      const keyChoice = key.answers[prop]
+
+      // question not attempted
+      if (choice.value === QUESTION_OPTIONS.NONE) {
+        choice.unattempted = true
+        this.unattemptedCount += 1
+      }
+
+      // question skipped
+      if (
+        keyChoice.value === QUESTION_OPTIONS.NONE ||
+        keyChoice.value === QUESTION_OPTIONS.MULTIPLE
+      ) {
+        choice.skipped = true
+        this.skippedCount += 1
+        continue
+      }
+
+      if (choice.value === keyChoice.value) {
+        choice.correct = true
+        this.correctCount += 1
+      } else {
+        choice.correct = false
+        this.incorrectCount += 1
+      }
+    }
+
+    if (marks && negativeMarks) {
+      this.setMarks(marks, negativeMarks)
+    }
+
+    this.isCompiled = true
+    return this
+  }
+
+  static fromJson(o: any): Result {
     const answerRegExp = new RegExp(REG_EXP_PATTERNS.QUESTION)
-    const result =
-      typeof o.rollNo === 'string' ? new Result(o.rollNo) : new Result()
+    const result = new Result()
+
+    Object.keys(result).forEach((k) => {
+      if (k !== 'answers') {
+        Object.defineProperty(result, k, value)
+      }
+    })
 
     Object.keys(o).forEach((key) => {
       const value = o[key] as QUESTION_OPTIONS
@@ -61,143 +135,12 @@ export class Result implements ResultJson {
           result.addAnswer(key, QUESTION_OPTIONS.NONE)
         }
       } else {
-        result[key] = value
+        console.log(result, key, value)
+
+        Object.defineProperty(result, key, value)
       }
     })
 
     return result
-  }
-
-  public addAnswer(title: string, value: QUESTION_OPTIONS): Result {
-    this.answers[title.toUpperCase()] = {
-      value: value.toUpperCase() as QUESTION_OPTIONS,
-    }
-
-    return this
-  }
-
-  public compile(key: Result, marks?: number, negativeMarks?: number): Result {
-    if (this.isCompiled) return this
-    if (!this.matchWithKey(key)) return this
-
-    const props = Object.keys(key.answers)
-
-    for (let k = 0; k < props.length; k += 1) {
-      const prop = props[k]
-      const keyChoice = key.answers[prop]
-      const candidateChoice = this.answers[prop]
-
-      // question not attempted
-      if (candidateChoice.value === QUESTION_OPTIONS.NONE) {
-        candidateChoice.unattempted = true
-        this.unattemptedCount += 1
-      }
-
-      // question skipped
-      if (
-        keyChoice.value === QUESTION_OPTIONS.NONE ||
-        keyChoice.value === QUESTION_OPTIONS.MULTIPLE
-      ) {
-        candidateChoice.skipped = true
-        this.skippedCount += 1
-        continue
-      }
-
-      if (candidateChoice.value === keyChoice.value) {
-        candidateChoice.correct = true
-        this.correctCount += 1
-      } else {
-        candidateChoice.correct = false
-        this.incorrectCount += 1
-      }
-    }
-
-    this.isCompiled = true
-
-    if (marks && negativeMarks) {
-      this.setMarks(marks, negativeMarks)
-    }
-
-    return this
-  }
-
-  public getCorrectCount(): number {
-    return this.correctCount
-  }
-
-  public getInCorrectCount(): number {
-    return this.incorrectCount
-  }
-
-  public getMarks(): number {
-    return this.marks
-  }
-
-  public getSkippedCount(): number {
-    return this.skippedCount
-  }
-
-  public getTotalMarks(): number {
-    return this.totalMarks
-  }
-
-  public getUnattemptedCount(): number {
-    return this.unattemptedCount
-  }
-
-  public hasImageFile(): boolean {
-    return this.imageFile !== undefined
-  }
-
-  public hasValidRollNo(): boolean {
-    return !this.isKey() && this.rollNo !== undefined
-  }
-
-  public isKey(): boolean {
-    return (
-      this.rollNo !== undefined && this.rollNo.trim().toLowerCase() === 'key'
-    )
-  }
-
-  public isResult(): boolean {
-    return !this.isKey()
-  }
-
-  public matchWithKey(key: Result): boolean {
-    return (
-      this.post === key.post &&
-      this.testCenter === key.testCenter &&
-      this.testTime === key.testTime &&
-      this.questionPaperType === key.questionPaperType
-    )
-  }
-
-  public setMarks(marks: number, negativeMarks: number): Result {
-    this.marks = this.correctCount * marks - this.incorrectCount * negativeMarks
-    this.totalMarks = (60 - this.skippedCount) * marks
-
-    return this
-  }
-
-  public toJson(): Record<string, any> {
-    const o: { [key: string]: string | AnswerCollection } = JSON.parse(
-      JSON.stringify(this)
-    )
-
-    for (const prop in o) {
-      const value = o[prop]
-
-      if (typeof value === 'object') {
-        for (const subProp in value) {
-          o[subProp] = value[subProp].value
-        }
-
-        delete o[prop]
-      } else {
-        o[prop] = value
-      }
-    }
-
-    return o
   }
 }

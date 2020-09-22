@@ -2,7 +2,7 @@ import { dataPaths } from '@/utilities/dataPaths'
 import { PROGRESS_STATES } from '@/utilities/workers/PROGRESS_STATES'
 import {
   // eslint-disable-next-line prettier/prettier
-  WorkerManager
+  WorkerManager,
 } from '@/utilities/workers/WorkerManager'
 
 const workerManager = new WorkerManager()
@@ -51,10 +51,7 @@ describe('WorkerManager', () => {
       .compile(dataPaths.result, dataPaths.key)
 
     expect(workerManager.inputCount).toBe(3)
-    // TODO: remove duplicate keys
-    // remove all keys from workers
-    // add keys again in worker manager
-    expect(data.length).toBe(3)
+    expect(data.length).toBe(4)
     expect(logCallback).toBeCalledTimes(0)
     expect(errorCallback).toBeCalledTimes(0)
     expect(progressCallback).toBeCalledTimes(3)

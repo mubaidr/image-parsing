@@ -30,16 +30,9 @@ export async function start(
 ): Promise<CompiledResult | undefined> {
   const { results, keys, correctMarks, incorrectMarks } = message
   const compiledResult = new CompiledResult()
-
-  results.forEach((result) => {
-    compiledResult.addResults(Result.fromJson(result))
-  })
-
-  keys.forEach((key) => {
-    compiledResult.addKeys(Result.fromJson(key))
-  })
-
-  compiledResult.compile(correctMarks, incorrectMarks)
+    .addResults(results)
+    .addKeys(keys)
+    .compile(correctMarks, incorrectMarks)
 
   // report progress status
   if (isWorker) {
