@@ -3,185 +3,185 @@
 exports[`readKey should read excel keys 1`] = `
 Object {
   "answers": Object {
-    "Q1": Object {
-      "value": "D",
+    "q1": Object {
+      "value": "d",
     },
-    "Q10": Object {
-      "value": "C",
+    "q10": Object {
+      "value": "c",
     },
-    "Q11": Object {
-      "value": "B",
+    "q11": Object {
+      "value": "b",
     },
-    "Q12": Object {
-      "value": "D",
+    "q12": Object {
+      "value": "d",
     },
-    "Q13": Object {
-      "value": "B",
+    "q13": Object {
+      "value": "b",
     },
-    "Q14": Object {
-      "value": "A",
+    "q14": Object {
+      "value": "a",
     },
-    "Q15": Object {
-      "value": "D",
+    "q15": Object {
+      "value": "d",
     },
-    "Q16": Object {
-      "value": "C",
+    "q16": Object {
+      "value": "c",
     },
-    "Q17": Object {
-      "value": "B",
+    "q17": Object {
+      "value": "b",
     },
-    "Q18": Object {
-      "value": "A",
+    "q18": Object {
+      "value": "a",
     },
-    "Q19": Object {
-      "value": "C",
+    "q19": Object {
+      "value": "c",
     },
-    "Q2": Object {
-      "value": "B",
+    "q2": Object {
+      "value": "b",
     },
-    "Q20": Object {
-      "value": "B",
+    "q20": Object {
+      "value": "b",
     },
-    "Q21": Object {
-      "value": "A",
+    "q21": Object {
+      "value": "a",
     },
-    "Q22": Object {
-      "value": "B",
+    "q22": Object {
+      "value": "b",
     },
-    "Q23": Object {
-      "value": "A",
+    "q23": Object {
+      "value": "a",
     },
-    "Q24": Object {
-      "value": "B",
+    "q24": Object {
+      "value": "b",
     },
-    "Q25": Object {
-      "value": "A",
+    "q25": Object {
+      "value": "a",
     },
-    "Q26": Object {
-      "value": "B",
+    "q26": Object {
+      "value": "b",
     },
-    "Q27": Object {
-      "value": "A",
+    "q27": Object {
+      "value": "a",
     },
-    "Q28": Object {
-      "value": "B",
+    "q28": Object {
+      "value": "b",
     },
-    "Q29": Object {
-      "value": "D",
+    "q29": Object {
+      "value": "d",
     },
-    "Q3": Object {
-      "value": "D",
+    "q3": Object {
+      "value": "d",
     },
-    "Q30": Object {
-      "value": "A",
+    "q30": Object {
+      "value": "a",
     },
-    "Q31": Object {
-      "value": "B",
+    "q31": Object {
+      "value": "b",
     },
-    "Q32": Object {
-      "value": "A",
+    "q32": Object {
+      "value": "a",
     },
-    "Q33": Object {
-      "value": "B",
+    "q33": Object {
+      "value": "b",
     },
-    "Q34": Object {
-      "value": "B",
+    "q34": Object {
+      "value": "b",
     },
-    "Q35": Object {
-      "value": "A",
+    "q35": Object {
+      "value": "a",
     },
-    "Q36": Object {
-      "value": "C",
+    "q36": Object {
+      "value": "c",
     },
-    "Q37": Object {
-      "value": "B",
+    "q37": Object {
+      "value": "b",
     },
-    "Q38": Object {
-      "value": "A",
+    "q38": Object {
+      "value": "a",
     },
-    "Q39": Object {
-      "value": "A",
+    "q39": Object {
+      "value": "a",
     },
-    "Q4": Object {
-      "value": "A",
+    "q4": Object {
+      "value": "a",
     },
-    "Q40": Object {
-      "value": "A",
+    "q40": Object {
+      "value": "a",
     },
-    "Q41": Object {
-      "value": "A",
+    "q41": Object {
+      "value": "a",
     },
-    "Q42": Object {
-      "value": "C",
+    "q42": Object {
+      "value": "c",
     },
-    "Q43": Object {
-      "value": "A",
+    "q43": Object {
+      "value": "a",
     },
-    "Q44": Object {
-      "value": "C",
+    "q44": Object {
+      "value": "c",
     },
-    "Q45": Object {
-      "value": "B",
+    "q45": Object {
+      "value": "b",
     },
-    "Q46": Object {
-      "value": "A",
+    "q46": Object {
+      "value": "a",
     },
-    "Q47": Object {
-      "value": "C",
+    "q47": Object {
+      "value": "c",
     },
-    "Q48": Object {
-      "value": "B",
+    "q48": Object {
+      "value": "b",
     },
-    "Q49": Object {
-      "value": "A",
+    "q49": Object {
+      "value": "a",
     },
-    "Q5": Object {
-      "value": "C",
+    "q5": Object {
+      "value": "c",
     },
-    "Q50": Object {
-      "value": "D",
+    "q50": Object {
+      "value": "d",
     },
-    "Q51": Object {
-      "value": "A",
+    "q51": Object {
+      "value": "a",
     },
-    "Q52": Object {
-      "value": "B",
+    "q52": Object {
+      "value": "b",
     },
-    "Q53": Object {
-      "value": "B",
+    "q53": Object {
+      "value": "b",
     },
-    "Q54": Object {
-      "value": "D",
+    "q54": Object {
+      "value": "d",
     },
-    "Q55": Object {
-      "value": "B",
+    "q55": Object {
+      "value": "b",
     },
-    "Q56": Object {
-      "value": "B",
+    "q56": Object {
+      "value": "b",
     },
-    "Q57": Object {
-      "value": "A",
+    "q57": Object {
+      "value": "a",
     },
-    "Q58": Object {
-      "value": "D",
+    "q58": Object {
+      "value": "d",
     },
-    "Q59": Object {
-      "value": "A",
+    "q59": Object {
+      "value": "a",
     },
-    "Q6": Object {
-      "value": "D",
+    "q6": Object {
+      "value": "d",
     },
-    "Q60": Object {
-      "value": "A",
+    "q60": Object {
+      "value": "a",
     },
-    "Q7": Object {
-      "value": "C",
+    "q7": Object {
+      "value": "c",
     },
-    "Q8": Object {
-      "value": "A",
+    "q8": Object {
+      "value": "a",
     },
-    "Q9": Object {
-      "value": "D",
+    "q9": Object {
+      "value": "d",
     },
   },
   "correctCount": 0,
@@ -205,185 +205,185 @@ Object {
 exports[`readKey should read image keys 1`] = `
 Object {
   "answers": Object {
-    "Q1": Object {
-      "value": "D",
+    "q1": Object {
+      "value": "d",
     },
-    "Q10": Object {
-      "value": "C",
+    "q10": Object {
+      "value": "c",
     },
-    "Q11": Object {
-      "value": "B",
+    "q11": Object {
+      "value": "b",
     },
-    "Q12": Object {
-      "value": "D",
+    "q12": Object {
+      "value": "d",
     },
-    "Q13": Object {
-      "value": "B",
+    "q13": Object {
+      "value": "b",
     },
-    "Q14": Object {
-      "value": "A",
+    "q14": Object {
+      "value": "a",
     },
-    "Q15": Object {
-      "value": "D",
+    "q15": Object {
+      "value": "d",
     },
-    "Q16": Object {
-      "value": "C",
+    "q16": Object {
+      "value": "c",
     },
-    "Q17": Object {
-      "value": "B",
+    "q17": Object {
+      "value": "b",
     },
-    "Q18": Object {
-      "value": "A",
+    "q18": Object {
+      "value": "a",
     },
-    "Q19": Object {
-      "value": "C",
+    "q19": Object {
+      "value": "c",
     },
-    "Q2": Object {
-      "value": "B",
+    "q2": Object {
+      "value": "b",
     },
-    "Q20": Object {
-      "value": "B",
+    "q20": Object {
+      "value": "b",
     },
-    "Q21": Object {
-      "value": "A",
+    "q21": Object {
+      "value": "a",
     },
-    "Q22": Object {
-      "value": "B",
+    "q22": Object {
+      "value": "b",
     },
-    "Q23": Object {
-      "value": "A",
+    "q23": Object {
+      "value": "a",
     },
-    "Q24": Object {
-      "value": "B",
+    "q24": Object {
+      "value": "b",
     },
-    "Q25": Object {
-      "value": "A",
+    "q25": Object {
+      "value": "a",
     },
-    "Q26": Object {
-      "value": "B",
+    "q26": Object {
+      "value": "b",
     },
-    "Q27": Object {
-      "value": "A",
+    "q27": Object {
+      "value": "a",
     },
-    "Q28": Object {
-      "value": "B",
+    "q28": Object {
+      "value": "b",
     },
-    "Q29": Object {
-      "value": "D",
+    "q29": Object {
+      "value": "d",
     },
-    "Q3": Object {
-      "value": "D",
+    "q3": Object {
+      "value": "d",
     },
-    "Q30": Object {
-      "value": "A",
+    "q30": Object {
+      "value": "a",
     },
-    "Q31": Object {
-      "value": "B",
+    "q31": Object {
+      "value": "b",
     },
-    "Q32": Object {
-      "value": "A",
+    "q32": Object {
+      "value": "a",
     },
-    "Q33": Object {
-      "value": "B",
+    "q33": Object {
+      "value": "b",
     },
-    "Q34": Object {
-      "value": "B",
+    "q34": Object {
+      "value": "b",
     },
-    "Q35": Object {
-      "value": "A",
+    "q35": Object {
+      "value": "a",
     },
-    "Q36": Object {
-      "value": "C",
+    "q36": Object {
+      "value": "c",
     },
-    "Q37": Object {
-      "value": "B",
+    "q37": Object {
+      "value": "b",
     },
-    "Q38": Object {
-      "value": "A",
+    "q38": Object {
+      "value": "a",
     },
-    "Q39": Object {
-      "value": "A",
+    "q39": Object {
+      "value": "a",
     },
-    "Q4": Object {
-      "value": "A",
+    "q4": Object {
+      "value": "a",
     },
-    "Q40": Object {
-      "value": "A",
+    "q40": Object {
+      "value": "a",
     },
-    "Q41": Object {
-      "value": "A",
+    "q41": Object {
+      "value": "a",
     },
-    "Q42": Object {
-      "value": "C",
+    "q42": Object {
+      "value": "c",
     },
-    "Q43": Object {
-      "value": "A",
+    "q43": Object {
+      "value": "a",
     },
-    "Q44": Object {
-      "value": "C",
+    "q44": Object {
+      "value": "c",
     },
-    "Q45": Object {
-      "value": "B",
+    "q45": Object {
+      "value": "b",
     },
-    "Q46": Object {
-      "value": "A",
+    "q46": Object {
+      "value": "a",
     },
-    "Q47": Object {
-      "value": "C",
+    "q47": Object {
+      "value": "c",
     },
-    "Q48": Object {
-      "value": "B",
+    "q48": Object {
+      "value": "b",
     },
-    "Q49": Object {
-      "value": "A",
+    "q49": Object {
+      "value": "a",
     },
-    "Q5": Object {
-      "value": "C",
+    "q5": Object {
+      "value": "c",
     },
-    "Q50": Object {
-      "value": "D",
+    "q50": Object {
+      "value": "d",
     },
-    "Q51": Object {
-      "value": "A",
+    "q51": Object {
+      "value": "a",
     },
-    "Q52": Object {
-      "value": "B",
+    "q52": Object {
+      "value": "b",
     },
-    "Q53": Object {
-      "value": "B",
+    "q53": Object {
+      "value": "b",
     },
-    "Q54": Object {
-      "value": "D",
+    "q54": Object {
+      "value": "d",
     },
-    "Q55": Object {
-      "value": "B",
+    "q55": Object {
+      "value": "b",
     },
-    "Q56": Object {
-      "value": "B",
+    "q56": Object {
+      "value": "b",
     },
-    "Q57": Object {
-      "value": "A",
+    "q57": Object {
+      "value": "a",
     },
-    "Q58": Object {
-      "value": "D",
+    "q58": Object {
+      "value": "d",
     },
-    "Q59": Object {
-      "value": "A",
+    "q59": Object {
+      "value": "a",
     },
-    "Q6": Object {
-      "value": "D",
+    "q6": Object {
+      "value": "d",
     },
-    "Q60": Object {
-      "value": "A",
+    "q60": Object {
+      "value": "a",
     },
-    "Q7": Object {
-      "value": "C",
+    "q7": Object {
+      "value": "c",
     },
-    "Q8": Object {
-      "value": "A",
+    "q8": Object {
+      "value": "a",
     },
-    "Q9": Object {
-      "value": "D",
+    "q9": Object {
+      "value": "d",
     },
   },
   "correctCount": 0,

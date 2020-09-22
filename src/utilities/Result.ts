@@ -12,6 +12,8 @@ export type AnswerCollection = {
 }
 
 export class Result {
+  [key: string]: unknown
+
   isCompiled = false
   correctCount = 0
   incorrectCount = 0
@@ -112,34 +114,50 @@ export class Result {
     }
 
     this.isCompiled = true
+
     return this
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  toJson(): any {
+    const o = JSON.parse(JSON.stringify(this))
+
+    for (const prop in o) {
+      const value = o[prop]
+
+      if (typeof value === 'object') {
+        for (const subProp in value) {
+          o[subProp.toLowerCase()] = value[subProp].value.toLowerCase()
+        }
+
+        delete o[prop]
+      } else {
+        o[prop] = value
+      }
+    }
+
+    return o
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJson(o: any): Result {
     const answerRegExp = new RegExp(REG_EXP_PATTERNS.QUESTION)
     const result = new Result()
-
-    Object.keys(result).forEach((k) => {
-      if (k !== 'answers') {
-        Object.defineProperty(result, k, value)
-      }
-    })
 
     Object.keys(o).forEach((key) => {
       const value = o[key] as QUESTION_OPTIONS
 
       if (answerRegExp.test(key)) {
-        if (typeof value === 'string') {
-          result.addAnswer(key, value)
-        } else {
-          result.addAnswer(key, QUESTION_OPTIONS.NONE)
-        }
+        result.addAnswer(
+          key.toLowerCase(),
+          (value.toLowerCase() as QUESTION_OPTIONS) || QUESTION_OPTIONS.NONE
+        )
       } else {
-        console.log(result, key, value)
-
-        Object.defineProperty(result, key, value)
+        result[key] = value
       }
     })
+
+    if (result.rollNo) result.isRollNoExtracted = true
 
     return result
   }

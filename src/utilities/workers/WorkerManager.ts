@@ -1,10 +1,8 @@
 import { EventEmitter } from 'events'
 import { cpus } from 'os'
 import { Worker } from 'worker_threads'
-import { CompiledResult } from '../CompiledResult'
 import { getDesignData } from '../design'
 import { getImagePaths } from '../images'
-import { readKey } from '../readKey'
 import { Result } from '../Result'
 import { PROGRESS_STATES } from './PROGRESS_STATES'
 
@@ -33,7 +31,7 @@ export class WorkerManager extends EventEmitter {
     super()
   }
 
-  createWorkers(count: number, type: WORKER_TYPES) {
+  createWorkers(count: number, type: WORKER_TYPES): WorkerManager {
     for (let i = 0; i < count; i += 1) {
       const worker = new Worker(`./dist_electron/workers/${type}.worker.js`)
       this.workers.push(worker)
@@ -66,6 +64,8 @@ export class WorkerManager extends EventEmitter {
         }
       })
     }
+
+    return this
   }
 
   async extract(directory: string, designPath: string): Promise<Result[]> {
@@ -102,30 +102,18 @@ export class WorkerManager extends EventEmitter {
     correctMarks?: number,
     incorrectMarks?: number
   ): Promise<Result[]> {
-    const results = CompiledResult.loadFromExcel(resultPath).getResults()
-    const keys = await readKey(keyPath)
-    const totalWorkers = Math.min(results.length, CPU_CORE_COUNT)
-    const step = Math.floor(results.length / totalWorkers)
+    this.createWorkers(1, WORKER_TYPES.COMPILE)
 
-    this.inputCount = results.length
-    this.createWorkers(totalWorkers, WORKER_TYPES.COMPILE)
-
-    for (let i = 0; i < totalWorkers; i += 1) {
-      const startIndex = i * step
-      const endIndex = i === totalWorkers - 1 ? results.length : (i + 1) * step
-
-      this.workers[i].postMessage({
-        results: results.slice(startIndex, endIndex),
-        keys,
-        correctMarks,
-        incorrectMarks,
-      })
-    }
+    this.workers[0].postMessage({
+      resultPath,
+      keyPath,
+      correctMarks,
+      incorrectMarks,
+    })
 
     return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.ERROR, reject)
       this.on(PROGRESS_STATES.COMPLETE, (data: Result[]) => {
-        console.log('compile data: ', data)
         resolve(data)
       })
     })

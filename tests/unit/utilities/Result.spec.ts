@@ -15,6 +15,49 @@ describe('Result', () => {
     expect(result.imageFile).toBe(imageFile)
   })
 
+  test('should load from json', async () => {
+    const o = {
+      correctCount: 0,
+      incorrectCount: 0,
+      isCompiled: false,
+      marks: 0,
+      skippedCount: 0,
+      totalMarks: 0,
+      unattemptedCount: 0,
+      id: '183b5aad-7122-4947-99e9-75c2f73cb076',
+      imageFile:
+        'D:\\Current\\image-parsing\\__tests__\\_data\\images-barcode\\10023.jpg',
+      isRollNoExtracted: true,
+      post: '',
+      questionPaperType: '',
+      rollNo: '10023',
+      testCenter: '',
+      testTime: '',
+      q1: 'a',
+      q2: 'b',
+      q3: 'c',
+      q4: 'd',
+      q5: '?',
+      q6: '*',
+    }
+
+    const result = Result.fromJson(o)
+
+    expect(result).toMatchSnapshot()
+  })
+
+  test('should be able to export to json object', async () => {
+    const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
+    const result = compiledResult.results.reverse()[0]
+
+    expect(result.hasValidRollNo()).toBeTruthy()
+    expect(result.hasImageFile()).toBeTruthy()
+
+    const o = result.toJson()
+
+    expect(o).toMatchSnapshot()
+  })
+
   test('should compile', async () => {
     const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
     const result = compiledResult.results[0]
@@ -25,8 +68,6 @@ describe('Result', () => {
     keys.forEach((key) => {
       result.compile(key, 3, 1)
     })
-
-    console.log(result)
 
     expect(result.totalMarks).toBeGreaterThan(0)
 

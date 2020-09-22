@@ -4,7 +4,7 @@ import { Result } from './Result'
 
 export class CompiledResult {
   id: string
-  lastSavedTime: Date | undefined
+  lastSavedTime?: Date
   keys: Result[] = []
   results: Result[] = []
 
@@ -27,6 +27,16 @@ export class CompiledResult {
     })
 
     return compiledResult
+  }
+
+  export(): any[] {
+    const obj: any[] = []
+
+    this.sortResults().results.forEach((result) => {
+      obj.push(result.toJson())
+    })
+
+    return obj
   }
 
   addKeys(keys: Result[]): CompiledResult {
@@ -72,5 +82,25 @@ export class CompiledResult {
     })
 
     return compiledResult
+  }
+
+  getRandomResults(percent: number | undefined): Result[] {
+    const resultCount = this.results.length
+    const count = Math.max(Math.floor(((percent || 5) * resultCount) / 100), 1)
+    const ids: string[] = []
+    const results: Result[] = []
+
+    for (let i = 0; i < count; ) {
+      const index = Math.floor(Math.random() * resultCount)
+      const result = this.results[index]
+
+      if (ids.includes(result.id)) continue
+
+      results.push(this.results[index])
+      ids.push(result.id)
+      i += 1
+    }
+
+    return results
   }
 }

@@ -4,8 +4,7 @@ import {
   DecodeHintType,
   HybridBinarizer,
   MultiFormatReader,
-  // eslint-disable-next-line prettier/prettier
-  RGBLuminanceSource
+  RGBLuminanceSource,
 } from '@zxing/library/esm5'
 import { Sharp } from 'sharp'
 import { DesignData } from './design'

@@ -7,8 +7,7 @@ import { dataPaths } from '@/utilities/dataPaths'
 import {
   exportHtmltoExcel,
   exportJsonToExcel,
-  // eslint-disable-next-line prettier/prettier
-  importExcelToJson
+  importExcelToJson,
 } from '@/utilities/excel'
 import fs from 'fs'
 import path from 'path'

@@ -3,12 +3,13 @@ import('v8-compile-cache')
 
 import { parentPort } from 'worker_threads'
 import { CompiledResult } from '../CompiledResult'
+import { readKey } from '../readKey'
 import { Result } from '../Result'
 import { PROGRESS_STATES } from './PROGRESS_STATES'
 
 export type WorkerCompileInputMessage = {
-  results: Result[]
-  keys: Result[]
+  resultPath: string
+  keyPath: string
   correctMarks?: number
   incorrectMarks?: number
 }
@@ -28,7 +29,15 @@ export async function start(
   message: WorkerCompileInputMessage,
   isWorker = true
 ): Promise<CompiledResult | undefined> {
-  const { results, keys, correctMarks, incorrectMarks } = message
+  const { resultPath, keyPath, correctMarks, incorrectMarks } = message
+
+  const results = CompiledResult.loadFromExcel(resultPath).results
+  const keys = await readKey(keyPath)
+
+  if (keys === undefined) {
+    throw 'keys not provided'
+  }
+
   const compiledResult = new CompiledResult()
     .addResults(results)
     .addKeys(keys)

@@ -3,246 +3,246 @@
 exports[`workerCompile should compile just fine 1`] = `
 Object {
   "answers": Object {
-    "Q1": Object {
+    "q1": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q10": Object {
+    "q10": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q11": Object {
+    "q11": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q12": Object {
+    "q12": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q13": Object {
+    "q13": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q14": Object {
+    "q14": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q15": Object {
+    "q15": Object {
       "correct": false,
-      "value": "A",
+      "value": "a",
     },
-    "Q16": Object {
+    "q16": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q17": Object {
+    "q17": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q18": Object {
+    "q18": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q19": Object {
+    "q19": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q2": Object {
+    "q2": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q20": Object {
+    "q20": Object {
       "correct": false,
-      "value": "A",
+      "value": "a",
     },
-    "Q21": Object {
+    "q21": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q22": Object {
+    "q22": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q23": Object {
+    "q23": Object {
       "correct": false,
       "unattempted": true,
       "value": "?",
     },
-    "Q24": Object {
+    "q24": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q25": Object {
+    "q25": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q26": Object {
+    "q26": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q27": Object {
+    "q27": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q28": Object {
+    "q28": Object {
       "correct": false,
-      "value": "A",
+      "value": "a",
     },
-    "Q29": Object {
+    "q29": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q3": Object {
+    "q3": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q30": Object {
+    "q30": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q31": Object {
+    "q31": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q32": Object {
+    "q32": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q33": Object {
+    "q33": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q34": Object {
+    "q34": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q35": Object {
+    "q35": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q36": Object {
+    "q36": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q37": Object {
+    "q37": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q38": Object {
+    "q38": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q39": Object {
+    "q39": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q4": Object {
+    "q4": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q40": Object {
+    "q40": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q41": Object {
+    "q41": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q42": Object {
+    "q42": Object {
       "correct": false,
-      "value": "A",
+      "value": "a",
     },
-    "Q43": Object {
+    "q43": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q44": Object {
+    "q44": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q45": Object {
+    "q45": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q46": Object {
+    "q46": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q47": Object {
+    "q47": Object {
       "correct": false,
-      "value": "A",
+      "value": "a",
     },
-    "Q48": Object {
+    "q48": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q49": Object {
+    "q49": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q5": Object {
+    "q5": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q50": Object {
+    "q50": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q51": Object {
+    "q51": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q52": Object {
+    "q52": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q53": Object {
+    "q53": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q54": Object {
+    "q54": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q55": Object {
+    "q55": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q56": Object {
+    "q56": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q57": Object {
+    "q57": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q58": Object {
+    "q58": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q59": Object {
+    "q59": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q6": Object {
+    "q6": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q60": Object {
+    "q60": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q7": Object {
+    "q7": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q8": Object {
+    "q8": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q9": Object {
+    "q9": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
   },
   "correctCount": 21,
@@ -266,246 +266,246 @@ Object {
 exports[`workerCompile should compile just fine 2`] = `
 Object {
   "answers": Object {
-    "Q1": Object {
+    "q1": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q10": Object {
+    "q10": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q11": Object {
+    "q11": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q12": Object {
+    "q12": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q13": Object {
+    "q13": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q14": Object {
+    "q14": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q15": Object {
+    "q15": Object {
       "correct": false,
-      "value": "A",
+      "value": "a",
     },
-    "Q16": Object {
+    "q16": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q17": Object {
+    "q17": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q18": Object {
+    "q18": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q19": Object {
+    "q19": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q2": Object {
+    "q2": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q20": Object {
+    "q20": Object {
       "correct": false,
-      "value": "A",
+      "value": "a",
     },
-    "Q21": Object {
+    "q21": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q22": Object {
+    "q22": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q23": Object {
+    "q23": Object {
       "correct": false,
       "unattempted": true,
       "value": "?",
     },
-    "Q24": Object {
+    "q24": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q25": Object {
+    "q25": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q26": Object {
+    "q26": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q27": Object {
+    "q27": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q28": Object {
+    "q28": Object {
       "correct": false,
-      "value": "A",
+      "value": "a",
     },
-    "Q29": Object {
+    "q29": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q3": Object {
+    "q3": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q30": Object {
+    "q30": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q31": Object {
+    "q31": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q32": Object {
+    "q32": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q33": Object {
+    "q33": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q34": Object {
+    "q34": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q35": Object {
+    "q35": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q36": Object {
+    "q36": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q37": Object {
+    "q37": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q38": Object {
+    "q38": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q39": Object {
+    "q39": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q4": Object {
+    "q4": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q40": Object {
+    "q40": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q41": Object {
+    "q41": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q42": Object {
+    "q42": Object {
       "correct": false,
-      "value": "A",
+      "value": "a",
     },
-    "Q43": Object {
+    "q43": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q44": Object {
+    "q44": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q45": Object {
+    "q45": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q46": Object {
+    "q46": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q47": Object {
+    "q47": Object {
       "correct": false,
-      "value": "A",
+      "value": "a",
     },
-    "Q48": Object {
+    "q48": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
-    "Q49": Object {
+    "q49": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q5": Object {
+    "q5": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q50": Object {
+    "q50": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q51": Object {
+    "q51": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q52": Object {
+    "q52": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q53": Object {
+    "q53": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q54": Object {
+    "q54": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q55": Object {
+    "q55": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q56": Object {
+    "q56": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q57": Object {
+    "q57": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q58": Object {
+    "q58": Object {
       "correct": false,
-      "value": "B",
+      "value": "b",
     },
-    "Q59": Object {
+    "q59": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q6": Object {
+    "q6": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q60": Object {
+    "q60": Object {
       "correct": false,
-      "value": "D",
+      "value": "d",
     },
-    "Q7": Object {
+    "q7": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q8": Object {
+    "q8": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q9": Object {
+    "q9": Object {
       "correct": false,
-      "value": "C",
+      "value": "c",
     },
   },
   "correctCount": 21,
@@ -529,250 +529,250 @@ Object {
 exports[`workerCompile should compile just fine 3`] = `
 Object {
   "answers": Object {
-    "Q1": Object {
+    "q1": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q10": Object {
+    "q10": Object {
       "correct": false,
       "unattempted": true,
       "value": "?",
     },
-    "Q11": Object {
+    "q11": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q12": Object {
+    "q12": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q13": Object {
+    "q13": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q14": Object {
+    "q14": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q15": Object {
+    "q15": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q16": Object {
+    "q16": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q17": Object {
+    "q17": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q18": Object {
+    "q18": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q19": Object {
+    "q19": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q2": Object {
+    "q2": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q20": Object {
+    "q20": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q21": Object {
+    "q21": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q22": Object {
+    "q22": Object {
       "correct": false,
       "value": "*",
     },
-    "Q23": Object {
+    "q23": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q24": Object {
+    "q24": Object {
       "correct": false,
       "unattempted": true,
       "value": "?",
     },
-    "Q25": Object {
+    "q25": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q26": Object {
+    "q26": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q27": Object {
+    "q27": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q28": Object {
+    "q28": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q29": Object {
+    "q29": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q3": Object {
+    "q3": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q30": Object {
+    "q30": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q31": Object {
+    "q31": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q32": Object {
+    "q32": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q33": Object {
+    "q33": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q34": Object {
+    "q34": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q35": Object {
+    "q35": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q36": Object {
+    "q36": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q37": Object {
+    "q37": Object {
       "correct": false,
       "unattempted": true,
       "value": "?",
     },
-    "Q38": Object {
+    "q38": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q39": Object {
+    "q39": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q4": Object {
+    "q4": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q40": Object {
+    "q40": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q41": Object {
+    "q41": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q42": Object {
+    "q42": Object {
       "correct": false,
       "unattempted": true,
       "value": "?",
     },
-    "Q43": Object {
+    "q43": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q44": Object {
+    "q44": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q45": Object {
+    "q45": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q46": Object {
+    "q46": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q47": Object {
+    "q47": Object {
       "correct": false,
       "unattempted": true,
       "value": "?",
     },
-    "Q48": Object {
+    "q48": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q49": Object {
+    "q49": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q5": Object {
+    "q5": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q50": Object {
+    "q50": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q51": Object {
+    "q51": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q52": Object {
+    "q52": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q53": Object {
+    "q53": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q54": Object {
+    "q54": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q55": Object {
+    "q55": Object {
       "correct": false,
       "value": "*",
     },
-    "Q56": Object {
+    "q56": Object {
       "correct": true,
-      "value": "B",
+      "value": "b",
     },
-    "Q57": Object {
+    "q57": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q58": Object {
+    "q58": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q59": Object {
+    "q59": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q6": Object {
+    "q6": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
-    "Q60": Object {
+    "q60": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q7": Object {
+    "q7": Object {
       "correct": true,
-      "value": "C",
+      "value": "c",
     },
-    "Q8": Object {
+    "q8": Object {
       "correct": true,
-      "value": "A",
+      "value": "a",
     },
-    "Q9": Object {
+    "q9": Object {
       "correct": true,
-      "value": "D",
+      "value": "d",
     },
   },
   "correctCount": 53,

@@ -28,7 +28,9 @@ describe('CompiledResult', () => {
       dataPaths.resultCompiled
     )
 
-    expect(compiledResult.sortResults().results.reverse()).not.toThrow()
+    expect(() => {
+      compiledResult.sortResults().results.reverse()
+    }).not.toThrow()
   })
 
   test('should be able to merge two compiled Results', async () => {
@@ -61,7 +63,16 @@ describe('CompiledResult', () => {
 
     compiledResultKey.addResults(compiledResult.results)
 
-    expect(compiledResultKey.results.length).toBe(3)
+    expect(compiledResultKey.results.length).toBe(4)
+  })
+
+  test('should be able to export as obj array', async () => {
+    const compiledResult = CompiledResult.loadFromExcel(
+      dataPaths.resultCompiled
+    )
+
+    const d = compiledResult.export()
+    expect(d).toMatchSnapshot()
   })
 
   test('should be able to compile results', async () => {

@@ -1,15 +1,14 @@
 import XLSX from 'xlsx'
 import { CompiledResult } from './CompiledResult'
-import { ResultJson } from './Result'
 import { toCamelCase, toHeadingCase } from './string'
 
-const importExcelToJson = (src: string): ResultJson[] => {
+const importExcelToJson = (src: string): any[] => {
   const workbook = XLSX.readFile(src)
 
-  const arr: ResultJson[] = []
+  const arr: any[] = []
 
   Object.values(workbook.Sheets).forEach((sheet) => {
-    const rows: ResultJson[] = XLSX.utils.sheet_to_json(sheet, {
+    const rows: any[] = XLSX.utils.sheet_to_json(sheet, {
       blankrows: false,
       raw: true,
     })
@@ -36,7 +35,7 @@ const importExcelToJson = (src: string): ResultJson[] => {
 }
 
 function exportJsonToExcel(
-  compiledResult: CompiledResult | ResultJson[],
+  compiledResult: CompiledResult | any[],
   destination: string
 ): void {
   const workbook = XLSX.utils.book_new()

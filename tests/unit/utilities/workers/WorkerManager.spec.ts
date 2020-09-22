@@ -1,9 +1,6 @@
 import { dataPaths } from '@/utilities/dataPaths'
 import { PROGRESS_STATES } from '@/utilities/workers/PROGRESS_STATES'
-import {
-  // eslint-disable-next-line prettier/prettier
-  WorkerManager,
-} from '@/utilities/workers/WorkerManager'
+import { WorkerManager } from '@/utilities/workers/WorkerManager'
 
 const workerManager = new WorkerManager()
 
