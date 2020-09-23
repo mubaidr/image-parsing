@@ -4,7 +4,7 @@ import config from '../../webpack.workers.config.js'
 
 // enable dev mode for workers
 config.mode = 'development'
-config.devtool = 'eval'
+config.devtool = 'eval-source-map'
 config.plugins = []
 config.optimization = {}
 config.node = {
@@ -14,15 +14,18 @@ config.node = {
 
 // compile workers
 module.exports = async () => {
-  webpack(
-    {
-      ...config,
-    },
-    (err, stats) => {
-      if (err || stats.hasErrors()) {
-        console.error(err || stats.compilation.errors[0])
-        process.exit(1)
+  return new Promise((resolve, reject) => {
+    webpack(
+      {
+        ...config,
+      },
+      (err, stats) => {
+        if (err || stats.hasErrors()) {
+          reject(err || stats.compilation.errors[0])
+        }
+
+        resolve(null)
       }
-    }
-  )
+    )
+  })
 }

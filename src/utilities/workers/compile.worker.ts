@@ -30,7 +30,6 @@ export async function start(
   isWorker = true
 ): Promise<CompiledResult | undefined> {
   const { resultPath, keyPath, correctMarks, incorrectMarks } = message
-
   const results = CompiledResult.loadFromExcel(resultPath).results
   const keys = await readKey(keyPath)
 
@@ -39,8 +38,8 @@ export async function start(
   }
 
   const compiledResult = new CompiledResult()
-    .addResults(results)
     .addKeys(keys)
+    .addResults(results)
     .compile(correctMarks, incorrectMarks)
 
   // report progress status

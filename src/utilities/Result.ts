@@ -24,7 +24,7 @@ export class Result {
   answers: AnswerCollection = {}
   error: string | undefined
   id: string
-  imageFile: string | undefined
+  imageFile: string | undefined //TODO: rename to filePath to track excel and image files for keys too
   isRollNoExtracted: boolean
   post = ''
   questionPaperType = ''

@@ -29,7 +29,7 @@ const isDevMode = process.env.NODE_ENV === 'development'
 const config = {
   name: 'workers',
   mode: isDevMode ? 'development' : 'production',
-  devtool: isDevMode ? 'eval ' : false,
+  devtool: isDevMode ? 'eval-source-map' : false,
   entry: entry,
   output: {
     libraryTarget: 'commonjs2',
