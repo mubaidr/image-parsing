@@ -12,7 +12,7 @@ describe('Result', () => {
 
     expect(result.id).toBeDefined()
     expect(result.rollNo).toBe(rollNo)
-    expect(result.imageFile).toBe(imageFile)
+    expect(result.filePath).toBe(imageFile)
   })
 
   test('should load from json', async () => {

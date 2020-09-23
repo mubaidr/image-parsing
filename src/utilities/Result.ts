@@ -24,7 +24,7 @@ export class Result {
   answers: AnswerCollection = {}
   error: string | undefined
   id: string
-  imageFile: string | undefined //TODO: rename to filePath to track excel and image files for keys too
+  filePath: string | undefined
   isRollNoExtracted: boolean
   post = ''
   questionPaperType = ''
@@ -35,12 +35,12 @@ export class Result {
   constructor(rollNo?: string, imageFile?: string) {
     this.id = uuid4()
     this.rollNo = rollNo
-    this.imageFile = imageFile
+    this.filePath = imageFile
     this.isRollNoExtracted = !!rollNo
   }
 
   hasImageFile(): boolean {
-    return this.imageFile !== undefined
+    return this.filePath !== undefined
   }
 
   hasValidRollNo(): boolean {

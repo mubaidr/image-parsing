@@ -19,7 +19,7 @@ describe('readKey', () => {
     expect(results.length).toBe(1)
     expect(results[0]).toMatchSnapshot({
       id: expect.any(String),
-      imageFile: expect.anything(),
+      filePath: expect.anything(),
     })
   })
 })

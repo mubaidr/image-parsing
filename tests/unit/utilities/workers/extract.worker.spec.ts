@@ -22,7 +22,7 @@ describe('workerExtract', () => {
     results.forEach((result) => {
       expect(result).toMatchSnapshot({
         id: expect.any(String),
-        imageFile: expect.any(String),
+        filePath: expect.any(String),
       })
     })
   })
@@ -46,7 +46,7 @@ describe('workerExtract', () => {
     results.forEach((result) => {
       expect(result).toMatchSnapshot({
         id: expect.any(String),
-        imageFile: expect.any(String),
+        filePath: expect.any(String),
       })
     })
   })

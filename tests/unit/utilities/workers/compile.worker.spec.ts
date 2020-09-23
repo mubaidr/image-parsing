@@ -19,7 +19,7 @@ describe('workerCompile', () => {
     compiledResult.results.forEach((result) => {
       expect(result).toMatchSnapshot({
         id: expect.any(String),
-        imageFile: expect.any(String),
+        filePath: expect.any(String),
       })
     })
   })
