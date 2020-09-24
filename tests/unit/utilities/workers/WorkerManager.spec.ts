@@ -24,6 +24,8 @@ describe('WorkerManager', () => {
       .on(PROGRESS_STATES.COMPLETE, completeCallback)
       .extract(dataPaths.imagesBarcode, dataPaths.designBarcode)
 
+    if (!data) fail()
+
     expect(workerManager.inputCount).toBe(4)
     expect(data.length).toBe(4)
     expect(logCallback).toBeCalledTimes(0)
@@ -46,6 +48,8 @@ describe('WorkerManager', () => {
       .on(PROGRESS_STATES.PROGRESS, progressCallback)
       .on(PROGRESS_STATES.COMPLETE, completeCallback)
       .compile(dataPaths.result, dataPaths.key)
+
+    if (!data) fail()
 
     expect(workerManager.inputCount).toBe(3)
     expect(data.length).toBe(4)

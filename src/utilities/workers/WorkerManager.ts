@@ -18,7 +18,7 @@ enum WORKER_TYPES {
 
 type WorkerOutputMessage = {
   progressState: PROGRESS_STATES
-  payload: Result[]
+  payload?: Result[]
 }
 
 export class WorkerManager extends EventEmitter {
@@ -68,7 +68,10 @@ export class WorkerManager extends EventEmitter {
     return this
   }
 
-  async extract(directory: string, designPath: string): Promise<Result[]> {
+  async extract(
+    directory: string,
+    designPath: string
+  ): Promise<Result[] | undefined> {
     const [designData, totalImages] = await Promise.all([
       getDesignData(designPath),
       getImagePaths(directory),
@@ -92,7 +95,10 @@ export class WorkerManager extends EventEmitter {
 
     return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.ERROR, reject)
-      this.on(PROGRESS_STATES.COMPLETE, resolve)
+      this.on(PROGRESS_STATES.COMPLETE, (payload: Result[] | undefined) => {
+        if (!payload) return resolve()
+        resolve(payload.map((p) => Result.fromJson(p)))
+      })
     })
   }
 
@@ -101,7 +107,7 @@ export class WorkerManager extends EventEmitter {
     keyPath: string,
     correctMarks?: number,
     incorrectMarks?: number
-  ): Promise<Result[]> {
+  ): Promise<Result[] | undefined> {
     this.createWorkers(1, WORKER_TYPES.COMPILE)
 
     this.workers[0].postMessage({
@@ -113,8 +119,9 @@ export class WorkerManager extends EventEmitter {
 
     return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.ERROR, reject)
-      this.on(PROGRESS_STATES.COMPLETE, (data: Result[]) => {
-        resolve(data)
+      this.on(PROGRESS_STATES.COMPLETE, (payload: Result[] | undefined) => {
+        if (!payload) return resolve()
+        resolve(payload.map((p) => Result.fromJson(p)))
       })
     })
   }

@@ -37,10 +37,11 @@ export async function start(
     throw 'keys not provided'
   }
 
-  const compiledResult = new CompiledResult()
-    .addKeys(keys)
-    .addResults(results)
-    .compile(correctMarks, incorrectMarks)
+  const compiledResult = new CompiledResult().addKeys(keys).addResults(results)
+
+  if (correctMarks && incorrectMarks) {
+    compiledResult.compile(correctMarks, incorrectMarks)
+  }
 
   // report progress status
   if (isWorker) {
