@@ -25,7 +25,7 @@ describe('Result', () => {
       totalMarks: 0,
       unattemptedCount: 0,
       id: '183b5aad-7122-4947-99e9-75c2f73cb076',
-      imageFile:
+      filePath:
         'D:\\Current\\image-parsing\\__tests__\\_data\\images-barcode\\10023.jpg',
       isRollNoExtracted: true,
       post: '',

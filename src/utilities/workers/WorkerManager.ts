@@ -108,6 +108,7 @@ export class WorkerManager extends EventEmitter {
     correctMarks?: number,
     incorrectMarks?: number
   ): Promise<Result[] | undefined> {
+    this.inputCount = 1
     this.createWorkers(1, WORKER_TYPES.COMPILE)
 
     this.workers[0].postMessage({

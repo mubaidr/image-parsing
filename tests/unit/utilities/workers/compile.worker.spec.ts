@@ -7,6 +7,8 @@ describe('workerCompile', () => {
       {
         resultPath: dataPaths.result,
         keyPath: dataPaths.key,
+        correctMarks: 3,
+        incorrectMarks: 1,
       },
       false
     )
@@ -16,7 +18,7 @@ describe('workerCompile', () => {
     expect(compiledResult.keys.length).toBeGreaterThanOrEqual(1)
     expect(compiledResult.results.length).toBeGreaterThanOrEqual(3)
 
-    compiledResult.results.forEach((result) => {
+    compiledResult.sortResults().results.forEach((result) => {
       expect(result).toMatchSnapshot({
         id: expect.any(String),
         filePath: expect.any(String),

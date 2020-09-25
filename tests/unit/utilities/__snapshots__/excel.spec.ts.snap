@@ -4,8 +4,8 @@ exports[`importExcelToJson works 1`] = `
 Array [
   Object {
     "correctCount": 0,
+    "filePath": "D:/Current/image-parsing/__tests__/_data/images-barcode//no-roll.jpg",
     "id": "df8c9ffe-db95-4ccd-a43e-0646905e4992",
-    "imageFile": "D:/Current/image-parsing/__tests__/_data/images-barcode//no-roll.jpg",
     "incorrectCount": 0,
     "isCompiled": false,
     "isRollNoExtracted": false,
@@ -80,8 +80,8 @@ Array [
   },
   Object {
     "correctCount": 0,
+    "filePath": "D:/Current/image-parsing/__tests__/_data/images-barcode//10023.jpg",
     "id": "eab21561-d52c-485f-8b94-f84e8919bc9e",
-    "imageFile": "D:/Current/image-parsing/__tests__/_data/images-barcode//10023.jpg",
     "incorrectCount": 0,
     "isCompiled": false,
     "isRollNoExtracted": true,
@@ -157,8 +157,8 @@ Array [
   },
   Object {
     "correctCount": 0,
+    "filePath": "D:/Current/image-parsing/__tests__/_data/images-barcode//10025.tif",
     "id": "1c0e9adc-a474-4e33-babd-0aa3a67463e0",
-    "imageFile": "D:/Current/image-parsing/__tests__/_data/images-barcode//10025.tif",
     "incorrectCount": 0,
     "isCompiled": false,
     "isRollNoExtracted": true,

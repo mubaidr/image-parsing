@@ -32,10 +32,10 @@ export class Result {
   testCenter = ''
   testTime = ''
 
-  constructor(rollNo?: string, imageFile?: string) {
+  constructor(rollNo?: string, filePath?: string) {
     this.id = uuid4()
     this.rollNo = rollNo
-    this.filePath = imageFile
+    this.filePath = filePath
     this.isRollNoExtracted = !!rollNo
   }
 

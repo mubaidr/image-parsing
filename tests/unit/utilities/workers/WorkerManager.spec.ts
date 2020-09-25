@@ -51,11 +51,11 @@ describe('WorkerManager', () => {
 
     if (!data) fail()
 
-    expect(workerManager.inputCount).toBe(3)
+    expect(workerManager.inputCount).toBe(1)
     expect(data.length).toBe(4)
     expect(logCallback).toBeCalledTimes(0)
     expect(errorCallback).toBeCalledTimes(0)
-    expect(progressCallback).toBeCalledTimes(3)
+    expect(progressCallback).toBeCalledTimes(1)
     expect(completeCallback).toBeCalledTimes(1)
   })
 

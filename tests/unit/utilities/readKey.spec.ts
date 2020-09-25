@@ -3,21 +3,23 @@ import { readKey } from '@/utilities/readKey'
 
 describe('readKey', () => {
   test('should read excel keys', async () => {
-    const results = await readKey(dataPaths.key)
-    if (!results) return
+    const keys = await readKey(dataPaths.key)
 
-    expect(results.length).toBeGreaterThanOrEqual(1)
-    expect(results[0]).toMatchSnapshot({
+    if (!keys) fail()
+
+    expect(keys.length).toBeGreaterThanOrEqual(1)
+    expect(keys[0]).toMatchSnapshot({
       id: expect.any(String),
     })
   })
 
   test('should read image keys', async () => {
-    const results = await readKey(dataPaths.keyImage)
-    if (!results) return
+    const keys = await readKey(dataPaths.keyImage)
 
-    expect(results.length).toBe(1)
-    expect(results[0]).toMatchSnapshot({
+    if (!keys) fail()
+
+    expect(keys.length).toBe(1)
+    expect(keys[0]).toMatchSnapshot({
       id: expect.any(String),
       filePath: expect.anything(),
     })
