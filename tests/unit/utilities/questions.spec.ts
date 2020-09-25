@@ -14,6 +14,5 @@ describe('getQuestionsData', () => {
     const qd = await getQuestionsData(design, sharpImg)
 
     expect(Object.keys(qd).length).toBe(60)
-    expect(qd).toMatchSnapshot()
   })
 })

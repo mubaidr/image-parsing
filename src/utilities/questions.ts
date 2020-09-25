@@ -1,7 +1,7 @@
-import { kernel, Sharp } from 'sharp'
+import { Sharp } from 'sharp'
 import { DesignData } from './design'
-import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
 // import { logImageData } from './images'
+import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
 
 export type QuestionData = {
   [key: string]: {
@@ -14,15 +14,16 @@ export async function getQuestionsData(
   sharpImage: Sharp
 ): Promise<QuestionData> {
   const { width } = await sharpImage.metadata()
-  const scale = width && width > design.width ? design.width / width : 1
+  // const scale = width && width > design.width ? design.width / width : 1
+  const scale = width && width > design.width ? width / design.width : 1
   const questions = Object.entries(design.questions)
   const questionsData: QuestionData = {}
 
-  if (scale !== 1) {
-    sharpImage.resize(Math.ceil(design.width * scale), null, {
-      kernel: kernel.nearest,
-    })
-  }
+  // if (scale !== 1) {
+  //   sharpImage.resize(Math.ceil(design.width * scale), null, {
+  //     kernel: kernel.nearest,
+  //   })
+  // }
 
   for (let i = 0; i < questions.length; i += 1) {
     const [questionTitle, q] = questions[i]
