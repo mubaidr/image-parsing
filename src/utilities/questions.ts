@@ -1,4 +1,4 @@
-import { kernel, Sharp } from 'sharp'
+import { Sharp } from 'sharp'
 import { DesignData } from './design'
 // import { logImageData } from './images'
 import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
@@ -54,17 +54,11 @@ export async function getQuestionsData(
   design: DesignData,
   sharpImage: Sharp
 ): Promise<QuestionData> {
-  const { width } = await sharpImage.metadata()
-  const scale = width && width > design.width ? design.width / width : 1
-  // const scale = width && width > design.width ? width / design.width : 1
   const questions = Object.entries(design.questions)
   const questionData: QuestionData = {}
+  const SCALE = 1
 
-  if (scale !== 1) {
-    sharpImage.resize(Math.ceil(design.width * scale), null, {
-      kernel: kernel.nearest,
-    })
-  }
+  sharpImage.resize(design.width * SCALE)
 
   for (let i = 0; i < questions.length; i += 1) {
     const [questionTitle, q] = questions[i]
@@ -79,10 +73,10 @@ export async function getQuestionsData(
       if (itemInfo === undefined) continue
 
       sharpImage.extract({
-        left: Math.floor((itemInfo.x - itemInfo.width * 0.5) * scale),
-        top: Math.floor((itemInfo.y - itemInfo.height * 0.5) * scale),
-        width: Math.ceil(itemInfo.width * scale),
-        height: Math.ceil(itemInfo.height * scale),
+        left: Math.floor((itemInfo.x - itemInfo.width * 0.5) * SCALE),
+        top: Math.floor((itemInfo.y - itemInfo.height * 0.5) * SCALE),
+        width: Math.ceil(itemInfo.width * SCALE),
+        height: Math.ceil(itemInfo.height * SCALE),
       })
 
       // log image
