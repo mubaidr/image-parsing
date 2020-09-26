@@ -4,6 +4,8 @@ import { WorkerManager } from '@/utilities/workers/WorkerManager'
 
 const workerManager = new WorkerManager()
 
+jest.setTimeout(10000)
+
 afterEach(() => {
   workerManager.stop()
 })

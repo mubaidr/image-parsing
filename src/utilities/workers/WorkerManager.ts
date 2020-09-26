@@ -1,12 +1,10 @@
+import { ChildProcess, fork } from 'child_process'
 import { EventEmitter } from 'events'
 import { cpus } from 'os'
-import { Worker } from 'worker_threads'
 import { getDesignData } from '../design'
 import { getImagePaths } from '../images'
 import { Result } from '../Result'
 import { PROGRESS_STATES } from './PROGRESS_STATES'
-
-// TODO: integrate https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer
 
 const CPU_CORE_COUNT = cpus().length
 
@@ -23,7 +21,7 @@ type WorkerOutputMessage = {
 
 export class WorkerManager extends EventEmitter {
   data: Result[] = []
-  workers: Worker[] = []
+  workers: ChildProcess[] = []
   finished = 0
   inputCount = 0
 
@@ -33,7 +31,9 @@ export class WorkerManager extends EventEmitter {
 
   createWorkers(count: number, type: WORKER_TYPES): WorkerManager {
     for (let i = 0; i < count; i += 1) {
-      const worker = new Worker(`./dist_electron/workers/${type}.worker.js`)
+      const worker = fork(`./dist_electron/workers/${type}.worker.js`, {
+        silent: true,
+      })
       this.workers.push(worker)
 
       worker.on(PROGRESS_STATES.EXIT, (code) => {
@@ -94,7 +94,7 @@ export class WorkerManager extends EventEmitter {
         const endIndex =
           i === totalWorkers - 1 ? totalImages.length : (i + 1) * step
 
-        this.workers[i].postMessage({
+        this.workers[i].send({
           designData,
           imagePaths: totalImages.slice(startIndex, endIndex),
         })
@@ -118,7 +118,7 @@ export class WorkerManager extends EventEmitter {
         resolve(payload.map((p) => Result.fromJson(p)))
       })
 
-      this.workers[0].postMessage({
+      this.workers[0].send({
         resultPath,
         keyPath,
         correctMarks,
@@ -138,7 +138,8 @@ export class WorkerManager extends EventEmitter {
 
   async stop(): Promise<void> {
     this.workers.forEach((w) => {
-      w.terminate()
+      w.unref()
+      w.kill()
     })
 
     this.finished = 0

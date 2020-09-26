@@ -2,9 +2,7 @@
   <div>
     <router-view v-slot="{ Component }">
       <transition mode="out-in" name="slide-up">
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
+        <component :is="Component" />
       </transition>
     </router-view>
   </div>

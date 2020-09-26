@@ -1,7 +1,6 @@
 // @ts-ignore
 import('v8-compile-cache')
 
-import { parentPort } from 'worker_threads'
 import { DesignData } from '../design'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
@@ -20,8 +19,8 @@ export type WorkerExtractOutputMessage = {
 }
 
 function sendMessage(message: WorkerExtractOutputMessage): void {
-  if (parentPort) {
-    parentPort.postMessage(message)
+  if (process && process.send) {
+    process.send(message)
   }
 }
 
@@ -69,8 +68,8 @@ export async function start(
   }
 }
 
-if (parentPort) {
-  parentPort.on('message', (payload: WorkerExtractInputMessage) => {
+if (process && process.send) {
+  process.on('message', (payload: WorkerExtractInputMessage) => {
     start(payload)
   })
 }

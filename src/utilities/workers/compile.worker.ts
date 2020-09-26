@@ -1,7 +1,6 @@
 // @ts-ignore
 import('v8-compile-cache')
 
-import { parentPort } from 'worker_threads'
 import { CompiledResult } from '../CompiledResult'
 import { readKey } from '../readKey'
 import { Result } from '../Result'
@@ -20,8 +19,8 @@ export type WorkerCompileOutputMessage = {
 }
 
 function sendMessage(message: WorkerCompileOutputMessage): void {
-  if (parentPort) {
-    parentPort.postMessage(message)
+  if (process && process.send) {
+    process.send(message)
   }
 }
 
@@ -58,8 +57,8 @@ export async function start(
   }
 }
 
-if (parentPort) {
-  parentPort.on('message', (payload: WorkerCompileInputMessage) => {
+if (process && process.send) {
+  process.on('message', (payload: WorkerCompileInputMessage) => {
     start(payload)
   })
 }
