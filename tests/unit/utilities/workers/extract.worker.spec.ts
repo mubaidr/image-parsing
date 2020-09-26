@@ -27,30 +27,6 @@ describe('workerExtract', () => {
     })
   })
 
-  test('should be able to extract result just fine', async () => {
-    const designData = await getDesignData(dataPaths.designBarcode)
-    const imagePaths = await getImagePaths(dataPaths.imagesBarcode)
-
-    const results = await start(
-      {
-        designData,
-        imagePaths,
-      },
-      false
-    )
-
-    if (!results) fail()
-
-    expect(results.length).toBe(4)
-
-    results.forEach((result) => {
-      expect(result).toMatchSnapshot({
-        id: expect.any(String),
-        filePath: expect.any(String),
-      })
-    })
-  })
-
   test('extracted result should match with results.xlsx', async () => {
     const resultsExcel = await readKey(dataPaths.result)
     const designData = await getDesignData(dataPaths.designBarcode)
@@ -66,11 +42,18 @@ describe('workerExtract', () => {
 
     if (!results || !resultsExcel) fail()
 
-    results.forEach((r) => {
+    expect(results.length).toBe(4)
+
+    results.forEach((result) => {
       resultsExcel.forEach((re) => {
-        if (r.rollNo === re.rollNo) {
-          expect(r.answers).toMatchObject(re.answers)
+        if (result.rollNo === re.rollNo) {
+          expect(result.answers).toMatchObject(re.answers)
         }
+      })
+
+      expect(result).toMatchSnapshot({
+        id: expect.any(String),
+        filePath: expect.any(String),
       })
     })
   })

@@ -1,208 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`workerExtract should be able to extract key just fine 1`] = `
-Object {
-  "answers": Object {
-    "q1": Object {
-      "value": "d",
-    },
-    "q10": Object {
-      "value": "c",
-    },
-    "q11": Object {
-      "value": "b",
-    },
-    "q12": Object {
-      "value": "d",
-    },
-    "q13": Object {
-      "value": "b",
-    },
-    "q14": Object {
-      "value": "a",
-    },
-    "q15": Object {
-      "value": "d",
-    },
-    "q16": Object {
-      "value": "c",
-    },
-    "q17": Object {
-      "value": "b",
-    },
-    "q18": Object {
-      "value": "a",
-    },
-    "q19": Object {
-      "value": "c",
-    },
-    "q2": Object {
-      "value": "b",
-    },
-    "q20": Object {
-      "value": "b",
-    },
-    "q21": Object {
-      "value": "a",
-    },
-    "q22": Object {
-      "value": "b",
-    },
-    "q23": Object {
-      "value": "a",
-    },
-    "q24": Object {
-      "value": "b",
-    },
-    "q25": Object {
-      "value": "a",
-    },
-    "q26": Object {
-      "value": "b",
-    },
-    "q27": Object {
-      "value": "a",
-    },
-    "q28": Object {
-      "value": "b",
-    },
-    "q29": Object {
-      "value": "d",
-    },
-    "q3": Object {
-      "value": "d",
-    },
-    "q30": Object {
-      "value": "a",
-    },
-    "q31": Object {
-      "value": "b",
-    },
-    "q32": Object {
-      "value": "a",
-    },
-    "q33": Object {
-      "value": "b",
-    },
-    "q34": Object {
-      "value": "b",
-    },
-    "q35": Object {
-      "value": "a",
-    },
-    "q36": Object {
-      "value": "c",
-    },
-    "q37": Object {
-      "value": "b",
-    },
-    "q38": Object {
-      "value": "a",
-    },
-    "q39": Object {
-      "value": "a",
-    },
-    "q4": Object {
-      "value": "a",
-    },
-    "q40": Object {
-      "value": "a",
-    },
-    "q41": Object {
-      "value": "a",
-    },
-    "q42": Object {
-      "value": "c",
-    },
-    "q43": Object {
-      "value": "a",
-    },
-    "q44": Object {
-      "value": "c",
-    },
-    "q45": Object {
-      "value": "b",
-    },
-    "q46": Object {
-      "value": "a",
-    },
-    "q47": Object {
-      "value": "c",
-    },
-    "q48": Object {
-      "value": "b",
-    },
-    "q49": Object {
-      "value": "a",
-    },
-    "q5": Object {
-      "value": "c",
-    },
-    "q50": Object {
-      "value": "d",
-    },
-    "q51": Object {
-      "value": "a",
-    },
-    "q52": Object {
-      "value": "b",
-    },
-    "q53": Object {
-      "value": "b",
-    },
-    "q54": Object {
-      "value": "d",
-    },
-    "q55": Object {
-      "value": "b",
-    },
-    "q56": Object {
-      "value": "b",
-    },
-    "q57": Object {
-      "value": "a",
-    },
-    "q58": Object {
-      "value": "d",
-    },
-    "q59": Object {
-      "value": "a",
-    },
-    "q6": Object {
-      "value": "d",
-    },
-    "q60": Object {
-      "value": "a",
-    },
-    "q7": Object {
-      "value": "c",
-    },
-    "q8": Object {
-      "value": "a",
-    },
-    "q9": Object {
-      "value": "d",
-    },
-  },
-  "correctCount": 0,
-  "filePath": Any<String>,
-  "id": Any<String>,
-  "incorrectCount": 0,
-  "isCompiled": false,
-  "isRollNoExtracted": false,
-  "marks": 0,
-  "post": "",
-  "questionPaperType": "",
-  "rollNo": undefined,
-  "skippedCount": 0,
-  "testCenter": "",
-  "testTime": "",
-  "totalMarks": 0,
-  "unattemptedCount": 0,
-}
-`;
-
-exports[`workerExtract should be able to extract result just fine 1`] = `
+exports[`workerExtract extracted result should match with results.xlsx 1`] = `
 Object {
   "answers": Object {
     "q1": Object {
@@ -404,7 +202,7 @@ Object {
 }
 `;
 
-exports[`workerExtract should be able to extract result just fine 2`] = `
+exports[`workerExtract extracted result should match with results.xlsx 2`] = `
 Object {
   "answers": Object {
     "q1": Object {
@@ -606,7 +404,7 @@ Object {
 }
 `;
 
-exports[`workerExtract should be able to extract result just fine 3`] = `
+exports[`workerExtract extracted result should match with results.xlsx 3`] = `
 Object {
   "answers": Object {
     "q1": Object {
@@ -808,7 +606,7 @@ Object {
 }
 `;
 
-exports[`workerExtract should be able to extract result just fine 4`] = `
+exports[`workerExtract extracted result should match with results.xlsx 4`] = `
 Object {
   "answers": Object {
     "q1": Object {
@@ -990,6 +788,208 @@ Object {
     },
     "q9": Object {
       "value": "c",
+    },
+  },
+  "correctCount": 0,
+  "filePath": Any<String>,
+  "id": Any<String>,
+  "incorrectCount": 0,
+  "isCompiled": false,
+  "isRollNoExtracted": false,
+  "marks": 0,
+  "post": "",
+  "questionPaperType": "",
+  "rollNo": undefined,
+  "skippedCount": 0,
+  "testCenter": "",
+  "testTime": "",
+  "totalMarks": 0,
+  "unattemptedCount": 0,
+}
+`;
+
+exports[`workerExtract should be able to extract key just fine 1`] = `
+Object {
+  "answers": Object {
+    "q1": Object {
+      "value": "d",
+    },
+    "q10": Object {
+      "value": "c",
+    },
+    "q11": Object {
+      "value": "b",
+    },
+    "q12": Object {
+      "value": "d",
+    },
+    "q13": Object {
+      "value": "b",
+    },
+    "q14": Object {
+      "value": "a",
+    },
+    "q15": Object {
+      "value": "d",
+    },
+    "q16": Object {
+      "value": "c",
+    },
+    "q17": Object {
+      "value": "b",
+    },
+    "q18": Object {
+      "value": "a",
+    },
+    "q19": Object {
+      "value": "c",
+    },
+    "q2": Object {
+      "value": "b",
+    },
+    "q20": Object {
+      "value": "b",
+    },
+    "q21": Object {
+      "value": "a",
+    },
+    "q22": Object {
+      "value": "b",
+    },
+    "q23": Object {
+      "value": "a",
+    },
+    "q24": Object {
+      "value": "b",
+    },
+    "q25": Object {
+      "value": "a",
+    },
+    "q26": Object {
+      "value": "b",
+    },
+    "q27": Object {
+      "value": "a",
+    },
+    "q28": Object {
+      "value": "b",
+    },
+    "q29": Object {
+      "value": "d",
+    },
+    "q3": Object {
+      "value": "d",
+    },
+    "q30": Object {
+      "value": "a",
+    },
+    "q31": Object {
+      "value": "b",
+    },
+    "q32": Object {
+      "value": "a",
+    },
+    "q33": Object {
+      "value": "b",
+    },
+    "q34": Object {
+      "value": "b",
+    },
+    "q35": Object {
+      "value": "a",
+    },
+    "q36": Object {
+      "value": "c",
+    },
+    "q37": Object {
+      "value": "b",
+    },
+    "q38": Object {
+      "value": "a",
+    },
+    "q39": Object {
+      "value": "a",
+    },
+    "q4": Object {
+      "value": "a",
+    },
+    "q40": Object {
+      "value": "a",
+    },
+    "q41": Object {
+      "value": "a",
+    },
+    "q42": Object {
+      "value": "c",
+    },
+    "q43": Object {
+      "value": "a",
+    },
+    "q44": Object {
+      "value": "c",
+    },
+    "q45": Object {
+      "value": "b",
+    },
+    "q46": Object {
+      "value": "a",
+    },
+    "q47": Object {
+      "value": "c",
+    },
+    "q48": Object {
+      "value": "b",
+    },
+    "q49": Object {
+      "value": "a",
+    },
+    "q5": Object {
+      "value": "c",
+    },
+    "q50": Object {
+      "value": "d",
+    },
+    "q51": Object {
+      "value": "a",
+    },
+    "q52": Object {
+      "value": "b",
+    },
+    "q53": Object {
+      "value": "b",
+    },
+    "q54": Object {
+      "value": "d",
+    },
+    "q55": Object {
+      "value": "b",
+    },
+    "q56": Object {
+      "value": "b",
+    },
+    "q57": Object {
+      "value": "a",
+    },
+    "q58": Object {
+      "value": "d",
+    },
+    "q59": Object {
+      "value": "a",
+    },
+    "q6": Object {
+      "value": "d",
+    },
+    "q60": Object {
+      "value": "a",
+    },
+    "q7": Object {
+      "value": "c",
+    },
+    "q8": Object {
+      "value": "a",
+    },
+    "q9": Object {
+      "value": "d",
     },
   },
   "correctCount": 0,
