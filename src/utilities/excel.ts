@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import XLSX from 'xlsx'
 import { CompiledResult } from './CompiledResult'
 import { toCamelCase, toHeadingCase } from './string'

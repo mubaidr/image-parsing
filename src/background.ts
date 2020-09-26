@@ -112,6 +112,7 @@ if (isDevelopment) {
 function registerLocalResourceProtocol() {
   protocol.registerFileProtocol(
     'local-resource',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (request: { url: string }, callback: (arg0: string) => any) => {
       const url = request.url.replace(/^local-resource:\/\//, '')
       // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"

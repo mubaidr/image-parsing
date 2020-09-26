@@ -13,6 +13,6 @@ describe('getQuestionsData', () => {
     const design = await getDesignData(dataPaths.designBarcode)
     const qd = await getQuestionsData(design, sharpImg)
 
-    expect(Object.keys(qd).length).toBe(60)
+    expect(qd).toMatchSnapshot()
   })
 })

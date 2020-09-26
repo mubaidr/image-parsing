@@ -82,23 +82,23 @@ export class WorkerManager extends EventEmitter {
     this.inputCount = totalImages.length
     this.createWorkers(totalWorkers, WORKER_TYPES.EXTRACT)
 
-    for (let i = 0; i < totalWorkers; i += 1) {
-      const startIndex = i * step
-      const endIndex =
-        i === totalWorkers - 1 ? totalImages.length : (i + 1) * step
-
-      this.workers[i].postMessage({
-        designData,
-        imagePaths: totalImages.slice(startIndex, endIndex),
-      })
-    }
-
     return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.ERROR, reject)
       this.on(PROGRESS_STATES.COMPLETE, (payload: Result[] | undefined) => {
         if (!payload) return resolve()
         resolve(payload.map((p) => Result.fromJson(p)))
       })
+
+      for (let i = 0; i < totalWorkers; i += 1) {
+        const startIndex = i * step
+        const endIndex =
+          i === totalWorkers - 1 ? totalImages.length : (i + 1) * step
+
+        this.workers[i].postMessage({
+          designData,
+          imagePaths: totalImages.slice(startIndex, endIndex),
+        })
+      }
     })
   }
 
@@ -111,28 +111,28 @@ export class WorkerManager extends EventEmitter {
     this.inputCount = 1
     this.createWorkers(1, WORKER_TYPES.COMPILE)
 
-    this.workers[0].postMessage({
-      resultPath,
-      keyPath,
-      correctMarks,
-      incorrectMarks,
-    })
-
     return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.ERROR, reject)
       this.on(PROGRESS_STATES.COMPLETE, (payload: Result[] | undefined) => {
         if (!payload) return resolve()
         resolve(payload.map((p) => Result.fromJson(p)))
       })
+
+      this.workers[0].postMessage({
+        resultPath,
+        keyPath,
+        correctMarks,
+        incorrectMarks,
+      })
     })
   }
 
   async generate(): Promise<WorkerManager> {
-    this.createWorkers(CPU_CORE_COUNT, WORKER_TYPES.GENERATE)
-
     return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.ERROR, reject)
       this.on(PROGRESS_STATES.COMPLETE, resolve)
+
+      this.createWorkers(CPU_CORE_COUNT, WORKER_TYPES.GENERATE)
     })
   }
 

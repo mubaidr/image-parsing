@@ -59,5 +59,6 @@ describe('WorkerManager', () => {
     expect(completeCallback).toBeCalledTimes(1)
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   test('should be able to generate using workers', () => {})
 })

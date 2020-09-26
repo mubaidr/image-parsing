@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { v4 as uuid4 } from 'uuid'
 import { REG_EXP_PATTERNS } from './design'
 import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
@@ -139,13 +140,13 @@ export class Result {
     return o
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static fromJson(o: any): Result {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  static fromJson(json: any): Result {
     const answerRegExp = new RegExp(REG_EXP_PATTERNS.QUESTION)
     const result = new Result()
 
-    Object.keys(o).forEach((key) => {
-      const value = o[key] as QUESTION_OPTIONS
+    Object.keys(json).forEach((key) => {
+      const value = json[key] as QUESTION_OPTIONS
 
       if (answerRegExp.test(key)) {
         result.addAnswer(

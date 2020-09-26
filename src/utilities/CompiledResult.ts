@@ -29,7 +29,9 @@ export class CompiledResult {
     return compiledResult
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export(): any[] {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const obj: any[] = []
 
     this.sortResults().results.forEach((result) => {
