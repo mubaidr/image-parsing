@@ -85,13 +85,14 @@ export async function logImageData(
   return target
 }
 
-export async function getImagePaths(dir: string): Promise<string[]> {
+export function getImagePaths(dir: string): string[] {
   const loc = dir.replace(/\\/g, '/')
   const exts = Object.keys(IMAGE_TYPES).map((ext) => `.${ext}`)
   const glob = `${loc}/**/*{${exts}}`.replace('//', '/')
 
-  return fastGlob(glob, {
+  return fastGlob.sync(glob, {
     absolute: true,
     onlyFiles: true,
+    stats: false,
   })
 }

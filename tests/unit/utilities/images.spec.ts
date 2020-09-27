@@ -28,7 +28,7 @@ describe('convertImage', () => {
 
 describe('getImagePaths', () => {
   test('works', async () => {
-    const paths = await getImagePaths(dataPaths.imagesBarcode)
+    const paths = getImagePaths(dataPaths.imagesBarcode)
 
     paths.forEach((path) => {
       expect(fs.existsSync(path)).toBeTruthy()

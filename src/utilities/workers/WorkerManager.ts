@@ -34,35 +34,33 @@ export class WorkerManager extends EventEmitter {
       const worker = fork(`./dist_electron/workers/${type}.worker.js`, {
         silent: true,
       })
+        .on(PROGRESS_STATES.EXIT, (code) => {
+          this.emit(PROGRESS_STATES.EXIT, code)
+        })
+        .on(PROGRESS_STATES.ERROR, (error) => {
+          this.emit(PROGRESS_STATES.ERROR, error)
+        })
+        .on(PROGRESS_STATES.MESSAGE, (message: WorkerOutputMessage) => {
+          const { progressState, payload } = message
+
+          if (progressState === PROGRESS_STATES.PROGRESS) {
+            this.emit(PROGRESS_STATES.PROGRESS)
+          }
+
+          if (progressState === PROGRESS_STATES.COMPLETE) {
+            this.finished += 1
+
+            if (payload) {
+              this.data.push(...payload.map((p) => Result.fromJson(p)))
+            }
+
+            if (this.finished === this.workers.length) {
+              this.emit(PROGRESS_STATES.COMPLETE)
+            }
+          }
+        })
+
       this.workers.push(worker)
-
-      worker.on(PROGRESS_STATES.EXIT, (code) => {
-        this.emit(PROGRESS_STATES.EXIT, code)
-      })
-
-      worker.on(PROGRESS_STATES.ERROR, (error) => {
-        this.emit(PROGRESS_STATES.ERROR, error)
-      })
-
-      worker.on(PROGRESS_STATES.MESSAGE, (message: WorkerOutputMessage) => {
-        const { progressState, payload } = message
-
-        if (progressState === PROGRESS_STATES.PROGRESS) {
-          return this.emit(PROGRESS_STATES.PROGRESS)
-        }
-
-        if (progressState === PROGRESS_STATES.COMPLETE) {
-          this.finished += 1
-
-          if (payload) {
-            this.data.push(...payload)
-          }
-
-          if (this.finished === this.workers.length) {
-            this.emit(PROGRESS_STATES.COMPLETE, this.data)
-          }
-        }
-      })
     }
 
     return this
@@ -72,10 +70,9 @@ export class WorkerManager extends EventEmitter {
     directory: string,
     designPath: string
   ): Promise<Result[] | undefined> {
-    const [designData, totalImages] = await Promise.all([
-      getDesignData(designPath),
-      getImagePaths(directory),
-    ])
+    const designData = await getDesignData(designPath)
+    const totalImages = getImagePaths(directory)
+
     const totalWorkers = Math.min(totalImages.length, CPU_CORE_COUNT)
     const step = Math.floor(totalImages.length / totalWorkers)
 
@@ -84,21 +81,20 @@ export class WorkerManager extends EventEmitter {
 
     return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.ERROR, reject)
-      this.on(PROGRESS_STATES.COMPLETE, (payload: Result[] | undefined) => {
-        if (!payload) return resolve()
-        resolve(payload.map((p) => Result.fromJson(p)))
+      this.on(PROGRESS_STATES.COMPLETE, () => {
+        resolve(this.data)
       })
 
-      for (let i = 0; i < totalWorkers; i += 1) {
-        const startIndex = i * step
+      this.workers.forEach((worker, index) => {
+        const startIndex = index * step
         const endIndex =
-          i === totalWorkers - 1 ? totalImages.length : (i + 1) * step
+          index === totalWorkers - 1 ? totalImages.length : (index + 1) * step
 
-        this.workers[i].send({
+        worker.send({
           designData,
           imagePaths: totalImages.slice(startIndex, endIndex),
         })
-      }
+      })
     })
   }
 
@@ -113,9 +109,8 @@ export class WorkerManager extends EventEmitter {
 
     return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.ERROR, reject)
-      this.on(PROGRESS_STATES.COMPLETE, (payload: Result[] | undefined) => {
-        if (!payload) return resolve()
-        resolve(payload.map((p) => Result.fromJson(p)))
+      this.on(PROGRESS_STATES.COMPLETE, () => {
+        resolve(this.data)
       })
 
       this.workers[0].send({
@@ -128,11 +123,11 @@ export class WorkerManager extends EventEmitter {
   }
 
   async generate(): Promise<WorkerManager> {
+    this.createWorkers(CPU_CORE_COUNT, WORKER_TYPES.GENERATE)
+
     return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.ERROR, reject)
       this.on(PROGRESS_STATES.COMPLETE, resolve)
-
-      this.createWorkers(CPU_CORE_COUNT, WORKER_TYPES.GENERATE)
     })
   }
 
@@ -146,6 +141,5 @@ export class WorkerManager extends EventEmitter {
     this.inputCount = 0
     this.data.length = 0
     this.workers.length = 0
-    this.removeAllListeners()
   }
 }

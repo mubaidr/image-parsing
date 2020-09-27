@@ -10,6 +10,7 @@ module.exports = {
         'process.env.NAME': name,
       }),
     ],
+    target: 'electron-renderer',
   },
 
   pluginOptions: {

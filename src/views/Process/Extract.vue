@@ -9,16 +9,18 @@
 import { dataPaths } from '@/utilities/dataPaths'
 import { defineComponent } from 'vue'
 import { WorkerManager } from '@/utilities/workers/WorkerManager'
+import { PROGRESS_STATES } from '@/utilities/workers/PROGRESS_STATES'
 
 export default defineComponent({
   setup() {
-    const wm = new WorkerManager()
-
     async function extract() {
-      const data = await wm.extract(
-        dataPaths.imagesBarcode,
-        dataPaths.designBarcode
-      )
+      const wm = new WorkerManager()
+
+      const data = await wm
+        .on(PROGRESS_STATES.ERROR, (msg) => {
+          console.log('ERROR ', msg)
+        })
+        .extract(dataPaths.imagesBarcode, dataPaths.designBarcode)
 
       console.log(data)
     }

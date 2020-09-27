@@ -30,7 +30,7 @@ describe('workerExtract', () => {
   test('extracted result should match with results.xlsx', async () => {
     const resultsExcel = await readKey(dataPaths.result)
     const designData = await getDesignData(dataPaths.designBarcode)
-    const imagePaths = await getImagePaths(dataPaths.imagesBarcode)
+    const imagePaths = getImagePaths(dataPaths.imagesBarcode)
 
     const results = await start(
       {
