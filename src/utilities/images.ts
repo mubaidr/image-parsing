@@ -34,11 +34,11 @@ export enum IMAGE_TYPES {
   'webp' = 'webp',
 }
 
-const getSharpObjectFromSource = (src: string): Sharp => {
+export function getSharpObjectFromSource(src: string): Sharp {
   return sharp(src).raw().flatten()
 }
 
-const convertImage = async (src: string): Promise<string> => {
+export async function convertImage(src: string): Promise<string> {
   if (!src) {
     throw new Error('Invalid source provided')
   }
@@ -67,10 +67,10 @@ const convertImage = async (src: string): Promise<string> => {
   return url
 }
 
-const logImageData = async (
+export async function logImageData(
   src: string | Sharp,
   name?: string
-): Promise<string> => {
+): Promise<string> {
   let img: Sharp
   const target = path.join(dataPaths.tmp, `${name || uuid4()}.jpg`)
 
@@ -85,19 +85,13 @@ const logImageData = async (
   return target
 }
 
-const getImagePaths = async (dir: string): Promise<string[]> => {
+export async function getImagePaths(dir: string): Promise<string[]> {
   const loc = dir.replace(/\\/g, '/')
-  const exts = Object.keys(IMAGE_TYPES)
-  // avoid deep directory scan in test env
-  const glob =
-    process.env.NODE_ENV === 'test'
-      ? `${loc}/*.{${exts}}`.replace('//', '/')
-      : `${loc}/**/*.{${exts}}`.replace('//', '/')
+  const exts = Object.keys(IMAGE_TYPES).map((ext) => `.${ext}`)
+  const glob = `${loc}/**/*{${exts}}`.replace('//', '/')
 
   return fastGlob(glob, {
     absolute: true,
     onlyFiles: true,
   })
 }
-
-export { convertImage, getImagePaths, logImageData, getSharpObjectFromSource }

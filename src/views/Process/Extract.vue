@@ -12,13 +12,15 @@ import { WorkerManager } from '@/utilities/workers/WorkerManager'
 
 export default defineComponent({
   setup() {
-    async function extract() {
-      const wm = new WorkerManager()
-      const data = wm
-        .extract(dataPaths.imagesBarcode, dataPaths.designBarcode)
-        .then(console.log)
+    const wm = new WorkerManager()
 
-      console.log(await data)
+    async function extract() {
+      const data = await wm.extract(
+        dataPaths.imagesBarcode,
+        dataPaths.designBarcode
+      )
+
+      console.log(data)
     }
 
     return { extract }
