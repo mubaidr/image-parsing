@@ -1,6 +1,3 @@
-// @ts-ignore
-import('v8-compile-cache')
-
 /* global __static */
 import { app, BrowserWindow, Menu, protocol } from 'electron'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'

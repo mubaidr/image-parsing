@@ -3,8 +3,8 @@ const path = require('path')
 const fsGlob = require('fast-glob')
 const TerserJSPlugin = require('terser-webpack-plugin')
 const { dependencies, devDependencies } = require('./package.json')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+//   .BundleAnalyzerPlugin
 
 const externals = Object.keys(dependencies)
   .concat(Object.keys(devDependencies))
@@ -74,7 +74,7 @@ const config = {
 
 if (isDevMode) {
   // dev only plugins
-  config.plugins.push(new BundleAnalyzerPlugin())
+  // config.plugins.push(new BundleAnalyzerPlugin())
 } else {
   config.optimization = {
     minimizer: [

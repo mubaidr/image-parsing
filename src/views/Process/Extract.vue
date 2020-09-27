@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Extract</h1>
-    <button @click="extract">Extract</button>
+    <button @click="process">Extract</button>
   </div>
 </template>
 
@@ -13,7 +13,7 @@ import { PROGRESS_STATES } from '@/utilities/workers/PROGRESS_STATES'
 
 export default defineComponent({
   setup() {
-    async function extract() {
+    async function process() {
       const wm = new WorkerManager()
 
       const data = await wm
@@ -23,9 +23,10 @@ export default defineComponent({
         .extract(dataPaths.imagesBarcode, dataPaths.designBarcode)
 
       console.log(data)
+      wm.stop()
     }
 
-    return { extract }
+    return { process }
   },
 })
 </script>

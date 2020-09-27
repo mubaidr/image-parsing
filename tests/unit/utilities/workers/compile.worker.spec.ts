@@ -1,12 +1,17 @@
 import { dataPaths } from '@/utilities/dataPaths'
+import { readKey } from '@/utilities/readKey'
 import { start } from '@/utilities/workers/compile.worker'
 
 describe('workerCompile', () => {
   test('should compile just fine', async () => {
+    const keys = await readKey(dataPaths.key)
+
+    if (!keys) fail()
+
     const compiledResult = await start(
       {
         resultPath: dataPaths.result,
-        keyPath: dataPaths.key,
+        keys,
         correctMarks: 3,
         incorrectMarks: 1,
       },

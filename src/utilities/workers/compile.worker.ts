@@ -1,14 +1,10 @@
-// @ts-ignore
-import('v8-compile-cache')
-
 import { CompiledResult } from '../CompiledResult'
-import { readKey } from '../readKey'
 import { Result } from '../Result'
 import { PROGRESS_STATES } from './PROGRESS_STATES'
 
 export type WorkerCompileInputMessage = {
   resultPath: string
-  keyPath: string
+  keys: Result[]
   correctMarks?: number
   incorrectMarks?: number
 }
@@ -28,15 +24,8 @@ export async function start(
   message: WorkerCompileInputMessage,
   isWorker = true
 ): Promise<CompiledResult | undefined> {
-  const { resultPath, keyPath, correctMarks, incorrectMarks } = message
-  const results = CompiledResult.loadFromExcel(resultPath).results
-  const keys = await readKey(keyPath)
-
-  if (keys === undefined) {
-    throw 'keys not provided'
-  }
-
-  const compiledResult = new CompiledResult().addKeys(keys).addResults(results)
+  const { resultPath, keys, correctMarks, incorrectMarks } = message
+  const compiledResult = CompiledResult.loadFromExcel(resultPath).addKeys(keys)
 
   if (correctMarks && incorrectMarks) {
     compiledResult.compile(correctMarks, incorrectMarks)

@@ -60,14 +60,19 @@ export class Result {
     return this
   }
 
-  setMarks(marks: number, negativeMarks: number): Result {
-    this.marks = this.correctCount * marks - this.incorrectCount * negativeMarks
-    this.totalMarks = (60 - this.skippedCount) * marks
+  setMarks(
+    totalQuestions: number,
+    correctMarks: number,
+    incorrectMarks: number
+  ): Result {
+    this.marks =
+      this.correctCount * correctMarks - this.incorrectCount * incorrectMarks
+    this.totalMarks = (totalQuestions - this.skippedCount) * correctMarks
 
     return this
   }
 
-  compile(key: Result, marks?: number, negativeMarks?: number): Result {
+  compile(key: Result, correctMarks?: number, incorrectMarks?: number): Result {
     if (
       this.isCompiled ||
       this.post !== key.post ||
@@ -110,8 +115,12 @@ export class Result {
       }
     }
 
-    if (marks && negativeMarks) {
-      this.setMarks(marks, negativeMarks)
+    if (correctMarks && incorrectMarks) {
+      this.setMarks(
+        Object.keys(key.answers).length,
+        correctMarks,
+        incorrectMarks
+      )
     }
 
     this.isCompiled = true

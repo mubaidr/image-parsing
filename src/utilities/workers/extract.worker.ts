@@ -1,6 +1,3 @@
-// @ts-ignore
-import('v8-compile-cache')
-
 import { DesignData } from '../design'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
@@ -30,6 +27,9 @@ export async function start(
 ): Promise<Result[] | undefined> {
   const { designData, imagePaths } = message
   const results: Result[] = []
+
+  console.log('log data...')
+  console.error('error data...')
 
   for (let i = 0; i < imagePaths.length; i += 1) {
     const imagePath = imagePaths[i]

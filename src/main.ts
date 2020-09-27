@@ -1,6 +1,3 @@
-// @ts-ignore
-import('v8-compile-cache')
-
 import { ipcRenderer } from 'electron'
 import { createApp } from 'vue'
 import App from './App.vue'
