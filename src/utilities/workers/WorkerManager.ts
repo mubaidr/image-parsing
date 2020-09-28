@@ -35,8 +35,7 @@ export class WorkerManager extends EventEmitter {
 
     for (let i = 0; i < count; i += 1) {
       const worker = fork(`./dist_electron/workers/${type}.worker.js`, {
-        silent: true,
-        //TODO: setup sdio settings
+        stdio: ['ignore', process.stdout, 'pipe', 'ipc'],
       })
         .on(PROGRESS_STATES.EXIT, (code) => {
           this.emit(PROGRESS_STATES.EXIT, code)

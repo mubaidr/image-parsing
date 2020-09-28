@@ -28,9 +28,6 @@ export async function start(
   const { designData, imagePaths } = message
   const results: Result[] = []
 
-  console.log('log data...')
-  console.error('error data...')
-
   for (let i = 0; i < imagePaths.length; i += 1) {
     const imagePath = imagePaths[i]
     const sharpImage = getSharpObjectFromSource(imagePath)
