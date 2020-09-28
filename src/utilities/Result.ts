@@ -12,7 +12,27 @@ export type AnswerCollection = {
   }
 }
 
-export class Result {
+//TODO: use result like interface where  applicable
+export interface ResultLike {
+  isCompiled: boolean
+  correctCount: number
+  incorrectCount: number
+  marks: number
+  skippedCount: number
+  totalMarks: number
+  unattemptedCount: number
+  answers: AnswerCollection
+  post: string
+  questionPaperType: string
+  testCenter: string
+  testTime: string
+  id: string
+  rollNo?: string
+  filePath?: string
+  isRollNoExtracted: boolean
+}
+
+export class Result implements ResultLike {
   [key: string]: unknown
 
   isCompiled = false

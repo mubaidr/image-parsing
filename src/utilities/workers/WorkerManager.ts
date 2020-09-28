@@ -4,7 +4,7 @@ import { cpus } from 'os'
 import { DesignData, getDesignData } from '../design'
 import { getImagePaths } from '../images'
 import { readKey } from '../readKey'
-import { Result } from '../Result'
+import { Result, ResultLike } from '../Result'
 import { PROGRESS_STATES } from './PROGRESS_STATES'
 
 const CPU_CORE_COUNT = cpus().length
@@ -17,17 +17,23 @@ enum WORKER_TYPES {
 
 type WorkerOutputMessage = {
   progressState: PROGRESS_STATES
-  payload?: Result[]
+  payload?: ResultLike[]
 }
 
 export class WorkerManager extends EventEmitter {
-  data: Result[] = []
+  data: ResultLike[] = []
   workers: ChildProcess[] = []
   finished = 0
   inputCount = 0
 
   constructor() {
     super()
+  }
+
+  getClonedData(): Result[] {
+    //TODO: conver to Result[] and return
+    // return [...this.data.forEach((d) => Result.fromJson(d))]
+    return []
   }
 
   createWorkers(count: number, type: WORKER_TYPES): WorkerManager {
@@ -54,7 +60,7 @@ export class WorkerManager extends EventEmitter {
             this.finished += 1
 
             if (payload) {
-              this.data.push(...payload.map((p) => Result.fromJson(p)))
+              this.data.push(...payload)
             }
 
             if (this.finished === this.workers.length) {
@@ -95,7 +101,7 @@ export class WorkerManager extends EventEmitter {
     return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.ERROR, reject)
       this.on(PROGRESS_STATES.COMPLETE, () => {
-        resolve(this.data)
+        resolve(this.getClonedData())
       })
 
       this.workers.forEach((worker, index) => {
@@ -136,7 +142,7 @@ export class WorkerManager extends EventEmitter {
     return new Promise((resolve, reject) => {
       this.on(PROGRESS_STATES.ERROR, reject)
       this.on(PROGRESS_STATES.COMPLETE, () => {
-        resolve(this.data)
+        resolve(this.getClonedData())
       })
 
       this.workers[0].send(
