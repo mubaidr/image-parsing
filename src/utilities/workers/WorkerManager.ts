@@ -4,7 +4,7 @@ import { cpus } from 'os'
 import { DesignData, getDesignData } from '../design'
 import { getImagePaths } from '../images'
 import { readKey } from '../readKey'
-import { Result, ResultLike } from '../Result'
+import { Result, ResultJSON } from '../Result'
 import { PROGRESS_STATES } from './PROGRESS_STATES'
 
 const CPU_CORE_COUNT = cpus().length
@@ -17,11 +17,11 @@ enum WORKER_TYPES {
 
 type WorkerOutputMessage = {
   progressState: PROGRESS_STATES
-  payload?: ResultLike[]
+  payload?: ResultJSON[]
 }
 
 export class WorkerManager extends EventEmitter {
-  data: ResultLike[] = []
+  data: ResultJSON[] = []
   workers: ChildProcess[] = []
   finished = 0
   inputCount = 0

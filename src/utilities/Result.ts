@@ -3,6 +3,10 @@ import { v4 as uuid4 } from 'uuid'
 import { REG_EXP_PATTERNS } from './design'
 import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
 
+// function instanceOfAnswerCollection(object: any): object is AnswerCollection{
+//   return 'member' in object;
+// }
+
 export type AnswerCollection = {
   [key: string]: {
     value: QUESTION_OPTIONS
@@ -12,8 +16,9 @@ export type AnswerCollection = {
   }
 }
 
-//TODO: use result like interface where  applicable
-export interface ResultLike {
+export interface ResultJSON {
+  [key: string]: unknown
+
   isCompiled: boolean
   correctCount: number
   incorrectCount: number
@@ -21,7 +26,6 @@ export interface ResultLike {
   skippedCount: number
   totalMarks: number
   unattemptedCount: number
-  answers: AnswerCollection
   post: string
   questionPaperType: string
   testCenter: string
@@ -32,7 +36,7 @@ export interface ResultLike {
   isRollNoExtracted: boolean
 }
 
-export class Result implements ResultLike {
+export class Result {
   [key: string]: unknown
 
   isCompiled = false
@@ -148,29 +152,29 @@ export class Result implements ResultLike {
     return this
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  toJson(): any {
-    const o = JSON.parse(JSON.stringify(this))
+  toJson(): ResultJSON {
+    const o = JSON.parse(JSON.stringify(this)) as ResultJSON
 
-    for (const prop in o) {
-      const value = o[prop]
+    // o.answers
 
-      if (typeof value === 'object') {
-        for (const subProp in value) {
-          o[subProp.toLowerCase()] = value[subProp].value.toLowerCase()
-        }
+    // for (const prop in o) {
+    //   const value = o[prop]
 
-        delete o[prop]
-      } else {
-        o[prop] = value
-      }
-    }
+    //   if (prop) {
+    //     for (const subProp in value) {
+    //       o[subProp.toLowerCase()] = value[subProp].value.toLowerCase()
+    //     }
+
+    //     delete o[prop]
+    //   } else {
+    //     o[prop] = value
+    //   }
+    // }
 
     return o
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  static fromJson(json: any): Result {
+  static fromJson(json: ResultJSON): Result {
     const answerRegExp = new RegExp(REG_EXP_PATTERNS.QUESTION)
     const result = new Result()
 

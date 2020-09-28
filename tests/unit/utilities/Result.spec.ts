@@ -99,7 +99,7 @@ describe('Result', () => {
     const keys = await readKey(dataPaths.key)
 
     if (keys) {
-      result.compile(keys[0]).setMarks(3, 1)
+      result.compile(keys[0], 3, 1)
       expect(result.totalMarks).not.toBe(0)
     }
   })
