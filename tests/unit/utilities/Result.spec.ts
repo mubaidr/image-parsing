@@ -48,11 +48,7 @@ describe('Result', () => {
 
   test('should be able to export to json object', async () => {
     const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
-    const result = compiledResult.results.reverse()[0]
-
-    expect(result.hasValidRollNo()).toBeTruthy()
-    expect(result.hasImageFile()).toBeTruthy()
-
+    const result = compiledResult.results[0]
     const o = result.toJson()
 
     expect(o).toMatchSnapshot()

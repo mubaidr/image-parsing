@@ -153,25 +153,14 @@ export class Result {
   }
 
   toJson(): ResultJSON {
-    const o = JSON.parse(JSON.stringify(this)) as ResultJSON
+    const o = JSON.parse(JSON.stringify(this))
 
-    // o.answers
+    for (const subProp in o.answers) {
+      o[subProp.toLowerCase()] = o.answers[subProp].value.toLowerCase()
+    }
 
-    // for (const prop in o) {
-    //   const value = o[prop]
-
-    //   if (prop) {
-    //     for (const subProp in value) {
-    //       o[subProp.toLowerCase()] = value[subProp].value.toLowerCase()
-    //     }
-
-    //     delete o[prop]
-    //   } else {
-    //     o[prop] = value
-    //   }
-    // }
-
-    return o
+    delete o.answers
+    return o as ResultJSON
   }
 
   static fromJson(json: ResultJSON): Result {
