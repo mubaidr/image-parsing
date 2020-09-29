@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { importExcelToJson } from './excel'
-import { Result } from './Result'
+import { Result, ResultJSON } from './Result'
 
 export class CompiledResult {
   id: string
@@ -12,27 +12,8 @@ export class CompiledResult {
     this.id = uuidv4()
   }
 
-  static loadFromExcel(src: string): CompiledResult {
-    const rows: unknown[] = importExcelToJson(src)
-    const compiledResult = new CompiledResult()
-
-    rows.forEach((row) => {
-      const result = Result.fromJson(row)
-
-      if (result.isKey()) {
-        compiledResult.addKeys([result])
-      } else {
-        compiledResult.addResults([result])
-      }
-    })
-
-    return compiledResult
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  export(): any[] {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const obj: any[] = []
+  export(): ResultJSON[] {
+    const obj: ResultJSON[] = []
 
     this.sortResults().results.forEach((result) => {
       obj.push(result.toJson())
@@ -76,16 +57,6 @@ export class CompiledResult {
     return this
   }
 
-  static merge(compiledResults: CompiledResult[]): CompiledResult {
-    const compiledResult = new CompiledResult()
-
-    compiledResults.forEach((cr) => {
-      compiledResult.addKeys(cr.keys).addResults(cr.results)
-    })
-
-    return compiledResult
-  }
-
   getRandomResults(percent: number | undefined): Result[] {
     const resultCount = this.results.length
     const count = Math.max(Math.floor(((percent || 5) * resultCount) / 100), 1)
@@ -104,5 +75,32 @@ export class CompiledResult {
     }
 
     return results
+  }
+
+  static loadFromExcel(src: string): CompiledResult {
+    const rows: ResultJSON[] = importExcelToJson(src)
+    const compiledResult = new CompiledResult()
+
+    rows.forEach((row) => {
+      const result = Result.fromJson(row)
+
+      if (result.isKey()) {
+        compiledResult.addKeys([result])
+      } else {
+        compiledResult.addResults([result])
+      }
+    })
+
+    return compiledResult
+  }
+
+  static merge(compiledResults: CompiledResult[]): CompiledResult {
+    const compiledResult = new CompiledResult()
+
+    compiledResults.forEach((cr) => {
+      compiledResult.addKeys(cr.keys).addResults(cr.results)
+    })
+
+    return compiledResult
   }
 }

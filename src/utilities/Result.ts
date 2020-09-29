@@ -36,6 +36,27 @@ export interface ResultJSON {
   isRollNoExtracted: boolean
 }
 
+export interface ResultLike {
+  [key: string]: unknown
+
+  isCompiled: boolean
+  correctCount: number
+  incorrectCount: number
+  marks: number
+  skippedCount: number
+  totalMarks: number
+  unattemptedCount: number
+  post: string
+  questionPaperType: string
+  testCenter: string
+  testTime: string
+  id: string
+  rollNo?: string
+  filePath?: string
+  isRollNoExtracted: boolean
+  answers: AnswerCollection
+}
+
 export class Result {
   [key: string]: unknown
 

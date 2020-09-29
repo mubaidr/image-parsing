@@ -4,7 +4,7 @@ import { cpus } from 'os'
 import { DesignData, getDesignData } from '../design'
 import { getImagePaths } from '../images'
 import { readKey } from '../readKey'
-import { Result, ResultJSON } from '../Result'
+import { Result, ResultLike } from '../Result'
 import { PROGRESS_STATES } from './PROGRESS_STATES'
 
 const CPU_CORE_COUNT = cpus().length
@@ -17,23 +17,22 @@ enum WORKER_TYPES {
 
 type WorkerOutputMessage = {
   progressState: PROGRESS_STATES
-  payload?: ResultJSON[]
+  payload?: ResultLike[]
 }
 
 export class WorkerManager extends EventEmitter {
-  data: ResultJSON[] = []
+  data: ResultLike[] = []
   workers: ChildProcess[] = []
+  finishedWorkers = 0
+  total = 0
   finished = 0
-  inputCount = 0
 
   constructor() {
     super()
   }
 
   getClonedData(): Result[] {
-    //TODO: conver to Result[] and return
-    // return [...this.data.forEach((d) => Result.fromJson(d))]
-    return []
+    return this.data.map((d) => Object.assign(new Result(), d))
   }
 
   createWorkers(count: number, type: WORKER_TYPES): WorkerManager {
@@ -53,17 +52,18 @@ export class WorkerManager extends EventEmitter {
           const { progressState, payload } = message
 
           if (progressState === PROGRESS_STATES.PROGRESS) {
+            this.finished += 1
             this.emit(PROGRESS_STATES.PROGRESS)
           }
 
           if (progressState === PROGRESS_STATES.COMPLETE) {
-            this.finished += 1
+            this.finishedWorkers += 1
 
             if (payload) {
               this.data.push(...payload)
             }
 
-            if (this.finished === this.workers.length) {
+            if (this.finishedWorkers === this.workers.length) {
               this.emit(PROGRESS_STATES.COMPLETE)
             }
           }
@@ -79,10 +79,7 @@ export class WorkerManager extends EventEmitter {
     return this
   }
 
-  async extract(
-    directory: string,
-    designPath: string
-  ): Promise<Result[] | undefined> {
+  async extract(directory: string, designPath: string): Promise<Result[]> {
     const totalImages = getImagePaths(directory)
     let designData: DesignData
 
@@ -94,31 +91,29 @@ export class WorkerManager extends EventEmitter {
 
     const totalWorkers = Math.min(totalImages.length, CPU_CORE_COUNT)
     const step = Math.floor(totalImages.length / totalWorkers)
-
-    this.createWorkers(totalWorkers, WORKER_TYPES.EXTRACT)
-    this.inputCount = totalImages.length
+    this.total = totalImages.length
 
     return new Promise((resolve, reject) => {
-      this.on(PROGRESS_STATES.ERROR, reject)
-      this.on(PROGRESS_STATES.COMPLETE, () => {
-        resolve(this.getClonedData())
-      })
+      this.createWorkers(totalWorkers, WORKER_TYPES.EXTRACT)
+        .on(PROGRESS_STATES.ERROR, reject)
+        .on(PROGRESS_STATES.COMPLETE, () => {
+          resolve(this.getClonedData())
+        })
+        .workers.forEach((worker, index) => {
+          const startIndex = index * step
+          const endIndex =
+            index === totalWorkers - 1 ? totalImages.length : (index + 1) * step
 
-      this.workers.forEach((worker, index) => {
-        const startIndex = index * step
-        const endIndex =
-          index === totalWorkers - 1 ? totalImages.length : (index + 1) * step
-
-        worker.send(
-          {
-            designData,
-            imagePaths: totalImages.slice(startIndex, endIndex),
-          },
-          (err) => {
-            if (err) reject(err)
-          }
-        )
-      })
+          worker.send(
+            {
+              designData,
+              imagePaths: totalImages.slice(startIndex, endIndex),
+            },
+            (err) => {
+              if (err) reject(err)
+            }
+          )
+        })
     })
   }
 
@@ -127,7 +122,7 @@ export class WorkerManager extends EventEmitter {
     keyPath: string,
     correctMarks?: number,
     incorrectMarks?: number
-  ): Promise<Result[] | undefined> {
+  ): Promise<Result[]> {
     let keys: Result[] | undefined
 
     try {
@@ -136,35 +131,33 @@ export class WorkerManager extends EventEmitter {
       return err
     }
 
-    this.createWorkers(1, WORKER_TYPES.COMPILE)
-    this.inputCount = 1
+    this.total = 1
 
     return new Promise((resolve, reject) => {
-      this.on(PROGRESS_STATES.ERROR, reject)
-      this.on(PROGRESS_STATES.COMPLETE, () => {
-        resolve(this.getClonedData())
-      })
-
-      this.workers[0].send(
-        {
-          resultPath,
-          keys,
-          correctMarks,
-          incorrectMarks,
-        },
-        (err) => {
-          if (err) reject(err)
-        }
-      )
+      this.createWorkers(1, WORKER_TYPES.COMPILE)
+        .on(PROGRESS_STATES.ERROR, reject)
+        .on(PROGRESS_STATES.COMPLETE, () => {
+          resolve(this.getClonedData())
+        })
+        .workers[0].send(
+          {
+            resultPath,
+            keys,
+            correctMarks,
+            incorrectMarks,
+          },
+          (err) => {
+            if (err) reject(err)
+          }
+        )
     })
   }
 
   async generate(): Promise<WorkerManager> {
-    this.createWorkers(CPU_CORE_COUNT, WORKER_TYPES.GENERATE)
-
     return new Promise((resolve, reject) => {
-      this.on(PROGRESS_STATES.ERROR, reject)
-      this.on(PROGRESS_STATES.COMPLETE, resolve)
+      this.createWorkers(CPU_CORE_COUNT, WORKER_TYPES.GENERATE)
+        .on(PROGRESS_STATES.ERROR, reject)
+        .on(PROGRESS_STATES.COMPLETE, resolve)
     })
   }
 
@@ -174,9 +167,10 @@ export class WorkerManager extends EventEmitter {
       w.kill()
     })
 
-    this.finished = 0
-    this.inputCount = 0
     this.data.length = 0
     this.workers.length = 0
+    this.finishedWorkers = 0
+    this.total = 0
+    this.finished = 0
   }
 }

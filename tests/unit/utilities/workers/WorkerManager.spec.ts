@@ -12,7 +12,7 @@ afterEach(() => {
 
 describe('WorkerManager', () => {
   test('should be able to extract using workers', async () => {
-    expect.assertions(6)
+    expect.assertions(5)
 
     const logCallback = jest.fn()
     const errorCallback = jest.fn()
@@ -28,7 +28,6 @@ describe('WorkerManager', () => {
 
     if (!data) fail()
 
-    expect(workerManager.inputCount).toBe(4)
     expect(data.length).toBe(4)
     expect(logCallback).toBeCalledTimes(0)
     expect(errorCallback).toBeCalledTimes(0)
@@ -37,7 +36,7 @@ describe('WorkerManager', () => {
   })
 
   test('should be able to compile using workers', async () => {
-    expect.assertions(6)
+    expect.assertions(5)
 
     const logCallback = jest.fn()
     const errorCallback = jest.fn()
@@ -53,7 +52,6 @@ describe('WorkerManager', () => {
 
     if (!data) fail()
 
-    expect(workerManager.inputCount).toBe(1)
     expect(data.length).toBe(4)
     expect(logCallback).toBeCalledTimes(0)
     expect(errorCallback).toBeCalledTimes(0)
