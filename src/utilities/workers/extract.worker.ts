@@ -2,7 +2,7 @@ import { DesignData } from '../design'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
 import { Result } from '../Result'
-import { getRollNoFromImage } from '../sheetInfo'
+import { getSheetInfoFromImage } from '../sheetInfo'
 import { PROGRESS_STATES } from './PROGRESS_STATES'
 
 export type WorkerExtractInputMessage = {
@@ -34,7 +34,7 @@ export async function start(
 
     // get design and image data
     const [rollNo, questionsData] = await Promise.all([
-      getRollNoFromImage(designData, sharpImage),
+      getSheetInfoFromImage(designData, sharpImage),
       getQuestionsData(designData, sharpImage.clone()),
     ])
     const result = new Result(rollNo, imagePath)

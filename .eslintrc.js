@@ -2,12 +2,15 @@ module.exports = {
   root: true,
 
   env: {
+    es2021: true,
     browser: true,
-    es6: true,
     node: true,
+    'shared-node-browser': true,
   },
 
   globals: {
+    BarcodeDetector: 'readonly',
+    TextDetector: 'readonly',
     __static: 'readonly',
   },
 
@@ -19,9 +22,9 @@ module.exports = {
     '@vue/prettier/@typescript-eslint',
   ],
 
-  parserOptions: {
-    ecmaVersion: 2020,
-  },
+  // parserOptions: {
+  //   ecmaVersion: 2020,
+  // },
 
   rules: {
     'no-console': 'off',
@@ -43,12 +46,12 @@ module.exports = {
         jest: true,
       },
     },
-    {
-      env: {
-        browser: false,
-      },
-      files: ['src/utilities/**/*.{j,t}s?(x)'],
-    },
+    // {
+    //   env: {
+    //     browser: false,
+    //   },
+    //   files: ['src/utilities/**/*.{j,t}s?(x)'],
+    // },
     {
       env: {
         worker: true,

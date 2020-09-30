@@ -1,7 +1,7 @@
 import { dataPaths } from '@/utilities/dataPaths'
 import { getDesignData } from '@/utilities/design'
 import { getSharpObjectFromSource } from '@/utilities/images'
-import { getRollNoFromImage } from '@/utilities/sheetInfo'
+import { getSheetInfoFromImage } from '@/utilities/sheetInfo'
 import path from 'path'
 
 const designData = getDesignData(dataPaths.designBarcode)
@@ -12,7 +12,7 @@ describe('getRollNoFromImage', () => {
     const sharpImg = getSharpObjectFromSource(
       path.join(dataPaths.imagesBarcode, '10023.jpg')
     )
-    const rollNo = await getRollNoFromImage(await designData, sharpImg)
+    const rollNo = await getSheetInfoFromImage(await designData, sharpImg)
     expect(rollNo).toBe('10023')
   })
 
@@ -20,7 +20,7 @@ describe('getRollNoFromImage', () => {
     const sharpImg = getSharpObjectFromSource(
       path.join(dataPaths.imagesBarcode, '10025.tif')
     )
-    const rollNo = await getRollNoFromImage(await designData, sharpImg)
+    const rollNo = await getSheetInfoFromImage(await designData, sharpImg)
     expect(rollNo).toBe('10025')
   })
 
@@ -28,7 +28,7 @@ describe('getRollNoFromImage', () => {
     const sharpImg = getSharpObjectFromSource(
       path.join(dataPaths.images, '10023.jpg')
     )
-    const rollNo = await getRollNoFromImage(await designDataQr, sharpImg)
+    const rollNo = await getSheetInfoFromImage(await designDataQr, sharpImg)
     expect(rollNo).toBe('99A-10023-AAA-AAA-A')
   })
 
@@ -36,7 +36,7 @@ describe('getRollNoFromImage', () => {
     const sharpImg = getSharpObjectFromSource(
       path.join(dataPaths.images, '10025.tif')
     )
-    const rollNo = await getRollNoFromImage(await designDataQr, sharpImg)
+    const rollNo = await getSheetInfoFromImage(await designDataQr, sharpImg)
     expect(rollNo).toBe('99A-10025-AAA-AAA-A')
   })
 
@@ -44,7 +44,7 @@ describe('getRollNoFromImage', () => {
     const sharpImg = getSharpObjectFromSource(
       path.join(dataPaths.imagesBarcode, 'no-roll.jpg')
     )
-    const rollNo = await getRollNoFromImage(await designData, sharpImg)
+    const rollNo = await getSheetInfoFromImage(await designData, sharpImg)
     expect(rollNo).toBeUndefined()
   })
 
@@ -52,7 +52,7 @@ describe('getRollNoFromImage', () => {
     const sharpImg = getSharpObjectFromSource(
       path.join(dataPaths.images, 'no-roll.tif')
     )
-    const rollNo = await getRollNoFromImage(await designDataQr, sharpImg)
+    const rollNo = await getSheetInfoFromImage(await designDataQr, sharpImg)
     expect(rollNo).toBeUndefined()
   })
 })

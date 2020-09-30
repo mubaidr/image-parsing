@@ -4,16 +4,75 @@ import {
   DecodeHintType,
   HybridBinarizer,
   MultiFormatReader,
-  RGBLuminanceSource,
+  // eslint-disable-next-line prettier/prettier
+  RGBLuminanceSource
 } from '@zxing/library/esm5'
-import { Sharp } from 'sharp'
+import { OutputInfo, Sharp } from 'sharp'
 import { DesignData } from './design'
 
-export async function getRollNoFromImage(
+function extractText(data: Buffer, info: OutputInfo): string | undefined {
+  // @ts-ignore
+  if (TextDetector) {
+    // @ts-ignore
+    const textContents = new TextDetector().detect(
+      new ImageData(Uint8ClampedArray.from(data), info.width, info.height)
+    )
+
+    console.log(textContents)
+    // return textContents[0].rawValue
+  }
+
+  return undefined
+}
+
+function decode(data: Buffer, info: OutputInfo): string {
+  // @ts-ignore
+  console.log(BarcodeDetector)
+  // @ts-ignore
+  console.log(TextDetector)
+
+  // @ts-ignore
+  if (BarcodeDetector) {
+    // @ts-ignore
+    const barcodes = new BarcodeDetector({
+      formats: ['code_39', 'qr_code'],
+    }).detect(
+      new ImageData(Uint8ClampedArray.from(data), info.width, info.height)
+    )
+
+    console.log(barcodes)
+
+    if (barcodes.length === 0) throw 'Not found!'
+
+    return barcodes[0].rawValue
+  }
+
+  const reader = new MultiFormatReader()
+  const binaryBitmap = new BinaryBitmap(
+    new HybridBinarizer(
+      new RGBLuminanceSource(
+        Uint8ClampedArray.from(data),
+        info.width,
+        info.height
+      )
+    )
+  )
+
+  const hints = new Map()
+  hints.set(DecodeHintType.PURE_BARCODE, true)
+  hints.set(DecodeHintType.POSSIBLE_FORMATS, [
+    BarcodeFormat.CODE_39,
+    BarcodeFormat.QR_CODE,
+  ])
+  reader.setHints(hints)
+  return reader.decode(binaryBitmap).getText()
+}
+
+export async function getSheetInfoFromImage(
   designData: DesignData,
   image: Sharp
 ): Promise<string | undefined> {
-  let rollNo: string | undefined
+  let sheetInfo: string | undefined
   const metadata = await image.metadata()
   const ratio = metadata.width ? metadata.width / designData.width : 1
 
@@ -29,39 +88,14 @@ export async function getRollNoFromImage(
       resolveWithObject: true,
     })
 
-  const formats: BarcodeFormat[] = []
-  const reader = new MultiFormatReader()
-  const hints = new Map()
-  const binaryBitmap = new BinaryBitmap(
-    new HybridBinarizer(
-      new RGBLuminanceSource(
-        Uint8ClampedArray.from(data),
-        info.width,
-        info.height
-      )
-    )
-  )
-
-  if (designData.isQrCode) {
-    formats.push(BarcodeFormat.QR_CODE)
-  } else {
-    formats.push(BarcodeFormat.CODE_39)
-  }
-
-  hints.set(DecodeHintType.POSSIBLE_FORMATS, formats)
-  hints.set(DecodeHintType.PURE_BARCODE, true)
-  reader.setHints(hints)
-
   try {
-    // TODO: extract question paper, center, vacancy etc info from qrcode
-    rollNo = reader.decode(binaryBitmap).getText()
-  } catch {
-    rollNo = undefined
+    sheetInfo = decode(data, info)
+  } catch (err) {
+    console.error(err)
+    sheetInfo = extractText(data, info)
   }
 
-  if (!rollNo) {
-    // try to extract from written content using ocr
-  }
+  // TODO: extract question paper, center, vacancy etc info from qrcode
 
-  return rollNo
+  return sheetInfo
 }

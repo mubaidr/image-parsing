@@ -18,7 +18,7 @@ export default defineComponent({
 
       const data = await wm
         .on(PROGRESS_STATES.ERROR, (msg) => {
-          console.log('ERROR ', msg)
+          console.error('ERROR ', msg)
         })
         .extract(dataPaths.imagesBarcode, dataPaths.designBarcode)
 
