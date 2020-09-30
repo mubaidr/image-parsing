@@ -8,6 +8,7 @@ import { Result, ResultLike } from '../Result'
 import { PROGRESS_STATES } from './PROGRESS_STATES'
 
 const CPU_CORE_COUNT = cpus().length
+const isElectron = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1
 
 enum WORKER_TYPES {
   COMPILE = 'compile',
@@ -22,7 +23,7 @@ type WorkerOutputMessage = {
 
 export class WorkerManager extends EventEmitter {
   data: ResultLike[] = []
-  workers: ChildProcess[] = []
+  workers: (Worker | ChildProcess)[] = []
   finishedWorkers = 0
   total = 0
   finished = 0
@@ -31,68 +32,56 @@ export class WorkerManager extends EventEmitter {
     super()
   }
 
+  errorHandler(error: Error | ErrorEvent): void {
+    this.emit(PROGRESS_STATES.ERROR, error)
+  }
+
+  messageHandler(message: WorkerOutputMessage): void {
+    const { progressState, payload } = message
+
+    if (progressState === PROGRESS_STATES.PROGRESS) {
+      this.finished += 1
+      this.emit(PROGRESS_STATES.PROGRESS)
+    }
+
+    if (progressState === PROGRESS_STATES.COMPLETE) {
+      this.finishedWorkers += 1
+
+      if (payload) {
+        this.data.push(...payload)
+      }
+
+      if (this.finishedWorkers === this.workers.length) {
+        this.emit(PROGRESS_STATES.COMPLETE)
+      }
+    }
+  }
+
   getClonedData(): Result[] {
     return this.data.map((d) => Object.assign(new Result(), d))
   }
 
   createWorkers(count: number, type: WORKER_TYPES): WorkerManager {
+    const workerPath = `./dist_electron/workers/${type}.worker.js`
     this.stop()
 
     for (let i = 0; i < count; i += 1) {
-      // worker_threads
-      // use worker threads for both electorn/nodejs compatiblity
-      const worker = fork(`./dist_electron/workers/${type}.worker.js`, {
-        stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
-        // silent: true,
-      })
-        .on(PROGRESS_STATES.EXIT, (code) => {
-          this.emit(PROGRESS_STATES.EXIT, code)
+      let worker: Worker | ChildProcess
+
+      if (isElectron) {
+        worker = new Worker(workerPath)
+        worker.addEventListener(PROGRESS_STATES.ERROR, this.errorHandler)
+        worker.addEventListener(PROGRESS_STATES.MESSAGE, (message) =>
+          this.messageHandler(message.data)
+        )
+      } else {
+        worker = fork(workerPath, {
+          stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
+          // silent: true,
         })
-        .on(PROGRESS_STATES.ERROR, (error) => {
-          this.emit(PROGRESS_STATES.ERROR, error)
-        })
-        .on(PROGRESS_STATES.MESSAGE, (message: WorkerOutputMessage) => {
-          const { progressState, payload } = message
-
-          if (progressState === PROGRESS_STATES.PROGRESS) {
-            this.finished += 1
-            this.emit(PROGRESS_STATES.PROGRESS)
-          }
-
-          if (progressState === PROGRESS_STATES.COMPLETE) {
-            this.finishedWorkers += 1
-
-            if (payload) {
-              this.data.push(...payload)
-            }
-
-            if (this.finishedWorkers === this.workers.length) {
-              this.emit(PROGRESS_STATES.COMPLETE)
-            }
-          }
-        })
-
-      worker.stdout?.on('data', (msg) => {
-        this.emit(PROGRESS_STATES.LOG, msg.toString())
-        if (
-          process &&
-          (process.env.NODE_END === 'test' ||
-            process.env.NODE_END === 'development')
-        ) {
-          console.log(msg.toString())
-        }
-      })
-
-      worker.stderr?.on('data', (msg) => {
-        this.emit(PROGRESS_STATES.ERROR, msg.toString())
-        if (
-          process &&
-          (process.env.NODE_END === 'test' ||
-            process.env.NODE_END === 'development')
-        ) {
-          console.error(msg.toString())
-        }
-      })
+        worker.on(PROGRESS_STATES.ERROR, this.errorHandler)
+        worker.on(PROGRESS_STATES.MESSAGE, this.messageHandler)
+      }
 
       this.workers.push(worker)
     }
@@ -120,11 +109,18 @@ export class WorkerManager extends EventEmitter {
         .on(PROGRESS_STATES.COMPLETE, () => {
           resolve(this.getClonedData())
         })
-        .workers.forEach((worker, index) => {
-          const startIndex = index * step
-          const endIndex =
-            index === totalWorkers - 1 ? totalImages.length : (index + 1) * step
 
+      this.workers.forEach((worker, index) => {
+        const startIndex = index * step
+        const endIndex =
+          index === totalWorkers - 1 ? totalImages.length : (index + 1) * step
+
+        if (worker instanceof Worker) {
+          worker.postMessage({
+            designData,
+            imagePaths: totalImages.slice(startIndex, endIndex),
+          })
+        } else {
           worker.send(
             {
               designData,
@@ -134,7 +130,8 @@ export class WorkerManager extends EventEmitter {
               if (err) reject(err)
             }
           )
-        })
+        }
+      })
     })
   }
 
@@ -160,7 +157,18 @@ export class WorkerManager extends EventEmitter {
         .on(PROGRESS_STATES.COMPLETE, () => {
           resolve(this.getClonedData())
         })
-        .workers[0].send(
+
+      const worker = this.workers[0]
+
+      if (worker instanceof Worker) {
+        worker.postMessage({
+          resultPath,
+          keys,
+          correctMarks,
+          incorrectMarks,
+        })
+      } else {
+        worker.send(
           {
             resultPath,
             keys,
@@ -171,6 +179,7 @@ export class WorkerManager extends EventEmitter {
             if (err) reject(err)
           }
         )
+      }
     })
   }
 
@@ -183,9 +192,13 @@ export class WorkerManager extends EventEmitter {
   }
 
   async stop(): Promise<void> {
-    this.workers.forEach((w) => {
-      w.unref()
-      w.kill()
+    this.workers.forEach((worker) => {
+      if (worker instanceof Worker) {
+        worker.terminate()
+      } else {
+        worker.unref()
+        worker.kill()
+      }
     })
 
     this.data.length = 0
