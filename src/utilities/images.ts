@@ -35,7 +35,9 @@ export enum IMAGE_TYPES {
 }
 
 export function getSharpObjectFromSource(src: string): Sharp {
-  return sharp(src).raw().flatten()
+  // TODO: trim image: this will will remove white space around square marks
+  // TODO: find angle of image usingangle between squares top-left and top-right
+  return sharp(src).raw().flatten().trim()
 }
 
 export async function convertImage(src: string): Promise<string> {
