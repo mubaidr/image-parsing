@@ -4,6 +4,8 @@ import { getImagePaths } from '@/utilities/images'
 import { readKey } from '@/utilities/readKey'
 import { start } from '@/utilities/workers/extract.worker'
 
+jest.setTimeout(10000)
+
 describe('workerExtract', () => {
   test('should be able to extract key just fine', async () => {
     const designData = await getDesignData(dataPaths.designBarcode)

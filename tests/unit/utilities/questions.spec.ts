@@ -3,6 +3,8 @@ import { getDesignData } from '@/utilities/design'
 import { getSharpObjectFromSource } from '@/utilities/images'
 import { getQuestionsData } from '@/utilities/questions'
 
+jest.setTimeout(10000)
+
 describe('getQuestionsData', () => {
   test('should be defined', async () => {
     expect(getQuestionsData).toBeInstanceOf(Function)

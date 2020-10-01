@@ -39,10 +39,8 @@ export class WorkerManager extends EventEmitter {
     this.stop()
 
     for (let i = 0; i < count; i += 1) {
-      // worker_threads
-      // use worker threads for both electorn/nodejs compatiblity
       const worker = fork(`./dist_electron/workers/${type}.worker.js`, {
-        stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
+        // stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
         // silent: true,
       })
         .on(PROGRESS_STATES.EXIT, (code) => {

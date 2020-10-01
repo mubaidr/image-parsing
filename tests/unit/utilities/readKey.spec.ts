@@ -1,6 +1,8 @@
 import { dataPaths } from '@/utilities/dataPaths'
 import { readKey } from '@/utilities/readKey'
 
+jest.setTimeout(10000)
+
 describe('readKey', () => {
   test('should read excel keys', async () => {
     const keys = await readKey(dataPaths.key)
