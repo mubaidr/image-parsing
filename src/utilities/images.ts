@@ -34,10 +34,32 @@ export enum IMAGE_TYPES {
   'webp' = 'webp',
 }
 
-export function getSharpObjectFromSource(src: string): Sharp {
-  // TODO: trim image: this will will remove white space around square marks
-  // TODO: find angle of image usingangle between squares top-left and top-right
-  return sharp(src).raw().flatten().trim()
+export async function getSharpObjectFromSource(src: string): Promise<Sharp> {
+  let sharpImage = sharp(src, {
+    failOnError: true,
+  })
+  const { width, height } = await sharpImage.metadata()
+  const padding = 25
+
+  if (!width || !height) throw 'Invalid image file'
+
+  sharpImage = sharp(
+    await sharpImage
+      .extract({
+        left: padding,
+        top: padding,
+        width: width - padding * 2,
+        height: height - padding * 2,
+      })
+      .toBuffer()
+  )
+    .trim(175)
+    .flatten()
+    .raw()
+
+  // logImageData(sharpImage, `trimmed ${padding}`)
+
+  return sharpImage
 }
 
 export async function convertImage(src: string): Promise<string> {
@@ -63,7 +85,9 @@ export async function convertImage(src: string): Promise<string> {
   myCache.set(src, url)
 
   // save file for preview
-  await getSharpObjectFromSource(src).jpeg().toFile(url)
+  getSharpObjectFromSource(src).then((img) => {
+    img.jpeg().toFile(url)
+  })
 
   // returns new url
   return url
@@ -77,12 +101,12 @@ export async function logImageData(
   const target = path.join(dataPaths.tmp, `${name || uuid4()}.jpg`)
 
   if (typeof src === 'string') {
-    img = getSharpObjectFromSource(src)
+    img = await getSharpObjectFromSource(src)
   } else {
     img = src.clone()
   }
 
-  await img.jpeg().toFile(target)
+  img.jpeg().toFile(target)
 
   return target
 }

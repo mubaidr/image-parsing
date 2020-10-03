@@ -11,7 +11,7 @@ describe('getQuestionsData', () => {
   })
 
   test('should return json for new data', async () => {
-    const sharpImg = getSharpObjectFromSource(dataPaths.keyImage)
+    const sharpImg = await getSharpObjectFromSource(dataPaths.keyImage)
     const design = await getDesignData(dataPaths.designBarcode)
     const qd = await getQuestionsData(design, sharpImg)
 

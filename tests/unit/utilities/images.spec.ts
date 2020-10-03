@@ -37,8 +37,8 @@ describe('getImagePaths', () => {
 })
 
 describe('getSharpObjectFromSource', () => {
-  test('works', () => {
-    const sharpImg = getSharpObjectFromSource(dataPaths.keyImage)
+  test('works', async () => {
+    const sharpImg = await getSharpObjectFromSource(dataPaths.keyImage)
 
     expect(sharpImg).toBeInstanceOf(Sharp)
   })
@@ -48,7 +48,7 @@ describe('logImageData', () => {
   test('works', async () => {
     const name = 'jest-test-img'
     const target = path.join(dataPaths.tmp, `${name}.jpg`)
-    const sharpImg = getSharpObjectFromSource(dataPaths.keyImage)
+    const sharpImg = await getSharpObjectFromSource(dataPaths.keyImage)
 
     await logImageData(sharpImg, name)
 

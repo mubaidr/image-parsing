@@ -1,5 +1,5 @@
 import { DesignData } from '../design'
-import { getSharpObjectFromSource, logImageData } from '../images'
+import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
 import { Result } from '../Result'
 import { getSheetInfoFromImage } from '../sheetInfo'
@@ -30,9 +30,7 @@ export async function start(
 
   for (let i = 0; i < imagePaths.length; i += 1) {
     const imagePath = imagePaths[i]
-    const sharpImage = getSharpObjectFromSource(imagePath)
-
-    logImageData(sharpImage)
+    const sharpImage = await getSharpObjectFromSource(imagePath)
 
     // get design and image data
     const [rollNo, questionsData] = await Promise.all([

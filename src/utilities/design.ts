@@ -8,7 +8,7 @@ export enum REG_EXP_PATTERNS {
   ROLL_NO = 'rollno$',
   QUESTION = 'q[1-9][0-9]?$',
   OPTION = 'q[1-9][0-9]?[a-e]$',
-  NONE = '',
+  COMPUTER_MARK = 'mark1',
 }
 
 export type ItemInfo = {
@@ -56,6 +56,7 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
 
   // for export
   const questions: QuestionsInfo = {}
+  let mark1: ItemInfo = { x: 0, y: 0, width: 0, height: 0 }
   let code: ItemInfo = { x: 0, y: 0, width: 0, height: 0 }
   let rollNo: ItemInfo = { x: 0, y: 0, width: 0, height: 0 }
   let isQrCode = false
@@ -93,10 +94,14 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
 
       const ii = { x, y, width, height }
       // prepare pattern matching reg expressions
-      const PATTERN_OPTION = new RegExp(REG_EXP_PATTERNS.OPTION, 'i')
       const PATTERN_BARCODE = new RegExp(REG_EXP_PATTERNS.BARCODE, 'i')
       const PATTERN_QRCODE = new RegExp(REG_EXP_PATTERNS.QRCODE, 'i')
+      const PATTERN_OPTION = new RegExp(REG_EXP_PATTERNS.OPTION, 'i')
       const PATTERN_ROLL_NO = new RegExp(REG_EXP_PATTERNS.ROLL_NO, 'i')
+      const PATTERN_COMPUTER_MARK = new RegExp(
+        REG_EXP_PATTERNS.COMPUTER_MARK,
+        'i'
+      )
 
       if (PATTERN_OPTION.test(title)) {
         const questionTitle = title.slice(0, -1)
@@ -113,9 +118,14 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
       } else if (PATTERN_QRCODE.test(title)) {
         code = ii
         isQrCode = true
+      } else if (PATTERN_COMPUTER_MARK.test(title)) {
+        mark1 = ii
       }
     }
   )
+
+  // TODO: adjust positions for all elements using mark1 top/left
+  console.log('mark1: ', mark1)
 
   return {
     isQrCode,

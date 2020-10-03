@@ -9,7 +9,7 @@ const designDataQr = getDesignData(dataPaths.design)
 
 describe('getRollNoFromImage', () => {
   test('should be working with barcode jpg', async () => {
-    const sharpImg = getSharpObjectFromSource(
+    const sharpImg = await getSharpObjectFromSource(
       path.join(dataPaths.imagesBarcode, '10023.jpg')
     )
     const rollNo = await getSheetInfoFromImage(await designData, sharpImg)
@@ -17,7 +17,7 @@ describe('getRollNoFromImage', () => {
   })
 
   test('should be working with barcode tif', async () => {
-    const sharpImg = getSharpObjectFromSource(
+    const sharpImg = await getSharpObjectFromSource(
       path.join(dataPaths.imagesBarcode, '10025.tif')
     )
     const rollNo = await getSheetInfoFromImage(await designData, sharpImg)
@@ -25,7 +25,7 @@ describe('getRollNoFromImage', () => {
   })
 
   test('should be working with qrcode jpg', async () => {
-    const sharpImg = getSharpObjectFromSource(
+    const sharpImg = await getSharpObjectFromSource(
       path.join(dataPaths.images, '10023.jpg')
     )
     const rollNo = await getSheetInfoFromImage(await designDataQr, sharpImg)
@@ -33,7 +33,7 @@ describe('getRollNoFromImage', () => {
   })
 
   test('should be working with qrcode tif', async () => {
-    const sharpImg = getSharpObjectFromSource(
+    const sharpImg = await getSharpObjectFromSource(
       path.join(dataPaths.images, '10025.tif')
     )
     const rollNo = await getSheetInfoFromImage(await designDataQr, sharpImg)
@@ -41,7 +41,7 @@ describe('getRollNoFromImage', () => {
   })
 
   test('should return undefined if not found jpg', async () => {
-    const sharpImg = getSharpObjectFromSource(
+    const sharpImg = await getSharpObjectFromSource(
       path.join(dataPaths.imagesBarcode, 'no-roll.jpg')
     )
     const rollNo = await getSheetInfoFromImage(await designData, sharpImg)
@@ -49,7 +49,7 @@ describe('getRollNoFromImage', () => {
   })
 
   test('should return undefined if not found tif', async () => {
-    const sharpImg = getSharpObjectFromSource(
+    const sharpImg = await getSharpObjectFromSource(
       path.join(dataPaths.images, 'no-roll.tif')
     )
     const rollNo = await getSheetInfoFromImage(await designDataQr, sharpImg)
