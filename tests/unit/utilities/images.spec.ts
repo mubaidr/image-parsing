@@ -2,8 +2,8 @@ import { dataPaths } from '@/utilities/dataPaths'
 import {
   convertImage,
   getImagePaths,
-  getSharpObjectFromSource,
-  logImageData,
+  // eslint-disable-next-line prettier/prettier
+  getSharpObjectFromSource
 } from '@/utilities/images'
 import fs from 'fs'
 import path from 'path'
@@ -41,25 +41,5 @@ describe('getSharpObjectFromSource', () => {
     const sharpImg = await getSharpObjectFromSource(dataPaths.keyImage)
 
     expect(sharpImg).toBeInstanceOf(Sharp)
-  })
-})
-
-describe('logImageData', () => {
-  test('works', async () => {
-    const name = 'jest-test-img'
-    const target = path.join(dataPaths.tmp, `${name}.jpg`)
-    const sharpImg = await getSharpObjectFromSource(dataPaths.keyImage)
-
-    await logImageData(sharpImg, name)
-
-    expect(fs.existsSync(target)).toBeTruthy()
-
-    fs.unlinkSync(target)
-
-    await logImageData(dataPaths.keyImage, name)
-
-    expect(fs.existsSync(target)).toBeTruthy()
-
-    fs.unlinkSync(target)
   })
 })

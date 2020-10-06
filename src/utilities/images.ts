@@ -85,9 +85,9 @@ export async function convertImage(src: string): Promise<string> {
   myCache.set(src, url)
 
   // save file for preview
-  getSharpObjectFromSource(src).then((img) => {
-    img.jpeg().toFile(url)
-  })
+  const sharpImg = await getSharpObjectFromSource(src)
+
+  await sharpImg.jpeg().toFile(url)
 
   // returns new url
   return url
