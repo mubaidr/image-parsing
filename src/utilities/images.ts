@@ -39,7 +39,7 @@ export async function getSharpObjectFromSource(src: string): Promise<Sharp> {
     failOnError: true,
   })
   const { width, height } = await sharpImage.metadata()
-  const padding = 25
+  const padding = 5
 
   if (!width || !height) throw 'Invalid image file'
 
