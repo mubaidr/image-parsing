@@ -1,9 +1,10 @@
-/* global __static */
 import { app, BrowserWindow, Menu, protocol } from 'electron'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
+import 'v8-compile-cache'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import { name } from '../package.json'
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will

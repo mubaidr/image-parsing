@@ -1,3 +1,4 @@
+import 'v8-compile-cache'
 import { DesignData } from '../design'
 import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'

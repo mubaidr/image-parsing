@@ -33,7 +33,11 @@ enum ComputerMarks {
 }
 
 export type ComputerMarksInfo = {
-  [key in ComputerMarks]: ItemInfo
+  marks: { [key in ComputerMarks]: ItemInfo }
+  leftMargin: number
+  rightMargin: number
+  topMargin: number
+  bottomMargin: number
 }
 
 export type DesignData = {
@@ -43,11 +47,42 @@ export type DesignData = {
   width: number
   height: number
   isQrCode: boolean
+  computerMarksInfo: ComputerMarksInfo
   code: ItemInfo
   rollNo: ItemInfo
   questions: QuestionsInfo
   createAt?: Date
   modifiedAt?: Date
+}
+
+export async function adjustTrimOffsetsForDesign(
+  designData: DesignData
+): Promise<DesignData> {
+  const designDataCopy = JSON.parse(JSON.stringify(designData)) as DesignData
+  const {
+    leftMargin,
+    rightMargin,
+    topMargin,
+    bottomMargin,
+  } = designDataCopy.computerMarksInfo
+
+  designDataCopy.code.x -= leftMargin
+  designDataCopy.code.y -= topMargin
+  designDataCopy.rollNo.x -= leftMargin
+  designDataCopy.rollNo.y -= topMargin
+  designDataCopy.width -= leftMargin + rightMargin
+  designDataCopy.height -= topMargin + bottomMargin
+
+  Object.values(designDataCopy.questions).forEach((q) => {
+    Object.values(q).forEach((v) => {
+      if (v) {
+        v.x -= leftMargin
+        v.y -= topMargin
+      }
+    })
+  })
+
+  return designDataCopy
 }
 
 export async function getDesignData(designPath: string): Promise<DesignData> {
@@ -68,11 +103,17 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
 
   // for export
   const computerMarksInfo: ComputerMarksInfo = {
-    mark1: { x: 0, y: 0, width: 0, height: 0 },
-    mark2: { x: 0, y: 0, width: 0, height: 0 },
-    mark3: { x: 0, y: 0, width: 0, height: 0 },
-    mark4: { x: 0, y: 0, width: 0, height: 0 },
-    mark5: { x: 0, y: 0, width: 0, height: 0 },
+    leftMargin: 0,
+    rightMargin: 0,
+    topMargin: 0,
+    bottomMargin: 0,
+    marks: {
+      mark1: { x: 0, y: 0, width: 0, height: 0 },
+      mark2: { x: 0, y: 0, width: 0, height: 0 },
+      mark3: { x: 0, y: 0, width: 0, height: 0 },
+      mark4: { x: 0, y: 0, width: 0, height: 0 },
+      mark5: { x: 0, y: 0, width: 0, height: 0 },
+    },
   }
   const questions: QuestionsInfo = {}
   let isQrCode = false
@@ -85,8 +126,6 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
   const PATTERN_OPTION = new RegExp(REG_EXP_PATTERNS.OPTION, 'i')
   const PATTERN_ROLL_NO = new RegExp(REG_EXP_PATTERNS.ROLL_NO, 'i')
   const PATTERN_COMPUTER_MARK = new RegExp(REG_EXP_PATTERNS.COMPUTER_MARK, 'i')
-
-  // TODO: find margins then iterate over groups for easier update of x,y
 
   svg.g.forEach(
     (group: {
@@ -137,30 +176,30 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
         code = ii
         isQrCode = true
       } else if (PATTERN_COMPUTER_MARK.test(title)) {
-        computerMarksInfo[title as ComputerMarks] = ii
+        computerMarksInfo.marks[title as ComputerMarks] = ii
       }
     }
   )
 
-  const leftMargin = computerMarksInfo.mark1.x
-  const topMargin = computerMarksInfo.mark1.y
-  const rightMargin =
-    svgWidth - computerMarksInfo.mark2.x - computerMarksInfo.mark2.width
-  const bottomMargin =
-    svgHeight - computerMarksInfo.mark3.y - computerMarksInfo.mark3.height
-
-  code.x -= leftMargin
-  code.y -= topMargin
-
-  rollNo.x -= leftMargin
-  rollNo.y -= topMargin
+  // computer readable marks info
+  computerMarksInfo.leftMargin = computerMarksInfo.marks.mark1.x
+  computerMarksInfo.topMargin = computerMarksInfo.marks.mark1.y
+  computerMarksInfo.rightMargin =
+    svgWidth -
+    computerMarksInfo.marks.mark2.x -
+    computerMarksInfo.marks.mark2.width
+  computerMarksInfo.bottomMargin =
+    svgHeight -
+    computerMarksInfo.marks.mark3.y -
+    computerMarksInfo.marks.mark3.height
 
   return {
     isQrCode,
+    computerMarksInfo,
     code,
     rollNo,
     questions,
-    width: svgWidth - leftMargin - rightMargin,
-    height: svgHeight - topMargin - bottomMargin,
+    width: svgWidth,
+    height: svgHeight,
   }
 }

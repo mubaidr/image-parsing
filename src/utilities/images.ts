@@ -35,31 +35,31 @@ export enum IMAGE_TYPES {
 }
 
 export async function getSharpObjectFromSource(src: string): Promise<Sharp> {
-  let sharpImage = sharp(src, {
-    failOnError: true,
-  })
-  const { width, height } = await sharpImage.metadata()
-  const padding = 5
+  return sharp(src).flatten().raw()
 
-  if (!width || !height) throw 'Invalid image file'
+  // let sharpImage = sharp(src).flatten().raw()
+  // const { width, height } = await sharpImage.metadata()
+  // const padding = 10
 
-  sharpImage = sharp(
-    await sharpImage
-      .extract({
-        left: padding,
-        top: padding,
-        width: width - padding * 2,
-        height: height - padding * 2,
-      })
-      .toBuffer()
-  )
-    .trim(175)
-    .flatten()
-    .raw()
+  // if (!width || !height) throw 'Invalid image file'
+
+  // sharpImage = sharp(
+  //   await sharpImage
+  //     .extract({
+  //       left: padding,
+  //       top: padding,
+  //       width: width - padding * 2,
+  //       height: height - padding * 2,
+  //     })
+  //     .toBuffer()
+  // )
+  //   .trim(175)
+  //   .flatten()
+  //   .raw()
 
   // logImageData(sharpImage, `trimmed ${padding}`)
 
-  return sharpImage
+  // return sharpImage
 }
 
 export async function convertImage(src: string): Promise<string> {

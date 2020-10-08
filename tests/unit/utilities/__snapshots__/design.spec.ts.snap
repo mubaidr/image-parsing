@@ -8,6 +8,44 @@ Object {
     "x": 25,
     "y": 68,
   },
+  "computerMarksInfo": Object {
+    "bottomMargin": 17,
+    "leftMargin": 21,
+    "marks": Object {
+      "mark1": Object {
+        "height": 15,
+        "width": 15,
+        "x": 21,
+        "y": 29,
+      },
+      "mark2": Object {
+        "height": 15,
+        "width": 15,
+        "x": 565,
+        "y": 29,
+      },
+      "mark3": Object {
+        "height": 15,
+        "width": 15,
+        "x": 21,
+        "y": 809,
+      },
+      "mark4": Object {
+        "height": 15,
+        "width": 15,
+        "x": 565,
+        "y": 809,
+      },
+      "mark5": Object {
+        "height": 15,
+        "width": 15,
+        "x": 565,
+        "y": 403,
+      },
+    },
+    "rightMargin": 15,
+    "topMargin": 29,
+  },
   "height": 841,
   "isQrCode": false,
   "questions": Object {

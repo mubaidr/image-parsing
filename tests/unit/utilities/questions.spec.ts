@@ -6,10 +6,6 @@ import { getQuestionsData } from '@/utilities/questions'
 jest.setTimeout(10000)
 
 describe('getQuestionsData', () => {
-  test('should be defined', async () => {
-    expect(getQuestionsData).toBeInstanceOf(Function)
-  })
-
   test('should return json for new data', async () => {
     const sharpImg = await getSharpObjectFromSource(dataPaths.keyImage)
     const design = await getDesignData(dataPaths.designBarcode)

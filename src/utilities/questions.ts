@@ -1,6 +1,5 @@
 import { Sharp } from 'sharp'
 import { DesignData } from './design'
-// import { logImageData } from './images'
 import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
 
 export type AnswerCollection = {
@@ -60,6 +59,9 @@ export async function getQuestionsData(
 
   sharpImage.resize(design.width * SCALE)
 
+  // log image
+  // logImageData(sharpImage, 'complete')
+
   for (let i = 0; i < questions.length; i += 1) {
     const [questionTitle, q] = questions[i]
     const options = Object.entries(q)
@@ -70,7 +72,7 @@ export async function getQuestionsData(
     for (let j = 0; j < options.length; j += 1) {
       const [optionTitle, itemInfo] = options[j]
 
-      if (itemInfo === undefined) continue
+      if (!itemInfo) continue
 
       sharpImage.extract({
         left: Math.floor((itemInfo.x - itemInfo.width * 0.5) * SCALE),

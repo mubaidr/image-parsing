@@ -1,4 +1,5 @@
 import { ipcRenderer } from 'electron'
+import 'v8-compile-cache'
 import { createApp } from 'vue'
 import App from './App.vue'
 import './assets/scss/animations.scss'

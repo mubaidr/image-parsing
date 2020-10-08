@@ -46,12 +46,12 @@ module.exports = {
         jest: true,
       },
     },
-    // {
-    //   env: {
-    //     browser: false,
-    //   },
-    //   files: ['src/utilities/**/*.{j,t}s?(x)'],
-    // },
+    {
+      env: {
+        browser: false,
+      },
+      files: ['src/utilities/**/*.{j,t}s?(x)'],
+    },
     {
       env: {
         worker: true,
