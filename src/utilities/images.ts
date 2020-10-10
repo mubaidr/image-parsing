@@ -7,7 +7,7 @@ import { dataPaths } from './dataPaths'
 
 const myCache = new NodeCache()
 
-export enum IMAGE_NATIVE_TYPES {
+export enum ImageNativeTypes {
   'bmp' = 'bmp',
   'gif' = 'gif',
   'jfif' = 'jfif',
@@ -19,7 +19,7 @@ export enum IMAGE_NATIVE_TYPES {
   'webp' = 'webp',
 }
 
-export enum IMAGE_TYPES {
+export enum ImageTypes {
   'bmp' = 'bmp',
   'dib' = 'dib',
   'gif' = 'gif',
@@ -70,7 +70,7 @@ export async function convertImage(src: string): Promise<string> {
   const ext = src.split('.').pop()
 
   // native supported images
-  if (ext && ext in IMAGE_NATIVE_TYPES) {
+  if (ext && ext in ImageNativeTypes) {
     return src
   }
 
@@ -113,7 +113,7 @@ export async function logImageData(
 
 export function getImagePaths(dir: string): string[] {
   const loc = dir.replace(/\\/g, '/')
-  const exts = Object.keys(IMAGE_TYPES).map((ext) => `.${ext}`)
+  const exts = Object.keys(ImageTypes).map((ext) => `.${ext}`)
   const glob = `${loc}/**/*{${exts}}`.replace('//', '/')
 
   return fastGlob.sync(glob, {

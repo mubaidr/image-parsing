@@ -1,7 +1,7 @@
 import 'v8-compile-cache'
 import { CompiledResult } from '../CompiledResult'
 import { Result } from '../Result'
-import { PROGRESS_STATES } from './PROGRESS_STATES'
+import { ProgressStates } from './ProgressStates'
 
 export type WorkerCompileInputMessage = {
   resultPath: string
@@ -11,7 +11,7 @@ export type WorkerCompileInputMessage = {
 }
 
 export type WorkerCompileOutputMessage = {
-  progressState: PROGRESS_STATES
+  progressState: ProgressStates
   payload?: Result[]
 }
 
@@ -35,11 +35,11 @@ export async function start(
   // report progress status
   if (isWorker) {
     sendMessage({
-      progressState: PROGRESS_STATES.PROGRESS,
+      progressState: ProgressStates.PROGRESS,
     })
 
     sendMessage({
-      progressState: PROGRESS_STATES.COMPLETE,
+      progressState: ProgressStates.COMPLETE,
       payload: compiledResult.getKeysAndResults(),
     })
   } else {

@@ -1,4 +1,4 @@
-export enum QuestionPaperTypeEnum {
+export enum QuestionPaperTypes {
   A = 'a',
   B = 'c',
   C = 'c',
@@ -12,7 +12,7 @@ export enum QuestionPaperTypeEnum {
   K = 'k',
 }
 
-export enum QUESTION_OPTIONS {
+export enum QuestionOptions {
   A = 'a',
   B = 'b',
   C = 'c',

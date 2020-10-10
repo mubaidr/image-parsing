@@ -4,14 +4,14 @@ import { importExcelToJson } from './excel'
 import { Result } from './Result'
 import { start as extractStart } from './workers/extract.worker'
 
-export enum KEY_NATIVE_TYPES {
+export enum KeyNativeTypes {
   'csv' = 'csv',
   'xls' = 'xls',
   'xlsm' = 'xlsm',
   'xlsx' = 'xlsx',
 }
 
-export enum KEY_TYPES {
+export enum KeyTypes {
   'bmp' = 'bmp',
   'csv' = 'csv',
   'dib' = 'dib',
@@ -35,7 +35,7 @@ export async function readKey(src: string): Promise<Result[] | undefined> {
 
   if (ext === undefined) throw new Error('Invalid path specified')
 
-  if (ext in KEY_NATIVE_TYPES) {
+  if (ext in KeyNativeTypes) {
     const rows = importExcelToJson(src)
     const results: Result[] = []
 

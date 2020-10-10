@@ -5,18 +5,18 @@ import { DesignData, getDesignData } from '../design'
 import { getImagePaths } from '../images'
 import { readKey } from '../readKey'
 import { Result, ResultLike } from '../Result'
-import { PROGRESS_STATES } from './PROGRESS_STATES'
+import { ProgressStates } from './ProgressStates'
 
 const CPU_CORE_COUNT = cpus().length
 
-enum WORKER_TYPES {
+enum WorkerTypes {
   COMPILE = 'compile',
   EXTRACT = 'extract',
   GENERATE = 'generate',
 }
 
 type WorkerOutputMessage = {
-  progressState: PROGRESS_STATES
+  progressState: ProgressStates
   payload?: ResultLike[]
 }
 
@@ -35,7 +35,7 @@ export class WorkerManager extends EventEmitter {
     return this.data.map((d) => Object.assign(new Result(), d))
   }
 
-  createWorkers(count: number, type: WORKER_TYPES): WorkerManager {
+  createWorkers(count: number, type: WorkerTypes): WorkerManager {
     this.stop()
 
     for (let i = 0; i < count; i += 1) {
@@ -43,21 +43,21 @@ export class WorkerManager extends EventEmitter {
         // stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
         // silent: true,
       })
-        .on(PROGRESS_STATES.EXIT, (code) => {
-          this.emit(PROGRESS_STATES.EXIT, code)
+        .on(ProgressStates.EXIT, (code) => {
+          this.emit(ProgressStates.EXIT, code)
         })
-        .on(PROGRESS_STATES.ERROR, (error) => {
-          this.emit(PROGRESS_STATES.ERROR, error)
+        .on(ProgressStates.ERROR, (error) => {
+          this.emit(ProgressStates.ERROR, error)
         })
-        .on(PROGRESS_STATES.MESSAGE, (message: WorkerOutputMessage) => {
+        .on(ProgressStates.MESSAGE, (message: WorkerOutputMessage) => {
           const { progressState, payload } = message
 
-          if (progressState === PROGRESS_STATES.PROGRESS) {
+          if (progressState === ProgressStates.PROGRESS) {
             this.finished += 1
-            this.emit(PROGRESS_STATES.PROGRESS)
+            this.emit(ProgressStates.PROGRESS)
           }
 
-          if (progressState === PROGRESS_STATES.COMPLETE) {
+          if (progressState === ProgressStates.COMPLETE) {
             this.finishedWorkers += 1
 
             if (payload) {
@@ -65,13 +65,13 @@ export class WorkerManager extends EventEmitter {
             }
 
             if (this.finishedWorkers === this.workers.length) {
-              this.emit(PROGRESS_STATES.COMPLETE)
+              this.emit(ProgressStates.COMPLETE)
             }
           }
         })
 
       worker.stdout?.on('data', (msg) => {
-        this.emit(PROGRESS_STATES.LOG, msg.toString())
+        this.emit(ProgressStates.LOG, msg.toString())
         if (
           process &&
           (process.env.NODE_END === 'test' ||
@@ -82,7 +82,7 @@ export class WorkerManager extends EventEmitter {
       })
 
       worker.stderr?.on('data', (msg) => {
-        this.emit(PROGRESS_STATES.ERROR, msg.toString())
+        this.emit(ProgressStates.ERROR, msg.toString())
         if (
           process &&
           (process.env.NODE_END === 'test' ||
@@ -113,9 +113,9 @@ export class WorkerManager extends EventEmitter {
     this.total = totalImages.length
 
     return new Promise((resolve, reject) => {
-      this.createWorkers(totalWorkers, WORKER_TYPES.EXTRACT)
-        .on(PROGRESS_STATES.ERROR, reject)
-        .on(PROGRESS_STATES.COMPLETE, () => {
+      this.createWorkers(totalWorkers, WorkerTypes.EXTRACT)
+        .on(ProgressStates.ERROR, reject)
+        .on(ProgressStates.COMPLETE, () => {
           resolve(this.getClonedData())
         })
         .workers.forEach((worker, index) => {
@@ -153,9 +153,9 @@ export class WorkerManager extends EventEmitter {
     this.total = 1
 
     return new Promise((resolve, reject) => {
-      this.createWorkers(1, WORKER_TYPES.COMPILE)
-        .on(PROGRESS_STATES.ERROR, reject)
-        .on(PROGRESS_STATES.COMPLETE, () => {
+      this.createWorkers(1, WorkerTypes.COMPILE)
+        .on(ProgressStates.ERROR, reject)
+        .on(ProgressStates.COMPLETE, () => {
           resolve(this.getClonedData())
         })
         .workers[0].send(
@@ -174,9 +174,9 @@ export class WorkerManager extends EventEmitter {
 
   async generate(): Promise<WorkerManager> {
     return new Promise((resolve, reject) => {
-      this.createWorkers(CPU_CORE_COUNT, WORKER_TYPES.GENERATE)
-        .on(PROGRESS_STATES.ERROR, reject)
-        .on(PROGRESS_STATES.COMPLETE, resolve)
+      this.createWorkers(CPU_CORE_COUNT, WorkerTypes.GENERATE)
+        .on(ProgressStates.ERROR, reject)
+        .on(ProgressStates.COMPLETE, resolve)
     })
   }
 

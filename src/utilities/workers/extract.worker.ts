@@ -4,7 +4,7 @@ import { getSharpObjectFromSource } from '../images'
 import { getQuestionsData } from '../questions'
 import { Result } from '../Result'
 import { getSheetInfoFromImage } from '../sheetInfo'
-import { PROGRESS_STATES } from './PROGRESS_STATES'
+import { ProgressStates } from './ProgressStates'
 
 export type WorkerExtractInputMessage = {
   designData: DesignData
@@ -12,7 +12,7 @@ export type WorkerExtractInputMessage = {
 }
 
 export type WorkerExtractOutputMessage = {
-  progressState: PROGRESS_STATES
+  progressState: ProgressStates
   payload?: Result[]
 }
 
@@ -51,14 +51,14 @@ export async function start(
 
     if (isWorker) {
       sendMessage({
-        progressState: PROGRESS_STATES.PROGRESS,
+        progressState: ProgressStates.PROGRESS,
       })
     }
   }
 
   if (isWorker) {
     sendMessage({
-      progressState: PROGRESS_STATES.COMPLETE,
+      progressState: ProgressStates.COMPLETE,
       payload: results,
     })
   } else {

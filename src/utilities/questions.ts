@@ -1,14 +1,14 @@
 import { Sharp } from 'sharp'
 import { DesignData } from './design'
-import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
+import { QuestionOptions } from './QuestionOptions'
 
 export type AnswerCollection = {
-  title: QUESTION_OPTIONS
+  title: QuestionOptions
   percentage: number
 }
 
 export type QuestionData = {
-  [key: string]: QUESTION_OPTIONS
+  [key: string]: QuestionOptions
 }
 
 function getPercentFilledFromBinary(data: number[]): number {
@@ -66,7 +66,7 @@ export async function getQuestionsData(
     const [questionTitle, q] = questions[i]
     const options = Object.entries(q)
     const answerCollection: AnswerCollection[] = []
-    let finalOption: QUESTION_OPTIONS
+    let finalOption: QuestionOptions
 
     // collect % filled for all options
     for (let j = 0; j < options.length; j += 1) {
@@ -89,7 +89,7 @@ export async function getQuestionsData(
       ])
 
       answerCollection.push({
-        title: optionTitle as QUESTION_OPTIONS,
+        title: optionTitle as QuestionOptions,
         percentage: percentBlack,
       })
     }
@@ -102,9 +102,9 @@ export async function getQuestionsData(
     if (first.percentage > 8 && first.percentage - second.percentage * 2 > 0) {
       finalOption = first.title
     } else if (first.percentage < 16) {
-      finalOption = QUESTION_OPTIONS.NONE
+      finalOption = QuestionOptions.NONE
     } else {
-      finalOption = QUESTION_OPTIONS.MULTIPLE
+      finalOption = QuestionOptions.MULTIPLE
     }
 
     questionData[questionTitle] = finalOption

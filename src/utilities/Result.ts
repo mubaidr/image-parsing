@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { v4 as uuid4 } from 'uuid'
-import { REG_EXP_PATTERNS } from './design'
-import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
+import { RegExpPatterns } from './design'
+import { QuestionOptions } from './QuestionOptions'
 
 // function instanceOfAnswerCollection(object: any): object is AnswerCollection{
 //   return 'member' in object;
@@ -9,7 +9,7 @@ import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
 
 export type AnswerCollection = {
   [key: string]: {
-    value: QUESTION_OPTIONS
+    value: QuestionOptions
     unattempted?: boolean
     correct?: boolean
     skipped?: boolean
@@ -99,7 +99,7 @@ export class Result {
     )
   }
 
-  addAnswer(title: string, value: QUESTION_OPTIONS): Result {
+  addAnswer(title: string, value: QuestionOptions): Result {
     this.answers[title] = { value }
 
     return this
@@ -136,15 +136,15 @@ export class Result {
       const keyChoice = key.answers[prop]
 
       // question not attempted
-      if (choice.value === QUESTION_OPTIONS.NONE) {
+      if (choice.value === QuestionOptions.NONE) {
         choice.unattempted = true
         this.unattemptedCount += 1
       }
 
       // question skipped
       if (
-        keyChoice.value === QUESTION_OPTIONS.NONE ||
-        keyChoice.value === QUESTION_OPTIONS.MULTIPLE
+        keyChoice.value === QuestionOptions.NONE ||
+        keyChoice.value === QuestionOptions.MULTIPLE
       ) {
         choice.skipped = true
         this.skippedCount += 1
@@ -185,16 +185,16 @@ export class Result {
   }
 
   static fromJson(json: ResultJSON): Result {
-    const answerRegExp = new RegExp(REG_EXP_PATTERNS.QUESTION)
+    const answerRegExp = new RegExp(RegExpPatterns.QUESTION)
     const result = new Result()
 
     Object.keys(json).forEach((key) => {
-      const value = json[key] as QUESTION_OPTIONS
+      const value = json[key] as QuestionOptions
 
       if (answerRegExp.test(key)) {
         result.addAnswer(
           key.toLowerCase(),
-          (value.toLowerCase() as QUESTION_OPTIONS) || QUESTION_OPTIONS.NONE
+          (value.toLowerCase() as QuestionOptions) || QuestionOptions.NONE
         )
       } else {
         result[key] = value

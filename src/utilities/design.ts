@@ -1,8 +1,8 @@
 import { parse } from 'fast-xml-parser'
 import { readFileSync } from 'fs'
-import { QUESTION_OPTIONS } from './QUESTION_OPTIONS'
+import { QuestionOptions } from './QuestionOptions'
 
-export enum REG_EXP_PATTERNS {
+export enum RegExpPatterns {
   BARCODE = 'barcode$',
   QRCODE = 'qrcode$',
   ROLL_NO = 'rollno$',
@@ -20,7 +20,7 @@ export type ItemInfo = {
 
 export type QuestionsInfo = {
   [key: string]: {
-    [key in QUESTION_OPTIONS]?: ItemInfo
+    [key in QuestionOptions]?: ItemInfo
   }
 }
 
@@ -121,11 +121,11 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
   let rollNo: ItemInfo = { x: 0, y: 0, width: 0, height: 0 }
 
   // prepare pattern matching reg expressions
-  const PATTERN_BARCODE = new RegExp(REG_EXP_PATTERNS.BARCODE, 'i')
-  const PATTERN_QRCODE = new RegExp(REG_EXP_PATTERNS.QRCODE, 'i')
-  const PATTERN_OPTION = new RegExp(REG_EXP_PATTERNS.OPTION, 'i')
-  const PATTERN_ROLL_NO = new RegExp(REG_EXP_PATTERNS.ROLL_NO, 'i')
-  const PATTERN_COMPUTER_MARK = new RegExp(REG_EXP_PATTERNS.COMPUTER_MARK, 'i')
+  const PATTERN_BARCODE = new RegExp(RegExpPatterns.BARCODE, 'i')
+  const PATTERN_QRCODE = new RegExp(RegExpPatterns.QRCODE, 'i')
+  const PATTERN_OPTION = new RegExp(RegExpPatterns.OPTION, 'i')
+  const PATTERN_ROLL_NO = new RegExp(RegExpPatterns.ROLL_NO, 'i')
+  const PATTERN_COMPUTER_MARK = new RegExp(RegExpPatterns.COMPUTER_MARK, 'i')
 
   svg.g.forEach(
     (group: {
@@ -162,7 +162,7 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
 
       if (PATTERN_OPTION.test(title)) {
         const questionTitle = title.slice(0, -1)
-        const optionTitle = title.slice(-1) as QUESTION_OPTIONS
+        const optionTitle = title.slice(-1) as QuestionOptions
 
         if (questions[questionTitle] === undefined) {
           questions[questionTitle] = {}

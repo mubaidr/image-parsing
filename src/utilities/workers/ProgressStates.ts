@@ -1,4 +1,4 @@
-export enum PROGRESS_STATES {
+export enum ProgressStates {
   MESSAGE = 'message',
   PROGRESS = 'progress',
   COMPLETE = 'completed',
