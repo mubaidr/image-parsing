@@ -1,9 +1,9 @@
-import { dataPaths } from '@/utilities/dataPaths'
+import { DataPaths } from '@/utilities/dataPaths'
 import {
   convertImage,
   getImagePaths,
   // eslint-disable-next-line prettier/prettier
-  getSharpObjectFromSource
+    getSharpObjectFromSource
 } from '@/utilities/images'
 import fs from 'fs'
 import path from 'path'
@@ -13,8 +13,8 @@ describe('convertImage', () => {
   test('works', async () => {
     expect.assertions(2)
 
-    const nativeImageSrc = path.resolve(dataPaths.imagesBarcode, '10023.jpg')
-    const imageSrc = path.resolve(dataPaths.imagesBarcode, '10025.tif')
+    const nativeImageSrc = path.resolve(DataPaths.imagesBarcode, '10023.jpg')
+    const imageSrc = path.resolve(DataPaths.imagesBarcode, '10025.tif')
 
     expect(await convertImage(nativeImageSrc)).toEqual(nativeImageSrc)
 
@@ -28,7 +28,7 @@ describe('convertImage', () => {
 
 describe('getImagePaths', () => {
   test('works', async () => {
-    const paths = getImagePaths(dataPaths.imagesBarcode)
+    const paths = getImagePaths(DataPaths.imagesBarcode)
 
     paths.forEach((path) => {
       expect(fs.existsSync(path)).toBeTruthy()
@@ -38,7 +38,7 @@ describe('getImagePaths', () => {
 
 describe('getSharpObjectFromSource', () => {
   test('works', async () => {
-    const sharpImg = await getSharpObjectFromSource(dataPaths.keyImage)
+    const sharpImg = await getSharpObjectFromSource(DataPaths.keyImage)
 
     expect(sharpImg).toBeInstanceOf(Sharp)
   })

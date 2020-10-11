@@ -3,12 +3,20 @@ import { readFileSync } from 'fs'
 import { QuestionOptions } from './QuestionOptions'
 
 export enum RegExpPatterns {
-  BARCODE = 'barcode$',
-  QRCODE = 'qrcode$',
-  ROLL_NO = 'rollno$',
-  QUESTION = 'q[1-9][0-9]?$',
-  OPTION = 'q[1-9][0-9]?[a-e]$',
-  COMPUTER_MARK = 'mark[0-5]',
+  Barcode = 'barcode$',
+  QRCode = 'qrcode$',
+  RollNo = 'rollno$',
+  Question = 'q[1-9][0-9]?$',
+  Option = 'q[1-9][0-9]?[a-e]$',
+  ComputerMark = 'mark[0-5]',
+}
+
+enum ComputerMarks {
+  'mark1' = 'mark1',
+  'mark2' = 'mark2',
+  'mark3' = 'mark3',
+  'mark4' = 'mark4',
+  'mark5' = 'mark5',
 }
 
 export type ItemInfo = {
@@ -22,14 +30,6 @@ export type QuestionsInfo = {
   [key: string]: {
     [key in QuestionOptions]?: ItemInfo
   }
-}
-
-enum ComputerMarks {
-  'mark1' = 'mark1',
-  'mark2' = 'mark2',
-  'mark3' = 'mark3',
-  'mark4' = 'mark4',
-  'mark5' = 'mark5',
 }
 
 export type ComputerMarksInfo = {
@@ -121,11 +121,11 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
   let rollNo: ItemInfo = { x: 0, y: 0, width: 0, height: 0 }
 
   // prepare pattern matching reg expressions
-  const PATTERN_BARCODE = new RegExp(RegExpPatterns.BARCODE, 'i')
-  const PATTERN_QRCODE = new RegExp(RegExpPatterns.QRCODE, 'i')
-  const PATTERN_OPTION = new RegExp(RegExpPatterns.OPTION, 'i')
-  const PATTERN_ROLL_NO = new RegExp(RegExpPatterns.ROLL_NO, 'i')
-  const PATTERN_COMPUTER_MARK = new RegExp(RegExpPatterns.COMPUTER_MARK, 'i')
+  const PATTERN_BARCODE = new RegExp(RegExpPatterns.Barcode, 'i')
+  const PATTERN_QRCODE = new RegExp(RegExpPatterns.QRCode, 'i')
+  const PATTERN_OPTION = new RegExp(RegExpPatterns.Option, 'i')
+  const PATTERN_ROLL_NO = new RegExp(RegExpPatterns.RollNo, 'i')
+  const PATTERN_COMPUTER_MARK = new RegExp(RegExpPatterns.ComputerMark, 'i')
 
   svg.g.forEach(
     (group: {

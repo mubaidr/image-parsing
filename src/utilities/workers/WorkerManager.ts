@@ -10,9 +10,9 @@ import { ProgressStates } from './ProgressStates'
 const CPU_CORE_COUNT = cpus().length
 
 enum WorkerTypes {
-  COMPILE = 'compile',
-  EXTRACT = 'extract',
-  GENERATE = 'generate',
+  Compile = 'Compile',
+  Extract = 'Extract',
+  Generate = 'Generate',
 }
 
 type WorkerOutputMessage = {
@@ -43,21 +43,21 @@ export class WorkerManager extends EventEmitter {
         // stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
         // silent: true,
       })
-        .on(ProgressStates.EXIT, (code) => {
-          this.emit(ProgressStates.EXIT, code)
+        .on(ProgressStates.Exit, (code) => {
+          this.emit(ProgressStates.Exit, code)
         })
-        .on(ProgressStates.ERROR, (error) => {
-          this.emit(ProgressStates.ERROR, error)
+        .on(ProgressStates.Error, (error) => {
+          this.emit(ProgressStates.Error, error)
         })
-        .on(ProgressStates.MESSAGE, (message: WorkerOutputMessage) => {
+        .on(ProgressStates.Message, (message: WorkerOutputMessage) => {
           const { progressState, payload } = message
 
-          if (progressState === ProgressStates.PROGRESS) {
+          if (progressState === ProgressStates.Progress) {
             this.finished += 1
-            this.emit(ProgressStates.PROGRESS)
+            this.emit(ProgressStates.Progress)
           }
 
-          if (progressState === ProgressStates.COMPLETE) {
+          if (progressState === ProgressStates.Complete) {
             this.finishedWorkers += 1
 
             if (payload) {
@@ -65,13 +65,13 @@ export class WorkerManager extends EventEmitter {
             }
 
             if (this.finishedWorkers === this.workers.length) {
-              this.emit(ProgressStates.COMPLETE)
+              this.emit(ProgressStates.Complete)
             }
           }
         })
 
       worker.stdout?.on('data', (msg) => {
-        this.emit(ProgressStates.LOG, msg.toString())
+        this.emit(ProgressStates.Log, msg.toString())
         if (
           process &&
           (process.env.NODE_END === 'test' ||
@@ -82,7 +82,7 @@ export class WorkerManager extends EventEmitter {
       })
 
       worker.stderr?.on('data', (msg) => {
-        this.emit(ProgressStates.ERROR, msg.toString())
+        this.emit(ProgressStates.Error, msg.toString())
         if (
           process &&
           (process.env.NODE_END === 'test' ||
@@ -113,9 +113,9 @@ export class WorkerManager extends EventEmitter {
     this.total = totalImages.length
 
     return new Promise((resolve, reject) => {
-      this.createWorkers(totalWorkers, WorkerTypes.EXTRACT)
-        .on(ProgressStates.ERROR, reject)
-        .on(ProgressStates.COMPLETE, () => {
+      this.createWorkers(totalWorkers, WorkerTypes.Extract)
+        .on(ProgressStates.Error, reject)
+        .on(ProgressStates.Complete, () => {
           resolve(this.getClonedData())
         })
         .workers.forEach((worker, index) => {
@@ -153,9 +153,9 @@ export class WorkerManager extends EventEmitter {
     this.total = 1
 
     return new Promise((resolve, reject) => {
-      this.createWorkers(1, WorkerTypes.COMPILE)
-        .on(ProgressStates.ERROR, reject)
-        .on(ProgressStates.COMPLETE, () => {
+      this.createWorkers(1, WorkerTypes.Compile)
+        .on(ProgressStates.Error, reject)
+        .on(ProgressStates.Complete, () => {
           resolve(this.getClonedData())
         })
         .workers[0].send(
@@ -174,9 +174,9 @@ export class WorkerManager extends EventEmitter {
 
   async generate(): Promise<WorkerManager> {
     return new Promise((resolve, reject) => {
-      this.createWorkers(CPU_CORE_COUNT, WorkerTypes.GENERATE)
-        .on(ProgressStates.ERROR, reject)
-        .on(ProgressStates.COMPLETE, resolve)
+      this.createWorkers(CPU_CORE_COUNT, WorkerTypes.Generate)
+        .on(ProgressStates.Error, reject)
+        .on(ProgressStates.Complete, resolve)
     })
   }
 

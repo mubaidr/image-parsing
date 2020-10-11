@@ -3,39 +3,39 @@ import NodeCache from 'node-cache'
 import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import { v4 as uuid4 } from 'uuid'
-import { dataPaths } from './dataPaths'
+import { DataPaths } from './dataPaths'
 
 const myCache = new NodeCache()
 
 export enum ImageNativeTypes {
-  'bmp' = 'bmp',
-  'gif' = 'gif',
-  'jfif' = 'jfif',
-  'jpe' = 'jpe',
-  'jpeg' = 'jpeg',
-  'jpg' = 'jpg',
-  'png' = 'png',
-  'svg' = 'svg',
-  'webp' = 'webp',
+  bmp,
+  gif,
+  jfif,
+  jpe,
+  jpeg,
+  jpg,
+  png,
+  svg,
+  webp,
 }
 
 export enum ImageTypes {
-  'bmp' = 'bmp',
-  'dib' = 'dib',
-  'gif' = 'gif',
-  'jfif' = 'jfif',
-  'jpe' = 'jpe',
-  'jpeg' = 'jpeg',
-  'jpg' = 'jpg',
-  'png' = 'png',
-  'svg' = 'svg',
-  'tif' = 'tif',
-  'tiff' = 'tiff',
-  'webp' = 'webp',
+  bmp,
+  dib,
+  gif,
+  jfif,
+  jpe,
+  jpeg,
+  jpg,
+  png,
+  svg,
+  tif,
+  tiff,
+  webp,
 }
 
 export async function getSharpObjectFromSource(src: string): Promise<Sharp> {
-  return sharp(src).flatten().raw()
+  return sharp(src).flatten().blur().raw()
 
   // let sharpImage = sharp(src).flatten().raw()
   // const { width, height } = await sharpImage.metadata()
@@ -81,7 +81,7 @@ export async function convertImage(src: string): Promise<string> {
   }
 
   // // generate random tmp url
-  const url = path.join(dataPaths.tmp, `${uuid4()}.jpg`)
+  const url = path.join(DataPaths.tmp, `${uuid4()}.jpg`)
   myCache.set(src, url)
 
   // save file for preview
@@ -98,7 +98,7 @@ export async function logImageData(
   name?: string
 ): Promise<string> {
   let img: Sharp
-  const target = path.join(dataPaths.tmp, `${name || uuid4()}.jpg`)
+  const target = path.join(DataPaths.tmp, `${name || uuid4()}.jpg`)
 
   if (typeof src === 'string') {
     img = await getSharpObjectFromSource(src)

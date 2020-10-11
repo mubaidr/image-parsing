@@ -3,7 +3,7 @@
  */
 
 import { CompiledResult } from '@/utilities/CompiledResult'
-import { dataPaths } from '@/utilities/dataPaths'
+import { DataPaths } from '@/utilities/dataPaths'
 import {
   exportHtmltoExcel,
   exportJsonToExcel,
@@ -58,7 +58,7 @@ describe('exportHtmltoExcel', () => {
       </tbody></table>`
 
     const table = document.getElementById('customers')
-    const target = path.resolve(dataPaths.tmp, Date.now().toString() + '.xlsx')
+    const target = path.resolve(DataPaths.tmp, Date.now().toString() + '.xlsx')
 
     if (!table) return
 
@@ -76,9 +76,9 @@ describe('exportJsonToExcel', () => {
 
   test('works', () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled
+      DataPaths.resultCompiled
     )
-    const target = path.resolve(dataPaths.tmp, Date.now().toString() + '.xlsx')
+    const target = path.resolve(DataPaths.tmp, Date.now().toString() + '.xlsx')
 
     exportJsonToExcel(compiledResult, target)
     expect(fs.existsSync(target)).toBeTruthy()
@@ -93,7 +93,7 @@ describe('importExcelToJson', () => {
   })
 
   test('works', () => {
-    const json = importExcelToJson(dataPaths.result)
+    const json = importExcelToJson(DataPaths.result)
 
     expect(json).toMatchSnapshot()
   })

@@ -1,4 +1,4 @@
-import { dataPaths } from '@/utilities/dataPaths'
+import { DataPaths } from '@/utilities/dataPaths'
 import { getDesignData } from '@/utilities/design'
 import { getImagePaths } from '@/utilities/images'
 import { readKey } from '@/utilities/readKey'
@@ -8,11 +8,11 @@ jest.setTimeout(10000)
 
 describe('workerExtract', () => {
   test('should be able to extract key just fine', async () => {
-    const designData = await getDesignData(dataPaths.designBarcode)
+    const designData = await getDesignData(DataPaths.designBarcode)
     const results = await start(
       {
         designData,
-        imagePaths: [dataPaths.keyImage],
+        imagePaths: [DataPaths.keyImage],
       },
       false
     )
@@ -30,9 +30,9 @@ describe('workerExtract', () => {
   })
 
   test('extracted result should match with results.xlsx', async () => {
-    const resultsExcel = await readKey(dataPaths.result)
-    const designData = await getDesignData(dataPaths.designBarcode)
-    const imagePaths = getImagePaths(dataPaths.imagesBarcode)
+    const resultsExcel = await readKey(DataPaths.result)
+    const designData = await getDesignData(DataPaths.designBarcode)
+    const imagePaths = getImagePaths(DataPaths.imagesBarcode)
 
     const results = await start(
       {

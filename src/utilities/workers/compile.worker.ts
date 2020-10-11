@@ -35,11 +35,11 @@ export async function start(
   // report progress status
   if (isWorker) {
     sendMessage({
-      progressState: ProgressStates.PROGRESS,
+      progressState: ProgressStates.Progress,
     })
 
     sendMessage({
-      progressState: ProgressStates.COMPLETE,
+      progressState: ProgressStates.Complete,
       payload: compiledResult.getKeysAndResults(),
     })
   } else {

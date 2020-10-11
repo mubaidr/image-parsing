@@ -1,4 +1,4 @@
-import { dataPaths } from '@/utilities/dataPaths'
+import { DataPaths } from '@/utilities/dataPaths'
 import { ProgressStates } from '@/utilities/workers/ProgressStates'
 import { WorkerManager } from '@/utilities/workers/WorkerManager'
 
@@ -16,11 +16,11 @@ describe('WorkerManager', () => {
     const completeCallback = jest.fn()
 
     const data = await workerManager
-      .on(ProgressStates.LOG, logCallback)
-      .on(ProgressStates.ERROR, errorCallback)
-      .on(ProgressStates.PROGRESS, progressCallback)
-      .on(ProgressStates.COMPLETE, completeCallback)
-      .extract(dataPaths.imagesBarcode, dataPaths.designBarcode)
+      .on(ProgressStates.Log, logCallback)
+      .on(ProgressStates.Error, errorCallback)
+      .on(ProgressStates.Progress, progressCallback)
+      .on(ProgressStates.Complete, completeCallback)
+      .extract(DataPaths.imagesBarcode, DataPaths.designBarcode)
 
     if (!data) fail()
 
@@ -40,11 +40,11 @@ describe('WorkerManager', () => {
     const completeCallback = jest.fn()
 
     const data = await workerManager
-      .on(ProgressStates.LOG, logCallback)
-      .on(ProgressStates.ERROR, errorCallback)
-      .on(ProgressStates.PROGRESS, progressCallback)
-      .on(ProgressStates.COMPLETE, completeCallback)
-      .compile(dataPaths.result, dataPaths.key)
+      .on(ProgressStates.Log, logCallback)
+      .on(ProgressStates.Error, errorCallback)
+      .on(ProgressStates.Progress, progressCallback)
+      .on(ProgressStates.Complete, completeCallback)
+      .compile(DataPaths.result, DataPaths.key)
 
     if (!data) fail()
 

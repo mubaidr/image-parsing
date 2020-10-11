@@ -136,15 +136,15 @@ export class Result {
       const keyChoice = key.answers[prop]
 
       // question not attempted
-      if (choice.value === QuestionOptions.NONE) {
+      if (choice.value === QuestionOptions.None) {
         choice.unattempted = true
         this.unattemptedCount += 1
       }
 
       // question skipped
       if (
-        keyChoice.value === QuestionOptions.NONE ||
-        keyChoice.value === QuestionOptions.MULTIPLE
+        keyChoice.value === QuestionOptions.None ||
+        keyChoice.value === QuestionOptions.Multiple
       ) {
         choice.skipped = true
         this.skippedCount += 1
@@ -185,7 +185,7 @@ export class Result {
   }
 
   static fromJson(json: ResultJSON): Result {
-    const answerRegExp = new RegExp(RegExpPatterns.QUESTION)
+    const answerRegExp = new RegExp(RegExpPatterns.Question)
     const result = new Result()
 
     Object.keys(json).forEach((key) => {
@@ -194,7 +194,7 @@ export class Result {
       if (answerRegExp.test(key)) {
         result.addAnswer(
           key.toLowerCase(),
-          (value.toLowerCase() as QuestionOptions) || QuestionOptions.NONE
+          (value.toLowerCase() as QuestionOptions) || QuestionOptions.None
         )
       } else {
         result[key] = value

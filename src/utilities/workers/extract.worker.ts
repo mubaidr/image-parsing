@@ -51,14 +51,14 @@ export async function start(
 
     if (isWorker) {
       sendMessage({
-        progressState: ProgressStates.PROGRESS,
+        progressState: ProgressStates.Progress,
       })
     }
   }
 
   if (isWorker) {
     sendMessage({
-      progressState: ProgressStates.COMPLETE,
+      progressState: ProgressStates.Complete,
       payload: results,
     })
   } else {

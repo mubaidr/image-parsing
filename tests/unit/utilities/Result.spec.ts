@@ -1,5 +1,5 @@
 import { CompiledResult } from '@/utilities/CompiledResult'
-import { dataPaths } from '@/utilities/dataPaths'
+import { DataPaths } from '@/utilities/dataPaths'
 import { readKey } from '@/utilities/readKey'
 import { Result } from '@/utilities/Result'
 import path from 'path'
@@ -7,7 +7,7 @@ import path from 'path'
 describe('Result', () => {
   test('should have defaults set', async () => {
     const rollNo = '10023'
-    const imageFile = path.resolve(dataPaths.imagesBarcode, '10023.jpg')
+    const imageFile = path.resolve(DataPaths.imagesBarcode, '10023.jpg')
     const result = new Result(rollNo, imageFile)
 
     expect(result.id).toBeDefined()
@@ -47,7 +47,7 @@ describe('Result', () => {
   })
 
   test('should be able to export to json object', async () => {
-    const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
+    const compiledResult = CompiledResult.loadFromExcel(DataPaths.result)
     const result = compiledResult.results[0]
     const o = result.toJson()
 
@@ -55,9 +55,9 @@ describe('Result', () => {
   })
 
   test('should compile', async () => {
-    const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
+    const compiledResult = CompiledResult.loadFromExcel(DataPaths.result)
     const result = compiledResult.results[0]
-    const keys = await readKey(dataPaths.key)
+    const keys = await readKey(DataPaths.key)
 
     if (!keys) fail()
 
@@ -77,9 +77,9 @@ describe('Result', () => {
   })
 
   test('should be able to identify key and result', async () => {
-    const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
+    const compiledResult = CompiledResult.loadFromExcel(DataPaths.result)
     const result = compiledResult.results[0]
-    const keys = await readKey(dataPaths.key)
+    const keys = await readKey(DataPaths.key)
 
     expect(result.isKey()).toBeFalsy()
 
@@ -90,9 +90,9 @@ describe('Result', () => {
   })
 
   test('should be able to calculate marks for compiled result', async () => {
-    const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
+    const compiledResult = CompiledResult.loadFromExcel(DataPaths.result)
     const result = compiledResult.results[0]
-    const keys = await readKey(dataPaths.key)
+    const keys = await readKey(DataPaths.key)
 
     if (keys) {
       result.compile(keys[0], 3, 1)

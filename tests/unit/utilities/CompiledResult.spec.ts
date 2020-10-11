@@ -1,13 +1,13 @@
 import { CompiledResult } from '@/utilities/CompiledResult'
-import { dataPaths } from '@/utilities/dataPaths'
+import { DataPaths } from '@/utilities/dataPaths'
 import { readKey } from '@/utilities/readKey'
 
 describe('CompiledResult', () => {
   test('should be able to load from excel', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled
+      DataPaths.resultCompiled
     )
-    const key = await readKey(dataPaths.key)
+    const key = await readKey(DataPaths.key)
 
     expect(compiledResult.keys.length).toBe(0)
     expect(compiledResult.results.length).toBeGreaterThanOrEqual(3)
@@ -25,7 +25,7 @@ describe('CompiledResult', () => {
 
   test('should be able to sort results', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled
+      DataPaths.resultCompiled
     )
 
     expect(() => {
@@ -35,11 +35,11 @@ describe('CompiledResult', () => {
 
   test('should be able to merge two compiled Results', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled
+      DataPaths.resultCompiled
     )
 
     const compiledResult2 = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled
+      DataPaths.resultCompiled
     )
 
     const compiledResultCombined = CompiledResult.merge([
@@ -52,7 +52,7 @@ describe('CompiledResult', () => {
 
   test('should be able to addResults', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled
+      DataPaths.resultCompiled
     )
 
     const compiledResultKey = new CompiledResult()
@@ -68,7 +68,7 @@ describe('CompiledResult', () => {
 
   test('should be able to export as obj array', async () => {
     const compiledResult = CompiledResult.loadFromExcel(
-      dataPaths.resultCompiled
+      DataPaths.resultCompiled
     )
 
     const d = compiledResult.export()
@@ -76,8 +76,8 @@ describe('CompiledResult', () => {
   })
 
   test('should be able to compile results', async () => {
-    const compiledResult = CompiledResult.loadFromExcel(dataPaths.result)
-    const keys = await readKey(dataPaths.key)
+    const compiledResult = CompiledResult.loadFromExcel(DataPaths.result)
+    const keys = await readKey(DataPaths.key)
 
     if (!keys) fail()
 

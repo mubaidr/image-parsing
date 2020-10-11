@@ -102,9 +102,9 @@ export async function getQuestionsData(
     if (first.percentage > 8 && first.percentage - second.percentage * 2 > 0) {
       finalOption = first.title
     } else if (first.percentage < 16) {
-      finalOption = QuestionOptions.NONE
+      finalOption = QuestionOptions.None
     } else {
-      finalOption = QuestionOptions.MULTIPLE
+      finalOption = QuestionOptions.Multiple
     }
 
     questionData[questionTitle] = finalOption

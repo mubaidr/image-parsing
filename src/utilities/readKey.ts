@@ -1,33 +1,33 @@
-import { dataPaths } from './dataPaths'
+import { DataPaths } from './dataPaths'
 import { getDesignData } from './design'
 import { importExcelToJson } from './excel'
 import { Result } from './Result'
 import { start as extractStart } from './workers/extract.worker'
 
 export enum KeyNativeTypes {
-  'csv' = 'csv',
-  'xls' = 'xls',
-  'xlsm' = 'xlsm',
-  'xlsx' = 'xlsx',
+  csv,
+  xls,
+  xlsm,
+  xlsx,
 }
 
 export enum KeyTypes {
-  'bmp' = 'bmp',
-  'csv' = 'csv',
-  'dib' = 'dib',
-  'gif' = 'gif',
-  'jfif' = 'jfif',
-  'jpe' = 'jpe',
-  'jpeg' = 'jpeg',
-  'jpg' = 'jpg',
-  'png' = 'png',
-  'svg' = 'svg',
-  'tif' = 'tif',
-  'tiff' = 'tiff',
-  'webp' = 'webp',
-  'xls' = 'xls',
-  'xlsm' = 'xlsm',
-  'xlsx' = 'xlsx',
+  bmp,
+  csv,
+  dib,
+  gif,
+  jfif,
+  jpe,
+  jpeg,
+  jpg,
+  png,
+  svg,
+  tif,
+  tiff,
+  webp,
+  xls,
+  xlsm,
+  xlsx,
 }
 
 export async function readKey(src: string): Promise<Result[] | undefined> {
@@ -46,7 +46,7 @@ export async function readKey(src: string): Promise<Result[] | undefined> {
     return results
   }
 
-  const designData = await getDesignData(dataPaths.designBarcode)
+  const designData = await getDesignData(DataPaths.designBarcode)
 
   return extractStart(
     {

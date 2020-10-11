@@ -3,7 +3,7 @@ import path from 'path'
 
 const tmp = os.tmpdir()
 
-const dataPaths = {
+export const DataPaths = {
   design: path.resolve('tests', '_data', 'design.qr.svg'),
   designBarcode: path.resolve('tests', '_data', 'design.svg'),
   home: os.homedir(),
@@ -17,5 +17,3 @@ const dataPaths = {
   temp: tmp,
   tmp,
 }
-
-export { dataPaths }
