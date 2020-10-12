@@ -55,6 +55,13 @@ export type DesignData = {
   modifiedAt?: Date
 }
 
+// prepare pattern matching reg expressions
+const PATTERN_BARCODE = new RegExp(RegExpPatterns.Barcode, 'i')
+const PATTERN_QRCODE = new RegExp(RegExpPatterns.QRCode, 'i')
+const PATTERN_OPTION = new RegExp(RegExpPatterns.Option, 'i')
+const PATTERN_ROLL_NO = new RegExp(RegExpPatterns.RollNo, 'i')
+const PATTERN_COMPUTER_MARK = new RegExp(RegExpPatterns.ComputerMark, 'i')
+
 export async function adjustTrimOffsetsForDesign(
   designData: DesignData
 ): Promise<DesignData> {
@@ -119,13 +126,6 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
   let isQrCode = false
   let code: ItemInfo = { x: 0, y: 0, width: 0, height: 0 }
   let rollNo: ItemInfo = { x: 0, y: 0, width: 0, height: 0 }
-
-  // prepare pattern matching reg expressions
-  const PATTERN_BARCODE = new RegExp(RegExpPatterns.Barcode, 'i')
-  const PATTERN_QRCODE = new RegExp(RegExpPatterns.QRCode, 'i')
-  const PATTERN_OPTION = new RegExp(RegExpPatterns.Option, 'i')
-  const PATTERN_ROLL_NO = new RegExp(RegExpPatterns.RollNo, 'i')
-  const PATTERN_COMPUTER_MARK = new RegExp(RegExpPatterns.ComputerMark, 'i')
 
   svg.g.forEach(
     (group: {
@@ -193,7 +193,7 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
     computerMarksInfo.marks.mark3.y -
     computerMarksInfo.marks.mark3.height
 
-  return {
+  return adjustTrimOffsetsForDesign({
     isQrCode,
     computerMarksInfo,
     code,
@@ -201,5 +201,5 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
     questions,
     width: svgWidth,
     height: svgHeight,
-  }
+  })
 }
