@@ -1,7 +1,7 @@
 import fastGlob from 'fast-glob'
 import NodeCache from 'node-cache'
 import path from 'path'
-import sharp, { Sharp } from 'sharp'
+import sharp from 'sharp'
 import { v4 as uuid4 } from 'uuid'
 import { DataPaths } from './dataPaths'
 
@@ -34,79 +34,40 @@ export enum ImageTypes {
   webp,
 }
 
-export async function getSharpObjectFromSource(src: string): Promise<Sharp> {
-  return sharp(src).flatten().blur().raw()
+export async function getImageDataFromSource(src: string): Promise<ImageData> {
+  const { data, info } = await sharp(src)
+    .resize(1240)
+    .flatten()
+    .raw()
+    .toBuffer({ resolveWithObject: true })
 
-  // let sharpImage = sharp(src).flatten().raw()
-  // const { width, height } = await sharpImage.metadata()
-  // const padding = 10
-
-  // if (!width || !height) throw 'Invalid image file'
-
-  // sharpImage = sharp(
-  //   await sharpImage
-  //     .extract({
-  //       left: padding,
-  //       top: padding,
-  //       width: width - padding * 2,
-  //       height: height - padding * 2,
-  //     })
-  //     .toBuffer()
-  // )
-  //   .trim(175)
-  //   .flatten()
-  //   .raw()
-
-  // logImageData(sharpImage, `trimmed ${padding}`)
-
-  // return sharpImage
+  return {
+    data: Uint8ClampedArray.from(data),
+    width: info.width,
+    height: info.height,
+  }
 }
 
-export async function convertImage(src: string): Promise<string> {
-  if (!src) {
-    throw new Error('Invalid source provided')
-  }
+export async function logImageData(
+  src: string | ImageData,
+  name?: string
+): Promise<string> {
+  const target = path.join(DataPaths.tmp, `${name || uuid4()}.jpg`)
 
-  const ext = src.split('.').pop()
-
-  // native supported images
-  if (ext && ext in ImageNativeTypes) {
-    return src
+  if (typeof src !== 'string') {
+    sharp(Buffer.from(src.data)).jpeg().toFile(target)
+    return target
   }
 
   // check cache
   const cached = myCache.get(src)
-  if (cached !== undefined) {
+  if (cached) {
     return cached as string
-  }
-
-  // // generate random tmp url
-  const url = path.join(DataPaths.tmp, `${uuid4()}.jpg`)
-  myCache.set(src, url)
-
-  // save file for preview
-  const sharpImg = await getSharpObjectFromSource(src)
-
-  await sharpImg.jpeg().toFile(url)
-
-  // returns new url
-  return url
-}
-
-export async function logImageData(
-  src: string | Sharp,
-  name?: string
-): Promise<string> {
-  let img: Sharp
-  const target = path.join(DataPaths.tmp, `${name || uuid4()}.jpg`)
-
-  if (typeof src === 'string') {
-    img = await getSharpObjectFromSource(src)
   } else {
-    img = src.clone()
+    myCache.set(src, target)
   }
 
-  img.jpeg().toFile(target)
+  sharp(src).jpeg().toFile(target)
 
   return target
 }

@@ -1,9 +1,7 @@
 import { DataPaths } from '@/utilities/dataPaths'
 import {
-  convertImage,
-  getImagePaths,
   // eslint-disable-next-line prettier/prettier
-    getSharpObjectFromSource
+  getImageDataFromSource, getImagePaths, logImageData
 } from '@/utilities/images'
 import fs from 'fs'
 import path from 'path'
@@ -16,9 +14,9 @@ describe('convertImage', () => {
     const nativeImageSrc = path.resolve(DataPaths.imagesBarcode, '10023.jpg')
     const imageSrc = path.resolve(DataPaths.imagesBarcode, '10025.tif')
 
-    expect(await convertImage(nativeImageSrc)).toEqual(nativeImageSrc)
+    expect(await logImageData(nativeImageSrc)).toEqual(nativeImageSrc)
 
-    const convertedImgPath = await convertImage(imageSrc)
+    const convertedImgPath = await logImageData(imageSrc)
 
     expect(fs.existsSync(convertedImgPath)).toBeTruthy()
 
@@ -38,7 +36,7 @@ describe('getImagePaths', () => {
 
 describe('getSharpObjectFromSource', () => {
   test('works', async () => {
-    const sharpImg = await getSharpObjectFromSource(DataPaths.keyImage)
+    const sharpImg = await getImageDataFromSource(DataPaths.keyImage)
 
     expect(sharpImg).toBeInstanceOf(Sharp)
   })

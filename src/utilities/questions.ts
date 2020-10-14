@@ -51,16 +51,16 @@ function getPercentFilledFromBinary(data: number[]): number {
 
 export async function getQuestionsData(
   design: DesignData,
-  sharpImage: Sharp
+  imageData: Sharp
 ): Promise<QuestionData> {
   const questions = Object.entries(design.questions)
   const questionData: QuestionData = {}
   const SCALE = 1
 
-  sharpImage.resize(design.width * SCALE)
+  imageData.resize(design.width * SCALE)
 
   // log image
-  // logImageData(sharpImage, 'complete')
+  // logImageData(imageData, 'complete')
 
   for (let i = 0; i < questions.length; i += 1) {
     const [questionTitle, q] = questions[i]
@@ -74,7 +74,7 @@ export async function getQuestionsData(
 
       if (!itemInfo) continue
 
-      sharpImage.extract({
+      imageData.extract({
         left: Math.floor((itemInfo.x - itemInfo.width * 0.5) * SCALE),
         top: Math.floor((itemInfo.y - itemInfo.height * 0.5) * SCALE),
         width: Math.ceil(itemInfo.width * SCALE),
@@ -82,10 +82,10 @@ export async function getQuestionsData(
       })
 
       // log image
-      // logImageData(sharpImage, questionTitle + optionTitle)
+      // logImageData(imageData, questionTitle + optionTitle)
 
       const percentBlack = getPercentFilledFromBinary([
-        ...(await sharpImage.toBuffer()),
+        ...(await imageData.toBuffer()),
       ])
 
       answerCollection.push({
