@@ -1,6 +1,6 @@
 import { DataPaths } from '@/utilities/dataPaths'
 import { getDesignData } from '@/utilities/design'
-import { getImagePaths } from '@/utilities/images'
+import { Image } from '@/utilities/Image'
 import { readKey } from '@/utilities/readKey'
 import { start } from '@/utilities/workers/extract.worker'
 
@@ -32,7 +32,7 @@ describe('workerExtract', () => {
   test('extracted result should match with results.xlsx', async () => {
     const resultsExcel = await readKey(DataPaths.result)
     const designData = await getDesignData(DataPaths.designBarcode)
-    const imagePaths = getImagePaths(DataPaths.imagesBarcode)
+    const imagePaths = Image.readDirectory(DataPaths.imagesBarcode)
 
     const results = await start(
       {

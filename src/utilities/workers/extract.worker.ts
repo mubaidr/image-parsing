@@ -1,6 +1,6 @@
 import 'v8-compile-cache'
 import { DesignData } from '../design'
-import { getImageDataFromSource } from '../images'
+import { Image } from '../Image'
 import { getQuestionsData } from '../questions'
 import { Result } from '../Result'
 import { getSheetInfoFromImage } from '../sheetInfo'
@@ -31,12 +31,12 @@ export async function start(
 
   for (let i = 0; i < imagePaths.length; i += 1) {
     const imagePath = imagePaths[i]
-    const imageData = await getImageDataFromSource(imagePath)
+    const image = await Image.load(imagePath)
 
     // get design and image data
     const [rollNo, questionsData] = await Promise.all([
-      getSheetInfoFromImage(designData, imageData),
-      getQuestionsData(designData, imageData.clone()),
+      getSheetInfoFromImage(designData, image),
+      getQuestionsData(designData, image.clone()),
     ])
     const result = new Result(rollNo, imagePath)
     results.push(result)

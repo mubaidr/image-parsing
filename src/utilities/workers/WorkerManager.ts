@@ -2,7 +2,7 @@ import { ChildProcess, fork } from 'child_process'
 import { EventEmitter } from 'events'
 import { cpus } from 'os'
 import { DesignData, getDesignData } from '../design'
-import { getImagePaths } from '../images'
+import { Image } from '../Image'
 import { readKey } from '../readKey'
 import { Result, ResultLike } from '../Result'
 import { ProgressStates } from './ProgressStates'
@@ -99,7 +99,7 @@ export class WorkerManager extends EventEmitter {
   }
 
   async extract(directory: string, designPath: string): Promise<Result[]> {
-    const totalImages = getImagePaths(directory)
+    const totalImages = Image.readDirectory(directory)
     let designData: DesignData
 
     try {

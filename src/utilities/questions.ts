@@ -1,5 +1,5 @@
-import { Sharp } from 'sharp'
 import { DesignData } from './design'
+import { Image } from './Image'
 import { QuestionOptions } from './QuestionOptions'
 
 export type AnswerCollection = {
@@ -11,53 +11,12 @@ export type QuestionData = {
   [key: string]: QuestionOptions
 }
 
-function getPercentFilledFromBinary(data: number[]): number {
-  const binaryData: number[] = []
-  const channels = 3
-
-  for (let i = 0; i < data.length; i += channels) {
-    const threshold = 15
-    const thresholdBlack = 80
-    const [r, g, b] = data.slice(i, i + channels)
-    const avg = Math.ceil((r + g + b) / channels)
-    const upperLimit = avg + threshold
-    const lowerLimit = avg - threshold
-
-    if (avg <= thresholdBlack) {
-      // Black pixel
-      binaryData.push(1)
-    } else if (
-      r <= upperLimit &&
-      r >= lowerLimit &&
-      g <= upperLimit &&
-      g >= lowerLimit &&
-      b <= upperLimit &&
-      b >= lowerLimit
-    ) {
-      // Grey pixel
-      binaryData.push(0)
-    } else {
-      // Color pixel
-      binaryData.push(1)
-    }
-  }
-
-  const percentageBlack =
-    binaryData.reduce((prev, item) => prev + item, 0) /
-    (binaryData.length / 100)
-
-  return percentageBlack
-}
-
 export async function getQuestionsData(
   design: DesignData,
-  imageData: Sharp
+  image: Image
 ): Promise<QuestionData> {
   const questions = Object.entries(design.questions)
   const questionData: QuestionData = {}
-  const SCALE = 1
-
-  imageData.resize(design.width * SCALE)
 
   // log image
   // logImageData(imageData, 'complete')
@@ -74,19 +33,17 @@ export async function getQuestionsData(
 
       if (!itemInfo) continue
 
-      imageData.extract({
-        left: Math.floor((itemInfo.x - itemInfo.width * 0.5) * SCALE),
-        top: Math.floor((itemInfo.y - itemInfo.height * 0.5) * SCALE),
-        width: Math.ceil(itemInfo.width * SCALE),
-        height: Math.ceil(itemInfo.height * SCALE),
-      })
-
       // log image
       // logImageData(imageData, questionTitle + optionTitle)
 
-      const percentBlack = getPercentFilledFromBinary([
-        ...(await imageData.toBuffer()),
-      ])
+      const percentBlack = image
+        .extract(
+          Math.floor(itemInfo.x - itemInfo.width * 0.5),
+          Math.floor(itemInfo.y - itemInfo.height * 0.5),
+          Math.ceil(itemInfo.width),
+          Math.ceil(itemInfo.height)
+        )
+        .getPercentFilled()
 
       answerCollection.push({
         title: optionTitle as QuestionOptions,

@@ -36,6 +36,7 @@ export enum ImageTypes {
 
 export class Image {
   static TARGET_SIZE = 1240
+  id: string
   source: string
   width = 0
   height = 0
@@ -43,13 +44,13 @@ export class Image {
   data: Uint8ClampedArray = Uint8ClampedArray.from([])
 
   constructor(source: string) {
-    const extension = source.split('.').pop()
+    this.id = uuid4()
+    this.source = source
 
+    const extension = source.split('.').pop()
     if (extension && extension in ImageNativeTypes) {
       this.isNative = true
     }
-
-    this.source = source
   }
 
   static readDirectory(dir: string): string[] {
@@ -83,8 +84,18 @@ export class Image {
     return image
   }
 
+  clone(): Image {
+    const image = new Image(this.source)
+    image.width = this.width
+    image.height = this.height
+    image.isNative = this.isNative
+    image.data = Uint8ClampedArray.from([...this.data])
+
+    return image
+  }
+
   write(src: string | ImageData, name?: string): string {
-    const target = path.join(DataPaths.tmp, `${name || uuid4()}.jpg`)
+    const target = path.join(DataPaths.tmp, `${name || this.id}.jpg`)
 
     if (typeof src !== 'string') {
       // TOFIX: write imageData to file
@@ -167,6 +178,7 @@ export class Image {
     const data: number[] = []
 
     for (let left = x; left < x + width; left += 1) {
+      // TODO: copy whole row for each x
       for (let top = y; top < y + height; top += 1) {
         const pos = (top * width + left) * 3
         data.push(this.data[pos])
@@ -182,5 +194,12 @@ export class Image {
     image.data = Uint8ClampedArray.from(data)
 
     return image
+  }
+
+  async log(name?: string): Promise<void> {
+    const target = path.join(DataPaths.tmp, `${name || uuid4()}.jpg`)
+    // BUG: Sharp instance
+    await sharp(src).jpeg().toFile(target)
+    console.log(`[log] : ${target}`)
   }
 }
