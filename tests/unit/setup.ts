@@ -20,8 +20,10 @@ module.exports = async () => {
         ...config,
       },
       (err, stats) => {
-        if (err || stats.hasErrors()) {
-          reject(err || stats.compilation.errors[0])
+        if (err) reject(err)
+
+        if (stats && stats.hasErrors()) {
+          reject(stats.compilation.errors[0])
         }
 
         resolve(null)

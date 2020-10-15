@@ -17,25 +17,25 @@ describe('Image', () => {
 
     const { width, height } = image
 
-    image.greyscale()
+    image.grayscale()
 
     expect(image.width * image.height).toBe(width * height)
     expect(image.data.length * image.width * image.height).toBeGreaterThan(0)
   })
 
   test('extract', async () => {
-    let image = await Image.load(
-      path.resolve('./tests/_data/empty-200x400.png'),
+    const image = await Image.load(
+      path.resolve('./tests/_data/empty-50x50.png'),
       true
     )
 
-    const width = 100
-    const height = 200
+    const width = 10
+    const height = 20
 
-    // 50, 100, 100, 200
-    image = image.extract(width / 2, height / 2, width, height)
+    // 5, 10, 10, 20
+    const imageCopy = image.extract(width / 2, height / 2, width, height)
 
-    expect(image.width * image.height).toBe(width * height)
-    expect(image.data.length).toBe(width * height * 3)
+    expect(imageCopy.width * imageCopy.height).toBe(width * height)
+    expect(imageCopy.data.length).toBe(width * height * 3)
   })
 })

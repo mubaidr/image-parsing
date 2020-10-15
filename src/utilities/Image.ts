@@ -38,9 +38,9 @@ export class Image {
   static TARGET_SIZE = 1240
   id: string
   source: string
+  isNative = false
   width = 0
   height = 0
-  isNative = false
   data: Uint8ClampedArray = Uint8ClampedArray.from([])
 
   constructor(source: string) {
@@ -84,6 +84,13 @@ export class Image {
     return image
   }
 
+  log(name: string = uuid4(), location?: string): void {
+    const target = path.join(location || DataPaths.tmp, `${name}.jpg`)
+    // BUG: Sharp instance
+    // await sharp(src).jpeg().toFile(target)
+    console.log(`[log] : ${target}`)
+  }
+
   clone(): Image {
     const image = new Image(this.source)
     image.width = this.width
@@ -92,32 +99,6 @@ export class Image {
     image.data = Uint8ClampedArray.from([...this.data])
 
     return image
-  }
-
-  write(src: string | ImageData, name?: string): string {
-    const target = path.join(DataPaths.tmp, `${name || this.id}.jpg`)
-
-    if (typeof src !== 'string') {
-      // TOFIX: write imageData to file
-      // sharp(src).jpeg().toFile(target)
-      return target
-    }
-
-    // check cache
-    const cached = myCache.get(src)
-    if (cached) {
-      return cached as string
-    } else {
-      myCache.set(src, target)
-    }
-
-    sharp(src).jpeg().toFile(target)
-
-    return target
-  }
-
-  greyscale(): Image {
-    return this.grayscale()
   }
 
   grayscale(): Image {
@@ -165,41 +146,40 @@ export class Image {
   }
 
   extract(x = 0, y = 0, width = this.width, height = this.height): Image {
-    if (
-      x < 0 ||
-      y < 0 ||
-      width <= 0 ||
-      height <= 0 ||
-      x + width >= this.width ||
-      y + height >= this.height
-    )
-      throw 'Invalid dimensions'
-
-    const data: number[] = []
-
-    for (let left = x; left < x + width; left += 1) {
-      // TODO: copy whole row for each x
-      for (let top = y; top < y + height; top += 1) {
-        const pos = (top * width + left) * 3
-        data.push(this.data[pos])
-        data.push(this.data[pos + 1])
-        data.push(this.data[pos + 2])
-      }
+    const dummyData: number[] = []
+    for (let i = 0; i < this.width * this.height * 3; i += 1) {
+      dummyData.push(i)
     }
+
+    console.log(this.width, this.height, ...dummyData)
+
+    const data = new Uint8ClampedArray(width * height * 3)
+
+    for (let top = y; top < y + height; top += 1) {
+      const start = (top * width + x) * 3
+      const end = (top * width + x + width) * 3
+      const row = top - y
+
+      // data.set(dummyData.slice(start, end), row * width * 3)
+      console.log(
+        row,
+        ' : ',
+        end - start,
+        ' : ',
+        ...dummyData.slice(start, end)
+      )
+    }
+
+    // console.log('TCL: ----------------------------------')
+    // console.log('TCL: Image -> extract -> data \n\n', ...data)
+    // console.log('TCL: ----------------------------------')
 
     const image = new Image(this.source)
     image.width = width
     image.height = height
+    image.data = data
     image.isNative = this.isNative
-    image.data = Uint8ClampedArray.from(data)
 
     return image
-  }
-
-  async log(name?: string): Promise<void> {
-    const target = path.join(DataPaths.tmp, `${name || uuid4()}.jpg`)
-    // BUG: Sharp instance
-    await sharp(src).jpeg().toFile(target)
-    console.log(`[log] : ${target}`)
   }
 }
