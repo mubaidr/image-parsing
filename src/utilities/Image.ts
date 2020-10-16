@@ -1,11 +1,11 @@
 import fastGlob from 'fast-glob'
-import NodeCache from 'node-cache'
+// import NodeCache from 'node-cache'
 import path from 'path'
 import sharp from 'sharp'
 import { v4 as uuid4 } from 'uuid'
 import { DataPaths } from './dataPaths'
 
-const myCache = new NodeCache()
+// const myCache = new NodeCache()
 
 export enum ImageNativeTypes {
   bmp,
@@ -91,12 +91,12 @@ export class Image {
     console.log(`[log] : ${target}`)
   }
 
-  clone(): Image {
+  clone(data?: Uint8ClampedArray, width?: number, height?: number): Image {
     const image = new Image(this.source)
-    image.width = this.width
-    image.height = this.height
     image.isNative = this.isNative
-    image.data = Uint8ClampedArray.from([...this.data])
+    image.width = width ? width : this.width
+    image.height = height ? height : this.height
+    image.data = data ? data : Uint8ClampedArray.from([...this.data])
 
     return image
   }
@@ -146,40 +146,15 @@ export class Image {
   }
 
   extract(x = 0, y = 0, width = this.width, height = this.height): Image {
-    const dummyData: number[] = []
-    for (let i = 0; i < this.width * this.height * 3; i += 1) {
-      dummyData.push(i)
-    }
-
-    console.log(this.width, this.height, ...dummyData)
-
     const data = new Uint8ClampedArray(width * height * 3)
 
     for (let top = y; top < y + height; top += 1) {
-      const start = (top * width + x) * 3
-      const end = (top * width + x + width) * 3
+      const start = (top * this.width + x) * 3
+      const end = (top * this.width + x + width - 1) * 3
       const row = top - y
-
-      // data.set(dummyData.slice(start, end), row * width * 3)
-      console.log(
-        row,
-        ' : ',
-        end - start,
-        ' : ',
-        ...dummyData.slice(start, end)
-      )
+      data.set(this.data.slice(start, end), row * width * 3)
     }
 
-    // console.log('TCL: ----------------------------------')
-    // console.log('TCL: Image -> extract -> data \n\n', ...data)
-    // console.log('TCL: ----------------------------------')
-
-    const image = new Image(this.source)
-    image.width = width
-    image.height = height
-    image.data = data
-    image.isNative = this.isNative
-
-    return image
+    return this.clone(data, width, height)
   }
 }
