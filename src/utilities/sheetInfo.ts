@@ -19,20 +19,25 @@ function extractText(image: Image): string | undefined {
 
 function decode(image: Image): string {
   const reader = new MultiFormatReader()
-  const binaryBitmap = new BinaryBitmap(
-    new HybridBinarizer(
-      new RGBLuminanceSource(image.data, image.width, image.height)
-    )
-  )
 
   const hints = new Map()
-  hints.set(DecodeHintType.PURE_BARCODE, true)
+  // hints.set(DecodeHintType.PURE_BARCODE, true)
   hints.set(DecodeHintType.POSSIBLE_FORMATS, [
     BarcodeFormat.CODE_39,
+    BarcodeFormat.CODE_93,
     BarcodeFormat.QR_CODE,
   ])
   reader.setHints(hints)
-  return reader.decode(binaryBitmap).getText()
+
+  return reader
+    .decode(
+      new BinaryBitmap(
+        new HybridBinarizer(
+          new RGBLuminanceSource(image.data, image.width, image.height)
+        )
+      )
+    )
+    .getText()
 }
 
 export async function getSheetInfoFromImage(
@@ -42,20 +47,19 @@ export async function getSheetInfoFromImage(
   let sheetInfo: string | undefined
   const ratio = image.width ? image.width / designData.width : 1
 
-  const extracted = image
-    .extract(
-      Math.floor(designData.code.x * ratio),
-      Math.floor(designData.code.y * ratio),
-      Math.ceil(designData.code.width * ratio),
-      Math.ceil(designData.code.height * ratio)
-    )
-    .greyscale()
+  const extracted = image.extract(
+    Math.floor(designData.code.x * ratio),
+    Math.floor(designData.code.y * ratio),
+    Math.ceil(designData.code.width * ratio),
+    Math.ceil(designData.code.height * ratio)
+  )
 
-  // extracted.log
+  await extracted.log('roll-no-grayscaled')
 
   try {
     sheetInfo = decode(extracted)
-  } catch {
+  } catch (err) {
+    console.log(err)
     sheetInfo = extractText(extracted)
   }
 

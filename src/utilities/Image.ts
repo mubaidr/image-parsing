@@ -105,7 +105,7 @@ export class Image {
         height: this.height,
         channels: 3,
       },
-    })
+    }).raw()
   }
 
   clone(data?: Uint8ClampedArray, width?: number, height?: number): Image {
@@ -124,10 +124,8 @@ export class Image {
 
   grayscale(): Image {
     for (let i = 0; i < this.data.length; i += 3) {
-      const brightness =
+      this.data[i] = this.data[i + 1] = this.data[i + 2] =
         0.34 * this.data[i] + 0.5 * this.data[i + 1] + 0.16 * this.data[i + 2]
-
-      this.data[i] = this.data[i + 1] = this.data[i + 2] = brightness
     }
 
     return this
