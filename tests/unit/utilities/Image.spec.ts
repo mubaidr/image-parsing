@@ -1,5 +1,6 @@
 import { DataPaths } from '@/utilities/dataPaths'
 import { Image } from '@/utilities/Image'
+import { existsSync } from 'fs'
 import * as path from 'path'
 
 describe('Image', () => {
@@ -35,8 +36,25 @@ describe('Image', () => {
     // 5, 10, 10, 20
     const imageCopy = image.extract(width / 2, height / 2, width, height)
 
+    imageCopy.log()
+
     expect(imageCopy.width * imageCopy.height).toBe(width * height)
     expect(imageCopy.data.length).toBe(width * height * 3)
     expect(imageCopy.data).toMatchSnapshot()
+  })
+
+  test('log', async () => {
+    const image = await Image.load(
+      path.resolve('./tests/_data/empty-20x20.png'),
+      true
+    )
+
+    const width = 10
+    const height = 10
+
+    const imageCopy = image.extract(width / 2, height / 2, width, height)
+    const target = await imageCopy.log()
+
+    expect(existsSync(target)).toBeTruthy()
   })
 })

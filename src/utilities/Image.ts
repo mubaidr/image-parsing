@@ -1,7 +1,7 @@
 import fastGlob from 'fast-glob'
 // import NodeCache from 'node-cache'
 import path from 'path'
-import sharp from 'sharp'
+import sharp, { Sharp } from 'sharp'
 import { v4 as uuid4 } from 'uuid'
 import { DataPaths } from './dataPaths'
 
@@ -84,11 +84,28 @@ export class Image {
     return image
   }
 
-  log(name: string = uuid4(), location?: string): void {
+  async log(name: string = uuid4(), location?: string): Promise<string> {
     const target = path.join(location || DataPaths.tmp, `${name}.jpg`)
-    // BUG: Sharp instance
-    // await sharp(src).jpeg().toFile(target)
-    console.log(`[log] : ${target}`)
+
+    await this.toSharpObject()
+      .jpeg()
+      .toFile(target)
+      .then(() => {
+        console.info(`[log] : ${target}`)
+      })
+      .catch(console.error)
+
+    return target
+  }
+
+  toSharpObject(): Sharp {
+    return sharp(Buffer.from(this.data), {
+      raw: {
+        width: this.width,
+        height: this.height,
+        channels: 3,
+      },
+    })
   }
 
   clone(data?: Uint8ClampedArray, width?: number, height?: number): Image {
@@ -99,6 +116,10 @@ export class Image {
     image.data = data ? data : Uint8ClampedArray.from([...this.data])
 
     return image
+  }
+
+  greyscale(): Image {
+    return this.grayscale()
   }
 
   grayscale(): Image {
