@@ -72,14 +72,15 @@ export class Image {
     })
   }
 
-  static async load(source: string, avoidResize = false): Promise<Image> {
-    const sharpImage = sharp(source)
-
-    if (!avoidResize) sharpImage.resize(Image.TARGET_SIZE)
-
-    const { data, info } = await sharpImage
-      .raw()
+  static async load(source: string): Promise<Image> {
+    const { data, info } = await sharp(source)
+      .resize(Image.TARGET_SIZE, null, {
+        kernel: sharp.kernel.mitchell,
+        fastShrinkOnLoad: false,
+        withoutEnlargement: true,
+      })
       .flatten()
+      .raw()
       .toBuffer({ resolveWithObject: true })
 
     const image = new Image(source)
@@ -112,7 +113,7 @@ export class Image {
         height: this.height,
         channels: Image.CHANNELS as 1 | 2 | 3 | 4,
       },
-    }).raw()
+    })
   }
 
   clone(data?: Uint8ClampedArray, width?: number, height?: number): Image {
@@ -145,8 +146,8 @@ export class Image {
     for (let i = 0; i < this.data.length; i += Image.CHANNELS) {
       const [r, g, b] = this.data.slice(i, i + Image.CHANNELS)
       const avg = pixelAverage(r, g, b)
-      const threshold = 15
-      const thresholdBlack = 80
+      const threshold = 25
+      const thresholdBlack = 85
       const upperLimit = avg + threshold
       const lowerLimit = avg - threshold
 

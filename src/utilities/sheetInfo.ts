@@ -21,7 +21,7 @@ function decode(image: Image): string {
   const reader = new MultiFormatReader()
 
   const hints = new Map()
-  // hints.set(DecodeHintType.PURE_BARCODE, true)
+  hints.set(DecodeHintType.PURE_BARCODE, true)
   hints.set(DecodeHintType.POSSIBLE_FORMATS, [
     BarcodeFormat.CODE_39,
     BarcodeFormat.CODE_93,
