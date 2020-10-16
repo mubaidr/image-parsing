@@ -34,14 +34,21 @@ export enum ImageTypes {
   webp,
 }
 
+// average using linear approximation of gamma & perceptual luminance correction
+function pixelAverage(r: number, g: number, b: number): number {
+  return Math.floor(0.299 * r + 0.587 * g + 0.114 * b)
+}
+
 export class Image {
-  static TARGET_SIZE = 1240
-  id: string
-  source: string
-  isNative = false
-  width = 0
-  height = 0
-  data: Uint8ClampedArray = Uint8ClampedArray.from([])
+  static TARGET_SIZE = 1280
+  static CHANNELS = 3
+
+  public id: string
+  public source: string
+  public isNative = false
+  public width = 0
+  public height = 0
+  public data: Uint8ClampedArray = Uint8ClampedArray.from([])
 
   constructor(source: string) {
     this.id = uuid4()
@@ -103,13 +110,14 @@ export class Image {
       raw: {
         width: this.width,
         height: this.height,
-        channels: 3,
+        channels: Image.CHANNELS as 1 | 2 | 3 | 4,
       },
     }).raw()
   }
 
   clone(data?: Uint8ClampedArray, width?: number, height?: number): Image {
     const image = new Image(this.source)
+
     image.isNative = this.isNative
     image.width = width ? width : this.width
     image.height = height ? height : this.height
@@ -123,9 +131,9 @@ export class Image {
   }
 
   grayscale(): Image {
-    for (let i = 0; i < this.data.length; i += 3) {
-      this.data[i] = this.data[i + 1] = this.data[i + 2] =
-        0.34 * this.data[i] + 0.5 * this.data[i + 1] + 0.16 * this.data[i + 2]
+    for (let i = 0; i < this.data.length; i += Image.CHANNELS) {
+      const [r, g, b] = this.data.slice(i, i + Image.CHANNELS)
+      this.data[i] = this.data[i + 1] = this.data[i + 2] = pixelAverage(r, g, b)
     }
 
     return this
@@ -134,11 +142,11 @@ export class Image {
   getPercentFilled(): number {
     let sum = 0
 
-    for (let i = 0; i < this.data.length; i += 3) {
-      const [r, g, b] = this.data.slice(i, i + 3)
+    for (let i = 0; i < this.data.length; i += Image.CHANNELS) {
+      const [r, g, b] = this.data.slice(i, i + Image.CHANNELS)
+      const avg = pixelAverage(r, g, b)
       const threshold = 15
       const thresholdBlack = 80
-      const avg = Math.ceil(0.34 * r + 0.5 * g + 0.16 * b)
       const upperLimit = avg + threshold
       const lowerLimit = avg - threshold
 
@@ -165,13 +173,13 @@ export class Image {
   }
 
   extract(x = 0, y = 0, width = this.width, height = this.height): Image {
-    const data = new Uint8ClampedArray(width * height * 3)
+    const data = new Uint8ClampedArray(width * height * Image.CHANNELS)
 
     for (let top = y; top < y + height; top += 1) {
-      const start = (top * this.width + x) * 3
-      const end = (top * this.width + x + width - 1) * 3
+      const start = (top * this.width + x) * Image.CHANNELS
+      const end = (top * this.width + x + width - 1) * Image.CHANNELS
       const row = top - y
-      data.set(this.data.slice(start, end), row * width * 3)
+      data.set(this.data.slice(start, end), row * width * Image.CHANNELS)
     }
 
     return this.clone(data, width, height)
