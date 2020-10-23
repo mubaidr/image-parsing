@@ -6,7 +6,7 @@ import {
   MultiFormatReader,
   // eslint-disable-next-line prettier/prettier
   RGBLuminanceSource
-} from '@zxing/library'
+} from '@zxing/library/cjs'
 import { DesignData } from './design'
 import { Image } from './Image'
 
@@ -17,26 +17,35 @@ function extractText(image: Image): string | undefined {
   return undefined
 }
 
-function decode(image: Image): string {
+function decode(image: Image, isQrCode = false): string {
   const hints = new Map()
   hints.set(DecodeHintType.TRY_HARDER, 1)
-  hints.set(DecodeHintType.PURE_BARCODE, 1)
-  hints.set(DecodeHintType.POSSIBLE_FORMATS, [
-    BarcodeFormat.CODE_39,
-    BarcodeFormat.CODE_93,
-    BarcodeFormat.QR_CODE,
-  ])
+
+  if (isQrCode) {
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.QR_CODE])
+  } else {
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.CODE_39])
+    hints.set(DecodeHintType.PURE_BARCODE, 1)
+  }
+
+  const len = image.width * image.height
+  const luminancesUint8Array = new Uint8ClampedArray(len)
+
+  for (let i = 0; i < len; i++) {
+    luminancesUint8Array[i] =
+      ((image.data[i * 3] + image.data[i * 3 + 1] + image.data[i * 3 + 2]) /
+        3) &
+      0xff
+  }
 
   const decode = new MultiFormatReader().decode(
     new BinaryBitmap(
       new HybridBinarizer(
-        new RGBLuminanceSource(image.data, image.width, image.height)
+        new RGBLuminanceSource(luminancesUint8Array, image.width, image.height)
       )
     ),
     hints
   )
-
-  console.log('decode: ', decode)
 
   return decode.getText()
 }
@@ -56,12 +65,9 @@ export async function getSheetInfoFromImage(
     Math.ceil(designData.code.height * ratioY)
   )
 
-  await extracted.log('roll-no-grayscaled')
-
   try {
-    sheetInfo = decode(extracted)
-  } catch (err) {
-    console.error(err)
+    sheetInfo = decode(extracted, designData.isQrCode)
+  } catch {
     sheetInfo = extractText(extracted)
   }
 
