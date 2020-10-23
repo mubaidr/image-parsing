@@ -44,8 +44,7 @@ describe('Image', () => {
 
   test('log', async () => {
     const image = await Image.load(
-      path.resolve('./tests/_data/empty-20x20.png'),
-      true
+      path.resolve('./tests/_data/empty-20x20.png')
     )
 
     const width = 10

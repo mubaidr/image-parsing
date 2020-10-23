@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
 const fsGlob = require('fast-glob')
-const TerserJSPlugin = require('terser-webpack-plugin')
 const { dependencies, devDependencies } = require('./package.json')
+const { ESBuildPlugin, ESBuildMinifyPlugin } = require('esbuild-loader')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 //   .BundleAnalyzerPlugin
 
@@ -24,7 +24,8 @@ fsGlob
     entry[split[split.length - 1].split('.')[0]] = workerPath
   })
 
-const isDevMode = process.env.NODE_ENV === 'development'
+const isDevMode =
+  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
 
 const config = {
   name: 'workers',
@@ -40,20 +41,19 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js(x?)$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
+        test: /\.js$/,
+        loader: 'esbuild-loader',
+        options: {
+          target: 'node12',
+        },
       },
       {
-        test: /\.ts(x?)$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              transpileOnly: true,
-            },
-          },
-        ],
+        test: /\.tsx?$/,
+        loader: 'esbuild-loader',
+        options: {
+          loader: 'tsx',
+          target: 'node12',
+        },
       },
       {
         test: /\.node$/,
@@ -65,7 +65,7 @@ const config = {
     __dirname: isDevMode,
     __filename: isDevMode,
   },
-  plugins: [],
+  plugins: [new ESBuildPlugin()],
   resolve: {
     extensions: ['.ts', '.js', '.json', '.node'],
   },
@@ -77,11 +77,10 @@ if (isDevMode) {
   // config.plugins.push(new BundleAnalyzerPlugin())
 } else {
   config.optimization = {
+    minimize: true,
     minimizer: [
-      new TerserJSPlugin({
-        parallel: true,
-        cache: true,
-        sourceMap: true,
+      new ESBuildMinifyPlugin({
+        target: 'node12',
       }),
     ],
   }

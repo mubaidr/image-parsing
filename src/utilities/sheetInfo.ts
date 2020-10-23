@@ -6,7 +6,7 @@ import {
   MultiFormatReader,
   // eslint-disable-next-line prettier/prettier
   RGBLuminanceSource
-} from '@zxing/library/esm5'
+} from '@zxing/library'
 import { DesignData } from './design'
 import { Image } from './Image'
 
@@ -18,26 +18,27 @@ function extractText(image: Image): string | undefined {
 }
 
 function decode(image: Image): string {
-  const reader = new MultiFormatReader()
-
   const hints = new Map()
-  hints.set(DecodeHintType.PURE_BARCODE, true)
+  hints.set(DecodeHintType.TRY_HARDER, 1)
+  hints.set(DecodeHintType.PURE_BARCODE, 1)
   hints.set(DecodeHintType.POSSIBLE_FORMATS, [
     BarcodeFormat.CODE_39,
     BarcodeFormat.CODE_93,
     BarcodeFormat.QR_CODE,
   ])
-  reader.setHints(hints)
 
-  return reader
-    .decode(
-      new BinaryBitmap(
-        new HybridBinarizer(
-          new RGBLuminanceSource(image.data, image.width, image.height)
-        )
+  const decode = new MultiFormatReader().decode(
+    new BinaryBitmap(
+      new HybridBinarizer(
+        new RGBLuminanceSource(image.data, image.width, image.height)
       )
-    )
-    .getText()
+    ),
+    hints
+  )
+
+  console.log('decode: ', decode)
+
+  return decode.getText()
 }
 
 export async function getSheetInfoFromImage(
@@ -45,13 +46,14 @@ export async function getSheetInfoFromImage(
   image: Image
 ): Promise<string | undefined> {
   let sheetInfo: string | undefined
-  const ratio = image.width ? image.width / designData.width : 1
+  const ratioX = image.width / designData.width
+  const ratioY = image.height / designData.height
 
   const extracted = image.extract(
-    Math.floor(designData.code.x * ratio),
-    Math.floor(designData.code.y * ratio),
-    Math.ceil(designData.code.width * ratio),
-    Math.ceil(designData.code.height * ratio)
+    Math.floor(designData.code.x * ratioX),
+    Math.floor(designData.code.y * ratioY),
+    Math.ceil(designData.code.width * ratioX),
+    Math.ceil(designData.code.height * ratioY)
   )
 
   await extracted.log('roll-no-grayscaled')
@@ -59,7 +61,7 @@ export async function getSheetInfoFromImage(
   try {
     sheetInfo = decode(extracted)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     sheetInfo = extractText(extracted)
   }
 

@@ -5,11 +5,6 @@
     "jsx": "preserve",
     "lib": [
       "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost",
-      "WebWorker",
-      "WebWorker.ImportScripts"
     ],
     "module": "esnext",
     "moduleResolution": "node",
