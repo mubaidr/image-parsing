@@ -194,7 +194,7 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
     computerMarksInfo.marks.mark3.height
 
   // disable offset adjustment until rectagnle detection impemented in image
-  return {
+  return adjustTrimOffsetsForDesign({
     isQrCode,
     computerMarksInfo,
     code,
@@ -202,5 +202,5 @@ export async function getDesignData(designPath: string): Promise<DesignData> {
     questions,
     width: svgWidth,
     height: svgHeight,
-  }
+  })
 }
