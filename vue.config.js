@@ -18,4 +18,10 @@ module.exports = {
       nodeIntegration: true,
     },
   },
+
+  productionSourceMap: false,
+
+  css: {
+    extract: false,
+  },
 }

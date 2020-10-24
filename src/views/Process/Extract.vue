@@ -6,10 +6,10 @@
 </template>
 
 <script lang="ts">
-import { dataPaths } from '@/utilities/dataPaths'
+import { DataPaths } from '@/utilities/dataPaths'
 import { defineComponent } from 'vue'
 import { WorkerManager } from '@/utilities/workers/WorkerManager'
-import { PROGRESS_STATES } from '@/utilities/workers/PROGRESS_STATES'
+import { ProgressStates } from '@/utilities/workers/ProgressStates'
 
 export default defineComponent({
   setup() {
@@ -17,10 +17,10 @@ export default defineComponent({
       const wm = new WorkerManager()
 
       const data = await wm
-        .on(PROGRESS_STATES.ERROR, (msg) => {
+        .on(ProgressStates.Error, (msg) => {
           console.error('ERROR ', msg)
         })
-        .extract(dataPaths.imagesBarcode, dataPaths.designBarcode)
+        .extract(DataPaths.imagesBarcode, DataPaths.designBarcode)
 
       console.log(data)
       wm.stop()

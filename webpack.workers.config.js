@@ -48,10 +48,10 @@ const config = {
         },
       },
       {
-        test: /\.tsx?$/,
+        test: /\.ts$/,
         loader: 'esbuild-loader',
         options: {
-          loader: 'tsx',
+          loader: 'ts',
           target: 'node12',
         },
       },
