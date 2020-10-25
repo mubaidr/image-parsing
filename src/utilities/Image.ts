@@ -4,6 +4,7 @@ import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import { v4 as uuid4 } from 'uuid'
 import { DataPaths } from './dataPaths'
+// import { ComputerMarksInfo } from './design'
 
 // const myCache = new NodeCache()
 
@@ -185,4 +186,6 @@ export class Image {
 
     return this.clone(data, width, height)
   }
+
+  // getComputerMarks(): ComputerMarksInfo {}
 }
