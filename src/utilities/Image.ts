@@ -1,12 +1,10 @@
 import fastGlob from 'fast-glob'
-// import NodeCache from 'node-cache'
 import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import { v4 as uuid4 } from 'uuid'
+import * as contoursUtility from './contoursUtility'
+import { ShapeTypes } from './contoursUtility'
 import { DataPaths } from './dataPaths'
-// import { ComputerMarksInfo } from './design'
-
-// const myCache = new NodeCache()
 
 export enum ImageNativeTypes {
   bmp,
@@ -148,7 +146,7 @@ export class Image {
       const [r, g, b] = this.data.slice(i, i + Image.CHANNELS)
       const avg = pixelAverage(r, g, b)
       const threshold = 25
-      const thresholdBlack = 85
+      const thresholdBlack = 75
       const upperLimit = avg + threshold
       const lowerLimit = avg - threshold
 
@@ -187,5 +185,7 @@ export class Image {
     return this.clone(data, width, height)
   }
 
-  // getComputerMarks(): ComputerMarksInfo {}
+  getShapes<T extends ShapeTypes>(shapeType: ShapeTypes): T[] {
+    return contoursUtility.getShapes<T>(this, shapeType)
+  }
 }
