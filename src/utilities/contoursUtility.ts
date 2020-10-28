@@ -25,8 +25,7 @@ export interface Circle {
 }
 
 // list of neighbours to visit
-function getNeighbours(image: Image, i: number, start: number) {
-  const { width } = image
+function getNeighbours(width: number, i: number, start: number) {
   const mask: number[] = []
 
   if (i % width === 0) {
@@ -68,7 +67,7 @@ const traceContour = (image: Image, i: number) => {
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const n = getNeighbours(image, p, 0)
+    const n = getNeighbours(image.width, p, 0)
 
     // find the first neighbour starting from
     // the direction we came from
@@ -88,7 +87,7 @@ const traceContour = (image: Image, i: number) => {
     for (let idx, i = 0; i < 8; i++) {
       idx = (i + offset) % 8
 
-      if (image.data[n[idx] * 4] > 0) {
+      if (image.data[n[idx] * Image.CHANNELS] > 0) {
         direction = idx
         break
       }
@@ -112,7 +111,6 @@ function getContours(image: Image): number[][] {
   let skipping = false
 
   for (let i = 0; i < image.data.length; i++) {
-    // TODO: adjust with 3 channels
     if (image.data[i * Image.CHANNELS] > 128) {
       if (seen[i] || skipping) {
         skipping = true
@@ -158,6 +156,8 @@ export function getShapes<T extends ShapeTypes>(
   const shapes: T[] = []
 
   getContours(image).forEach((contour) => {
+    console.log(contour)
+
     let shape: T
 
     if (shapeType === ShapeTypes.Rectangle) {
