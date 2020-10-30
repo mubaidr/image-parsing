@@ -33,10 +33,10 @@ function decode(image: Image, isQrCode = false): string {
 
   for (let i = 0; i < len; i++) {
     luminancesUint8Array[i] =
-      ((image.data[i * Image.CHANNELS] +
-        image.data[i * Image.CHANNELS + 1] +
-        image.data[i * Image.CHANNELS + 2]) /
-        Image.CHANNELS) &
+      ((image.data[i * image.channels] +
+        image.data[i * image.channels + 1] +
+        image.data[i * image.channels + 2]) /
+        image.channels) &
       0xff
   }
 

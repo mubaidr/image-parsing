@@ -87,7 +87,7 @@ const traceContour = (image: Image, i: number) => {
     for (let idx, i = 0; i < 8; i++) {
       idx = (i + offset) % 8
 
-      if (image.data[n[idx] * Image.CHANNELS] > 0) {
+      if (image.data[n[idx] * image.channels] > 0) {
         direction = idx
         break
       }
@@ -111,7 +111,7 @@ function getContours(image: Image): number[][] {
   let skipping = false
 
   for (let i = 0; i < image.data.length; i++) {
-    if (image.data[i * Image.CHANNELS] > 128) {
+    if (image.data[i * image.channels] > 128) {
       if (seen[i] || skipping) {
         skipping = true
       } else {

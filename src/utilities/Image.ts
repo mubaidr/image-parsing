@@ -45,6 +45,7 @@ export class Image {
   public id: string
   public source: string
   public isNative = false
+  public channels = Image.CHANNELS
   public width = 0
   public height = 0
   public data: Uint8ClampedArray = Uint8ClampedArray.from([])
@@ -79,6 +80,7 @@ export class Image {
         withoutEnlargement: true,
       })
       .flatten()
+      .median(3)
       .raw()
       .toBuffer({ resolveWithObject: true })
 
@@ -87,6 +89,7 @@ export class Image {
     image.data = Uint8ClampedArray.from(data)
     image.width = info.width
     image.height = info.height
+    image.channels = info.channels
 
     return image
   }
@@ -110,7 +113,7 @@ export class Image {
       raw: {
         width: this.width,
         height: this.height,
-        channels: Image.CHANNELS as 1 | 2 | 3 | 4,
+        channels: this.channels as 1 | 2 | 3 | 4,
       },
     })
   }
@@ -131,10 +134,24 @@ export class Image {
   }
 
   grayscale(): Image {
-    for (let i = 0; i < this.data.length; i += Image.CHANNELS) {
-      const [r, g, b] = this.data.slice(i, i + Image.CHANNELS)
+    for (let i = 0; i < this.data.length; i += this.channels) {
+      const [r, g, b] = this.data.slice(i, i + this.channels)
       this.data[i] = this.data[i + 1] = this.data[i + 2] = pixelAverage(r, g, b)
     }
+
+    return this
+  }
+
+  toBitImage(): Image {
+    const data: number[] = []
+
+    for (let i = 0; i < this.data.length; i += this.channels) {
+      const [r, g, b] = this.data.slice(i, i + this.channels)
+      data.push(pixelAverage(r, g, b))
+    }
+
+    this.channels = 1
+    this.data = new Uint8ClampedArray(data)
 
     return this
   }
@@ -142,8 +159,8 @@ export class Image {
   getPercentFilled(): number {
     let sum = 0
 
-    for (let i = 0; i < this.data.length; i += Image.CHANNELS) {
-      const [r, g, b] = this.data.slice(i, i + Image.CHANNELS)
+    for (let i = 0; i < this.data.length; i += this.channels) {
+      const [r, g, b] = this.data.slice(i, i + this.channels)
       const avg = pixelAverage(r, g, b)
       const threshold = 25
       const thresholdBlack = 75
@@ -173,19 +190,19 @@ export class Image {
   }
 
   extract(x = 0, y = 0, width = this.width, height = this.height): Image {
-    const data = new Uint8ClampedArray(width * height * Image.CHANNELS)
+    const data = new Uint8ClampedArray(width * height * this.channels)
 
     for (let top = y; top < y + height; top += 1) {
-      const start = (top * this.width + x) * Image.CHANNELS
-      const end = (top * this.width + x + width - 1) * Image.CHANNELS
+      const start = (top * this.width + x) * this.channels
+      const end = (top * this.width + x + width - 1) * this.channels
       const row = top - y
-      data.set(this.data.slice(start, end), row * width * Image.CHANNELS)
+      data.set(this.data.slice(start, end), row * width * this.channels)
     }
 
     return this.clone(data, width, height)
   }
 
   getShapes<T extends ShapeTypes>(shapeType: ShapeTypes): T[] {
-    return contoursUtility.getShapes<T>(this, shapeType)
+    return contoursUtility.getShapes<T>(this.clone().grayscale(), shapeType)
   }
 }
