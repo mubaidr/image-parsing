@@ -66,12 +66,8 @@ export async function adjustTrimOffsetsForDesign(
   designData: DesignData
 ): Promise<DesignData> {
   const designDataCopy = JSON.parse(JSON.stringify(designData)) as DesignData
-  const {
-    leftMargin,
-    rightMargin,
-    topMargin,
-    bottomMargin,
-  } = designDataCopy.computerMarksInfo
+  const { leftMargin, rightMargin, topMargin, bottomMargin } =
+    designDataCopy.computerMarksInfo
 
   designDataCopy.code.x -= leftMargin
   designDataCopy.code.y -= topMargin

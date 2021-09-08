@@ -161,9 +161,9 @@ export function getShapes<T extends ShapeTypes>(
     let shape: T
 
     if (shapeType === ShapeTypes.Rectangle) {
-      shape = (getBoundingRectangle(contour) as unknown) as T
+      shape = getBoundingRectangle(contour) as unknown as T
     } else {
-      shape = (getBoundingCircle(contour) as unknown) as T
+      shape = getBoundingCircle(contour) as unknown as T
     }
 
     shapes.push(shape)

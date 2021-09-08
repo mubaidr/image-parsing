@@ -100,13 +100,7 @@ export class WorkerManager extends EventEmitter {
 
   async extract(directory: string, designPath: string): Promise<Result[]> {
     const totalImages = Image.readDirectory(directory)
-    let designData: DesignData
-
-    try {
-      designData = await getDesignData(designPath)
-    } catch (err) {
-      return err
-    }
+    const designData: DesignData = await getDesignData(designPath)
 
     const totalWorkers = Math.min(totalImages.length, CPU_CORE_COUNT)
     const step = Math.floor(totalImages.length / totalWorkers)
@@ -142,14 +136,7 @@ export class WorkerManager extends EventEmitter {
     correctMarks?: number,
     incorrectMarks?: number
   ): Promise<Result[]> {
-    let keys: Result[] | undefined
-
-    try {
-      keys = await readKey(keyPath)
-    } catch (err) {
-      return err
-    }
-
+    const keys: Result[] | undefined = await readKey(keyPath)
     this.total = 1
 
     return new Promise((resolve, reject) => {
