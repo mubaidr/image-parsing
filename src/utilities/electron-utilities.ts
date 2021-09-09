@@ -1,3 +1,3 @@
-import { remote } from 'electron'
+import { BrowserWindow } from 'electron'
 
-export const currentWindow = remote.getCurrentWindow()
+export const currentWindow = BrowserWindow.getFocusedWindow()

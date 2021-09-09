@@ -30,8 +30,8 @@ function createWindow() {
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-      nodeIntegration: (process.env
-        .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+      nodeIntegration: process.env
+        .ELECTRON_NODE_INTEGRATION as unknown as boolean,
       // experimentalFeatures: true,
       enableBlinkFeatures: 'ShapeDetection,BarcodeDetector,TextDetector',
     },
@@ -82,11 +82,7 @@ app.on('ready', async () => {
 
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
-    try {
-      await installExtension(VUEJS_DEVTOOLS)
-    } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString())
-    }
+    await installExtension(VUEJS_DEVTOOLS)
   }
   createWindow()
 })

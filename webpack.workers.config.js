@@ -2,7 +2,6 @@
 const path = require('path')
 const fsGlob = require('fast-glob')
 const { dependencies, devDependencies } = require('./package.json')
-const { ESBuildPlugin, ESBuildMinifyPlugin } = require('esbuild-loader')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 //   .BundleAnalyzerPlugin
 
@@ -41,19 +40,8 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        loader: 'esbuild-loader',
-        options: {
-          target: 'node12',
-        },
-      },
-      {
         test: /\.ts$/,
-        loader: 'esbuild-loader',
-        options: {
-          loader: 'ts',
-          target: 'node12',
-        },
+        loader: 'ts-loader',
       },
       {
         test: /\.node$/,
@@ -65,7 +53,7 @@ const config = {
     __dirname: isDevMode,
     __filename: isDevMode,
   },
-  plugins: [new ESBuildPlugin()],
+  plugins: [],
   resolve: {
     extensions: ['.ts', '.js', '.json', '.node'],
   },
@@ -76,14 +64,7 @@ if (isDevMode) {
   // dev only plugins
   // config.plugins.push(new BundleAnalyzerPlugin())
 } else {
-  config.optimization = {
-    minimize: true,
-    minimizer: [
-      new ESBuildMinifyPlugin({
-        target: 'node12',
-      }),
-    ],
-  }
+  config.optimization = { minimize: true }
 }
 
 module.exports = config
