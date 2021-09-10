@@ -2,8 +2,6 @@ import fastGlob from 'fast-glob'
 import path from 'path'
 import sharp, { Sharp } from 'sharp'
 import { v4 as uuid4 } from 'uuid'
-import * as contoursUtility from './contoursUtility'
-import { ShapeTypes } from './contoursUtility'
 import { DataPaths } from './dataPaths'
 
 export enum ImageNativeTypes {
@@ -202,7 +200,7 @@ export class Image {
     return this.clone(data, width, height)
   }
 
-  getShapes<T extends ShapeTypes>(shapeType: ShapeTypes): T[] {
-    return contoursUtility.getShapes<T>(this.clone().grayscale(), shapeType)
-  }
+  // getShapes<T extends ShapeTypes>(shapeType: ShapeTypes): T[] {
+  //   return contoursUtility.getShapes<T>(this.clone().grayscale(), shapeType)
+  // }
 }

@@ -1,5 +1,5 @@
-import { RouteRecordRaw, createRouter, createWebHashHistory } from 'vue-router'
-import { name as productName } from '../../package.json'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+// import { name as productName } from '../../package.json'
 // generate
 import Generate from '../views/Generate.vue'
 import AnswerSheets from '../views/Generate/AnswerSheets.vue'
@@ -105,9 +105,9 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to) => {
-  document.title =
-    to.path === '/home' ? productName : `${to.meta.title} - ${productName}`
-})
+// router.beforeEach((to) => {
+//   document.title =
+//     to.path === '/home' ? productName : `${to.meta.title} - ${productName}`
+// })
 
 export default router

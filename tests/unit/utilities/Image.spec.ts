@@ -1,4 +1,4 @@
-import { ShapeTypes } from '@/utilities/contoursUtility'
+// import { ShapeTypes } from '@/utilities/contoursUtility'
 import { DataPaths } from '@/utilities/dataPaths'
 import { Image } from '@/utilities/Image'
 import { existsSync } from 'fs'
@@ -57,19 +57,19 @@ describe('Image', () => {
     expect(existsSync(target)).toBeTruthy()
   })
 
-  test('contour detection', async () => {
-    const image = await Image.load(
-      path.resolve('./tests/_data/empty-20x20.png')
-    )
+  // test('contour detection', async () => {
+  //   const image = await Image.load(
+  //     path.resolve('./tests/_data/empty-20x20.png')
+  //   )
 
-    const circles = image.getShapes<ShapeTypes.Circle>(ShapeTypes.Circle)
-    const rectangles = image.getShapes<ShapeTypes.Rectangle>(
-      ShapeTypes.Rectangle
-    )
+  //   const circles = image.getShapes<ShapeTypes.Circle>(ShapeTypes.Circle)
+  //   const rectangles = image.getShapes<ShapeTypes.Rectangle>(
+  //     ShapeTypes.Rectangle
+  //   )
 
-    expect(circles.length).toBe(0)
-    expect(rectangles.length).toBe(1)
+  //   expect(circles.length).toBe(0)
+  //   expect(rectangles.length).toBe(1)
 
-    // TODO: draw contours on empty image for shape trace
-  })
+  //   // TODO: draw contours on empty image for shape trace
+  // })
 })

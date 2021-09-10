@@ -13,7 +13,8 @@ import { Image } from './Image'
 // TODO: deploy a electorn webworker for BarcodeDecoder and TextDecoder
 // TODO: get barcode/text from electron webworker through worker manager
 
-function extractText(image: Image): string | undefined {
+// function extractText(image: Image): string | undefined {
+function extractText(): string | undefined {
   return undefined
 }
 
@@ -70,7 +71,7 @@ export async function getSheetInfoFromImage(
   try {
     sheetInfo = decode(extracted, designData.isQrCode)
   } catch {
-    sheetInfo = extractText(extracted)
+    sheetInfo = extractText()
   }
 
   // TODO: extract question paper, center, vacancy etc info from qrcode
