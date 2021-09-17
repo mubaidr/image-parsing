@@ -1,8 +1,8 @@
-import { DataPaths } from '@/utilities/dataPaths';
-import { getDesignData } from '@/utilities/design';
-import { Image } from '@/utilities/Image';
-import { readKey } from '@/utilities/readKey';
-import { start } from '@/utilities/workers/extract.worker';
+import { DataPaths } from '/@/utilities/dataPaths';
+import { getDesignData } from '/@/utilities/design';
+import { Image } from '/@/utilities/Image';
+import { readKey } from '/@/utilities/readKey';
+import { start } from '/@/utilities/workers/extract.worker';
 
 jest.setTimeout(10000);
 

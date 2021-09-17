@@ -1,5 +1,5 @@
-import { DataPaths } from '@/utilities/dataPaths';
-import { readKey } from '@/utilities/readKey';
+import { DataPaths } from '/@/utilities/dataPaths';
+import { readKey } from '/@/utilities/readKey';
 
 jest.setTimeout(10000);
 

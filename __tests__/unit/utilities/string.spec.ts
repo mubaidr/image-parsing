@@ -1,4 +1,4 @@
-import { toCamelCase, toHeadingCase } from '@/utilities/string';
+import { toCamelCase, toHeadingCase } from '/@/utilities/string';
 
 describe('string', () => {
   test('should be defined', () => {

@@ -1,8 +1,8 @@
-import { DataPaths } from '@/utilities/dataPaths';
-import { getDesignData } from '@/utilities/design';
-import { Image } from '@/utilities/Image';
-import { getSheetInfoFromImage } from '@/utilities/sheetInfo';
-import path from 'path';
+import * as path from 'path';
+import { DataPaths } from '/@/utilities/dataPaths';
+import { getDesignData } from '/@/utilities/design';
+import { Image } from '/@/utilities/Image';
+import { getSheetInfoFromImage } from '/@/utilities/sheetInfo';
 
 const designData = getDesignData(DataPaths.designBarcode);
 const designDataQr = getDesignData(DataPaths.design);

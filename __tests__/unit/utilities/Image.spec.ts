@@ -1,8 +1,8 @@
-// import { ShapeTypes } from '@/utilities/contoursUtility'
-import { DataPaths } from '@/utilities/dataPaths';
-import { Image } from '@/utilities/Image';
+// import { ShapeTypes } from '/@/utilities/contoursUtility'
 import { existsSync } from 'fs';
 import * as path from 'path';
+import { DataPaths } from '/@/utilities/dataPaths';
+import { Image } from '/@/utilities/Image';
 
 describe('Image', () => {
   test('load', async () => {

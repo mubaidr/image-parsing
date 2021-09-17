@@ -1,6 +1,6 @@
-import { CompiledResult } from '@/utilities/CompiledResult';
-import { DataPaths } from '@/utilities/dataPaths';
-import { readKey } from '@/utilities/readKey';
+import { CompiledResult } from '/@/utilities/CompiledResult';
+import { DataPaths } from '/@/utilities/dataPaths';
+import { readKey } from '/@/utilities/readKey';
 
 describe('CompiledResult', () => {
   test('should be able to load from excel', async () => {

@@ -1,8 +1,8 @@
-import { CompiledResult } from '@/utilities/CompiledResult';
-import { DataPaths } from '@/utilities/dataPaths';
-import { readKey } from '@/utilities/readKey';
-import { Result } from '@/utilities/Result';
-import path from 'path';
+import * as path from 'path';
+import { CompiledResult } from '/@/utilities/CompiledResult';
+import { DataPaths } from '/@/utilities/dataPaths';
+import { readKey } from '/@/utilities/readKey';
+import { Result } from '/@/utilities/Result';
 
 describe('Result', () => {
   test('should have defaults set', async () => {

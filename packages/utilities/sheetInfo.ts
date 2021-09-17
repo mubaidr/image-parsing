@@ -4,7 +4,6 @@ import {
   DecodeHintType,
   HybridBinarizer,
   MultiFormatReader,
-  // eslint-disable-next-line prettier/prettier
   RGBLuminanceSource,
 } from '@zxing/library/cjs';
 import type { DesignData } from './design';

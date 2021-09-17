@@ -1,7 +1,7 @@
-import { DataPaths } from '@/utilities/dataPaths';
-import { getDesignData } from '@/utilities/design';
-import { Image } from '@/utilities/Image';
-import { getQuestionsData } from '@/utilities/questions';
+import { DataPaths } from '/@/utilities/dataPaths';
+import { getDesignData } from '/@/utilities/design';
+import { Image } from '/@/utilities/Image';
+import { getQuestionsData } from '/@/utilities/questions';
 
 jest.setTimeout(10000);
 
