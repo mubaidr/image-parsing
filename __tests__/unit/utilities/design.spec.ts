@@ -1,5 +1,5 @@
-import { DataPaths } from '@/utilities/dataPaths';
-import { getDesignData } from '@/utilities/design';
+import { DataPaths } from '../../../packages/utilities/dataPaths';
+import { getDesignData } from '../../../packages/utilities/design';
 
 describe('getDesignData', () => {
   test('works with adjust offset', async () => {
