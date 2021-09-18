@@ -6,8 +6,6 @@
   },
   "extends": [
     "eslint:recommended",
-    /** @see https://eslint.vuejs.org/rules/ */
-    "plugin:vue/vue3-recommended",
     /** @see https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin#recommended-configs */
     "plugin:@typescript-eslint/recommended"
   ],

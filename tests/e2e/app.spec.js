@@ -1,5 +1,5 @@
-const { _electron: electron } = require('playwright');
-const { strict: assert } = require('assert');
+import { strict as assert } from 'assert';
+import { _electron as electron } from 'playwright';
 
 // Playwright has EXPERIMENTAL electron support.
 (async () => {
