@@ -1,5 +1,7 @@
 // import { FileFilter, remote } from 'electron'
 
+export { };
+
 // // import { store } from './store'
 
 // const { dialog, getCurrentWindow } = remote
