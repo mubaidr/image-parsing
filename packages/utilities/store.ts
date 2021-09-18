@@ -1,4 +1,7 @@
 // /* eslint-disable @typescript-eslint/unbound-method */
+
+export { };
+
 // import Store from 'electron-store'
 // import { dataPaths } from './dataPaths'
 // TODO replace with electron-json-storage
