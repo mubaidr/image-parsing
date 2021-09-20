@@ -3,15 +3,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "/@/*": [
-        "./packages/*"
-      ]
+      "/@/*": ["./packages/*"]
     },
     "lib": ["ESNext"],
-    "types": [
-      "node",
-      "jest"
-    ]
+    "types": ["node", "jest"]
   },
 
   "include": [

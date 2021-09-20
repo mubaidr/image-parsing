@@ -28,10 +28,10 @@ function decode(image: Image, isQrCode = false): string {
     hints.set(DecodeHintType.PURE_BARCODE, 1);
   }
 
-  const len = image.width * image.height;
-  const luminancesUint8Array = new Uint8ClampedArray(len);
+  const length = image.width * image.height;
+  const luminancesUint8Array = new Uint8ClampedArray(length);
 
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < length; i++) {
     luminancesUint8Array[i] =
       ((image.data[i * image.channels] +
         image.data[i * image.channels + 1] +

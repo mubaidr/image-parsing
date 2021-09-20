@@ -13,6 +13,9 @@ module.exports = {
   moduleNameMapper: {
     '^/@/(.*)$': '<rootDir>/packages/$1',
   },
+  testPathIgnorePatterns : [
+    '<rootDir>/e2e/',
+  ],
   // globalSetup: './tests/unit/setup.ts',
   // globalTeardown: './tests/unit/teardown.ts'
 };

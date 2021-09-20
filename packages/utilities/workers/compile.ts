@@ -1,5 +1,4 @@
-import 'v8-compile-cache';
-import { CompiledResult } from '../CompiledResult';
+import { CompiledResult } from '../compiledResult';
 import type { Result } from '../Result';
 import { ProgressStates } from './ProgressStates';
 

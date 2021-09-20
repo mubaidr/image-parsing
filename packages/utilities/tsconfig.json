@@ -1,8 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "allowJs": true,
     "baseUrl": ".",
-    "lib": ["ESNext"]
+    "lib": ["ESNext", "WebWorker"]
   },
 
   "include": [

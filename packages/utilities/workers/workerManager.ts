@@ -1,7 +1,7 @@
-import type { ChildProcess } from 'child_process';
-import { fork } from 'child_process';
 import { EventEmitter } from 'events';
 import { cpus } from 'os';
+import * as path from 'path';
+import { Worker as WorkerThread } from 'worker_threads';
 import type { DesignData } from '../design';
 import { getDesignData } from '../design';
 import { Image } from '../Image';
@@ -13,9 +13,9 @@ import { ProgressStates } from './ProgressStates';
 const CPU_CORE_COUNT = cpus().length;
 
 enum WorkerTypes {
-  Compile = 'Compile',
-  Extract = 'Extract',
-  Generate = 'Generate',
+  compile = 'compile',
+  extract = 'extract',
+  generate = 'generate',
 }
 
 type WorkerOutputMessage = {
@@ -25,7 +25,7 @@ type WorkerOutputMessage = {
 
 export class WorkerManager extends EventEmitter {
   data: ResultLike[] = [];
-  workers: ChildProcess[] = [];
+  workers: WorkerThread[] = [];
   finishedWorkers = 0;
   total = 0;
   finished = 0;
@@ -42,10 +42,14 @@ export class WorkerManager extends EventEmitter {
     this.stop();
 
     for (let i = 0; i < count; i += 1) {
-      const worker = fork(`./dist_electron/workers/${type}.worker.js`, {
-        // stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
-        // silent: true,
-      })
+      const workerThread = new WorkerThread(
+        path.join(__dirname, './worker.js'),
+        {
+          workerData: {
+            type,
+          },
+        },
+      )
         .on(ProgressStates.Exit, (code) => {
           this.emit(ProgressStates.Exit, code);
         })
@@ -73,7 +77,7 @@ export class WorkerManager extends EventEmitter {
           }
         });
 
-      worker.stdout?.on('data', (msg) => {
+      workerThread.stdout?.on('data', (msg) => {
         this.emit(ProgressStates.Log, msg.toString());
         if (
           process &&
@@ -84,7 +88,7 @@ export class WorkerManager extends EventEmitter {
         }
       });
 
-      worker.stderr?.on('data', (msg) => {
+      workerThread.stderr?.on('data', (msg) => {
         this.emit(ProgressStates.Error, msg.toString());
         if (
           process &&
@@ -95,7 +99,7 @@ export class WorkerManager extends EventEmitter {
         }
       });
 
-      this.workers.push(worker);
+      this.workers.push(workerThread);
     }
 
     return this;
@@ -110,7 +114,7 @@ export class WorkerManager extends EventEmitter {
     this.total = totalImages.length;
 
     return new Promise((resolve, reject) => {
-      this.createWorkers(totalWorkers, WorkerTypes.Extract)
+      this.createWorkers(totalWorkers, WorkerTypes.extract)
         .on(ProgressStates.Error, reject)
         .on(ProgressStates.Complete, () => {
           resolve(this.getClonedData());
@@ -122,15 +126,10 @@ export class WorkerManager extends EventEmitter {
               ? totalImages.length
               : (index + 1) * step;
 
-          worker.send(
-            {
-              designData,
-              imagePaths: totalImages.slice(startIndex, endIndex),
-            },
-            (err) => {
-              if (err) reject(err);
-            },
-          );
+          worker.postMessage({
+            designData,
+            imagePaths: totalImages.slice(startIndex, endIndex),
+          });
         });
     });
   }
@@ -145,28 +144,25 @@ export class WorkerManager extends EventEmitter {
     this.total = 1;
 
     return new Promise((resolve, reject) => {
-      this.createWorkers(1, WorkerTypes.Compile)
+      this.createWorkers(1, WorkerTypes.compile)
         .on(ProgressStates.Error, reject)
         .on(ProgressStates.Complete, () => {
           resolve(this.getClonedData());
         })
-        .workers[0].send(
-          {
+        .workers.forEach((worker) => {
+          worker.postMessage({
             resultPath,
             keys,
             correctMarks,
             incorrectMarks,
-          },
-          (err) => {
-            if (err) reject(err);
-          },
-        );
+          });
+        });
     });
   }
 
   async generate(): Promise<WorkerManager> {
     return new Promise((resolve, reject) => {
-      this.createWorkers(CPU_CORE_COUNT, WorkerTypes.Generate)
+      this.createWorkers(CPU_CORE_COUNT, WorkerTypes.generate)
         .on(ProgressStates.Error, reject)
         .on(ProgressStates.Complete, resolve);
     });
@@ -175,7 +171,8 @@ export class WorkerManager extends EventEmitter {
   async stop(): Promise<void> {
     this.workers.forEach((w) => {
       w.unref();
-      w.kill();
+      w.removeAllListeners();
+      w.terminate();
     });
 
     this.data.length = 0;

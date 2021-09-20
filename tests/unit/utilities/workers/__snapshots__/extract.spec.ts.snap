@@ -1,0 +1,204 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`workerExtract should be able to extract key just fine 1`] = `
+Object {
+  "answers": Object {
+    "q1": Object {
+      "value": "?",
+    },
+    "q10": Object {
+      "value": "?",
+    },
+    "q11": Object {
+      "value": "?",
+    },
+    "q12": Object {
+      "value": "?",
+    },
+    "q13": Object {
+      "value": "?",
+    },
+    "q14": Object {
+      "value": "?",
+    },
+    "q15": Object {
+      "value": "?",
+    },
+    "q16": Object {
+      "value": "?",
+    },
+    "q17": Object {
+      "value": "?",
+    },
+    "q18": Object {
+      "value": "?",
+    },
+    "q19": Object {
+      "value": "?",
+    },
+    "q2": Object {
+      "value": "?",
+    },
+    "q20": Object {
+      "value": "?",
+    },
+    "q21": Object {
+      "value": "?",
+    },
+    "q22": Object {
+      "value": "?",
+    },
+    "q23": Object {
+      "value": "?",
+    },
+    "q24": Object {
+      "value": "?",
+    },
+    "q25": Object {
+      "value": "?",
+    },
+    "q26": Object {
+      "value": "?",
+    },
+    "q27": Object {
+      "value": "?",
+    },
+    "q28": Object {
+      "value": "?",
+    },
+    "q29": Object {
+      "value": "?",
+    },
+    "q3": Object {
+      "value": "?",
+    },
+    "q30": Object {
+      "value": "?",
+    },
+    "q31": Object {
+      "value": "?",
+    },
+    "q32": Object {
+      "value": "?",
+    },
+    "q33": Object {
+      "value": "?",
+    },
+    "q34": Object {
+      "value": "?",
+    },
+    "q35": Object {
+      "value": "?",
+    },
+    "q36": Object {
+      "value": "?",
+    },
+    "q37": Object {
+      "value": "?",
+    },
+    "q38": Object {
+      "value": "?",
+    },
+    "q39": Object {
+      "value": "?",
+    },
+    "q4": Object {
+      "value": "?",
+    },
+    "q40": Object {
+      "value": "?",
+    },
+    "q41": Object {
+      "value": "?",
+    },
+    "q42": Object {
+      "value": "?",
+    },
+    "q43": Object {
+      "value": "?",
+    },
+    "q44": Object {
+      "value": "?",
+    },
+    "q45": Object {
+      "value": "?",
+    },
+    "q46": Object {
+      "value": "?",
+    },
+    "q47": Object {
+      "value": "?",
+    },
+    "q48": Object {
+      "value": "?",
+    },
+    "q49": Object {
+      "value": "?",
+    },
+    "q5": Object {
+      "value": "?",
+    },
+    "q50": Object {
+      "value": "?",
+    },
+    "q51": Object {
+      "value": "?",
+    },
+    "q52": Object {
+      "value": "?",
+    },
+    "q53": Object {
+      "value": "?",
+    },
+    "q54": Object {
+      "value": "?",
+    },
+    "q55": Object {
+      "value": "?",
+    },
+    "q56": Object {
+      "value": "?",
+    },
+    "q57": Object {
+      "value": "?",
+    },
+    "q58": Object {
+      "value": "?",
+    },
+    "q59": Object {
+      "value": "?",
+    },
+    "q6": Object {
+      "value": "?",
+    },
+    "q60": Object {
+      "value": "?",
+    },
+    "q7": Object {
+      "value": "?",
+    },
+    "q8": Object {
+      "value": "?",
+    },
+    "q9": Object {
+      "value": "?",
+    },
+  },
+  "correctCount": 0,
+  "error": undefined,
+  "filePath": Any<String>,
+  "id": Any<String>,
+  "incorrectCount": 0,
+  "isCompiled": false,
+  "isRollNoExtracted": false,
+  "marks": 0,
+  "post": "",
+  "questionPaperType": "",
+  "rollNo": undefined,
+  "skippedCount": 0,
+  "testCenter": "",
+  "testTime": "",
+  "totalMarks": 0,
+  "unattemptedCount": 0,
+}
+`;

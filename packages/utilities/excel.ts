@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import XLSX from 'xlsx';
-import { CompiledResult } from './CompiledResult';
+import { CompiledResult } from './compiledResult';
 import { toCamelCase, toHeadingCase } from './string';
 
 const importExcelToJson = (src: string): any[] => {
@@ -65,9 +65,9 @@ function exportJsonToExcel(
   XLSX.writeFile(workbook, destination);
 }
 
-function exportHtmltoExcel(htmlTable: Element, destination: string): void {
-  const wb = XLSX.utils.table_to_book(htmlTable);
-  XLSX.writeFile(wb, destination);
-}
+// function exportHtmltoExcel(htmlTable: Element, destination: string): void {
+//   const wb = XLSX.utils.table_to_book(htmlTable);
+//   XLSX.writeFile(wb, destination);
+// }
 
-export { importExcelToJson, exportJsonToExcel, exportHtmltoExcel };
+export { importExcelToJson, exportJsonToExcel };

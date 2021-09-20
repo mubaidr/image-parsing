@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { CompiledResult } from '/@/utilities/CompiledResult';
+import { CompiledResult } from '/@/utilities/compiledResult';
 import { DataPaths } from '/@/utilities/dataPaths';
 import { readKey } from '/@/utilities/readKey';
 import { Result } from '/@/utilities/Result';

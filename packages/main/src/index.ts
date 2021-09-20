@@ -34,6 +34,9 @@ const createWindow = async () => {
     webPreferences: {
       nativeWindowOpen: true,
       preload: join(__dirname, '../../preload/dist/index.cjs'),
+      nodeIntegration: true,
+      nodeIntegrationInWorker: true,
+      experimentalFeatures: true,
     },
   });
 

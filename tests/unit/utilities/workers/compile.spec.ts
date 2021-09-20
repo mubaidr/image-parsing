@@ -1,6 +1,6 @@
 import { DataPaths } from '/@/utilities/dataPaths';
 import { readKey } from '/@/utilities/readKey';
-import { start } from '/@/utilities/workers/compile.worker';
+import { start } from '/@/utilities/workers/compile';
 
 describe('workerCompile', () => {
   test('should compile just fine', async () => {

@@ -1,6 +1,6 @@
 import { DataPaths } from '/@/utilities/dataPaths';
 import { ProgressStates } from '/@/utilities/workers/ProgressStates';
-import { WorkerManager } from '/@/utilities/workers/WorkerManager';
+import { WorkerManager } from '/@/utilities/workers/workerManager';
 
 jest.setTimeout(10000);
 

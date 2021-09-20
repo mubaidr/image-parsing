@@ -1,4 +1,3 @@
-import 'v8-compile-cache';
 import type { DesignData } from '../design';
 import { Image } from '../Image';
 import { getQuestionsData } from '../questions';

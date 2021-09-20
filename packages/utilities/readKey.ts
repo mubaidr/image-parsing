@@ -2,7 +2,7 @@ import { DataPaths } from './dataPaths';
 import { getDesignData } from './design';
 import { importExcelToJson } from './excel';
 import { Result } from './Result';
-import { start as extractStart } from './workers/extract.worker';
+import { start as extractStart } from './workers/extract';
 
 export enum KeyNativeTypes {
   csv,
