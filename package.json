@@ -19,10 +19,9 @@
     "lint": "eslint . --ext js,ts,vue,jsx,tsx --fix",
     "typecheck-main": "tsc --noEmit -p packages/main/tsconfig.json",
     "typecheck-utilities": "tsc --noEmit -p packages/utilities/tsconfig.json",
-    "typecheck-workers": "tsc --noEmit -p packages/workers/tsconfig.json",
     "typecheck-preload": "tsc --noEmit -p packages/preload/tsconfig.json",
     "typecheck-renderer": "vue-tsc --noEmit -p packages/renderer/tsconfig.json",
-    "typecheck": "npm run typecheck-main && npm run typecheck-utilities && npm run typecheck-workers && npm run typecheck-preload && npm run typecheck-renderer"
+    "typecheck": "npm run typecheck-main && npm run typecheck-utilities && npm run typecheck-preload && npm run typecheck-renderer"
   },
   "browserslist": [
     "Chrome 93"
